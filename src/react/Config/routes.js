@@ -20,7 +20,7 @@ const routes =[
     key:'root',
     path:'/',
     component: Main,
-    isPrivate: true
+    isPrivate: false
   },
   {
     key:'other',
