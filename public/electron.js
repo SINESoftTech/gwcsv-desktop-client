@@ -1,0 +1,226 @@
+const electron = require('electron');
+const fse = require('fs-extra')
+const path = require('path')
+const R = require('ramda')
+// Module to control application life.
+const app = electron.app;
+const ipcMain = electron.ipcMain
+const isDev = require('electron-is-dev')
+// Module to create native browser window.
+const BrowserWindow = electron.BrowserWindow;
+const userHomedir = require('os').homedir();
+const url = require('url');
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow;
+let config = {
+  rootFolder: path.join(userHomedir, '/.gwapp'),
+  fileFolder: path.join(userHomedir, '/.gwapp')
+}
+function initApp(){
+  loadConfig()
+  initFileStructure()
+  createWindow()
+}
+
+function loadConfig(){
+  var configPath = path.join(config.rootFolder,'appSetting.conf')
+  if(!fse.existsSync(configPath)){
+    fse.writeFileSync(configPath, JSON.stringify(config))
+  }
+  config = fse.readJSONSync(configPath)
+}
+
+function createWindow() {
+  // Create the browser window.
+  console.log(path.join(__dirname, 'preload.js'))
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: false
+    }
+  });
+
+  // and load the index.html of the app.
+  var fileLocation = `file://${path.join(__dirname, '../build/index.html')}`
+  var devServerUrl = 'http://localhost:3000'
+  mainWindow.loadURL(isDev ? devServerUrl : fileLocation);
+
+  // Open the DevTools.
+  mainWindow.webContents.openDevTools();
+  // Emitted when the window is closed.
+  mainWindow.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    mainWindow = null
+  })
+}
+
+
+
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', initApp);
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function () {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+});
+
+app.on('activate', function () {
+  // On OS X it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) {
+    createWindow()
+  }
+});
+
+const stageFolders = {
+  'scanned': {step: '01', folder: '01'},
+  'identifySent': {step: '02', folder: '02'},
+  'identifyResultReceived': {step: '03', folder: '03'},
+  'evidenceSaved': {step: '04', folder: '04'},
+  'evidenceUploaded': {step: '05', folder: '05'},
+}
+
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and require them here.
+function initFileStructure(){
+  console.log(config)
+  if(!fse.existsSync(config.fileFolder)){
+    fse.mkdirSync(config.fileFolder)
+  }
+  Object.keys(stageFolders).forEach(key=>{
+    const stageFolderItem = stageFolders[key]
+    const folderPath = path.join(config.fileFolder, stageFolderItem.folder)
+    if(!fse.existsSync(folderPath)){
+      fse.mkdirSync(folderPath)
+    }
+  })
+}
+function getAllFileLists() {
+  var fileLists = {}
+  Object.keys(stageFolders).filter(stageKey=>{
+    return stageFolders[stageKey].step !=='05'
+  }).forEach(key=>{
+    const stageFolderItem = stageFolders[key]
+    fileLists[stageFolderItem.step] = openFile(path.join(config.fileFolder, stageFolderItem.folder))
+  })
+
+  return fileLists
+}
+
+function openFile(directory) {
+  var fileInfo = fse.readdirSync(directory)
+  // console.log('fileInfo', fileInfo)
+
+  var fileResult = fileInfo.filter(filename=>{
+    return filename !=='.DS_Store'
+  }).map(filename => {
+    let fileObj = {
+      filename: filename,
+      fullPath: path.join(directory, filename)
+    }
+
+    return fileObj
+  })
+  return fileResult
+}
+
+function getFileContent(fullPath){
+  if(R.endsWith('.jpg', fullPath)){
+    return fse.readFileSync(fullPath, {encoding: 'base64'});
+  }
+  if(R.endsWith(".js", fullPath) || R.endsWith(".txt", fullPath) || R.endsWith(".json", fullPath)){
+    return fse.readFileSync(fullPath, "utf-8");
+  }
+
+}
+
+ipcMain.handle('evidence:getFileLists', (event, ...args) => {
+  const fileList = getAllFileLists()
+  return fileList
+})
+
+ipcMain.handle('evidence:getImageFileContent',  (event, imageFilePath) => {
+
+})
+
+ipcMain.handle('evidence:identifySent', (event, user, client, ticket, fileObj)=>{
+  console.log('user', user)
+  console.log('ticket', ticket)
+  console.log('fileObj', fileObj)
+  let userObj = JSON.parse(user)
+  let clientObj = JSON.parse(client)
+  let tickerObj = JSON.parse(ticket)
+  let fileObjObj = JSON.parse(fileObj)
+  let fileExt = fileObjObj.filename.split('.').slice(-1)[0]
+
+  var targetFileName = `${userObj.username}_${clientObj.taxId}_${tickerObj.id}.${fileExt}`
+  console.log(targetFileName)
+  var targetFullName = path.join(config.fileFolder,stageFolders.identifySent.folder, targetFileName)
+  console.log(targetFullName)
+  fse.moveSync(fileObjObj.fullPath, targetFullName)
+  return getAllFileLists()
+})
+
+ipcMain.handle('evidence:identifyResultReceived', (event, imageFileObj, identifyResult)=>{
+  let targetFolder = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder);
+  let fileObjObj = JSON.parse(imageFileObj)
+  let resultObj = JSON.parse(identifyResult)
+  const filenameWithoutExt = fileObjObj.filename.split('.').slice(0, -1).join('.')
+  console.log(filenameWithoutExt)
+  const imageFileExt = fileObjObj.filename.split('.').slice(-1)[0]
+  console.log(imageFileExt)
+  fse.moveSync(fileObjObj.fullPath, path.join(targetFolder, fileObjObj.filename))
+  fse.writeJSONSync(path.join(targetFolder, filenameWithoutExt+"_sightour_result.txt"), resultObj)
+  return getAllFileLists()
+})
+
+
+ipcMain.handle('evidence:evidenceSaved', (event,imageFileObj, sightourFileObj, savedResult)=>{
+  let targetFolder = path.join(config.fileFolder, stageFolders.evidenceSaved.folder);
+  let imageFileObjObj = JSON.parse(imageFileObj)
+  let sightourResultFileObjObj = JSON.parse(sightourFileObj)
+  let resultObj = savedResult ? JSON.parse(savedResult) : null;
+  const filenameWithoutExt = imageFileObjObj.filename.split('.').slice(0, -1).join('.')
+  console.log(filenameWithoutExt)
+  const imageFileExt = imageFileObjObj.filename.split('.').slice(-1)[0]
+  console.log(imageFileExt)
+
+  if(resultObj) {
+    console.log('result exists')
+    fse.writeJSONSync(path.join(targetFolder, filenameWithoutExt + "_saved_result.txt"), resultObj)
+  }
+  else {
+    console.log('copyFile')
+    fse.copySync(sightourResultFileObjObj.fullPath, path.join(targetFolder, filenameWithoutExt + "_saved_result.txt"))
+  }
+  fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))
+  fse.moveSync(sightourResultFileObjObj.fullPath, path.join(targetFolder, sightourResultFileObjObj.filename))
+  return getAllFileLists()
+})
+
+ipcMain.handle('evidence:uploaded', (event,imageFileObj, sightourFileObj, savedFileObj)=>{
+  let targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder);
+  let imageFileObjObj = JSON.parse(imageFileObj)
+  let sightourResultFileObjObj = JSON.parse(sightourFileObj)
+  let savedFileObjObj = JSON.parse(savedFileObj);
+  fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))
+  fse.moveSync(sightourResultFileObjObj.fullPath, path.join(targetFolder, sightourResultFileObjObj.filename))
+  fse.moveSync(savedFileObjObj.fullPath, path.join(targetFolder, savedFileObjObj.filename))
+  return getAllFileLists()
+})
+
