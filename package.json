@@ -2,7 +2,7 @@
   "name": "ocr-desktop",
   "version": "0.1.0",
   "private": true,
-  "main": "public/electron.js",
+  "main": "./public/electron.js",
   "dependencies": {
     "@material-ui/core": "^4.12.1",
     "@material-ui/data-grid": "^4.0.0-alpha.33",
@@ -25,12 +25,12 @@
   },
   "homepage": ".",
   "scripts": {
-    "start": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "start": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000/#/ && electron .\"",
     "build": "yarn react-build && yarn electron-build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "react-start": "react-scripts start",
-    "electron-start": "yarn react-build && ELECTRON_IS_DEV=1 electron .",
+    "electron-start": "yarn react-build && electron .",
     "react-build": "react-scripts build",
     "electron-build": "electron-packager ./ --overwrite"
   },

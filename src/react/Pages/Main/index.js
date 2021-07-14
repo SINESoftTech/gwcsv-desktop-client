@@ -14,9 +14,8 @@ const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 const Main = (props) => {
   const dispatch = useAuthDispatch();
   const userDetails = useAuthState();
-  let [localFiles, setLocalFiles] = useState({})
-
-
+  const [localFiles, setLocalFiles] = useState({})
+  const [imageUrl, setImageUrl] = useState('')
   const handleLogout = () => {
     logout(dispatch);
     props.history.push('/login');
@@ -48,18 +47,18 @@ const Main = (props) => {
 
   };
 
-  const getUser=()=>{
-    var initUser={
-      username:'seanlin',
+  const getUser = () => {
+    var initUser = {
+      username: 'seanlin',
       taxId: '24549210'
     }
-    if(userDetails && userDetails.user){
+    if (userDetails && userDetails.user) {
       return userDetails.user
     }
     return initUser
   }
 
-  const getClient = ()=>{
+  const getClient = () => {
     return {
       taxId: '50985089',
       name: 'Happy Industry'
@@ -79,7 +78,7 @@ const Main = (props) => {
     localFiles['02'].forEach(async (fileObj) => {
       var ticketId = fileObj.filename.split('_')[3]
       var result = getIdentifyResult(ticketId)
-      if(result.status === 'completed') {
+      if (result.status === 'completed') {
         if (ipcRenderer) {
           var updatedFiles = await ipcRenderer.invoke('evidence:identifyResultReceived', JSON.stringify(fileObj), JSON.stringify(result))
           console.log('updatedFiles', updatedFiles)
@@ -89,35 +88,35 @@ const Main = (props) => {
     })
   };
 
-  const getIdentifyResult = (ticketId)=>{
+  const getIdentifyResult = (ticketId) => {
     console.log(ticketId)
     return {
       status: 'completed',
-      content:{
-        invoiceNumber:'AZ12345678'
+      content: {
+        invoiceNumber: 'AZ12345678'
       }
     }
   }
 
-  const byTicketId = R.groupBy((fileObj)=>{
+  const byTicketId = R.groupBy((fileObj) => {
     return fileObj.filename.split('_')[2].split('.')[0]
   })
   const handleResultAllConfirmed = () => {
     console.log('localfiles 03', localFiles['03'])
     var filesByTicketId = byTicketId(localFiles['03'])
     let imageFileExtension = ['jpg', 'png', 'git']
-    Object.keys(filesByTicketId).forEach(async ticketId=>{
-      if(ipcRenderer){
-        let imageObj = filesByTicketId[ticketId].filter((fileObj)=>{
+    Object.keys(filesByTicketId).forEach(async ticketId => {
+      if (ipcRenderer) {
+        let imageObj = filesByTicketId[ticketId].filter((fileObj) => {
           return imageFileExtension.indexOf(fileObj.filename.split('.')[1]) > -1
         })[0]
 
-        let sighttourObj = filesByTicketId[ticketId].filter(fileObj=>{
+        let sighttourObj = filesByTicketId[ticketId].filter(fileObj => {
           return R.includes('sightour', fileObj.filename)
         })[0]
 
         console.log('imageObj', imageObj)
-        console.log('sightourObj',sighttourObj)
+        console.log('sightourObj', sighttourObj)
         var updatedFiles = await ipcRenderer.invoke('evidence:evidenceSaved', JSON.stringify(imageObj), JSON.stringify(sighttourObj), null)
         setLocalFiles(updatedFiles)
       }
@@ -130,20 +129,20 @@ const Main = (props) => {
   const handleUpload = () => {
     var filesByTicketId = byTicketId(localFiles['04'])
     let imageFileExtension = ['jpg', 'png', 'git']
-    Object.keys(filesByTicketId).forEach(async ticketId=>{
-      let imageObj = filesByTicketId[ticketId].filter((fileObj)=>{
+    Object.keys(filesByTicketId).forEach(async ticketId => {
+      let imageObj = filesByTicketId[ticketId].filter((fileObj) => {
         return imageFileExtension.indexOf(fileObj.filename.split('.')[1]) > -1
       })[0]
 
-      let sighttourObj = filesByTicketId[ticketId].filter(fileObj=>{
+      let sighttourObj = filesByTicketId[ticketId].filter(fileObj => {
         return R.includes('sightour', fileObj.filename)
       })[0]
 
-      let savedResultObj = filesByTicketId[ticketId].filter(fileObj=>{
+      let savedResultObj = filesByTicketId[ticketId].filter(fileObj => {
         return R.includes('saved', fileObj.filename)
       })[0]
       var uploadResult = uploadToGateweb(imageObj, savedResultObj)
-      if(uploadResult.success) {
+      if (uploadResult.success) {
         if (ipcRenderer) {
           var updatedFiles = await ipcRenderer.invoke('evidence:uploaded', JSON.stringify(imageObj), JSON.stringify(sighttourObj), JSON.stringify(savedResultObj))
           setLocalFiles(updatedFiles)
@@ -152,13 +151,22 @@ const Main = (props) => {
     })
   };
 
-  const uploadToGateweb = (imageObj, savedResultObj) =>{
+  const uploadToGateweb = (imageObj, savedResultObj) => {
     return {
       success: true
     }
   }
 
-  const handleTabChange = ()=>{
+  const handleReadImage = async () => {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getFileLists')
+      const image = await ipcRenderer.invoke('evidence:getImageFileContent', result['01'][0]['fullPath'])
+      const blob = new Blob([image]);
+      setImageUrl(URL.createObjectURL(blob))
+    }
+  }
+
+  const handleTabChange = () => {
 
   }
 
@@ -185,11 +193,13 @@ const Main = (props) => {
         <Button variant="contained" onClick={handleGetIdentifyResult}>Get Identify Result</Button>
         <Button variant="contained" onClick={handleResultAllConfirmed}>Result Confirmed</Button>
         <Button variant="contained" onClick={handleUpload}>Upload to Gateweb</Button>
+        <Button variant="contained" onClick={handleReadImage}>ReadImage</Button>
       </Container>
 
 
       <Container>
         <div>{JSON.stringify(localFiles)}</div>
+        <img src={imageUrl} alt="test"/>
         <EvidenceList></EvidenceList>
       </Container>
 
