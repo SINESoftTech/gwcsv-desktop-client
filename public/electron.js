@@ -71,8 +71,8 @@ function createWindow() {
     // and load the index.html of the app.
     var fileLocation = `file://${path.join(__dirname, '../build/index.html')}`
     var devServerUrl = 'http://localhost:3000'
-    // mainWindow.loadURL(isDev ? devServerUrl : fileLocation);
-    mainWindow.loadURL(fileLocation)
+    mainWindow.loadURL(isDev ? devServerUrl : fileLocation);
+    // mainWindow.loadURL(fileLocation)
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
     // Emitted when the window is closed.

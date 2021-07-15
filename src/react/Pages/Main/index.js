@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {logout, useAuthDispatch, useAuthState} from '../../Context';
 import EvidenceList from "../../Components/EvidenceListTable";
 import Button from "@material-ui/core/Button";
 import isElectron from 'is-electron'
-import {AppBar, Container, Tabs} from "@material-ui/core";
+import {AppBar, Container, Tab, Tabs} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import ImageDisplay from 'material-ui-image'
 
 const R = require('ramda');
 // import electron from 'electron'
@@ -11,10 +14,30 @@ const electron = isElectron() ? window.electron : null;
 const remote = isElectron() ? window.remote : null;
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
 const Main = (props) => {
   const dispatch = useAuthDispatch();
   const userDetails = useAuthState();
-  const [localFiles, setLocalFiles] = useState({})
+  const [localFiles, setLocalFiles] = useState()
   const [imageUrl, setImageUrl] = useState('')
   const handleLogout = () => {
     logout(dispatch);
@@ -28,6 +51,14 @@ const Main = (props) => {
       setLocalFiles(result)
     }
   };
+
+  async function getFiles() {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getFileLists')
+      return result
+    }
+    return {}
+  }
 
   const handleScan = async () => {
     if (ipcRenderer) {
@@ -166,8 +197,8 @@ const Main = (props) => {
     }
   }
 
-  const handleTabChange = () => {
-
+  const handleTabChange = (event, newValue) => {
+    setValue(newValue);
   }
 
   function a11yProps(index) {
@@ -176,33 +207,44 @@ const Main = (props) => {
       'aria-controls': `simple-tabpanel-${index}`,
     };
   }
+  const [value, setValue] = React.useState(0);
 
   return (
     <div style={{padding: 10}}>
+      <div>{JSON.stringify(localFiles)}</div>
       <Container>
         <h1>Main</h1>
         <p>Welcome {userDetails.user.username}</p>
         <Button variant="contained" onClick={handleLogout}>
           Logout
         </Button>
-      </Container>
-      <Container>
         <Button variant="contained" onClick={handleLoad}>Load</Button>
-        <Button variant="contained" onClick={handleScan}>Scan</Button>
-        <Button variant="contained" onClick={handleSendToIdentify}>Send to Identify</Button>
-        <Button variant="contained" onClick={handleGetIdentifyResult}>Get Identify Result</Button>
-        <Button variant="contained" onClick={handleResultAllConfirmed}>Result Confirmed</Button>
-        <Button variant="contained" onClick={handleUpload}>Upload to Gateweb</Button>
-        <Button variant="contained" onClick={handleReadImage}>ReadImage</Button>
       </Container>
-
-
       <Container>
-        <div>{JSON.stringify(localFiles)}</div>
-        <img src={imageUrl} alt="test"/>
-        <EvidenceList></EvidenceList>
+        <AppBar position="static">
+          <Tabs value={value} onChange={handleTabChange} aria-label="simple tabs example">
+            <Tab label="已掃描圖檔" {...a11yProps(0)} />
+            <Tab label="已辨識憑證" {...a11yProps(1)} />
+            <Tab label="已確認辨識結果" {...a11yProps(2)} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          <Button variant="contained" onClick={handleScan}>掃描文件</Button>
+          <Button variant="contained" oonClick={handleSendToIdentify}>送出辨識</Button>
+          <EvidenceList></EvidenceList>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Button variant="contained" onClick={handleGetIdentifyResult}>取得辨識結果</Button>
+          <Button variant="contained" onClick={handleResultAllConfirmed}>確認辨識結果</Button>
+          <Button variant="contained" onClick={handleReadImage}>載入圖檔</Button>
+          <ImageDisplay alt="Example Alt" src={imageUrl} />
+          <EvidenceList></EvidenceList>
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <Button variant="contained" onClick={handleUpload}>Upload to Gateweb</Button>
+          <EvidenceList></EvidenceList>
+        </TabPanel>
       </Container>
-
     </div>
   );
 };
