@@ -1,7 +1,6 @@
-import MainReducer from './mainReducer'
+import {MainReducer, initialMainState} from './mainReducer'
+import {AuthReducer, authInitialState} from "./authReducer";
 
-const initialMainState = {
-  fileLists: {}
-};
 
-export {MainReducer, initialMainState}
+
+export {MainReducer, AuthReducer, initialMainState, authInitialState}

@@ -9,9 +9,6 @@ export const authInitialState = {
 }
 
 export const AuthReducer = (initialState, action) => {
-  debugger
-  console.log('in auth reducer, initialState', initialState)
-  console.log('in auth reducer, action', action)
   switch (action.type) {
     case 'REQUEST_LOGIN':
       return {

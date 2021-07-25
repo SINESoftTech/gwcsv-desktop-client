@@ -1,6 +1,5 @@
 import React, { useReducer } from 'react';
-import { AuthReducer, authInitialState } from './authReducer';
-import { MainReducer, initialMainState } from '../Reducers'
+import { MainReducer, initialMainState, AuthReducer, authInitialState } from '../Reducers'
 
 const AppStateContext = React.createContext();
 const AppDispatchContext = React.createContext();

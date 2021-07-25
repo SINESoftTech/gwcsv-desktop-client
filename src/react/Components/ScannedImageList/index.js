@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import Button from "@material-ui/core/Button";
-import EvidenceList from "../EvidenceListTable";
-import * as mockData from "../../Pages/Main/mockDisplayData";
 import isElectron from "is-electron";
+import PropTypes from "prop-types";
+import scannedImageListStyles from "./scannedImageListStyles";
+import ColumnDefinitions from "./columnDefinitions";
+import {DataGrid} from "@material-ui/data-grid";
+import {sequence} from "ramda";
 const electron = isElectron() ? window.electron : null;
 const remote = isElectron() ? window.remote : null;
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
@@ -19,7 +22,7 @@ const sendToIdentify = async (fileObj) => {
 
 const ScannedImageList = (props) => {
   const [rowData, setRowData] = useState(props.data)
-
+  const classes = scannedImageListStyles();
   const handleSendToIdentify = () => {
     props.data.forEach(async (fileObj) => {
       var ticket = await sendToIdentify(fileObj)
@@ -41,15 +44,28 @@ const ScannedImageList = (props) => {
     }
   };
 
-
+  const dataRows = (props.data) ? props.data.map((item, index) => {
+    console.log('in render dataRow item', item)
+    return {id: index+1, fileName: item.filename}
+  }) : []
+  console.log('dataRows', dataRows)
+  const columns = ColumnDefinitions
 
   return (
-    <div>
-        <Button variant="contained" onClick={handleScan}>掃描文件</Button>
-        <Button variant="contained" onClick={handleSendToIdentify}>送出辨識</Button>
-        <EvidenceList data={mockData.rows2}></EvidenceList>
+      <div style={{height: 650, width: '100%'}}>
+        <Button variant="contained" onClick={props.onScanClick}>掃描文件</Button>
+        <Button variant="contained" onClick={props.onSendToIdentifyClick}>送出辨識</Button>
+        <DataGrid rows={dataRows}
+                  columns={columns}
+        />
     </div>
   );
+};
+
+ScannedImageList.propTypes = {
+  onScanClick: PropTypes.func,
+  onSendToIdentifyClick: PropTypes.func,
+  data: PropTypes.array
 };
 
 export default ScannedImageList;
