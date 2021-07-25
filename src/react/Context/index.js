@@ -1,5 +1,5 @@
-import { loginUser, logout } from './actions';
-import { AuthProvider, useAuthDispatch, useAuthState } from './context';
+import * as gwActions from '../Actions/gwActions';
+import { AppContextProvider, useAppDispatch, useAppState } from './context';
 import actionTypes from "./actionTypes";
 
-export { AuthProvider, useAuthState, useAuthDispatch, loginUser, logout, actionTypes };
+export { AppContextProvider, useAppState, useAppDispatch, gwActions, actionTypes };

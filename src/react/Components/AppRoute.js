@@ -1,19 +1,19 @@
 import React from 'react';
 import {Redirect, Route} from 'react-router-dom';
 
-import {useAuthState} from '../Context';
+import {useAppState} from '../Context';
 
 const AppRoutes = ({component: Component, path, isPrivate, ...rest}) => {
-  const userDetails = useAuthState();
-  console.log('userDetails in approutes', userDetails)
-  console.log('isTokenNotExists', !userDetails.token)
+  const {auth} = useAppState();
+  console.log('auth in approutes', auth)
+  console.log('isTokenNotExists', !auth.token)
   console.log('isPrivate', isPrivate)
   console.log('path', path)
   return (
     <Route
       path={path}
       render={(props) =>
-        isPrivate && !userDetails.token ? (
+        isPrivate && !auth.token ? (
           <Redirect to='/login'/>
         ) : (
           <Component {...props} />

@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {loginUser, useAuthState, useAuthDispatch, actionTypes} from '../../Context';
+import {gwActions, useAppState, useAppDispatch} from '../../Context';
 
 function Copyright() {
   return (
@@ -53,16 +53,17 @@ const Login = (props) => {
   const [accountingFirmTaxId, setAccountingFirmTaxId] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const dispatch = useAuthDispatch();
-  const {loading, errorMessage} = useAuthState();
+  const dispatch = useAppDispatch();
+  const {auth} = useAppState();
   console.log('Login Page')
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log('auth', auth)
 
     try {
-      let response = await loginUser(dispatch, {taxId: accountingFirmTaxId, username, password});
-      console.log(response)
-      if (!response.user) return;
+      let response = await gwActions.loginUser(dispatch, {taxId: accountingFirmTaxId, username, password});
+      console.log('login response', response)
+      if (!response.token) return;
       props.history.push('/main');
     } catch (error) {
       console.log(error);
@@ -79,7 +80,7 @@ const Login = (props) => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        {errorMessage ? <p className={classes.error}>{errorMessage}</p> : null}
+        {auth.errorMessage ? <p className={classes.error}>{auth.errorMessage}</p> : null}
         <form className={classes.form} noValidate>
           <TextField
             variant="outlined"
@@ -105,7 +106,6 @@ const Login = (props) => {
             value={username}
             onChange={e => setUsername(e.target.value)}
             autoComplete="username"
-            autoFocus
           />
           <TextField
             variant="outlined"
@@ -130,7 +130,7 @@ const Login = (props) => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleLogin} disabled={loading}
+            onClick={handleLogin} disabled={auth.loading}
           >
             Sign In
           </Button>

@@ -1,11 +1,12 @@
 import React, { useReducer } from 'react';
-import { initialState, AuthReducer } from './reducer';
+import { AuthReducer, authInitialState } from './authReducer';
+import { MainReducer, initialMainState } from '../Reducers'
 
-const AuthStateContext = React.createContext();
-const AuthDispatchContext = React.createContext();
+const AppStateContext = React.createContext();
+const AppDispatchContext = React.createContext();
 
-export function useAuthState() {
-  const context = React.useContext(AuthStateContext);
+export function useAppState() {
+  const context = React.useContext(AppStateContext);
   if (context === undefined) {
     throw new Error('useAuthState must be used within a AuthProvider');
   }
@@ -13,8 +14,8 @@ export function useAuthState() {
   return context;
 }
 
-export function useAuthDispatch() {
-  const context = React.useContext(AuthDispatchContext);
+export function useAppDispatch() {
+  const context = React.useContext(AppDispatchContext);
   if (context === undefined) {
     throw new Error('useAuthDispatch must be used within a AuthProvider');
   }
@@ -22,14 +23,20 @@ export function useAuthDispatch() {
   return context;
 }
 
-export const AuthProvider = ({ children }) => {
-  const [user, dispatch] = useReducer(AuthReducer, initialState);
+const combineDispatch = (...dispatches) => (action) =>
+  dispatches.forEach((dispatch) => dispatch(action));
+
+export const AppContextProvider = ({ children }) => {
+  const [auth, authDispatch] = useReducer(AuthReducer, authInitialState);
+  const [appData, appDispatch] = useReducer(MainReducer, initialMainState);
+  const combinedDispatch = React.useCallback(combineDispatch(authDispatch, appDispatch), [authDispatch, appDispatch]);
+  const combinedState = React.useMemo(() => ({ auth, appData, }), [auth, appData]);
 
   return (
-    <AuthStateContext.Provider value={user}>
-      <AuthDispatchContext.Provider value={dispatch}>
+    <AppStateContext.Provider value={combinedState}>
+      <AppDispatchContext.Provider value={combinedDispatch}>
         {children}
-      </AuthDispatchContext.Provider>
-    </AuthStateContext.Provider>
+      </AppDispatchContext.Provider>
+    </AppStateContext.Provider>
   );
 };

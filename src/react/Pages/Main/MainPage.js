@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useReducer} from 'react';
 import mainStyles from "./mainStyles";
-import clsx from 'clsx';
 import {
   CssBaseline,
   Box,
@@ -28,6 +27,7 @@ function Copyright() {
 
 
 export default function MainPage() {
+  // const [state, dispatch] = useReducer(mainReducer, inititalState)
   const classes = mainStyles()
   return (
     <div className={classes.root}>

@@ -1,4 +1,4 @@
-const ROOT_URL = 'http://test.gwis.com.tw:8596';
+const ROOT_URL = 'http://test.gwis.com.tw:8596'
 
 export async function loginUser(dispatch, loginPayload) {
   const requestOptions = {
@@ -11,16 +11,12 @@ export async function loginUser(dispatch, loginPayload) {
     dispatch({ type: 'REQUEST_LOGIN' });
     let response = await fetch(`${ROOT_URL}/auth/login`, requestOptions);
     let data = await response.json();
-    console.log('data', data)
-    let user = loginPayload
-    console.log('user', user)
+    let user = {taxId: loginPayload.taxId, username: loginPayload.username}
     if (data.token) {
       user.token = data.token
-      data.user = user
-      dispatch({ type: 'LOGIN_SUCCESS', payload: data });
-      localStorage.setItem('currentUser', JSON.stringify(data));
-      console.log('data success', data)
-      return data;
+      dispatch({ type: 'LOGIN_SUCCESS', payload: user });
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      return user;
     }
 
     dispatch({ type: 'LOGIN_ERROR', error: data.errorMsg});
@@ -36,4 +32,21 @@ export async function logout(dispatch) {
   dispatch({ type: 'LOGOUT' });
   localStorage.removeItem('currentUser');
   localStorage.removeItem('token');
+}
+
+export async function uploadToGw(dispatch, payload) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  };
+
+  try {
+    dispatch({ type: 'REQUEST_LOGIN' });
+    dispatch({ type: 'LOGIN_SUCCESS', payload: '' });
+    return;
+  } catch (error) {
+    dispatch({ type: 'LOGIN_ERROR', error: error });
+    console.log(error);
+  }
 }

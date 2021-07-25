@@ -1,11 +1,11 @@
 import {BrowserRouter, Switch} from 'react-router-dom'
 import routes from '../Config/routes'
-import {AuthProvider} from '../Context';
+import {AppContextProvider} from '../Context';
 import AppRoute from './AppRoute';
 
 const RouterDesktop = (props) => {
   return (
-    <AuthProvider>
+    <AppContextProvider>
       <BrowserRouter>
         <Switch>
           {routes.map(route => (
@@ -13,7 +13,7 @@ const RouterDesktop = (props) => {
           ))}
         </Switch>
       </BrowserRouter>
-    </AuthProvider>
+    </AppContextProvider>
   )
 
 }

@@ -1,4 +1,6 @@
 import React, { useState, useReducer } from 'react';
+import AuthReducer from "./authReducer";
+import MainReducer from "../Reducers/mainReducer";
 
 let user = localStorage.getItem('currentUser')
   ? JSON.parse(localStorage.getItem('currentUser')).user
@@ -6,43 +8,30 @@ let user = localStorage.getItem('currentUser')
 let token = localStorage.getItem('currentUser')
   ? JSON.parse(localStorage.getItem('currentUser')).token
   : '';
-
-export const initialState = {
+const authInitState = {
   user: '' || user,
   token: '' || token,
   loading: false,
   errorMessage: null,
+}
+export const initialState = {
+  auth: authInitState,
+  fileLists: []
 };
 
-export const AuthReducer = (initialState, action) => {
-  switch (action.type) {
-    case 'REQUEST_LOGIN':
-      return {
-        ...initialState,
-        loading: true,
-      };
-    case 'LOGIN_SUCCESS':
-      return {
-        ...initialState,
-        user: action.payload.user,
-        token: action.payload.token,
-        loading: false,
-      };
-    case 'LOGOUT':
-      return {
-        ...initialState,
-        user: '',
-        token: '',
-      };
+const combineDispatch = (...dispatches) => (action) =>
+  dispatches.forEach((dispatch) => dispatch(action));
 
-    case 'LOGIN_ERROR':
-      return {
-        ...initialState,
-        loading: false,
-        errorMessage: action.error,
-      };
+const combineReducers = (slices) => (state, action) =>
+  Object.keys(slices).reduce( // use for..in loop, if you prefer it
+    (acc, prop) => ({
+      ...acc,
+      [prop]: slices[prop](acc[prop], action),
+    }),
+    state
+  );
 
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
-  }
-};
+
+export const rootReducer = combineReducers(AuthReducer, MainReducer)
+
+

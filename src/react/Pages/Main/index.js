@@ -1,15 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {logout, useAuthDispatch, useAuthState} from '../../Context';
-import EvidenceList from "../../Components/EvidenceListTable";
+import React, {useEffect, useReducer, useState} from 'react';
+import {gwActions, useAppDispatch, useAppState} from '../../Context';
 import Button from "@material-ui/core/Button";
 import isElectron from 'is-electron'
 import {AppBar, Container, CssBaseline, Grid, IconButton, Paper, Tab, Tabs, Toolbar} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import ImageDisplay from 'material-ui-image'
 import GwMenuTop from "./GwMenuTop";
 import mainStyles from "./mainStyles";
-import * as mockData from './mockDisplayData'
 import ScannedImageList from "../../Components/ScannedImageList";
 import ConfirmedEvidenceList from "../../Components/ConfirmedEvidenceList";
 import IdentifiedEvidenceList from "../../Components/IdenfiedEvidenceList";
@@ -41,27 +38,29 @@ function TabPanel(props) {
 }
 
 const Main = (props) => {
-  const dispatch = useAuthDispatch();
-  const userDetails = useAuthState();
-  const [localFiles, setLocalFiles] = useState()
+  const dispatch = useAppDispatch();
+  const appState = useAppState();
   const [value, setValue] = React.useState(0);
-
   const classes = mainStyles()
+
+
+
   useEffect(async () => {
-    await fetchAllFiles()
+    console.log('userDetails', appState)
+    // const result = await electronActions.getFileLists()
   }, [])
 
   const handleLogout = () => {
-    logout(dispatch);
+    gwActions.logout(dispatch);
     props.history.push('/login');
   };
 
-  const fetchAllFiles = async () => {
-    if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:getFileLists')
-      setLocalFiles(result)
-    }
-  }
+  // const fetchAllFiles = async () => {
+  //   if (ipcRenderer) {
+  //     const result = await ipcRenderer.invoke('evidence:getFileLists')
+  //     setLocalFiles(result)
+  //   }
+  // }
 
   async function getFiles(filepath) {
     if (ipcRenderer) {
@@ -76,10 +75,10 @@ const Main = (props) => {
       username: 'seanlin',
       taxId: '24549210'
     }
-    if (userDetails && userDetails.user) {
-      return userDetails.user
+    if (appState.auth) {
+      return appState.auth
     }
-    return initUser
+    return (appState.auth) ? appState.auth : initUser
   }
 
   const getClient = () => {
@@ -101,11 +100,11 @@ const Main = (props) => {
   }
 
   const renderUserMenu = () => {
-    if (userDetails.user) {
+    if (appState.auth) {
       return (
         <div>
           <nav>
-            <p>Welcome {userDetails.user.username}</p>
+            <p>Welcome {appState.auth.username}</p>
             <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </nav>
         </div>
@@ -136,10 +135,10 @@ const Main = (props) => {
                   </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
-                  <ScannedImageList data={localFiles} user={getUser()} client={getClient()}></ScannedImageList>
+                  <ScannedImageList data={[]} user={getUser()} client={getClient()}></ScannedImageList>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                  <IdentifiedEvidenceList data={localFiles}></IdentifiedEvidenceList>
+                  <IdentifiedEvidenceList data={[]}></IdentifiedEvidenceList>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList></ConfirmedEvidenceList>
