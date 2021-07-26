@@ -113,7 +113,7 @@ const Main = (props) => {
     }
 
     const uploadFileToSightour = (formData) => {
-        console.log("AA")
+        //FIXME
         const url = 'http://aiocr.sightour.com/gateweb/api/upload.php'
         axios.post(url, formData).then(r => {
             console.log(r)
