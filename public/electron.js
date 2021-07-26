@@ -172,7 +172,7 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
 })
 
 ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
-    // console.log(event)
+    // console.log(event)g
     // console.log(fullPath)
     // return '1'
     return fse.readFileSync(fullPath, {encoding: 'base64'});
