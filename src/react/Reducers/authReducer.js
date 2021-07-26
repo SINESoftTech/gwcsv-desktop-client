@@ -1,6 +1,6 @@
 let user = localStorage.getItem('currentUser')
   ? JSON.parse(localStorage.getItem('currentUser'))
-  : '';
+  : {taxId: '', username:'', token:''};
 
 export const authInitialState = {
   user: '' || user,
@@ -16,9 +16,6 @@ export const AuthReducer = (initialState, action) => {
         loading: true,
       };
     case 'LOGIN_SUCCESS':
-      debugger
-      console.log('in auth reducer, initialState', initialState)
-      console.log('in auth reducer, action', action)
       return {
         ...initialState,
         user: action.payload,
@@ -35,7 +32,7 @@ export const AuthReducer = (initialState, action) => {
       return {
         ...initialState,
         loading: false,
-        errorMessage: action.error,
+        errorMessage: action.error.errorMsg,
       };
 
     default:

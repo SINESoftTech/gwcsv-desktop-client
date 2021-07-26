@@ -21,6 +21,7 @@ import ScannedImageList from "../../Components/ScannedImageList";
 import ConfirmedEvidenceList from "../../Components/ConfirmedEvidenceList";
 import IdentifiedEvidenceList from "../../Components/IdenfiedEvidenceList";
 import * as electronActions from '../../Actions/electionActions'
+import * as sightTourActions from '../../Actions/sightourActions'
 
 const R = require('ramda');
 // import electron from 'electron'
@@ -66,20 +67,12 @@ const Main = (props) => {
     props.history.push('/login');
   };
 
-  async function getFiles(filepath) {
-    if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:getFileLists', filepath)
-      return result
-    }
-    return {}
-  }
-
   const getUser = () => {
     var initUser = {
       username: 'seanlin',
       taxId: '24549210'
     }
-    return (appState.auth) ? appState.auth : initUser
+    return (appState.auth && appState.auth.user.username) ? appState.auth.user : initUser
   }
 
   const getClient = () => {
@@ -92,20 +85,23 @@ const Main = (props) => {
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   }
-  const handleClientSelectChange = (event, target)=>{
+  const handleClientSelectChange = (event, target) => {
     console.log('handleClientSelectChange event', event)
     console.log('handleClientSelectChange target', target)
     setClientTaxId(event.target.value)
   }
 
-  const handleSendImageToIdentify = (event)=>{
-    console.log('handleSendImageToIdentify event', event)
+  const handleSendImageToIdentify = (event) => {
+    var result = sightTourActions.sendToIdentify(dispatch, appState.appData.fileLists['01'])
   }
 
-  const handleScanImage = (event)=>{
+  const handleScanImage = (event) => {
     console.log('handleScanImage event', event)
   }
 
+  const updateFiles = (getFileListResult) => {
+
+  }
 
   function a11yProps(index) {
     return {
@@ -135,16 +131,16 @@ const Main = (props) => {
     return (
       <>
         <FormControl className={classes.formControl}>
-        <InputLabel id="client-taxId-select-label">客戶</InputLabel>
-        <Select
-          labelId="client-taxId-select-label"
-          id="client-taxId-select"
-          value={clientTaxId}
-          onChange={handleClientSelectChange}>
-          <MenuItem value={'24549210'}>
-            Gateweb Ltd. Co.
-          </MenuItem>
-        </Select>
+          <InputLabel id="client-taxId-select-label">客戶</InputLabel>
+          <Select
+            labelId="client-taxId-select-label"
+            id="client-taxId-select"
+            value={clientTaxId}
+            onChange={handleClientSelectChange}>
+            <MenuItem value={'24549210'}>
+              Gateweb Ltd. Co.
+            </MenuItem>
+          </Select>
         </FormControl>
       </>
     )
@@ -170,7 +166,8 @@ const Main = (props) => {
                   </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
-                  <ScannedImageList data={appState.appData.fileLists['01']} onScanClick={handleScanImage} onSendToIdentifyClick={handleSendImageToIdentify}></ScannedImageList>
+                  <ScannedImageList data={appState.appData.fileLists['01']} username={appState.auth.user.username} clientTaxId={clientTaxId} onScanClick={handleScanImage}
+                                    onSendToIdentifyClick={handleSendImageToIdentify}></ScannedImageList>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={[]}></IdentifiedEvidenceList>

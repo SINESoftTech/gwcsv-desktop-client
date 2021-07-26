@@ -56,7 +56,7 @@ function loadConfig() {
 
 function createWindow() {
     // Create the browser window.
-    console.log(path.join(__dirname, 'preload.js'))
+    // console.log(path.join(__dirname, 'preload.js'))
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -150,7 +150,7 @@ function getFileContent(fullPath) {
         return fse.readFileSync(fullPath);
     }
     if (R.endsWith('.jpg', fullPath)) {
-        return fse.readFileSync(fullPath, {encoding: 'base64'});
+        return fse.readFileSync(fullPath);
     }
     if (R.endsWith(".js", fullPath) || R.endsWith(".txt", fullPath) || R.endsWith(".json", fullPath)) {
         return fse.readFileSync(fullPath, "utf-8");
@@ -165,16 +165,24 @@ ipcMain.handle('evidence:getFileLists', (event, ...args) => {
 })
 
 ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
-    console.log(event)
-    console.log(fullPath)
+    // console.log(event)
+    // console.log(fullPath)
     // return '1'
     return getFileContent(fullPath)
 })
 
+ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
+    // console.log(event)
+    // console.log(fullPath)
+    // return '1'
+    return fse.readFileSync(fullPath, {encoding: 'base64'});
+})
+
+
 ipcMain.handle('evidence:identifySent', (event, user, client, ticket, fileObj) => {
-    console.log('user', user)
-    console.log('ticket', ticket)
-    console.log('fileObj', fileObj)
+    // console.log('user', user)
+    // console.log('ticket', ticket)
+    // console.log('fileObj', fileObj)
     let userObj = JSON.parse(user)
     let clientObj = JSON.parse(client)
     let tickerObj = JSON.parse(ticket)
@@ -182,9 +190,9 @@ ipcMain.handle('evidence:identifySent', (event, user, client, ticket, fileObj) =
     let fileExt = fileObjObj.filename.split('.').slice(-1)[0]
 
     var targetFileName = `${userObj.username}_${clientObj.taxId}_${tickerObj.id}.${fileExt}`
-    console.log(targetFileName)
+    // console.log(targetFileName)
     var targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
-    console.log(targetFullName)
+    // console.log(targetFullName)
     fse.moveSync(fileObjObj.fullPath, targetFullName)
     return getAllFileLists()
 })
@@ -194,9 +202,9 @@ ipcMain.handle('evidence:identifyResultReceived', (event, imageFileObj, identify
     let fileObjObj = JSON.parse(imageFileObj)
     let resultObj = JSON.parse(identifyResult)
     const filenameWithoutExt = fileObjObj.filename.split('.').slice(0, -1).join('.')
-    console.log(filenameWithoutExt)
+    // console.log(filenameWithoutExt)
     const imageFileExt = fileObjObj.filename.split('.').slice(-1)[0]
-    console.log(imageFileExt)
+    // console.log(imageFileExt)
     fse.moveSync(fileObjObj.fullPath, path.join(targetFolder, fileObjObj.filename))
     fse.writeJSONSync(path.join(targetFolder, filenameWithoutExt + "_sightour_result.txt"), resultObj)
     return getAllFileLists()
@@ -209,15 +217,15 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
     let sightourResultFileObjObj = JSON.parse(sightourFileObj)
     let resultObj = savedResult ? JSON.parse(savedResult) : null;
     const filenameWithoutExt = imageFileObjObj.filename.split('.').slice(0, -1).join('.')
-    console.log(filenameWithoutExt)
+    // console.log(filenameWithoutExt)
     const imageFileExt = imageFileObjObj.filename.split('.').slice(-1)[0]
-    console.log(imageFileExt)
+    // console.log(imageFileExt)
 
     if (resultObj) {
-        console.log('result exists')
+        // console.log('result exists')
         fse.writeJSONSync(path.join(targetFolder, filenameWithoutExt + "_saved_result.txt"), resultObj)
     } else {
-        console.log('copyFile')
+        // console.log('copyFile')
         fse.copySync(sightourResultFileObjObj.fullPath, path.join(targetFolder, filenameWithoutExt + "_saved_result.txt"))
     }
     fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))

@@ -1,3 +1,5 @@
+import {gwAxios as axios} from "./axios";
+
 const ROOT_URL = 'http://test.gwis.com.tw:8596'
 
 export async function loginUser(dispatch, loginPayload) {
@@ -9,8 +11,8 @@ export async function loginUser(dispatch, loginPayload) {
 
   try {
     dispatch({ type: 'REQUEST_LOGIN' });
-    let response = await fetch(`${ROOT_URL}/auth/login`, requestOptions);
-    let data = await response.json();
+    let response = await axios.post('/auth/login', JSON.stringify(loginPayload)) //await fetch(`${ROOT_URL}/auth/login`, requestOptions);
+    let data = response.data
     let user = {taxId: loginPayload.taxId, username: loginPayload.username}
     if (data.token) {
       user.token = data.token
@@ -19,11 +21,11 @@ export async function loginUser(dispatch, loginPayload) {
       return user;
     }
 
-    dispatch({ type: 'LOGIN_ERROR', error: data.errorMsg});
-    console.log(data.errorMsg);
+    dispatch({ type: 'LOGIN_ERROR', error: response.data});
+    console.log('error response', response.data);
     return;
   } catch (error) {
-    dispatch({ type: 'LOGIN_ERROR', error: error });
+    dispatch({ type: 'LOGIN_ERROR', error: error.response.data });
     console.log(error);
   }
 }

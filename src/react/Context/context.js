@@ -29,7 +29,7 @@ export const AppContextProvider = ({ children }) => {
   const [auth, authDispatch] = useReducer(AuthReducer, authInitialState);
   const [appData, appDispatch] = useReducer(MainReducer, initialMainState);
   const combinedDispatch = React.useCallback(combineDispatch(authDispatch, appDispatch), [authDispatch, appDispatch]);
-  const combinedState = React.useMemo(() => ({ auth, appData, }), [auth, appData]);
+  const combinedState = React.useMemo(() => ({ auth, appData }), [auth, appData]);
 
   return (
     <AppStateContext.Provider value={combinedState}>

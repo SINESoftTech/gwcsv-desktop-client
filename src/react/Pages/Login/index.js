@@ -64,7 +64,7 @@ const Login = (props) => {
       let response = await gwActions.loginUser(dispatch, {taxId: accountingFirmTaxId, username, password});
       console.log('login response', response)
       if (!response.token) return;
-      props.history.push('/main');
+      props.history.push('/');
     } catch (error) {
       console.log(error);
     }

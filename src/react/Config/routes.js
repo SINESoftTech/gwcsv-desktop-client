@@ -8,8 +8,8 @@ const routes =[
   {
     key:'main',
     path:'/main',
-    component: MainPage,
-    isPrivate: false
+    component: Main,
+    isPrivate: true
   },
   {
     key:'login',
@@ -21,7 +21,7 @@ const routes =[
     key:'root',
     path:'/',
     component: Main,
-    isPrivate: false
+    isPrivate: true
   },
   {
     key:'other',

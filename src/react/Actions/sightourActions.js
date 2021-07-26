@@ -1,3 +1,4 @@
+import {signtTourAxios} from "./axios";
 export async function sendToIdentify(dispatch, payload) {
   try {
   } catch (error) {
