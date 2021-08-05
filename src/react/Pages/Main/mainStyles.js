@@ -88,7 +88,10 @@ const mainStyles = makeStyles((theme) => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
-
+  link:{
+    margin: theme.spacing(1, 1.5),
+    color: "white"
+  }
 
 }));
 

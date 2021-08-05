@@ -58,15 +58,8 @@ const Main = (props) => {
     const classes = mainStyles()
 
     useEffect(async () => {
-        console.log('userDetails', appState)
         const result = await electronActions.getFileLists(dispatch)
-        console.log('result', result)
     }, [])
-
-    const handleLogout = () => {
-        gwActions.logout(dispatch);
-        props.history.push('/login');
-    };
 
     const getUser = () => {
         var initUser = {
@@ -86,16 +79,11 @@ const Main = (props) => {
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
     }
-    const handleClientSelectChange = (event, target) => {
-        console.log('handleClientSelectChange event', event)
-        console.log('handleClientSelectChange target', target)
+    const handleClientSelectChange = (event) => {
         setClientTaxId(event.target.value)
     }
 
     const handleSendImageToIdentify = (event, data) => {
-        console.log("A")
-        console.log(event)
-        console.log(data)
         //FIXME
         const blob = data[0].imageUrl
         const fileName = data[0].fileName
@@ -133,23 +121,6 @@ const Main = (props) => {
             id: `simple-tab-${index}`,
             'aria-controls': `simple-tabpanel-${index}`,
         };
-    }
-
-    const renderUserMenu = () => {
-        if (appState.auth) {
-            return (
-                <div>
-                    <nav>
-                        <p>Welcome {appState.auth.username}</p>
-                        <Button color="inherit" onClick={handleLogout}>Logout</Button>
-                    </nav>
-                </div>
-            )
-        }
-        return (<>
-            <nav>Aloha</nav>
-            <Button color="inherit" variant="outlined" onClick={handleLogout}>Logout</Button>
-        </>)
     }
 
     const renderClientSelect = () => {
