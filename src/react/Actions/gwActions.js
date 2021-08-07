@@ -3,6 +3,14 @@ import actionTypes from '../Actions/actionTypes'
 
 const ROOT_URL = 'http://test.gwis.com.tw:8596'
 
+// axios.interceptors.response.use(function(response){
+//   console.log('axios interceptors response')
+//   return response
+// }, function(error){
+//   console.log('axios interceptors response error', error.response)
+//   return Promise.reject(error)
+// })
+
 export async function loginUser(dispatch, loginPayload) {
   const requestOptions = {
     method: 'POST',
@@ -58,11 +66,13 @@ export const getAllClientList = async (dispatch, username, taxId, token) => {
   const requestOptions = {
     headers: {'Content-Type': 'application/json', 'Authorization': token, taxId: taxId},
   };
+
   const result = await axios.get(`/businessEntity/${taxId}`, requestOptions).catch((error) => {
     // TODO Error handling, logout or re-login?
-    console.log('getAllClientList error', error)
+    console.log('getAllClientList error', JSON.stringify(error))
     dispatch({type: actionTypes.GET_CLIENT_LIST_FAILED, payload: error})
   })
+  console.log('getAllClientList result', result)
   if(result) {
     dispatch({type: actionTypes.GET_CLIENT_LIST_SUCCESS, payload: result.data})
   }
