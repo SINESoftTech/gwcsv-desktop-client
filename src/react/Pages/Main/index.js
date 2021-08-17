@@ -72,6 +72,10 @@ const Main = (props) => {
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
+    const accountingfirmTaxId = appState.auth.user.taxId
+    const businessEntityTaxId = clientTaxId
+    console.log('main handleSendImageToIdentify clientTaxId', clientTaxId)
+    console.log('main handleSendImageToIdentify accountingfirmTaxId', accountingfirmTaxId)
     console.log('main handleSendImageToIdentify event', event)
     console.log('main handleSendImageToIdentify data', data)
     await sightTourActions.sendToIdentify(dispatch, data)

@@ -3,14 +3,13 @@ import axios from 'axios'
 
 const R = require('ramda')
 
-const getToken = (id, psw) => {
+const getToken = async (id, psw) => {
   try {
     const apiPath = '/requestToken.php'
-    const req = {
-      'id': id,
-      'psw': psw
-    }
-    const result = signtTourAxios.post(apiPath, JSON.stringify(req))
+    const formData = new FormData()
+    formData.append('id', id)
+    formData.append('psw', psw)
+    const result = await signtTourAxios.post(apiPath, formData)
     return result.data['token']
   } catch (error) {
     //TODO error handle
@@ -21,7 +20,8 @@ export async function sendToIdentify(dispatch, fileObjectList) {
   console.log('sendToIdentify dispatch', dispatch)
   console.log('sendToIdentify fileObj', fileObjectList)
   try {
-    const token = getToken('gateweb1', 'qwe123')
+    const token = await getToken('gateweb1', 'qwe123')
+    console.log('sendToIdentify token', token)
     const apiPath = '/upload.php'
     let formData = new FormData()
     // formData.append('file','')
