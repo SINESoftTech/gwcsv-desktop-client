@@ -16,8 +16,14 @@ const getRowData = async (fileObjects, username, clientTaxId) => {
   for (let idx = 0; idx < fileObjects.length; idx++) {
     let item = fileObjects[idx]
     if (clientTaxId && item.filename.indexOf(username) > -1 && item.filename.indexOf(clientTaxId) > -1) {
-      let imageUrl = await getImageFileUrl(item.fullPath)
-      let rowItem = { id: idx + 1, fileName: item.filename.split('_')[2], imageUrl: imageUrl, fullPath: item.fullPath }
+      let imageFileBlob = await getImageFileBlob(item.fullPath)
+      let rowItem = {
+        id: idx + 1,
+        fileName: item.filename.split('_')[2],
+        fileBlob: imageFileBlob,
+        imageUrl: URL.createObjectURL(imageFileBlob),
+        fullPath: item.fullPath
+      }
       rowData.push(rowItem)
       //FIXME
     }
@@ -25,11 +31,10 @@ const getRowData = async (fileObjects, username, clientTaxId) => {
   return rowData
 }
 
-const getImageFileUrl = async (fullPath) => {
+const getImageFileBlob = async (fullPath) => {
   if (ipcRenderer) {
     const image = await ipcRenderer.invoke('evidence:getImageFileContent', fullPath)
-    const blob = new Blob([image])
-    return URL.createObjectURL(blob)
+    return new Blob([image])
   }
   return ''
 }
