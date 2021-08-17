@@ -11,16 +11,29 @@ const getToken = (id, psw) => {
       'psw': psw
     }
     const result = signtTourAxios.post(apiPath, JSON.stringify(req))
-    console.log(result)
+    return result.data['token']
   } catch (error) {
     //TODO error handle
   }
 }
 
 export async function sendToIdentify(dispatch, fileObjectList) {
-  console.log(fileObjectList)
+  console.log('sendToIdentify dispatch', dispatch)
+  console.log('sendToIdentify fileObj', fileObjectList)
   try {
-
+    const token = getToken('gateweb1', 'qwe123')
+    const apiPath = '/upload.php'
+    let formData = new FormData()
+    // formData.append('file','')
+    // formData.append('type','')
+    // formData.append('company','')
+    // formData.append('token',)
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // }
+    // return await axios.post(url, bodyFormData, config)
   } catch (error) {
   }
 }

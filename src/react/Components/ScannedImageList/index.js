@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import Button from "@material-ui/core/Button";
-import isElectron from "is-electron";
-import PropTypes from "prop-types";
-import scannedImageListStyles from "./scannedImageListStyles";
-import {IconButton, ImageList, ImageListItem, ImageListItemBar} from "@material-ui/core";
-import {Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon} from '@material-ui/icons';
+import React, { useEffect, useState } from 'react'
+import Button from '@material-ui/core/Button'
+import isElectron from 'is-electron'
+import PropTypes from 'prop-types'
+import scannedImageListStyles from './scannedImageListStyles'
+import { IconButton, ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core'
+import { Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon } from '@material-ui/icons'
 
-const electron = isElectron() ? window.electron : null;
-const remote = isElectron() ? window.remote : null;
+const electron = isElectron() ? window.electron : null
+const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
-var fs = isElectron() ? remote.require('fs') : null;
+var fs = isElectron() ? remote.require('fs') : null
 
 const getRowData = async (fileObjects, username, clientTaxId) => {
   let rowData = []
@@ -17,7 +17,7 @@ const getRowData = async (fileObjects, username, clientTaxId) => {
     let item = fileObjects[idx]
     if (clientTaxId && item.filename.indexOf(username) > -1 && item.filename.indexOf(clientTaxId) > -1) {
       let imageUrl = await getImageFileUrl(item.fullPath)
-      let rowItem = {id: idx + 1, fileName: item.filename.split('_')[2], imageUrl: imageUrl, fullPath: item.fullPath}
+      let rowItem = { id: idx + 1, fileName: item.filename.split('_')[2], imageUrl: imageUrl, fullPath: item.fullPath }
       rowData.push(rowItem)
       //FIXME
     }
@@ -28,7 +28,7 @@ const getRowData = async (fileObjects, username, clientTaxId) => {
 const getImageFileUrl = async (fullPath) => {
   if (ipcRenderer) {
     const image = await ipcRenderer.invoke('evidence:getImageFileContent', fullPath)
-    const blob = new Blob([image]);
+    const blob = new Blob([image])
     return URL.createObjectURL(blob)
   }
   return ''
@@ -42,14 +42,21 @@ const isSendToIdentifyEnable = (data) => {
 }
 
 const ScannedImageList = (props) => {
+
   const [dataRows, setDataRows] = useState([])
-  useEffect(async () => {
-    console.log('in useEffect props.clientTaxId', props.clientTaxId)
-    let rowData = (props.data) ? await getRowData(props.data, props.username, props.clientTaxId) : []
-    setDataRows(rowData)
+
+  useEffect(() => {
+    const initDataRows = async (data, username, clientTaxId) => {
+      console.log('in useEffect clientTaxId', clientTaxId)
+      const rowData = (props.data) ? await getRowData(data, username, clientTaxId) : []
+      console.log('in useEffect', rowData)
+      setDataRows(rowData)
+    }
+    initDataRows(props.data, props.username, props.clientTaxId)
   }, [props.data, props.clientTaxId])
 
-  const classes = scannedImageListStyles();
+  const classes = scannedImageListStyles()
+
 
   const handleViewOriginalImage = (selectedImageUrl) => {
     // console.log('handleViewOriginalImage event', event)
@@ -58,31 +65,31 @@ const ScannedImageList = (props) => {
   }
 
   return (
-    <div style={{height: 650, width: '100%'}}>
-      <Button variant="contained" onClick={props.onScanClick} disabled={!isScanEnable(props.clientTaxId)}>掃描文件</Button>
-      <Button variant="contained" onClick={(e) => {
+    <div style={{ height: 650, width: '100%' }}>
+      <Button variant='contained' onClick={props.onScanClick} disabled={!isScanEnable(props.clientTaxId)}>掃描文件</Button>
+      <Button variant='contained' onClick={(e) => {
         props.onSendToIdentifyClick(e, dataRows)
       }} disabled={!isSendToIdentifyEnable(dataRows)}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
           {dataRows.map((item) => (
             <ImageListItem key={item.id}>
-              <img src={item.imageUrl} alt={item.fileName}/>
+              <img src={item.imageUrl} alt={item.fileName} />
               <ImageListItemBar
                 title={item.fileName}
                 actionIcon={
                   <div>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
                                 onClick={e => props.onImageOriginalViewClick(e, item)}>
-                      <ZoomInIcon/>
+                      <ZoomInIcon />
                     </IconButton>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                                onClick={e=> props.onSaveImageClick(e, item)}>
-                      <SaveIcon/>
+                                onClick={e => props.onSaveImageClick(e, item)}>
+                      <SaveIcon />
                     </IconButton>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                                onClick={e=> props.onDeleteImageClick(e.item)}>
-                      <DeleteIcon/>
+                                onClick={e => props.onDeleteImageClick(e.item)}>
+                      <DeleteIcon />
                     </IconButton>
                   </div>
                 }
@@ -92,8 +99,8 @@ const ScannedImageList = (props) => {
         </ImageList>
       </div>
     </div>
-  );
-};
+  )
+}
 
 ScannedImageList.propTypes = {
   onScanClick: PropTypes.func,
@@ -104,6 +111,6 @@ ScannedImageList.propTypes = {
   username: PropTypes.string,
   data: PropTypes.array,
   clientTaxId: PropTypes.string
-};
+}
 
-export default ScannedImageList;
+export default ScannedImageList
