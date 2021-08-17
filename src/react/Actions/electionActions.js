@@ -36,13 +36,10 @@ export async function fileScanned(dispatch, payload) {
 }
 
 export async function identifySent(dispatch, payload) {
-  console.log('identifySent payload', payload)
   try {
     if (ipcRenderer) {
-      //TODO
       const result = await ipcRenderer.invoke('evidence:identifySent', payload)
-      // dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
-      // return result
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
     //todo handle
