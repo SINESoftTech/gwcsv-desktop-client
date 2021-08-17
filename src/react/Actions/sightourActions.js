@@ -1,5 +1,6 @@
 import { signtTourAxios } from './axios'
 import axios from 'axios'
+import { forEach } from 'ramda'
 
 const R = require('ramda')
 
@@ -16,24 +17,29 @@ const getToken = async (id, psw) => {
   }
 }
 
-export async function sendToIdentify(dispatch, fileObjectList) {
+export async function sendToIdentify(dispatch, identifyData) {
   console.log('sendToIdentify dispatch', dispatch)
-  console.log('sendToIdentify fileObj', fileObjectList)
+  console.log('sendToIdentify fileObj', identifyData)
   try {
-    const token = await getToken('gateweb1', 'qwe123')
-    console.log('sendToIdentify token', token)
     const apiPath = '/upload.php'
-    let formData = new FormData()
-    // formData.append('file','')
-    // formData.append('type','')
-    // formData.append('company','')
-    // formData.append('token',)
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // }
-    // return await axios.post(url, bodyFormData, config)
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+    for (let i = 0; i < identifyData.length; i++) {
+      const data = identifyData[i]
+      const token = await getToken('gateweb1', 'qwe123')
+      const formData = new FormData()
+      formData.append('file', data.fileBlob)
+      formData.append('type', data.evidenceType)
+      formData.append('agent', data.accountingfirmTaxId)
+      formData.append('company', data.businessEntityTaxId)
+      formData.append('token', token)
+      const result = await signtTourAxios.post(apiPath, formData, config)
+      const ticketId = result.data['ticket']
+    }
+
   } catch (error) {
   }
 }

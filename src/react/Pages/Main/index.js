@@ -74,11 +74,16 @@ const Main = (props) => {
   const handleSendImageToIdentify = async (event, data) => {
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = clientTaxId
-    console.log('main handleSendImageToIdentify clientTaxId', clientTaxId)
-    console.log('main handleSendImageToIdentify accountingfirmTaxId', accountingfirmTaxId)
-    console.log('main handleSendImageToIdentify event', event)
-    console.log('main handleSendImageToIdentify data', data)
-    await sightTourActions.sendToIdentify(dispatch, data)
+    const sendToIdentifyData = data.map(d => {
+      return {
+        'fileBlob': d.fileBlob,
+        'accountingfirmTaxId': accountingfirmTaxId,
+        'businessEntityTaxId': businessEntityTaxId,
+        'evidenceType': 'A5002'
+      }
+    })
+    console.log(sendToIdentifyData)
+    await sightTourActions.sendToIdentify(dispatch, sendToIdentifyData)
   }
 
   const handleSaveImage = (event, data) => {
