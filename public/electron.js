@@ -178,22 +178,23 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
     return fse.readFileSync(fullPath, {encoding: 'base64'});
 })
 
-
-ipcMain.handle('evidence:identifySent', (event, user, client, ticket, fileObj) => {
+//TODO
+ipcMain.handle('evidence:identifySent', (event,sentIdentifyResult) => {
+    console.log(sentIdentifyResult)
     // console.log('user', user)
     // console.log('ticket', ticket)
     // console.log('fileObj', fileObj)
-    let userObj = JSON.parse(user)
-    let clientObj = JSON.parse(client)
-    let tickerObj = JSON.parse(ticket)
-    let fileObjObj = JSON.parse(fileObj)
-    let fileExt = fileObjObj.filename.split('.').slice(-1)[0]
-
-    var targetFileName = `${userObj.username}_${clientObj.taxId}_${tickerObj.id}.${fileExt}`
-    // console.log(targetFileName)
-    var targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
+    // let userObj = JSON.parse(user)
+    // let clientObj = JSON.parse(client)
+    // let tickerObj = JSON.parse(ticket)
+    // let fileObjObj = JSON.parse(fileObj)
+    // let fileExt = fileObjObj.filename.split('.').slice(-1)[0]
+    //
+    // var targetFileName = `${userObj.username}_${clientObj.taxId}_${tickerObj.id}.${fileExt}`
+    // // console.log(targetFileName)
+    // var targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
     // console.log(targetFullName)
-    fse.moveSync(fileObjObj.fullPath, targetFullName)
+    // fse.moveSync(fileObjObj.fullPath, targetFullName)
     return getAllFileLists()
 })
 

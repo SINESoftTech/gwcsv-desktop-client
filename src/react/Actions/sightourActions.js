@@ -1,6 +1,4 @@
 import { signtTourAxios } from './axios'
-import axios from 'axios'
-import { forEach } from 'ramda'
 
 const R = require('ramda')
 
@@ -17,9 +15,7 @@ const getToken = async (id, psw) => {
   }
 }
 
-export async function sendToIdentify(dispatch, identifyData) {
-  console.log('sendToIdentify dispatch', dispatch)
-  console.log('sendToIdentify fileObj', identifyData)
+export async function sendToIdentify(identifyData) {
   try {
     const apiPath = '/upload.php'
     const config = {
@@ -27,6 +23,7 @@ export async function sendToIdentify(dispatch, identifyData) {
         'Content-Type': 'multipart/form-data'
       }
     }
+    let resultList = []
     for (let i = 0; i < identifyData.length; i++) {
       const data = identifyData[i]
       const token = await getToken('gateweb1', 'qwe123')
@@ -37,10 +34,15 @@ export async function sendToIdentify(dispatch, identifyData) {
       formData.append('company', data.businessEntityTaxId)
       formData.append('token', token)
       const result = await signtTourAxios.post(apiPath, formData, config)
-      const ticketId = result.data['ticket']
+      resultList.push({
+        'ticketId': result.data['ticket'],
+        'sourceFullPath': data.sourceFullPath,
+        'sourceFileName': data.sourceFileName
+      })
     }
-
+    return resultList
   } catch (error) {
+    //TODO handle
   }
 }
 
@@ -50,28 +52,4 @@ export async function getIdentifyResult(dispatch, payload) {
 
 export async function sendConfirmedResult(dispatch, payload) {
   dispatch({ type: 'LOGOUT' })
-}
-
-export const handleSendImageToIdentify = (data) => {
-  //FIXME
-  const blob = data[0].imageUrl
-  const fileName = data[0].fileName
-  const file = new File([blob], fileName)
-  //FIXME add value
-  const bodyFormData = new FormData()
-  bodyFormData.append('file', file)
-  bodyFormData.append('type', 'A5001')
-  bodyFormData.append('agent', '00000000')
-  bodyFormData.append('company', '00000000')
-  bodyFormData.append('token', '2olhx7gwv10z')
-  //todo upload
-  console.log(bodyFormData)
-  uploadFileToSightour(bodyFormData)
-}
-export const uploadFileToSightour = (formData) => {
-  //FIXME
-  const url = 'http://aiocr.sightour.com/gateweb/api/upload.php'
-  axios.post(url, formData).then(r => {
-    console.log(r)
-  })
 }

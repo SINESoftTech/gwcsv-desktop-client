@@ -19,6 +19,7 @@ import mainStyles from './mainStyles'
 import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
+import { identifySent } from '../../Actions/electionActions'
 // import * as electronActions from '../../Actions/electionActions'
 // import * as sightTourActions from '../../Actions/sightourActions'
 // import axios from "axios";
@@ -76,14 +77,16 @@ const Main = (props) => {
     const businessEntityTaxId = clientTaxId
     const sendToIdentifyData = data.map(d => {
       return {
+        'sourceFullPath': d.fileName,
+        'sourceFileName': d.fullPath,
         'fileBlob': d.fileBlob,
         'accountingfirmTaxId': accountingfirmTaxId,
         'businessEntityTaxId': businessEntityTaxId,
         'evidenceType': 'A5002'
       }
     })
-    console.log(sendToIdentifyData)
-    await sightTourActions.sendToIdentify(dispatch, sendToIdentifyData)
+    const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
+    identifySent(dispatch, sentIdentifyResult)
   }
 
   const handleSaveImage = (event, data) => {
