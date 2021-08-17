@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import isElectron from "is-electron";
 import PropTypes from "prop-types";
 import scannedImageListStyles from "./scannedImageListStyles";
-import {CardMedia, Dialog, IconButton, ImageList, ImageListItem, ImageListItemBar, Modal} from "@material-ui/core";
+import {IconButton, ImageList, ImageListItem, ImageListItemBar} from "@material-ui/core";
 import {Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon} from '@material-ui/icons';
 
 const electron = isElectron() ? window.electron : null;
@@ -11,21 +11,10 @@ const remote = isElectron() ? window.remote : null;
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 var fs = isElectron() ? remote.require('fs') : null;
 
-const sendToIdentify = async (fileObj) => {
-  // const result = await ipcRenderer.invoke('evidence:getImageFileContent')
-  return {
-    result: 'true',
-    ticket: {
-      id: '8c869dbd-1bb5-4fe2-ac60-9b4215edffb8'
-    }
-  }
-}
-
-const getRowData = async (fileNames, username, clientTaxId) => {
+const getRowData = async (fileObjects, username, clientTaxId) => {
   let rowData = []
-  for (let idx = 0; idx < fileNames.length; idx++) {
-    let item = fileNames[idx]
-    //FIXME
+  for (let idx = 0; idx < fileObjects.length; idx++) {
+    let item = fileObjects[idx]
     if (clientTaxId && item.filename.indexOf(username) > -1 && item.filename.indexOf(clientTaxId) > -1) {
       let imageUrl = await getImageFileUrl(item.fullPath)
       let rowItem = {id: idx + 1, fileName: item.filename.split('_')[2], imageUrl: imageUrl, fullPath: item.fullPath}
@@ -48,11 +37,12 @@ const getImageFileUrl = async (fullPath) => {
 const isScanEnable = (taxIdSelected) => {
   return !!taxIdSelected
 }
+const isSendToIdentifyEnable = (data) => {
+  return data.length > 0
+}
 
 const ScannedImageList = (props) => {
   const [dataRows, setDataRows] = useState([])
-  const [currentImageUrl, setCurrentImageUrl] = useState('')
-  const [viewLargeImage, setViewLargeImage] = useState(false)
   useEffect(async () => {
     console.log('in useEffect props.clientTaxId', props.clientTaxId)
     let rowData = (props.data) ? await getRowData(props.data, props.username, props.clientTaxId) : []
@@ -60,26 +50,7 @@ const ScannedImageList = (props) => {
   }, [props.data, props.clientTaxId])
 
   const classes = scannedImageListStyles();
-  // const handleSendToIdentify = () => {
-  //   props.data.forEach(async (fileObj) => {
-  //     var ticket = await sendToIdentify(fileObj)
-  //
-  //     if (ipcRenderer) {
-  //       console.log('ticket', ticket)
-  //       var updatedFiles = await ipcRenderer.invoke('evidence:identifySent', JSON.stringify(props.user), JSON.stringify(props.client), JSON.stringify(ticket.ticket), JSON.stringify(fileObj))
-  //       console.log('updatedFiles', updatedFiles)
-  //       setRowData(updatedFiles)
-  //     }
-  //   })
-  //
-  // };
 
-  // const handleScan = async () => {
-  //   if (ipcRenderer) {
-  //     const result = await ipcRenderer.invoke('evidence:scan')
-  //     setRowData(result)
-  //   }
-  // };
   const handleViewOriginalImage = (selectedImageUrl) => {
     // console.log('handleViewOriginalImage event', event)
     // console.log('handleViewOriginalImage target', target)
@@ -91,7 +62,7 @@ const ScannedImageList = (props) => {
       <Button variant="contained" onClick={props.onScanClick} disabled={!isScanEnable(props.clientTaxId)}>掃描文件</Button>
       <Button variant="contained" onClick={(e) => {
         props.onSendToIdentifyClick(e, dataRows)
-      }}>送出辨識</Button>
+      }} disabled={!isSendToIdentifyEnable(dataRows)}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
           {dataRows.map((item) => (
@@ -102,15 +73,15 @@ const ScannedImageList = (props) => {
                 actionIcon={
                   <div>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                                onClick={e => handleViewOriginalImage(item.fullPath)}>
+                                onClick={e => props.onImageOriginalViewClick(e, item)}>
                       <ZoomInIcon/>
                     </IconButton>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                                onClick={props.onSaveImageClick}>
+                                onClick={e=> props.onSaveImageClick(e, item)}>
                       <SaveIcon/>
                     </IconButton>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                                onClick={props.onDeleteImageClick}>
+                                onClick={e=> props.onDeleteImageClick(e.item)}>
                       <DeleteIcon/>
                     </IconButton>
                   </div>

@@ -1,8 +1,7 @@
 import React, {useEffect, useReducer, useState} from 'react';
-import {gwActions, useAppDispatch, useAppState} from '../../Context';
+import {gwActions, sightTourActions, electronActions, useAppDispatch, useAppState} from '../../Context';
 import isElectron from 'is-electron'
 import {
-  Button,
   Box,
   AppBar,
   Container,
@@ -20,11 +19,11 @@ import mainStyles from "./mainStyles";
 import ScannedImageList from "../../Components/ScannedImageList";
 import ConfirmedEvidenceList from "../../Components/ConfirmedEvidenceList";
 import IdentifiedEvidenceList from "../../Components/IdenfiedEvidenceList";
-import * as electronActions from '../../Actions/electionActions'
-import * as sightTourActions from '../../Actions/sightourActions'
-import axios from "axios";
+// import * as electronActions from '../../Actions/electionActions'
+// import * as sightTourActions from '../../Actions/sightourActions'
+// import axios from "axios";
 
-const R = require('ramda');
+// const R = require('ramda');
 // import electron from 'electron'
 const electron = isElectron() ? window.electron : null;
 const remote = isElectron() ? window.remote : null;
@@ -62,72 +61,47 @@ const Main = (props) => {
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
   }, [])
 
-  const getUser = () => {
-    var initUser = {
-      username: 'seanlin',
-      taxId: '24549210'
-    }
-    return (appState.auth && appState.auth.user.username) ? appState.auth.user : initUser
-  }
-
-  const getClient = () => {
-    return {
-      taxId: '50985089',
-      name: 'Happy Industry'
-    }
-  }
-
+  //region Main Events
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   }
   const handleClientSelectChange = (event) => {
     setClientTaxId(event.target.value)
   }
+  //endregion
 
-  const handleSendImageToIdentify = (event, data) => {
-    //FIXME
-    const blob = data[0].imageUrl
-    const fileName = data[0].fileName
-    const file = new File([blob], fileName);
-    //FIXME add value
-    const bodyFormData = new FormData();
-    bodyFormData.append('file', file);
-    bodyFormData.append('type', "A5001");
-    bodyFormData.append('agent', "00000000");
-    bodyFormData.append('company', "00000000");
-    bodyFormData.append('token', "2olhx7gwv10z");
-    //todo upload
-    console.log(bodyFormData)
-    uploadFileToSightour(bodyFormData)
+  //region scanned image list events
+  const handleSendImageToIdentify = async (event, data) => {
+    await sightTourActions.sendToIdentify(dispatch, data)
+    console.log('main handleSendImageToIdentify data', data)
+
   }
 
-  const uploadFileToSightour = (formData) => {
-    //FIXME
-    const url = 'http://aiocr.sightour.com/gateweb/api/upload.php'
-    axios.post(url, formData).then(r => {
-      console.log(r)
-    })
+  const handleSaveImage = (event, data) =>{
+    console.log('handleSaveImage event', event)
+    console.log('handleSaveImage data', data)
+  }
+  const handleViewImage = (event, data) =>{
+    console.log('handleViewImage event', event)
+    console.log('handleViewImage data', data)
+
+  }
+  const handleDeleteImage = (event, data) =>{
+    console.log('handleDeleteImage event', event)
+    console.log('handleDeleteImage data', data)
+
   }
 
   const handleScanImage = (event) => {
     console.log('handleScanImage event', event)
   }
-
-  const updateFiles = (getFileListResult) => {
-
-  }
+  //endregion
 
   function a11yProps(index) {
     return {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`,
     };
-  }
-
-  const renderClientSelectOptions = (clientLists) => {
-    return clientLists.map(client => {
-      return <MenuItem key={client.taxId} value={client.taxId}>{client.name}</MenuItem>
-    })
   }
   const renderClientSelect = () => {
     console.log('renderClientSelect appState', appState)
@@ -173,7 +147,11 @@ const Main = (props) => {
                   <ScannedImageList data={appState.appData.fileLists['01']}
                                     username={appState.auth.user.username} clientTaxId={clientTaxId.toString()}
                                     onScanClick={handleScanImage}
-                                    onSendToIdentifyClick={handleSendImageToIdentify}></ScannedImageList>
+                                    onSendToIdentifyClick={handleSendImageToIdentify}
+                                    onSaveImageClick={handleSaveImage}
+                                    onImageOriginalViewClick={handleViewImage}
+                                    onDeleteImageClick={handleDeleteImage}
+                  />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={[]}></IdentifiedEvidenceList>
