@@ -36,7 +36,6 @@ export async function fileScanned(dispatch, payload) {
 }
 
 export async function identifySent(dispatch, payload) {
-  // console.log('identifySent dispatch', dispatch)
   console.log('identifySent payload', payload)
   try {
     if (ipcRenderer) {
