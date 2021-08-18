@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import * as mockData from '../../Pages/Main/mockDisplayData'
 import isElectron from 'is-electron'
-import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE } from '../../Enum/sigoutour_type'
+import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -13,6 +13,7 @@ const R = require('ramda')
 const byTicketId = R.groupBy((fileObj) => {
   return fileObj.filename.split('_')[2].split('.')[0]
 })
+
 const parseData = (jsonData) => {
   let json = {}
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
@@ -21,6 +22,7 @@ const parseData = (jsonData) => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
     json[key] = data['text']
   })
+  json['taxType'] = TAX_TYPE[json.taxType]
   return json
 }
 
