@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import * as mockData from '../../Pages/Main/mockDisplayData'
 import isElectron from 'is-electron'
+import { getIdentifyResult } from '../../Actions/sightourActions'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -13,39 +14,11 @@ const byTicketId = R.groupBy((fileObj) => {
   return fileObj.filename.split('_')[2].split('.')[0]
 })
 
-
-const getIdentifyResult = (ticketId) => {
-  console.log(ticketId)
-  return {
-    status: 'completed',
-    content: {
-      invoiceNumber: 'AZ12345678'
-    }
-  }
-}
-
 const IdentifiedEvidenceList = (props) => {
-  console.log('IdentifiedEvidenceList',props.data)
+  console.log('IdentifiedEvidenceList', props.data)
   const [rowData, setRowData] = useState()
   const [localFiles, setLocalFiles] = useState(props.data)
   const [imageUrl, setImageUrl] = useState('')
-
-  const handleGetIdentifyResult = () => {
-    console.log(localFiles)
-    console.log(localFiles['02'])
-    // localFiles['02'].forEach((fileObj) => {
-    //   console.log(fileObj)
-      // var ticketId = fileObj.filename.split('_')[3]
-      // var result = getIdentifyResult(ticketId)
-      // if (result.status === 'completed') {
-      //   if (ipcRenderer) {
-      //     var updatedFiles = await ipcRenderer.invoke('evidence:identifyResultReceived', JSON.stringify(fileObj), JSON.stringify(result))
-      //     console.log('updatedFiles', updatedFiles)
-      //     setLocalFiles(updatedFiles)
-      //   }
-      // }
-    // })
-  }
 
   const handleResultAllConfirmed = () => {
     console.log('localfiles 03', localFiles['03'])
@@ -80,7 +53,7 @@ const IdentifiedEvidenceList = (props) => {
 
   return (
     <div>
-      <Button variant='contained' onClick={handleGetIdentifyResult}>取得辨識結果</Button>
+      <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
       <Button variant='contained' onClick={handleReadImage}>載入圖檔</Button>
       <EvidenceList data={mockData.rows}></EvidenceList>

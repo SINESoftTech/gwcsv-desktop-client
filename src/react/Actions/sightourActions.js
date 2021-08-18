@@ -58,15 +58,21 @@ export async function sendToIdentify(identifyData) {
   return resultList
 }
 
-export async function getIdentifyResult(fileObjList) {
+export async function getIdentifyResult(fileObj) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
+    const ticketId = fileObj.filename.split('_')[2]
     const formData = new FormData()
     formData.append('token', token)
-    formData.append('ticket', '')
+    formData.append('ticket', ticketId)
     const result = await signtTourAxios.post(apiPath, formData)
-
+    return {
+      'sourceFullPath': fileObj.fullPath,
+      'sourceFileName': fileObj.filename,
+      'status': 'completed',
+      'data': result.data
+    }
   } catch (error) {
     throw new Error(error)
   }

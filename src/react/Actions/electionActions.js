@@ -47,7 +47,16 @@ export async function identifySent(dispatch, payload) {
 }
 
 export async function identifyResultReceived(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
+  try {
+    if (ipcRenderer) {
+      console.log(payload)
+      const result = await ipcRenderer.invoke('evidence:identifyResultReceived', payload)
+      // dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
+  // dispatch({ type: 'LOGOUT' })
 }
 
 export async function identifyResultConfirmed(dispatch, payload) {

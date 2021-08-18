@@ -183,7 +183,6 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
   const identifyResult = sentIdentifyResult['result']
   for (let i = 0; i < identifyResult.length; i++) {
     const data = identifyResult[i]
-    console.log(data)
     if (data['result']) {
       const fileExt = data['sourceFileName'].split('.')[1]
       const targetFileName = `${username}_${data['businessEntityTaxId']}_${data['ticketId']}.${fileExt}`
@@ -194,16 +193,28 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
   return getAllFileLists()
 })
 
-ipcMain.handle('evidence:identifyResultReceived', (event, imageFileObj, identifyResult) => {
-  let targetFolder = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
-  let fileObjObj = JSON.parse(imageFileObj)
-  let resultObj = JSON.parse(identifyResult)
-  const filenameWithoutExt = fileObjObj.filename.split('.').slice(0, -1).join('.')
-  // console.log(filenameWithoutExt)
-  const imageFileExt = fileObjObj.filename.split('.').slice(-1)[0]
-  // console.log(imageFileExt)
-  fse.moveSync(fileObjObj.fullPath, path.join(targetFolder, fileObjObj.filename))
-  fse.writeJSONSync(path.join(targetFolder, filenameWithoutExt + '_sightour_result.txt'), resultObj)
+ipcMain.handle('evidence:identifyResultReceived', (event, identifyResult) => {
+  for (let i = 0; i < identifyResult.length; i++) {
+    const data = identifyResult[i]
+    if (data['status'] === 'completed') {
+      //todo mv 02 image to 03
+      const targetFolder = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
+      console.log(targetFolder)
+      console.log(data.data)
+      console.log(JSON.stringify(data.data))
+
+      // todo save json to 03
+    }
+  }
+  //
+  // let fileObjObj = JSON.parse(imageFileObj)
+  // let resultObj = JSON.parse(identifyResult)
+  // const filenameWithoutExt = fileObjObj.filename.split('.').slice(0, -1).join('.')
+  // // console.log(filenameWithoutExt)
+  // const imageFileExt = fileObjObj.filename.split('.').slice(-1)[0]
+  // // console.log(imageFileExt)
+  // fse.moveSync(fileObjObj.fullPath, path.join(targetFolder, fileObjObj.filename))
+  // fse.writeJSONSync(path.join(targetFolder, filenameWithoutExt + '_sightour_result.txt'), resultObj)
   return getAllFileLists()
 })
 
