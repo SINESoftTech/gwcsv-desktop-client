@@ -67,11 +67,18 @@ export async function getIdentifyResult(fileObj) {
     formData.append('token', token)
     formData.append('ticket', ticketId)
     const result = await signtTourAxios.post(apiPath, formData)
+    if (result.data.result === undefined) {
+      return {
+        'sourceFullPath': fileObj.fullPath,
+        'sourceFileName': fileObj.filename,
+        'status': 'completed',
+        'data': result.data
+      }
+    }
     return {
       'sourceFullPath': fileObj.fullPath,
       'sourceFileName': fileObj.filename,
-      'status': 'completed',
-      'data': result.data
+      'status': 'failed'
     }
   } catch (error) {
     throw new Error(error)
