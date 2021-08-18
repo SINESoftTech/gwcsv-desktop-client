@@ -197,24 +197,12 @@ ipcMain.handle('evidence:identifyResultReceived', (event, identifyResult) => {
   for (let i = 0; i < identifyResult.length; i++) {
     const data = identifyResult[i]
     if (data['status'] === 'completed') {
-      //todo mv 02 image to 03
       const targetFolder = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
-      console.log(targetFolder)
-      console.log(data.data)
-      console.log(JSON.stringify(data.data))
-
-      // todo save json to 03
+      const fileNameWithoutExt = data.sourceFileName.split('.')[0]
+      fse.moveSync(data.sourceFullPath, path.join(targetFolder, data.sourceFileName))
+      fse.writeJSONSync(path.join(targetFolder, fileNameWithoutExt + '_sightour_result.json'), data.data)
     }
   }
-  //
-  // let fileObjObj = JSON.parse(imageFileObj)
-  // let resultObj = JSON.parse(identifyResult)
-  // const filenameWithoutExt = fileObjObj.filename.split('.').slice(0, -1).join('.')
-  // // console.log(filenameWithoutExt)
-  // const imageFileExt = fileObjObj.filename.split('.').slice(-1)[0]
-  // // console.log(imageFileExt)
-  // fse.moveSync(fileObjObj.fullPath, path.join(targetFolder, fileObjObj.filename))
-  // fse.writeJSONSync(path.join(targetFolder, filenameWithoutExt + '_sightour_result.txt'), resultObj)
   return getAllFileLists()
 })
 
