@@ -14,7 +14,6 @@ const byTicketId = R.groupBy((fileObj) => {
   return fileObj.filename.split('_')[2].split('.')[0]
 })
 const parseData = (jsonData) => {
-  console.log('parseData', jsonData)
   let json = {}
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
   json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']].name
@@ -26,7 +25,6 @@ const parseData = (jsonData) => {
 }
 
 const getJsonRawData = async (data, clientTaxId) => {
-  console.log(data)
   try {
     const filterJsonDataFilePathList = data.filter(d => {
       return d.filename.endsWith('.json')
@@ -47,7 +45,6 @@ const getJsonRawData = async (data, clientTaxId) => {
 const IdentifiedEvidenceList = (props) => {
 
   const [rowData, setRowData] = useState([])
-  console.log('IdentifiedEvidenceList', rowData)
   const [imageUrl, setImageUrl] = useState('')
 
   const [localFiles, setLocalFiles] = useState(props.data)
@@ -66,6 +63,7 @@ const IdentifiedEvidenceList = (props) => {
   }, [props.data, props.clientTaxId])
 
 
+  //TODO
   const handleResultAllConfirmed = () => {
     console.log('localfiles 03', localFiles['03'])
     var filesByTicketId = byTicketId(localFiles['03'])

@@ -40,7 +40,6 @@ const handleRowOut = (param, event) => {
 const EvidenceList = (props) => {
 
   useEffect(() => {
-    console.log("AA",props.data)
     setDataRows(props.data)
   }, [props.data])
 
