@@ -4,6 +4,8 @@ import EvidenceList from '../EvidenceListTable'
 import * as mockData from '../../Pages/Main/mockDisplayData'
 import isElectron from 'is-electron'
 import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
+import { getIdentifyResult } from '../../Actions/sightourActions'
+import { identifyResultConfirmed, identifyResultReceived } from '../../Actions/electionActions'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -51,41 +53,28 @@ const IdentifiedEvidenceList = (props) => {
 
   const [localFiles, setLocalFiles] = useState(props.data)
 
+  const initDataRows = async (data, clientTaxId) => {
+    const jsonDataList = await getJsonRawData(data, clientTaxId)
+    const parseJsonDataList = jsonDataList.map((json, idx) => {
+      const parseResult = parseData(json.data)
+      parseResult['id'] = idx + 1
+      return parseResult
+    })
+    setRowData(parseJsonDataList)
+  }
+
   useEffect(() => {
-    const initDataRows = async (data, clientTaxId) => {
-      const jsonDataList = (props.data) ? await getJsonRawData(data, clientTaxId) : []
-      const parseJsonDataList = jsonDataList.map((json, idx) => {
-        const parseResult = parseData(json.data)
-        parseResult['id'] = idx + 1
-        return parseResult
-      })
-      setRowData(parseJsonDataList)
-    }
     initDataRows(props.data['03'], props.clientTaxId)
   }, [props.data, props.clientTaxId])
 
 
   //TODO
-  const handleResultAllConfirmed = () => {
+  const handleResultAllConfirmed = async () => {
     console.log('localfiles 03', localFiles['03'])
-    var filesByTicketId = byTicketId(localFiles['03'])
-    let imageFileExtension = ['jpg', 'png', 'git']
-    Object.keys(filesByTicketId).forEach(async ticketId => {
-      if (ipcRenderer) {
-        let imageObj = filesByTicketId[ticketId].filter((fileObj) => {
-          return imageFileExtension.indexOf(fileObj.filename.split('.')[1]) > -1
-        })[0]
-
-        let sighttourObj = filesByTicketId[ticketId].filter(fileObj => {
-          return R.includes('sightour', fileObj.filename)
-        })[0]
-
-        console.log('imageObj', imageObj)
-        console.log('sightourObj', sighttourObj)
-        var updatedFiles = await ipcRenderer.invoke('evidence:evidenceSaved', JSON.stringify(imageObj), JSON.stringify(sighttourObj), null)
-        setLocalFiles(updatedFiles)
-      }
-    })
+    const filesByTicketId = byTicketId(localFiles['03'])
+    const result = await identifyResultConfirmed(filesByTicketId)
+    initDataRows(result['03'], props.clientTaxId)
+    //set view
   }
 
   const handleReadImage = async () => {

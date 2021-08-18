@@ -178,8 +178,20 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
 
+ipcMain.handle('evidence:identifyResultConfirmed', (event, payload) => {
+  console.log('identifyResultConfirmed', payload)
+  Object.keys(payload).forEach(ticketId => {
+    const sourceImageFullPath = payload[ticketId][0].fullPath
+    const targetImageFullName = path.join(config.fileFolder, stageFolders.evidenceSaved.folder, payload[ticketId][0].filename)
+    fse.moveSync(sourceImageFullPath, targetImageFullName)
+    const sourceJsonFullPath = payload[ticketId][1].fullPath
+    const targetJsonFullName = path.join(config.fileFolder, stageFolders.evidenceSaved.folder, payload[ticketId][1].filename)
+    fse.moveSync(sourceJsonFullPath, targetJsonFullName)
+  })
+  return getAllFileLists()
+})
+
 ipcMain.handle('evidence:getJsonFileData', (event, fullPathList) => {
-  console.log('getJsonFileData', fullPathList)
   const jsonDataList = fullPathList.map(filePath => {
     return {
       'filePath': filePath,
