@@ -179,7 +179,7 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
 })
 
 ipcMain.handle('evidence:getJsonFileData', (event, fullPathList) => {
-  console.log('getJsonFileData',fullPathList)
+  console.log('getJsonFileData', fullPathList)
   const jsonDataList = fullPathList.map(filePath => {
     return {
       'filePath': filePath,

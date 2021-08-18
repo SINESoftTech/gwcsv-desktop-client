@@ -1,60 +1,66 @@
-import React, {useState} from 'react';
-import {DataGrid, GridRowsProp, GridColDef} from '@material-ui/data-grid';
-import ColumnDefinitions from "./ColumnDefinitions";
-import {Button} from "@material-ui/core";
+import React, { useEffect, useState } from 'react'
+import { DataGrid, GridRowsProp, GridColDef } from '@material-ui/data-grid'
+import ColumnDefinitions from './ColumnDefinitions'
+import { Button } from '@material-ui/core'
 
 const columns = ColumnDefinitions
 
 
-
-const getRowClassName = (params) =>{
-  if(params.row.rowStatus === 'error'){
-    return "highlight"
+const getRowClassName = (params) => {
+  if (params.row.rowStatus === 'error') {
+    return 'highlight'
   }
 }
 
 
 const handleRowClick = (param, event) => {
-  console.log("Row:");
-  console.log(param);
-  console.log(event);
-};
-const handleCellDoubleClicked = (param, event) =>{
+  console.log('Row:')
+  console.log(param)
+  console.log(event)
+}
+const handleCellDoubleClicked = (param, event) => {
   console.log('handleCellDoubleClicked param', param)
   console.log('handleCellDoubleClicked event', event)
 }
 
-const handleEditRowModeChanged = (param, event)=>{
+const handleEditRowModeChanged = (param, event) => {
   console.log('handleEditRowModeChanged param', param)
   console.log('handleEditRowModeChanged event', event)
 }
-const handleRowLeft = (param, event)=>{
+const handleRowLeft = (param, event) => {
   console.log('handleRowLeft param', param)
   console.log('handleRowLeft event', event)
 }
 
-const handleRowOut = (param, event)=>{
+const handleRowOut = (param, event) => {
   console.log('handleRowOut param', param)
   console.log('handleRowOut event', event)
 }
 
 const EvidenceList = (props) => {
+
+  useEffect(() => {
+    console.log("AA",props.data)
+    setDataRows(props.data)
+  }, [props.data])
+
   const [dataRows, setDataRows] = useState(props.data)
   const [pageNumber, setPageNumber] = useState(0)
   const [pageSize, setPageSize] = useState(10)
+
   return (
-    <div style={{height: 650, width: '100%'}}>
+    <div style={{ height: 650, width: '100%' }}>
       <DataGrid rows={dataRows}
                 columns={columns}
                 page={pageNumber}
                 pageSize={pageSize}
                 onPageChange={e => setPageNumber(e.page)}
                 onPageSizeChange={e => setPageSize(e.pageSize)}
-                rowsPerPageOptions={[10,20,30,40,50]}
+                rowsPerPageOptions={[10, 20, 30, 40, 50]}
                 getCellClassName={getRowClassName}
       />
     </div>
-  );
-};
+  )
+}
 
-export default EvidenceList;
+export default EvidenceList

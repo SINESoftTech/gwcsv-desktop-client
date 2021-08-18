@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import * as mockData from '../../Pages/Main/mockDisplayData'
 import isElectron from 'is-electron'
+import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE } from '../../Enum/sigoutour_type'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -12,217 +13,29 @@ const R = require('ramda')
 const byTicketId = R.groupBy((fileObj) => {
   return fileObj.filename.split('_')[2].split('.')[0]
 })
-//{
-//     "ticket": "0818124603395695",
-//     "pageList": [
-//         {
-//             "page": "0818124603395695_1",
-//             "photoList": [
-//                 {
-//                     "photo": "0818124603395695_1_1",
-//                     "type": "A5002",
-//                     "x": 0,
-//                     "y": 87,
-//                     "w": 677,
-//                     "h": 2101,
-//                     "result": [
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "invoiceNumber",
-//                             "key": "KEY_INVN",
-//                             "text": "FN51290225",
-//                             "score": [
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "invoiceDate",
-//                             "key": "KEY_INVD",
-//                             "text": "1091023",
-//                             "score": [
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "buyer",
-//                             "key": "KEY_BUY",
-//                             "text": "16151904",
-//                             "score": [
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "seller",
-//                             "key": "KEY_SEL",
-//                             "text": "29278095",
-//                             "score": [
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98,
-//                                 0.98
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "taxType",
-//                             "key": "KEY_TXT",
-//                             "text": 1,
-//                             "score": [
-//                                 0.98
-//                             ]
-//                         },
-//                         {
-//                             "x": 31,
-//                             "y": 1211,
-//                             "w": 204,
-//                             "h": 35,
-//                             "name": "salesAmount",
-//                             "key": "KEY_SALA",
-//                             "text": "86",
-//                             "score": [
-//                                 0.998,
-//                                 1
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "zeroTaxSalesAmount",
-//                             "key": "KEY_ZTSA",
-//                             "text": "",
-//                             "score": [
-//                                 0
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "freeTaxSalesAmount",
-//                             "key": "KEY_FTSA",
-//                             "text": "",
-//                             "score": [
-//                                 0
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "taxAmount",
-//                             "key": "KEY_TAXA",
-//                             "text": "4",
-//                             "score": [
-//                                 0.98
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "totalAmount",
-//                             "key": "KEY_TOTA",
-//                             "text": "90",
-//                             "score": [
-//                                 0.98,
-//                                 0.98
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "payAmount",
-//                             "key": "KEY_PAYA",
-//                             "text": "90",
-//                             "score": [
-//                                 0.98,
-//                                 0.98
-//                             ]
-//                         },
-//                         {
-//                             "x": 0,
-//                             "y": 0,
-//                             "w": 0,
-//                             "h": 0,
-//                             "name": "remark",
-//                             "key": "KEY_REM",
-//                             "text": "",
-//                             "score": [
-//                                 0
-//                             ]
-//                         }
-//                     ]
-//                 }
-//             ]
-//         }
-//     ]
-// }
-//TODO
 const parseData = (jsonData) => {
+  console.log('parseData', jsonData)
   let json = {}
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
-  console.log(jsonDataBody)
+  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']].name
+  jsonDataBody.forEach(data => {
+    const key = SIGOUTOUR_FIELD_TYPE[data['key']]
+    json[key] = data['text']
+  })
+  return json
 }
 
-const getJsonRawData = async (data) => {
+const getJsonRawData = async (data, clientTaxId) => {
+  console.log(data)
   try {
     const filterJsonDataFilePathList = data.filter(d => {
       return d.filename.endsWith('.json')
+    }).filter(d => {
+      const fileNameClientId = d.filename.split('_')[1]
+      return fileNameClientId === clientTaxId
     }).map(d => {
       return d.fullPath
     })
-    console.log('getJsonRawData', filterJsonDataFilePathList)
     if (ipcRenderer) {
       return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
     }
@@ -233,20 +46,25 @@ const getJsonRawData = async (data) => {
 
 const IdentifiedEvidenceList = (props) => {
 
-  const [rowData, setRowData] = useState()
-
+  const [rowData, setRowData] = useState([])
+  console.log('IdentifiedEvidenceList', rowData)
   const [imageUrl, setImageUrl] = useState('')
 
   const [localFiles, setLocalFiles] = useState(props.data)
 
   useEffect(() => {
-    const initDataRows = async (data) => {
-      const jsonDataList = (props.data) ? await getJsonRawData(data) : []
-      //parseData
-      console.log('in useEffect', jsonDataList)
+    const initDataRows = async (data, clientTaxId) => {
+      const jsonDataList = (props.data) ? await getJsonRawData(data, clientTaxId) : []
+      const parseJsonDataList = jsonDataList.map((json, idx) => {
+        const parseResult = parseData(json.data)
+        parseResult['id'] = idx + 1
+        return parseResult
+      })
+      setRowData(parseJsonDataList)
     }
-    initDataRows(props.data['03'])
+    initDataRows(props.data['03'], props.clientTaxId)
   }, [props.data, props.clientTaxId])
+
 
   const handleResultAllConfirmed = () => {
     console.log('localfiles 03', localFiles['03'])
@@ -284,7 +102,7 @@ const IdentifiedEvidenceList = (props) => {
       <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
       <Button variant='contained' onClick={handleReadImage}>載入圖檔</Button>
-      <EvidenceList data={mockData.rows}></EvidenceList>
+      <EvidenceList data={rowData}></EvidenceList>
     </div>
   )
 }
