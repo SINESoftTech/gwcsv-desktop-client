@@ -35,7 +35,7 @@ export async function sendToIdentify(identifyData) {
       formData.append('token', token)
       const result = await signtTourAxios.post(apiPath, formData, config)
       resultList.push({
-        'businessEntityTaxId':data.businessEntityTaxId,
+        'businessEntityTaxId': data.businessEntityTaxId,
         'ticketId': result.data['ticket'],
         'sourceFullPath': data.sourceFullPath,
         'sourceFileName': data.sourceFileName
@@ -43,7 +43,7 @@ export async function sendToIdentify(identifyData) {
     }
     return resultList
   } catch (error) {
-    //TODO handle
+    throw new Error(error)
   }
 }
 

@@ -42,7 +42,7 @@ export async function identifySent(dispatch, payload) {
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
-    //todo handle
+    throw new Error(error)
   }
 }
 
