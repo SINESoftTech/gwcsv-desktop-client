@@ -76,7 +76,6 @@ export async function getIdentifyResult(fileObj) {
   } catch (error) {
     throw new Error(error)
   }
-  // dispatch({ type: 'LOGOUT' })
 }
 
 export async function sendConfirmedResult(dispatch, payload) {
