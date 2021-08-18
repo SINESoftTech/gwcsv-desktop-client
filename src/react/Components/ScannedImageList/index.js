@@ -50,6 +50,8 @@ const ScannedImageList = (props) => {
 
   const [dataRows, setDataRows] = useState([])
 
+  console.log(props.clientTaxId)
+
   useEffect(() => {
     const initDataRows = async (data, username, clientTaxId) => {
       console.log('in useEffect clientTaxId', clientTaxId)

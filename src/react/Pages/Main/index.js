@@ -100,7 +100,6 @@ const Main = (props) => {
       const identifyResult = await getIdentifyResult(fileObj)
       identifyResultReceivedList.push(identifyResult)
     }
-    console.log('handleGetIdentifyResult', identifyResultReceivedList)
     identifyResultReceived(dispatch, identifyResultReceivedList)
   }
 
@@ -186,6 +185,7 @@ const Main = (props) => {
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
+                                          clientTaxId={clientTaxId.toString()}
                                           onGetIdentifyResult={handleGetIdentifyResult}></IdentifiedEvidenceList>
                 </TabPanel>
                 <TabPanel value={value} index={2}>

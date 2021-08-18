@@ -178,6 +178,17 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
 
+ipcMain.handle('evidence:getJsonFileData', (event, fullPathList) => {
+  console.log('getJsonFileData',fullPathList)
+  const jsonDataList = fullPathList.map(filePath => {
+    return {
+      'filePath': filePath,
+      'data': fse.readJSONSync(filePath)
+    }
+  })
+  return jsonDataList
+})
+
 ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
   const username = sentIdentifyResult['user']
   const identifyResult = sentIdentifyResult['result']
