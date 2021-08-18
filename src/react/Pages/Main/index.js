@@ -172,7 +172,7 @@ const Main = (props) => {
                                     />
                                 </TabPanel>
                                 <TabPanel value={value} index={1}>
-                                    <IdentifiedEvidenceList data={[]}></IdentifiedEvidenceList>
+                                    <IdentifiedEvidenceList data={appState.appData.fileLists}></IdentifiedEvidenceList>
                                 </TabPanel>
                                 <TabPanel value={value} index={2}>
                                     <ConfirmedEvidenceList></ConfirmedEvidenceList>
