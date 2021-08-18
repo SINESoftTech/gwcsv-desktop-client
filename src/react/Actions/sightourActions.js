@@ -1,15 +1,78 @@
-import {signtTourAxios} from "./axios";
-export async function sendToIdentify(dispatch, payload) {
+import { signtTourAxios } from './axios'
+
+const R = require('ramda')
+
+const getToken = async (id, psw) => {
   try {
+    const apiPath = '/requestToken.php'
+    const formData = new FormData()
+    formData.append('id', id)
+    formData.append('psw', psw)
+    const result = await signtTourAxios.post(apiPath, formData)
+    return result.data['token']
   } catch (error) {
+    throw new Error(error)
   }
 }
 
-export async function getIdentifyResult(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' });
+
+export async function sendToIdentify(identifyData) {
+  const apiPath = '/upload.php'
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }
+  let resultList = []
+  for (let i = 0; i < identifyData.length; i++) {
+    const data = identifyData[i]
+    try {
+      const token = await getToken('gateweb1', 'qwe123')
+      const formData = new FormData()
+      formData.append('file', data.fileBlob)
+      formData.append('type', data.evidenceType)
+      formData.append('agent', data.accountingfirmTaxId)
+      formData.append('company', data.businessEntityTaxId)
+      formData.append('token', token)
+      const result = await signtTourAxios.post(apiPath, formData, config)
+      if (result.data['result'] === 0) {
+        resultList.push({
+          'result': true,
+          'businessEntityTaxId': data.businessEntityTaxId,
+          'ticketId': result.data['ticket'],
+          'sourceFullPath': data.sourceFullPath,
+          'sourceFileName': data.sourceFileName
+        })
+      } else {
+        resultList.push({
+          'result': false,
+          'businessEntityTaxId': data.businessEntityTaxId,
+          'sourceFullPath': data.sourceFullPath,
+          'sourceFileName': data.sourceFileName
+        })
+      }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  return resultList
+}
+
+export async function getIdentifyResult(fileObjList) {
+  try {
+    const apiPath = '/check.php'
+    const token = await getToken('gateweb1', 'qwe123')
+    const formData = new FormData()
+    formData.append('token', token)
+    formData.append('ticket', '')
+    const result = await signtTourAxios.post(apiPath, formData)
+
+  } catch (error) {
+    throw new Error(error)
+  }
+  // dispatch({ type: 'LOGOUT' })
 }
 
 export async function sendConfirmedResult(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' });
+  dispatch({ type: 'LOGOUT' })
 }
-
