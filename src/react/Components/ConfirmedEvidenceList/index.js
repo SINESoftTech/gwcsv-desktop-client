@@ -43,8 +43,6 @@ const getJsonRawData = async (data, clientTaxId) => {
 
 const ConfirmedEvidenceList = (props) => {
 
-  console.log('ConfirmedEvidenceList', props)
-
   const [rowData, setRowData] = useState([])
 
   const initDataRows = async (data, clientTaxId) => {
@@ -59,13 +57,14 @@ const ConfirmedEvidenceList = (props) => {
   }
 
   useEffect(() => {
-    initDataRows(props.data['03'], props.clientTaxId)
+    initDataRows(props.data['04'], props.clientTaxId)
   }, [props.data, props.clientTaxId])
 
 
   const handleUpload = () => {
-
+    
   }
+
   return (
     <div>
       <Button variant='contained' onClick={handleUpload}>上傳OCR-CLOUD</Button>

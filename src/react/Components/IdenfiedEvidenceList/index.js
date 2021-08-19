@@ -68,13 +68,10 @@ const IdentifiedEvidenceList = (props) => {
   }, [props.data, props.clientTaxId])
 
 
-  //TODO
   const handleResultAllConfirmed = async () => {
-    console.log('localfiles 03', localFiles['03'])
     const filesByTicketId = byTicketId(localFiles['03'])
-    const result = await identifyResultConfirmed(filesByTicketId)
+    const result = await props.onResultAllConfirmed(filesByTicketId)
     initDataRows(result['03'], props.clientTaxId)
-    //set view
   }
 
   const handleReadImage = async () => {

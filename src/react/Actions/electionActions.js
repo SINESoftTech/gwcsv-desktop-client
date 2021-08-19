@@ -57,11 +57,11 @@ export async function identifyResultReceived(dispatch, payload) {
   }
 }
 
-export async function identifyResultConfirmed(payload) {
+export async function identifyResultConfirmed(dispatch,payload) {
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
-      // dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }
   } catch (error) {

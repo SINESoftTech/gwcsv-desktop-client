@@ -19,7 +19,7 @@ import mainStyles from './mainStyles'
 import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
-import { identifyResultReceived, identifySent } from '../../Actions/electionActions'
+import { identifyResultConfirmed, identifyResultReceived, identifySent } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
 // import * as electronActions from '../../Actions/electionActions'
 // import * as sightTourActions from '../../Actions/sightourActions'
@@ -125,6 +125,15 @@ const Main = (props) => {
 
   //endregion
 
+  const handleResultAllConfirmed = async (event, filesByTicketId) => {
+    try {
+      const result = await identifyResultConfirmed(dispatch, filesByTicketId)
+      return result
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
   function a11yProps(index) {
     return {
       id: `simple-tab-${index}`,
@@ -186,7 +195,8 @@ const Main = (props) => {
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
                                           clientTaxId={clientTaxId.toString()}
-                                          onGetIdentifyResult={handleGetIdentifyResult}></IdentifiedEvidenceList>
+                                          onGetIdentifyResult={handleGetIdentifyResult}
+                                          onResultAllConfirmed={handleResultAllConfirmed}></IdentifiedEvidenceList>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
