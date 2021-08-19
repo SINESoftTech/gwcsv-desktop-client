@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import isElectron from 'is-electron'
 import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
-import { gwUploaded } from '../../Actions/electionActions'
+import { getRawDataWithImage, gwUploaded } from '../../Actions/electionActions'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -64,26 +64,47 @@ const ConfirmedEvidenceList = (props) => {
   }, [props.data, props.clientTaxId])
 
 
+  // const getRawDataWithImage = (clientTaxId, data) => {
+  //   console.log('getRawDataWithImage', data)
+  //
+  //   // (filterData)
+  //
+  // }
+
   const handleUpload = async () => {
     console.log('handleUpload', props.data['04'])
     const filesByTicketId = byTicketId(props.data['04'])
     console.log(filesByTicketId)
-    try {
-      //upload gw
-
-      //mv folder
-      const result = await gwUploaded(filesByTicketId)
-      return result
-    } catch (e) {
-      throw new Error(e)
+    let result = []
+    for (let key in filesByTicketId) {
+      const filterData = filesByTicketId[key]
+        .filter(d => {
+          const taxId = d.filename.split('_')[1]
+          return taxId === props.clientTaxId
+        })
+      if (filterData.length) {
+        result.push(filterData)
+      }
     }
+    await getRawDataWithImage(result)
+    // try {
+    //
+    //   //get raw Data
+    //
+    //   //upload gw by evidenceType
+    //   //mv folder
+    //   const result = await gwUploaded(filesByTicketId)
+    //   return result
+    // } catch (e) {
+    //   throw new Error(e)
+    // }
     //  818085909997119: Array(2)
     // 0: {filename: "string123_24549210_0818085909997119.jpg", fullPath: "/Users/tony/.gwapp/04/string123_24549210_0818085909997119.jpg"}
   }
 
   return (
     <div>
-      <Button variant='contained' onClick={handleUpload}>上傳OCR-CLOUD</Button>
+      <Button variant='contained' onClick={handleUpload}>上傳</Button>
       <EvidenceList data={rowData}></EvidenceList>
     </div>
   )

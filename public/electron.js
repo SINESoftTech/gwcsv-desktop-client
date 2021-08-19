@@ -172,7 +172,7 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
 })
 
 ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
-  // console.log(event)g
+  // console.log(event)
   // console.log(fullPath)
   // return '1'
   return fse.readFileSync(fullPath, { encoding: 'base64' })
@@ -265,3 +265,19 @@ ipcMain.handle('evidence:uploaded', (event, payload) => {
   return getAllFileLists()
 })
 
+//todo
+ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
+  console.log(fullPathList)
+  fullPathList.flatMap(d => {
+    console.log(d)
+  })
+  //getFileContent
+  // const jsonDataList = fullPathList.map(filePath => {
+  //   return {
+  //     'filePath': filePath,
+  //     'data': fse.readJSONSync(filePath),
+  //     'image':fse.readFileSync()
+  //   }
+  // })
+  return null
+})

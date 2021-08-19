@@ -57,7 +57,7 @@ export async function identifyResultReceived(dispatch, payload) {
   }
 }
 
-export async function identifyResultConfirmed(dispatch,payload) {
+export async function identifyResultConfirmed(dispatch, payload) {
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
@@ -79,5 +79,15 @@ export async function gwUploaded(payload) {
   } catch (error) {
     throw new Error(error)
   }
-  // dispatch({ type: 'LOGOUT' })
+}
+
+export async function getRawDataWithImage(payload) {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getRawDataWithImage', payload)
+      return result
+    }
+  } catch (error) {
+    // throw new Error(error)
+  }
 }
