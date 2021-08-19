@@ -34,7 +34,7 @@
     "react-start": "react-scripts start",
     "electron-start": " electron .",
     "react-build": "react-scripts build",
-    "electron-build": "electron-packager ./ --overwrite"
+    "electron-build": "electron-packager ./ test --platform=win32 --arch=x64 --prune=true --out=release-builds --asar=false"
   },
   "eslintConfig": {
     "extends": [
