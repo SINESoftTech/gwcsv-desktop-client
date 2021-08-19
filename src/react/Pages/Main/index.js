@@ -189,7 +189,8 @@ const Main = (props) => {
                                           onGetIdentifyResult={handleGetIdentifyResult}></IdentifiedEvidenceList>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  <ConfirmedEvidenceList></ConfirmedEvidenceList>
+                  <ConfirmedEvidenceList data={appState.appData.fileLists}
+                                         clientTaxId={clientTaxId.toString()}></ConfirmedEvidenceList>
                 </TabPanel>
               </Paper>
             </Grid>

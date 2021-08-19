@@ -1,63 +1,77 @@
-import React, {useEffect, useState} from 'react';
-import Button from "@material-ui/core/Button";
-import EvidenceList from "../EvidenceListTable";
-import * as mockData from "../../Pages/Main/mockDisplayData";
-import isElectron from "is-electron";
-const electron = isElectron() ? window.electron : null;
-const remote = isElectron() ? window.remote : null;
+import React, { useEffect, useState } from 'react'
+import Button from '@material-ui/core/Button'
+import EvidenceList from '../EvidenceListTable'
+import * as mockData from '../../Pages/Main/mockDisplayData'
+import isElectron from 'is-electron'
+import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
+
+const electron = isElectron() ? window.electron : null
+const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-const R = require('ramda');
-const convertData = (fileList) => {
+const R = require('ramda')
 
+const parseData = (jsonData) => {
+  let json = {}
+  const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
+  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']].name
+  jsonDataBody.forEach(data => {
+    const key = SIGOUTOUR_FIELD_TYPE[data['key']]
+    json[key] = data['text']
+  })
+  json['taxType'] = TAX_TYPE[json.taxType]
+  return json
 }
 
-const byTicketId = R.groupBy((fileObj) => {
-  return fileObj.filename.split('_')[2].split('.')[0]
-})
-const uploadToGateweb = (imageObj, savedResultObj) => {
-  return {
-    success: true
+const getJsonRawData = async (data, clientTaxId) => {
+  try {
+    const filterJsonDataFilePathList = data.filter(d => {
+      return d.filename.endsWith('.json')
+    }).filter(d => {
+      const fileNameClientId = d.filename.split('_')[1]
+      return fileNameClientId === clientTaxId
+    }).map(d => {
+      return d.fullPath
+    })
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
+    }
+  } catch (error) {
+    //todo handler
   }
 }
 
 const ConfirmedEvidenceList = (props) => {
+
+  console.log('ConfirmedEvidenceList', props)
+
   const [rowData, setRowData] = useState([])
+
+  const initDataRows = async (data, clientTaxId) => {
+    const jsonDataList = await getJsonRawData(data, clientTaxId)
+    const parseJsonDataList = jsonDataList.map((json, idx) => {
+      const parseResult = parseData(json.data)
+      parseResult['id'] = idx + 1
+      return parseResult
+    })
+    setRowData(parseJsonDataList)
+    console.log('initDataRows', rowData)
+  }
+
   useEffect(() => {
-    setRowData(convertData())
-  }, [])
+    initDataRows(props.data['03'], props.clientTaxId)
+  }, [props.data, props.clientTaxId])
 
 
   const handleUpload = () => {
-    var filesByTicketId = byTicketId(props.data['04'])
-    let imageFileExtension = ['jpg', 'png', 'git']
-    Object.keys(filesByTicketId).forEach(async ticketId => {
-      let imageObj = filesByTicketId[ticketId].filter((fileObj) => {
-        return imageFileExtension.indexOf(fileObj.filename.split('.')[1]) > -1
-      })[0]
 
-      let sighttourObj = filesByTicketId[ticketId].filter(fileObj => {
-        return R.includes('sightour', fileObj.filename)
-      })[0]
-
-      let savedResultObj = filesByTicketId[ticketId].filter(fileObj => {
-        return R.includes('saved', fileObj.filename)
-      })[0]
-      var uploadResult = uploadToGateweb(imageObj, savedResultObj)
-      if (uploadResult.success) {
-        if (ipcRenderer) {
-          var updatedFiles = await ipcRenderer.invoke('evidence:uploaded', JSON.stringify(imageObj), JSON.stringify(sighttourObj), JSON.stringify(savedResultObj))
-          setRowData(updatedFiles)
-        }
-      }
-    })
-  };
+  }
   return (
     <div>
-      <Button variant="contained" onClick={handleUpload}>Upload to Gateweb</Button>
-      <EvidenceList data={mockData.rows}></EvidenceList>
+      <Button variant='contained' onClick={handleUpload}>上傳OCR-CLOUD</Button>
+      <EvidenceList data={rowData}></EvidenceList>
     </div>
-  );
-};
+  )
+}
 
-export default ConfirmedEvidenceList;
+export default ConfirmedEvidenceList
