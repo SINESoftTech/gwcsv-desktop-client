@@ -69,6 +69,15 @@ export async function identifyResultConfirmed(dispatch,payload) {
   }
 }
 
-export async function gwUploaded(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
+export async function gwUploaded(payload) {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      return result
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
+  // dispatch({ type: 'LOGOUT' })
 }

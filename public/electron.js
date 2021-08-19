@@ -252,14 +252,16 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
   return getAllFileLists()
 })
 
-ipcMain.handle('evidence:uploaded', (event, imageFileObj, sightourFileObj, savedFileObj) => {
-  let targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
-  let imageFileObjObj = JSON.parse(imageFileObj)
-  let sightourResultFileObjObj = JSON.parse(sightourFileObj)
-  let savedFileObjObj = JSON.parse(savedFileObj)
-  fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))
-  fse.moveSync(sightourResultFileObjObj.fullPath, path.join(targetFolder, sightourResultFileObjObj.filename))
-  fse.moveSync(savedFileObjObj.fullPath, path.join(targetFolder, savedFileObjObj.filename))
+ipcMain.handle('evidence:uploaded', (event, payload) => {
+  console.log('evidence:uploaded payload', payload)
+
+  // let targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
+  // let imageFileObjObj = JSON.parse(imageFileObj)
+  // let sightourResultFileObjObj = JSON.parse(sightourFileObj)
+  // let savedFileObjObj = JSON.parse(savedFileObj)
+  // fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))
+  // fse.moveSync(sightourResultFileObjObj.fullPath, path.join(targetFolder, sightourResultFileObjObj.filename))
+  // fse.moveSync(savedFileObjObj.fullPath, path.join(targetFolder, savedFileObjObj.filename))
   return getAllFileLists()
 })
 

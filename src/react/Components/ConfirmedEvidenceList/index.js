@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
-import * as mockData from '../../Pages/Main/mockDisplayData'
 import isElectron from 'is-electron'
 import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
+import { gwUploaded } from '../../Actions/electionActions'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -19,7 +19,7 @@ const parseData = (jsonData) => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
     json[key] = data['text']
   })
-  json['taxType'] = TAX_TYPE[json.taxType]
+  json['taxType'] = TAX_TYPE[json.taxType].name
   return json
 }
 
@@ -40,6 +40,9 @@ const getJsonRawData = async (data, clientTaxId) => {
     //todo handler
   }
 }
+const byTicketId = R.groupBy((fileObj) => {
+  return fileObj.filename.split('_')[2].split('.')[0]
+})
 
 const ConfirmedEvidenceList = (props) => {
 
@@ -61,8 +64,21 @@ const ConfirmedEvidenceList = (props) => {
   }, [props.data, props.clientTaxId])
 
 
-  const handleUpload = () => {
-    
+  const handleUpload = async () => {
+    console.log('handleUpload', props.data['04'])
+    const filesByTicketId = byTicketId(props.data['04'])
+    console.log(filesByTicketId)
+    try {
+      //upload gw
+
+      //mv folder
+      const result = await gwUploaded(filesByTicketId)
+      return result
+    } catch (e) {
+      throw new Error(e)
+    }
+    //  818085909997119: Array(2)
+    // 0: {filename: "string123_24549210_0818085909997119.jpg", fullPath: "/Users/tony/.gwapp/04/string123_24549210_0818085909997119.jpg"}
   }
 
   return (

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
-import * as mockData from '../../Pages/Main/mockDisplayData'
 import isElectron from 'is-electron'
 import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
-import { getIdentifyResult } from '../../Actions/sightourActions'
-import { identifyResultConfirmed, identifyResultReceived } from '../../Actions/electionActions'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -24,7 +21,7 @@ const parseData = (jsonData) => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
     json[key] = data['text']
   })
-  json['taxType'] = TAX_TYPE[json.taxType]
+  json['taxType'] = TAX_TYPE[json.taxType].name
   return json
 }
 
