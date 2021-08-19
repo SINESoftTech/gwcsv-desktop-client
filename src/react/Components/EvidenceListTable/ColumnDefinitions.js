@@ -4,7 +4,7 @@ import { Done } from '@material-ui/icons'
 import { GridColDef } from '@material-ui/data-grid'
 
 const ColumnDefinitions: GridColDef[] = [
-  { field: 'tools', headerName: '', width: 50, renderCell: renderActionCell },
+  // { field: 'tools', headerName: '', width: 50, renderCell: renderActionCell },
   { field: 'evidenceType', headerName: '憑證類型', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceNumber', headerName: '發票號碼', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'carrierNumber', headerName: '憑證/載具號碼', width: 200, cellClassName: getCellClassName, editable: true },
