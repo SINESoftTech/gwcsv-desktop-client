@@ -26,12 +26,6 @@ import {
   identifySent
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-// import * as electronActions from '../../Actions/electionActions'
-// import * as sightTourActions from '../../Actions/sightourActions'
-// import axios from "axios";
-
-// const R = require('ramda');
-// import electron from 'electron'
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
@@ -192,7 +186,7 @@ const Main = (props) => {
                   <Tabs value={value} onChange={handleTabChange} aria-label='simple tabs example'>
                     <Tab key={0} label='已掃描圖檔' {...a11yProps(0)} />
                     <Tab key={1} label='已辨識憑證' {...a11yProps(1)} />
-                    <Tab key={2} label='已確認辨識結果' {...a11yProps(2)} />
+                    <Tab key={2} label='待上傳雲端' {...a11yProps(2)} />
                   </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>

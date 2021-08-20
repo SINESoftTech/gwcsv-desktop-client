@@ -57,7 +57,6 @@ const ConfirmedEvidenceList = (props) => {
       return parseResult
     })
     setRowData(parseJsonDataList)
-    console.log('initDataRows', rowData)
   }
 
   useEffect(() => {
@@ -72,7 +71,7 @@ const ConfirmedEvidenceList = (props) => {
       const filterData = filesByTicketId[key]
         .filter(d => {
           const taxId = d.filename.split('_')[1]
-          return taxId === '24549210'
+          return taxId === props.clientTaxId
         })
       if (filterData.length) {
         let json = {}
@@ -81,7 +80,6 @@ const ConfirmedEvidenceList = (props) => {
       }
     }
     const getRawDataResult = await getRawDataWithImage(filterResult)
-    console.log('getRawDataResult', getRawDataResult)
     const parseRawDataResult = getRawDataResult.map(data => {
       return {
         'image': new File([data['image']], Date.now() + '.jpg'),
