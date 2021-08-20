@@ -15,8 +15,6 @@ export const MainReducer = (state = initialMainState, action) => {
       return { ...state, fileLists: action.payload }
     case actionTypes.GET_CLIENT_LIST_SUCCESS:
       return { ...state, clientLists: action.payload }
-    // case actionTypes.GET_CLIENT_LIST_SUCCESS:
-    //   return {...initialState, clientLists: action.payload}
     default:
       console.log('mainReducer initial state', state)
       return state

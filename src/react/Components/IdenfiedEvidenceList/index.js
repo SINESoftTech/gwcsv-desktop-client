@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import isElectron from 'is-electron'
 import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
+import { getJsonRawData } from '../../Actions/electionActions'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -23,24 +24,6 @@ const parseData = (jsonData) => {
   })
   json['taxType'] = TAX_TYPE[json.taxType].name
   return json
-}
-
-const getJsonRawData = async (data, clientTaxId) => {
-  try {
-    const filterJsonDataFilePathList = data.filter(d => {
-      return d.filename.endsWith('.json')
-    }).filter(d => {
-      const fileNameClientId = d.filename.split('_')[1]
-      return fileNameClientId === clientTaxId
-    }).map(d => {
-      return d.fullPath
-    })
-    if (ipcRenderer) {
-      return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
-    }
-  } catch (error) {
-    //todo handler
-  }
 }
 
 const IdentifiedEvidenceList = (props) => {

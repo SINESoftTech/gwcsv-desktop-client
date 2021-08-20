@@ -5,8 +5,22 @@ const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-const getFileList = async () => {
-
+export async function getJsonRawData(data, clientTaxId) {
+  try {
+    const filterJsonDataFilePathList = data.filter(d => {
+      return d.filename.endsWith('.json')
+    }).filter(d => {
+      const fileNameClientId = d.filename.split('_')[1]
+      return fileNameClientId === clientTaxId
+    }).map(d => {
+      return d.fullPath
+    })
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 export async function getFileLists(dispatch) {

@@ -96,7 +96,6 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
     const url = ROOT_URL + '/evidence/gui'
     let bodyFormData = new FormData()
     bodyFormData.append('input', JSON.stringify(req))
-    //TODO
     bodyFormData.append('file', imageBlob)
     const config = {
       headers: {
