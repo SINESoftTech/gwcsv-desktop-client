@@ -259,17 +259,13 @@ ipcMain.handle('evidence:uploaded', (event, payload) => {
   console.log('evidence:uploaded payload', payload)
   payload.map(data => {
     if (data.status) {
-      //todo
-      const sourceFileName = data.fileName
       const targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
-
+      const targetImagePath = targetFolder + data['imageFullPath'].split('04/')[1]
+      const targetJsonPath = targetFolder + data['jsonFullPath'].split('04/')[1]
+      fse.moveSync(data['imageFullPath'], targetImagePath)
+      fse.moveSync(data['jsonFullPath'], targetJsonPath)
     }
-
   })
-  //todo mv
-  // fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))
-  // fse.moveSync(sightourResultFileObjObj.fullPath, path.join(targetFolder, sightourResultFileObjObj.filename))
-  // fse.moveSync(savedFileObjObj.fullPath, path.join(targetFolder, savedFileObjObj.filename))
   return getAllFileLists()
 })
 
