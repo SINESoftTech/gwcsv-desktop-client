@@ -198,9 +198,11 @@ const Main = (props) => {
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}></IdentifiedEvidenceList>
                 </TabPanel>
+                {/*appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token*/}
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
-                                         clientTaxId={clientTaxId.toString()}></ConfirmedEvidenceList>
+                                         clientTaxId={clientTaxId.toString()}
+                                         user={appState.auth.user}></ConfirmedEvidenceList>
                 </TabPanel>
               </Paper>
             </Grid>

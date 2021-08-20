@@ -1,79 +1,157 @@
-import {gwAxios as axios} from "./axios";
+import { gwAxios, gwAxios as axios } from './axios'
 import actionTypes from '../Actions/actionTypes'
+import { SIGOUTOUR_EVIDENCE_TYPE } from '../Enum/sigoutour_type'
 
 const ROOT_URL = 'http://test.gwis.com.tw:8596'
-
-// axios.interceptors.response.use(function(response){
-//   console.log('axios interceptors response')
-//   return response
-// }, function(error){
-//   console.log('axios interceptors response error', error.response)
-//   return Promise.reject(error)
-// })
 
 export async function loginUser(dispatch, loginPayload) {
   const requestOptions = {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(loginPayload),
-  };
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(loginPayload)
+  }
 
   try {
-    dispatch({type: 'REQUEST_LOGIN'});
+    dispatch({ type: 'REQUEST_LOGIN' })
     let response = await axios.post('/auth/login', JSON.stringify(loginPayload)) //await fetch(`${ROOT_URL}/auth/login`, requestOptions);
     let data = response.data
-    let user = {taxId: loginPayload.taxId, username: loginPayload.username}
+    let user = { taxId: loginPayload.taxId, username: loginPayload.username }
     if (data.token) {
       user.token = data.token
-      dispatch({type: 'LOGIN_SUCCESS', payload: user});
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      return user;
+      dispatch({ type: 'LOGIN_SUCCESS', payload: user })
+      localStorage.setItem('currentUser', JSON.stringify(user))
+      return user
     }
 
-    dispatch({type: 'LOGIN_ERROR', error: response.data});
-    console.log('error response', response.data);
-    return;
+    dispatch({ type: 'LOGIN_ERROR', error: response.data })
+    console.log('error response', response.data)
+    return
   } catch (error) {
-    dispatch({type: 'LOGIN_ERROR', error: error.response.data});
-    console.log(error);
+    dispatch({ type: 'LOGIN_ERROR', error: error.response.data })
+    console.log(error)
   }
 }
 
 export async function logout(dispatch) {
-  dispatch({type: 'LOGOUT'});
-  localStorage.removeItem('currentUser');
-  localStorage.removeItem('token');
+  dispatch({ type: 'LOGOUT' })
+  localStorage.removeItem('currentUser')
+  localStorage.removeItem('token')
 }
 
-export async function uploadToGw(dispatch, payload) {
-  const requestOptions = {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload),
-  };
-
-  try {
-    dispatch({type: 'REQUEST_LOGIN'});
-    dispatch({type: 'LOGIN_SUCCESS', payload: ''});
-    return;
-  } catch (error) {
-    dispatch({type: 'LOGIN_ERROR', error: error});
-    console.log(error);
+const uploadToGwStrategy = {
+  'TRIPLE_GUI': function(payload, imageBlob, accountingFirmTaxId, token) {
+    return uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
+  },
+  'DUPLICATE_CASH_REGISTER_GUI': function(payload, imageBlob, accountingFirmTaxId, token) {
+    return uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
+  },
+  'TRIPLE_CASH_REGISTER_GUI': function(payload, imageBlob, accountingFirmTaxId, token) {
+    return uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
+  },
+  'EGUI': function(payload, imageBlob, accountingFirmTaxId, token) {
+    return uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
+  },
+  'ELECTRIC_BILL': function(payload, imageBlob, accountingFirmTaxId, token) {
+    return uploadBill(payload, imageBlob, accountingFirmTaxId, token)
+  },
+  'WATER_BILL': function(payload, imageBlob, accountingFirmTaxId, token) {
+    return uploadBill(payload, imageBlob, accountingFirmTaxId, token)
+  },
+  'TELECOM_BILL': function(payload, imageBlob, accountingFirmTaxId, token) {
+    return uploadBill(payload, imageBlob, accountingFirmTaxId, token)
+  },
+  'CUSTOMS_TAXABLE_EVIDENCE': function(payload, imageBlob, accountingFirmTaxId, token) {
+    return uploadCustoms(payload, imageBlob, accountingFirmTaxId, token)
   }
+}
+
+async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
+  try {
+    const taxableSalesValue = payload.taxableSalesValue === '' ? 0 : payload.taxableSalesValue
+    const zeroTaxSalesValue = payload.zeroTaxSalesValue === '' ? 0 : payload.zeroTaxSalesValue
+    const dutyFreeSalesValue = payload.dutyFreeSalesValue === '' ? 0 : payload.dutyFreeSalesValue
+    const timestamp = new Date(payload.evidenceDate.substring(0, 4) + '-' + payload.evidenceDate.substring(4, 6) + '-' + payload.evidenceDate.substring(6, 8)).getTime()
+    const req = {
+      'businessEntityTaxId': payload.buyerTaxId,
+      'evidenceType': payload.evidenceType,
+      'reportingPeriod': '11002',
+      'deductionType': 'PURCHASE_AND_FEE',
+      'isDeclareBusinessTax': true,
+      'buyerTaxId': payload.buyerTaxId,
+      'sellerTaxId': payload.sellerTaxId,
+      'taxType': payload.taxType,
+      'taxableSalesValue': taxableSalesValue,
+      'zeroTaxSalesValue': zeroTaxSalesValue,
+      'dutyFreeSalesValue': dutyFreeSalesValue,
+      'withoutTaxAmount': parseInt(taxableSalesValue) + parseInt(zeroTaxSalesValue) + parseInt(dutyFreeSalesValue),
+      'businessTaxValue': payload.businessTaxValue,
+      'totalAmount': payload.totalAmount,
+      'evidenceTimestamp': timestamp,
+      'guiId': payload.evidenceNumber,
+      'commentType': 'WHITE_SPACE',
+      'summaryCount': 1,
+      'groupName': null,
+      'remarkText': payload.remark
+    }
+    const url = ROOT_URL + '/evidence/gui'
+    let bodyFormData = new FormData()
+    bodyFormData.append('input', JSON.stringify(req))
+    //TODO
+    bodyFormData.append('file', imageBlob)
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'taxId': accountingFirmTaxId,
+        'Authorization': token
+      }
+    }
+    const result = await gwAxios.post(url, bodyFormData, config)
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+async function uploadBill(payload, accountingFirmTaxId, token) {
+  try {
+
+  } catch (error) {
+
+  }
+}
+
+async function uploadCustoms(payload, accountingFirmTaxId, token) {
+  try {
+
+  } catch (error) {
+
+  }
+}
+
+export async function uploadToGw(payload, accountingFirmTaxId, token) {
+  console.log('uploadToGw', payload)
+  payload.map(async (data) => {
+    const uploadResult = await uploadToGwStrategy[data['json'].evidenceType](data['json'], data['jpg'], accountingFirmTaxId, token)
+    if (uploadResult) {
+      //todo return success
+    } else {
+      //todo return error
+    }
+  })
 }
 
 export const getAllClientList = async (dispatch, username, taxId, token) => {
   const requestOptions = {
-    headers: {'Content-Type': 'application/json', 'Authorization': token, taxId: taxId},
-  };
+    headers: { 'Content-Type': 'application/json', 'Authorization': token, taxId: taxId }
+  }
 
   const result = await axios.get(`/businessEntity/${taxId}`, requestOptions).catch((error) => {
     // TODO Error handling, logout or re-login?
     console.log('getAllClientList error', JSON.stringify(error))
-    dispatch({type: actionTypes.GET_CLIENT_LIST_FAILED, payload: error})
+    dispatch({ type: actionTypes.GET_CLIENT_LIST_FAILED, payload: error })
   })
   console.log('getAllClientList result', result)
-  if(result) {
-    dispatch({type: actionTypes.GET_CLIENT_LIST_SUCCESS, payload: result.data})
+  if (result) {
+    dispatch({ type: actionTypes.GET_CLIENT_LIST_SUCCESS, payload: result.data })
   }
 }

@@ -3,7 +3,8 @@ import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import isElectron from 'is-electron'
 import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
-import { getRawDataWithImage, gwUploaded } from '../../Actions/electionActions'
+import { getRawDataWithImage } from '../../Actions/electionActions'
+import { uploadToGw } from '../../Actions/gwActions'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -14,12 +15,12 @@ const R = require('ramda')
 const parseData = (jsonData) => {
   let json = {}
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
-  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']].name
+  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']].value
   jsonDataBody.forEach(data => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
     json[key] = data['text']
   })
-  json['taxType'] = TAX_TYPE[json.taxType].name
+  json['taxType'] = TAX_TYPE[json.taxType].value
   return json
 }
 
@@ -82,11 +83,12 @@ const ConfirmedEvidenceList = (props) => {
     const getRawDataResult = await getRawDataWithImage(result)
     const parseRawDataResult = getRawDataResult.map(data => {
       return {
-        'jpg': new Blob([data['jpg']]),
+        'jpg': new File([data['jpg']], Date.now() + '.jpg'),
         'json': parseData(data['json'])
       }
     })
-    console.log(parseRawDataResult)
+    await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
+
     // parseData
   }
 
