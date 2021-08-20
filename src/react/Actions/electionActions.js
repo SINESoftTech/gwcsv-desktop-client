@@ -72,7 +72,7 @@ export async function identifyResultConfirmed(dispatch, payload) {
 export async function gwUploaded(dispatch, payload) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
+      const result = await ipcRenderer.invoke('evidence:uploaded', payload)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }
