@@ -84,17 +84,17 @@ const ConfirmedEvidenceList = (props) => {
     console.log('getRawDataResult', getRawDataResult)
     const parseRawDataResult = getRawDataResult.map(data => {
       return {
-        'fileName': data['fileName'],
-        'jpg': new File([data['jpg']], Date.now() + '.jpg'),
+        'image': new File([data['image']], Date.now() + '.jpg'),
+        'imageFullPath': data['imageFullPath'],
+        'jsonFullPath': data['jsonFullPath'],
         'json': parseData(data['json'])
       }
     })
     console.log('parseRawDataResult', parseRawDataResult)
     const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
     //TODO move file and set view
-    //  gwUploaded
-    props.onGwUploaded(uploadResult)
-
+    const moveFileResult = props.onGwUploaded(uploadResult)
+    console.log(moveFileResult)
   }
 
   return (

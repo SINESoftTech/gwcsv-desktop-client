@@ -134,16 +134,19 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
   const result = []
   for (let i = 0; i < payload.length; i++) {
     const data = payload[i]
+    console.log('uploadToGw', data)
     const uploadResult = await uploadToGwStrategy[data['json'].evidenceType](data['json'], data['jpg'], accountingFirmTaxId, token)
     if (uploadResult) {
       result.push({
         'status': true,
-        'fileName': data['fileName']
+        'imageFullPath': data['imageFullPath'],
+        'jsonFullPath': data['jsonFullPath']
       })
     } else {
       result.push({
         'status': false,
-        'fileName': data['fileName']
+        'imageFullPath': data['imageFullPath'],
+        'jsonFullPath': data['jsonFullPath']
       })
     }
   }

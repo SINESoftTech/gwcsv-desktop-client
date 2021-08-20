@@ -257,11 +257,16 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
 
 ipcMain.handle('evidence:uploaded', (event, payload) => {
   console.log('evidence:uploaded payload', payload)
+  payload.map(data => {
+    if (data.status) {
+      //todo
+      const sourceFileName = data.fileName
+      const targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
+
+    }
+
+  })
   //todo mv
-  // let targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
-  // let imageFileObjObj = JSON.parse(imageFileObj)
-  // let sightourResultFileObjObj = JSON.parse(sightourFileObj)
-  // let savedFileObjObj = JSON.parse(savedFileObj)
   // fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))
   // fse.moveSync(sightourResultFileObjObj.fullPath, path.join(targetFolder, sightourResultFileObjObj.filename))
   // fse.moveSync(savedFileObjObj.fullPath, path.join(targetFolder, savedFileObjObj.filename))
@@ -270,20 +275,28 @@ ipcMain.handle('evidence:uploaded', (event, payload) => {
 
 
 ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
+  const getFileExt = (fileName) => {
+    if (fileName.endsWith('jpg') || fileName.endsWith('png')) {
+      return 'image'
+    }
+    return 'json'
+  }
   return fullPathList.map(d => {
     const key = R.keys(d)[0]
     let json = {}
-    json['fileName'] = d[key][0].filename.split('.')[0]
     const r = d[key].map(fileObj => {
-      const key = fileObj.filename.split('.')[1]
+      const fileExt = getFileExt(fileObj.filename.split('.')[1])
       const value = getFileContent(fileObj.fullPath)
       let json = {}
-      json[key] = value
+      json[fileExt] = value
+      const filePathKey = fileExt + 'FullPath'
+      json[filePathKey] = fileObj.fullPath
       return json
     })
-
-    json['jpg'] = r[0]['jpg']
+    json['imageFullPath'] = r[0]['imageFullPath']
+    json['image'] = r[0]['image']
     json['json'] = r[1]['json']
+    json['jsonFullPath'] = r[1]['jsonFullPath']
     return json
   })
 })
