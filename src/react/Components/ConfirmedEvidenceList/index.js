@@ -92,6 +92,9 @@ const ConfirmedEvidenceList = (props) => {
     console.log('parseRawDataResult', parseRawDataResult)
     const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
     //TODO move file and set view
+    //  gwUploaded
+    props.onGwUploaded(uploadResult)
+
   }
 
   return (

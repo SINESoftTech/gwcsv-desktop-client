@@ -19,7 +19,12 @@ import mainStyles from './mainStyles'
 import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
-import { identifyResultConfirmed, identifyResultReceived, identifySent } from '../../Actions/electionActions'
+import {
+  gwUploaded,
+  identifyResultConfirmed,
+  identifyResultReceived,
+  identifySent
+} from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
 // import * as electronActions from '../../Actions/electionActions'
 // import * as sightTourActions from '../../Actions/sightourActions'
@@ -134,6 +139,15 @@ const Main = (props) => {
     }
   }
 
+  const handleGwUploaded = async (data) => {
+    try {
+      const result = await gwUploaded(dispatch, data)
+      return result
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
   function a11yProps(index) {
     return {
       id: `simple-tab-${index}`,
@@ -202,7 +216,8 @@ const Main = (props) => {
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
                                          clientTaxId={clientTaxId.toString()}
-                                         user={appState.auth.user}></ConfirmedEvidenceList>
+                                         user={appState.auth.user}
+                                         onGwUploaded={handleGwUploaded}></ConfirmedEvidenceList>
                 </TabPanel>
               </Paper>
             </Grid>
