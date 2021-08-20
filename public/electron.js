@@ -152,7 +152,10 @@ function getFileContent(fullPath) {
   if (R.endsWith('.jpg', fullPath)) {
     return fse.readFileSync(fullPath)
   }
-  if (R.endsWith('.js', fullPath) || R.endsWith('.txt', fullPath) || R.endsWith('.json', fullPath)) {
+  if (R.endsWith('.json', fullPath)) {
+    return fse.readJSONSync(fullPath)
+  }
+  if (R.endsWith('.js', fullPath) || R.endsWith('.txt', fullPath)) {
     return fse.readFileSync(fullPath, 'utf-8')
   }
 
@@ -254,7 +257,7 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
 
 ipcMain.handle('evidence:uploaded', (event, payload) => {
   console.log('evidence:uploaded payload', payload)
-
+  //todo mv
   // let targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
   // let imageFileObjObj = JSON.parse(imageFileObj)
   // let sightourResultFileObjObj = JSON.parse(sightourFileObj)
@@ -265,19 +268,20 @@ ipcMain.handle('evidence:uploaded', (event, payload) => {
   return getAllFileLists()
 })
 
-//todo
+
 ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
-  console.log(fullPathList)
-  fullPathList.flatMap(d => {
-    console.log(d)
+  return fullPathList.map(d => {
+    const key = R.keys(d)[0]
+    const r = d[key].map(fileObj => {
+      const key = fileObj.filename.split('.')[1]
+      const value = getFileContent(fileObj.fullPath)
+      let json = {}
+      json[key] = value
+      return json
+    })
+    let json = {}
+    json['jpg'] = r[0]['jpg']
+    json['json'] = r[1]['json']
+    return json
   })
-  //getFileContent
-  // const jsonDataList = fullPathList.map(filePath => {
-  //   return {
-  //     'filePath': filePath,
-  //     'data': fse.readJSONSync(filePath),
-  //     'image':fse.readFileSync()
-  //   }
-  // })
-  return null
 })

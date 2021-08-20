@@ -63,43 +63,31 @@ const ConfirmedEvidenceList = (props) => {
     initDataRows(props.data['04'], props.clientTaxId)
   }, [props.data, props.clientTaxId])
 
-
-  // const getRawDataWithImage = (clientTaxId, data) => {
-  //   console.log('getRawDataWithImage', data)
-  //
-  //   // (filterData)
-  //
-  // }
-
   const handleUpload = async () => {
     console.log('handleUpload', props.data['04'])
     const filesByTicketId = byTicketId(props.data['04'])
-    console.log(filesByTicketId)
     let result = []
     for (let key in filesByTicketId) {
       const filterData = filesByTicketId[key]
         .filter(d => {
           const taxId = d.filename.split('_')[1]
-          return taxId === props.clientTaxId
+          return taxId === '24549210'
         })
       if (filterData.length) {
-        result.push(filterData)
+        let json = {}
+        json[key] = filesByTicketId[key]
+        result.push(json)
       }
     }
-    await getRawDataWithImage(result)
-    // try {
-    //
-    //   //get raw Data
-    //
-    //   //upload gw by evidenceType
-    //   //mv folder
-    //   const result = await gwUploaded(filesByTicketId)
-    //   return result
-    // } catch (e) {
-    //   throw new Error(e)
-    // }
-    //  818085909997119: Array(2)
-    // 0: {filename: "string123_24549210_0818085909997119.jpg", fullPath: "/Users/tony/.gwapp/04/string123_24549210_0818085909997119.jpg"}
+    const getRawDataResult = await getRawDataWithImage(result)
+    const parseRawDataResult = getRawDataResult.map(data => {
+      return {
+        'jpg': new Blob([data['jpg']]),
+        'json': parseData(data['json'])
+      }
+    })
+    console.log(parseRawDataResult)
+    // parseData
   }
 
   return (
