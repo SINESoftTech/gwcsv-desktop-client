@@ -39,29 +39,29 @@ export async function logout(dispatch) {
 }
 
 const uploadToGwStrategy = {
-  'TRIPLE_GUI': function(payload, imageBlob, accountingFirmTaxId, token) {
-    return uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
+  'TRIPLE_GUI': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'DUPLICATE_CASH_REGISTER_GUI': function(payload, imageBlob, accountingFirmTaxId, token) {
-    return uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
+  'DUPLICATE_CASH_REGISTER_GUI': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'TRIPLE_CASH_REGISTER_GUI': function(payload, imageBlob, accountingFirmTaxId, token) {
-    return uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
+  'TRIPLE_CASH_REGISTER_GUI': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'EGUI': function(payload, imageBlob, accountingFirmTaxId, token) {
-    return uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
+  'EGUI': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'ELECTRIC_BILL': function(payload, imageBlob, accountingFirmTaxId, token) {
-    return uploadBill(payload, imageBlob, accountingFirmTaxId, token)
+  'ELECTRIC_BILL': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'WATER_BILL': function(payload, imageBlob, accountingFirmTaxId, token) {
-    return uploadBill(payload, imageBlob, accountingFirmTaxId, token)
+  'WATER_BILL': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'TELECOM_BILL': function(payload, imageBlob, accountingFirmTaxId, token) {
-    return uploadBill(payload, imageBlob, accountingFirmTaxId, token)
+  'TELECOM_BILL': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'CUSTOMS_TAXABLE_EVIDENCE': function(payload, imageBlob, accountingFirmTaxId, token) {
-    return uploadCustoms(payload, imageBlob, accountingFirmTaxId, token)
+  'CUSTOMS_TAXABLE_EVIDENCE': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadCustoms(payload, imageBlob, accountingFirmTaxId, token)
   }
 }
 
@@ -112,6 +112,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   }
 }
 
+//TODO
 async function uploadBill(payload, accountingFirmTaxId, token) {
   try {
 
@@ -120,6 +121,7 @@ async function uploadBill(payload, accountingFirmTaxId, token) {
   }
 }
 
+//TODO
 async function uploadCustoms(payload, accountingFirmTaxId, token) {
   try {
 
@@ -129,15 +131,23 @@ async function uploadCustoms(payload, accountingFirmTaxId, token) {
 }
 
 export async function uploadToGw(payload, accountingFirmTaxId, token) {
-  console.log('uploadToGw', payload)
-  payload.map(async (data) => {
+  const result = []
+  for (let i = 0; i < payload.length; i++) {
+    const data = payload[i]
     const uploadResult = await uploadToGwStrategy[data['json'].evidenceType](data['json'], data['jpg'], accountingFirmTaxId, token)
     if (uploadResult) {
-      //todo return success
+      result.push({
+        'status': true,
+        'fileName': data['fileName']
+      })
     } else {
-      //todo return error
+      result.push({
+        'status': false,
+        'fileName': data['fileName']
+      })
     }
-  })
+  }
+  return result
 }
 
 export const getAllClientList = async (dispatch, username, taxId, token) => {

@@ -67,7 +67,7 @@ const ConfirmedEvidenceList = (props) => {
   const handleUpload = async () => {
     console.log('handleUpload', props.data['04'])
     const filesByTicketId = byTicketId(props.data['04'])
-    let result = []
+    let filterResult = []
     for (let key in filesByTicketId) {
       const filterData = filesByTicketId[key]
         .filter(d => {
@@ -77,19 +77,21 @@ const ConfirmedEvidenceList = (props) => {
       if (filterData.length) {
         let json = {}
         json[key] = filesByTicketId[key]
-        result.push(json)
+        filterResult.push(json)
       }
     }
-    const getRawDataResult = await getRawDataWithImage(result)
+    const getRawDataResult = await getRawDataWithImage(filterResult)
+    console.log('getRawDataResult', getRawDataResult)
     const parseRawDataResult = getRawDataResult.map(data => {
       return {
+        'fileName': data['fileName'],
         'jpg': new File([data['jpg']], Date.now() + '.jpg'),
         'json': parseData(data['json'])
       }
     })
-    await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
-
-    // parseData
+    console.log('parseRawDataResult', parseRawDataResult)
+    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
+    //TODO move file and set view
   }
 
   return (

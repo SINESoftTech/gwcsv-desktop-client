@@ -272,6 +272,8 @@ ipcMain.handle('evidence:uploaded', (event, payload) => {
 ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
   return fullPathList.map(d => {
     const key = R.keys(d)[0]
+    let json = {}
+    json['fileName'] = d[key][0].filename.split('.')[0]
     const r = d[key].map(fileObj => {
       const key = fileObj.filename.split('.')[1]
       const value = getFileContent(fileObj.fullPath)
@@ -279,7 +281,7 @@ ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
       json[key] = value
       return json
     })
-    let json = {}
+
     json['jpg'] = r[0]['jpg']
     json['json'] = r[1]['json']
     return json
