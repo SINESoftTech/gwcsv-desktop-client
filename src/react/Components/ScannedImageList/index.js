@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import scannedImageListStyles from './scannedImageListStyles'
 import { IconButton, ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core'
 import { Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon } from '@material-ui/icons'
-import FormDialog from '../FormDialog'
 
 
 const electron = isElectron() ? window.electron : null
@@ -74,7 +73,6 @@ const ScannedImageList = (props) => {
 
   return (
     <div style={{ height: 650, width: '100%' }}>
-      <FormDialog />
       <Button variant='contained' onClick={props.onScanClick} disabled={!isScanEnable(props.clientTaxId)}>掃描文件</Button>
       <Button variant='contained' onClick={(e) => {
         props.onSendToIdentifyClick(e, dataRows)
