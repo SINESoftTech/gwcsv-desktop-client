@@ -92,7 +92,6 @@ const Main = (props) => {
   }
   const handleSelectionChange = (event) => {
     const { name, value } = event.target
-    console.log('handleSelectionChange', name, value)
     setDeclareProperties(prevState => {
       return {
         ...prevState,
@@ -102,7 +101,6 @@ const Main = (props) => {
     if (name === 'clientTaxId') {
       setDisableSelection(false)
     }
-    console.log('handleSelectionChange', declareProperties)
   }
   //endregion
 
@@ -119,7 +117,7 @@ const Main = (props) => {
         'fileBlob': d.fileBlob,
         'accountingfirmTaxId': accountingfirmTaxId,
         'businessEntityTaxId': businessEntityTaxId,
-        'evidenceType': 'A5002'
+        'evidenceType': declareProperties.evidenceType
       }
     })
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
