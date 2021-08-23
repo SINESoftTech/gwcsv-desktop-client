@@ -72,7 +72,6 @@ const Main = (props) => {
   const dispatch = useAppDispatch()
   const appState = useAppState()
   const [value, setValue] = React.useState(0)
-  const [clientTaxId, setClientTaxId] = React.useState('')
   const [declareProperties, setDeclareProperties] = React.useState({
     'clientTaxId': '',
     'reportingPeriod': '',
@@ -92,20 +91,21 @@ const Main = (props) => {
   }
   const handleSelectionChange = (event) => {
     const { name, value } = event.target
+    console.log('handleSelectionChange', name, value)
     setDeclareProperties(prevState => {
       return {
         ...prevState,
         [name]: value
       }
     })
-    console.log(declareProperties)
+    console.log('handleSelectionChange', declareProperties)
   }
   //endregion
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
     const accountingfirmTaxId = appState.auth.user.taxId
-    const businessEntityTaxId = clientTaxId
+    const businessEntityTaxId = declareProperties.clientTaxId
     const sendToIdentifyData = data.map(d => {
       return {
         'sourceFullPath': d.fullPath,
@@ -294,7 +294,7 @@ const Main = (props) => {
                 <TabPanel value={value} index={0}>
                   <ScannedImageList data={appState.appData.fileLists['01']}
                                     username={appState.auth.user.username}
-                                    clientTaxId={declareProperties.clientTaxId}
+                                    declareProperties={declareProperties}
                                     onScanClick={handleScanImage}
                                     onSendToIdentifyClick={handleSendImageToIdentify}
                                     onSaveImageClick={handleSaveImage}

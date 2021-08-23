@@ -42,14 +42,13 @@ const getImageFileBlob = async (fullPath) => {
 const isScanEnable = (taxIdSelected) => {
   return !!taxIdSelected
 }
-const isSendToIdentifyEnable = (data) => {
-  return data.length > 0
+const isRequiredEnable = (data, reportingPeriod, deductionCode, evidenceType) => {
+  return (reportingPeriod !== '' && deductionCode !== '' && evidenceType !== '') || data.length <= 0
 }
-
 
 const ScannedImageList = (props) => {
 
-  console.log('ScannedImageList',props)
+  console.log('ScannedImageList', props)
 
   const [dataRows, setDataRows] = useState([])
 
@@ -61,9 +60,9 @@ const ScannedImageList = (props) => {
       console.log('in useEffect', rowData)
       setDataRows(rowData)
     }
-    initDataRows(props.data, props.username, props.clientTaxId)
+    initDataRows(props.data, props.username, props.declareProperties.clientTaxId)
     console.log('ScannedImageList', dataRows)
-  }, [props.data, props.clientTaxId])
+  }, [props.data, props.declareProperties.clientTaxId])
 
   const classes = scannedImageListStyles()
 
@@ -76,10 +75,12 @@ const ScannedImageList = (props) => {
 
   return (
     <div style={{ height: 650, width: '100%' }}>
-      <Button variant='contained' onClick={props.onScanClick} disabled={!isScanEnable(props.clientTaxId)}>掃描文件</Button>
+      <Button variant='contained' onClick={props.onScanClick}
+              disabled={!isScanEnable(props.declareProperties.clientTaxId)}>掃描文件</Button>
       <Button variant='contained' onClick={(e) => {
         props.onSendToIdentifyClick(e, dataRows)
-      }} disabled={!isSendToIdentifyEnable(dataRows)}>送出辨識</Button>
+      }}
+              disabled={!isRequiredEnable(dataRows, props.declareProperties.reportingPeriod, props.declareProperties.deductionType, props.declareProperties.evidenceType)}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
           {dataRows.map((item) => (
