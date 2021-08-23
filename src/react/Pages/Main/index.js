@@ -78,6 +78,7 @@ const Main = (props) => {
     'deductionType': '',
     'evidenceType': ''
   })
+  const [disableSelection, setDisableSelection] = React.useState(true)
   const classes = mainStyles()
 
   useEffect(async () => {
@@ -98,12 +99,17 @@ const Main = (props) => {
         [name]: value
       }
     })
+    if (name === 'clientTaxId') {
+      setDisableSelection(false)
+    }
     console.log('handleSelectionChange', declareProperties)
   }
   //endregion
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
+    setDisableSelection(true)
+    //todo
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = declareProperties.clientTaxId
     const sendToIdentifyData = data.map(d => {
@@ -192,7 +198,10 @@ const Main = (props) => {
             id='reporting-period-select'
             name='reportingPeriod'
             value={declareProperties.reportingPeriod}
-            onChange={handleSelectionChange}>
+            onChange={handleSelectionChange}
+            disabled={disableSelection}
+          >
+
             <MenuItem key={0} value={''}>請選擇申報期別</MenuItem>
             {toPeriodTime().filter(period => period % 2 === 0).map(period => {
               return (<MenuItem key={period} value={period}>{period}</MenuItem>)
@@ -214,7 +223,8 @@ const Main = (props) => {
             id='deduction-type-select'
             name='deductionType'
             value={declareProperties.deductionType}
-            onChange={handleSelectionChange}>
+            onChange={handleSelectionChange}
+            disabled={disableSelection}>
             <MenuItem key={0} value={''}>請選擇扣抵代號</MenuItem>
             {DEDUCTION_TYPE.map(obj => {
               return <MenuItem key={obj.value} value={obj.value}>{obj.key}</MenuItem>
@@ -258,7 +268,8 @@ const Main = (props) => {
             id='evidence-type-select'
             name='evidenceType'
             value={declareProperties.evidenceType}
-            onChange={handleSelectionChange}>
+            onChange={handleSelectionChange}
+            disabled={disableSelection}>
             <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
             {keyList.map(key => {
               return <MenuItem key={key}

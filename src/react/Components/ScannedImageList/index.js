@@ -43,15 +43,12 @@ const isScanEnable = (taxIdSelected) => {
   return !!taxIdSelected
 }
 const isRequiredEnable = (data, reportingPeriod, deductionCode, evidenceType) => {
-  return (reportingPeriod !== '' && deductionCode !== '' && evidenceType !== '') || data.length <= 0
+  return (reportingPeriod !== '' && deductionCode !== '' && evidenceType !== '') && data.length > 0
 }
 
 const ScannedImageList = (props) => {
 
-  console.log('ScannedImageList', props)
-
   const [dataRows, setDataRows] = useState([])
-
 
   useEffect(() => {
     const initDataRows = async (data, username, clientTaxId) => {
