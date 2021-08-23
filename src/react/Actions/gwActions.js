@@ -1,6 +1,5 @@
 import { gwAxios, gwAxios as axios } from './axios'
 import actionTypes from '../Actions/actionTypes'
-import { SIGOUTOUR_EVIDENCE_TYPE } from '../Enum/sigoutour_type'
 
 const ROOT_URL = 'http://test.gwis.com.tw:8596'
 

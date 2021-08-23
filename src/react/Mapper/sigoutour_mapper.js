@@ -103,4 +103,37 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
   }
 }
 
-export { SIGOUTOUR_FIELD_TYPE, SIGOUTOUR_EVIDENCE_TYPE, TAX_TYPE }
+const parseData = (jsonData) => {
+  let json = {}
+  const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
+  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']]
+  jsonDataBody.forEach(data => {
+    const key = SIGOUTOUR_FIELD_TYPE[data['key']]
+    json[key] = data['text']
+  })
+  json['taxType'] = TAX_TYPE[json.taxType]
+  return json
+}
+
+class SigoutourMapperClass {
+
+  toView(jsonData) {
+    const json = parseData(jsonData)
+    json['evidenceType'] = json['evidenceType'].name
+    json['taxType'] = json['taxType'].name
+    return json
+  }
+
+  toGw(jsonData) {
+    const json = parseData(jsonData)
+    json['evidenceType'] = json['evidenceType'].value
+    json['taxType'] = json['taxType'].value
+    return json
+  }
+
+}
+
+
+const SigoutourMapper = new SigoutourMapperClass()
+
+export default SigoutourMapper

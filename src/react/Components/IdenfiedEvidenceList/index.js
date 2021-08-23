@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import isElectron from 'is-electron'
-import { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, TAX_TYPE } from '../../Enum/sigoutour_type'
 import { getJsonRawData } from '../../Actions/electionActions'
+import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -13,18 +14,6 @@ const R = require('ramda')
 const byTicketId = R.groupBy((fileObj) => {
   return fileObj.filename.split('_')[2].split('.')[0]
 })
-
-const parseData = (jsonData) => {
-  let json = {}
-  const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
-  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']].name
-  jsonDataBody.forEach(data => {
-    const key = SIGOUTOUR_FIELD_TYPE[data['key']]
-    json[key] = data['text']
-  })
-  json['taxType'] = TAX_TYPE[json.taxType].name
-  return json
-}
 
 const IdentifiedEvidenceList = (props) => {
 
@@ -36,7 +25,7 @@ const IdentifiedEvidenceList = (props) => {
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
-      const parseResult = parseData(json.data)
+      const parseResult = SigoutourMapper.toView(json.data)
       parseResult['id'] = idx + 1
       return parseResult
     })
