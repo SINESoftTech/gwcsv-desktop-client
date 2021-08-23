@@ -66,10 +66,6 @@ const uploadToGwStrategy = {
 
 async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   try {
-    const taxableSalesValue = payload.taxableSalesValue === '' ? 0 : payload.taxableSalesValue
-    const zeroTaxSalesValue = payload.zeroTaxSalesValue === '' ? 0 : payload.zeroTaxSalesValue
-    const dutyFreeSalesValue = payload.dutyFreeSalesValue === '' ? 0 : payload.dutyFreeSalesValue
-    const timestamp = new Date(payload.evidenceDate.substring(0, 4) + '-' + payload.evidenceDate.substring(4, 6) + '-' + payload.evidenceDate.substring(6, 8)).getTime()
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
       'evidenceType': payload.evidenceType,
