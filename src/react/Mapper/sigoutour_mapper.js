@@ -112,12 +112,18 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
 const parseData = (jsonData) => {
   let json = {}
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
+
   json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']]
   jsonDataBody.forEach(data => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
     json[key] = data['text']
   })
   json['taxType'] = TAX_TYPE[json.taxType]
+  if (jsonData['pageList'][0]['photoList'][0]['type'] === 'A5020') {
+    json['waterFee'] = json['waterFee'] === '' ? 0 : json['waterFee']
+    json['basicFee'] = json['basicFee'] === '' ? 0 : json['basicFee']
+    json['taxableSalesValue'] = parseInt(json['waterFee']) + parseInt(json['basicFee'])
+  }
   json['taxableSalesValue'] = json['taxableSalesValue'] === '' ? 0 : json['taxableSalesValue']
   json['zeroTaxSalesValue'] = json['zeroTaxSalesValue'] === '' ? 0 : json['zeroTaxSalesValue']
   json['dutyFreeSalesValue'] = json['dutyFreeSalesValue'] === '' ? 0 : json['dutyFreeSalesValue']
