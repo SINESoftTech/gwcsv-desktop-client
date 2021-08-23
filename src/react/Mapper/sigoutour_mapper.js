@@ -52,11 +52,11 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
     'value': 'TRIPLE_CASH_REGISTER_GUI'
   },
   'A5002': {
-    'name': '電子發票證明聯 格式一',
+    'name': '電子發票證明聯-格式一',
     'value': 'EGUI'
   },
   'A5003': {
-    'name': '電子發票證明聯 格式二',
+    'name': '電子發票證明聯-格式二',
     'value': 'EGUI'
   },
   'A5010': {
@@ -146,5 +146,5 @@ class SigoutourMapperClass {
 
 
 const SigoutourMapper = new SigoutourMapperClass()
-
+export {SIGOUTOUR_EVIDENCE_TYPE}
 export default SigoutourMapper

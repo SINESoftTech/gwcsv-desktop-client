@@ -27,10 +27,13 @@ import {
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
 import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
+import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 
+const R = require('ramda')
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
+
 
 const toPeriodTime = (timestamp = Date.now()) => {
   const date = new Date(timestamp)
@@ -245,7 +248,7 @@ const Main = (props) => {
   }
 
   const renderEvidenceType = () => {
-    console.log('renderEvidenceType')
+    const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
     return (
       <>
         <FormControl className={classes.formControl}>
@@ -257,6 +260,10 @@ const Main = (props) => {
             value={declareProperties.evidenceType}
             onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
+            {keyList.map(key => {
+              return <MenuItem key={key}
+                               value={key}>{SIGOUTOUR_EVIDENCE_TYPE[key].name}</MenuItem>
+            })}
           </Select>
         </FormControl>
       </>
