@@ -112,6 +112,9 @@ const parseData = (jsonData) => {
     json[key] = data['text']
   })
   json['taxType'] = TAX_TYPE[json.taxType]
+  json['taxableSalesValue'] = json['taxableSalesValue'] === '' ? 0 : json['taxableSalesValue']
+  json['zeroTaxSalesValue'] = json['zeroTaxSalesValue'] === '' ? 0 : json['zeroTaxSalesValue']
+  json['dutyFreeSalesValue'] = json['dutyFreeSalesValue'] === '' ? 0 : json['dutyFreeSalesValue']
   return json
 }
 
@@ -128,6 +131,8 @@ class SigoutourMapperClass {
     const json = parseData(jsonData)
     json['evidenceType'] = json['evidenceType'].value
     json['taxType'] = json['taxType'].value
+    const evidenceDate = json['evidenceDate']
+    json['evidenceDate'] = new Date(evidenceDate.substring(0, 4) + '-' + evidenceDate.substring(4, 6) + '-' + evidenceDate.substring(6, 8)).getTime()
     return json
   }
 
