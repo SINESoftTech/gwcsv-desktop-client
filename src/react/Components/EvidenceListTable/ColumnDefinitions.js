@@ -8,6 +8,7 @@ const ColumnDefinitions: GridColDef[] = [
   { field: 'evidenceType', headerName: '憑證類型', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceNumber', headerName: '發票號碼', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'carrierNumber', headerName: '憑證/載具號碼', width: 200, cellClassName: getCellClassName, editable: true },
+  { field: 'declarationId', headerName: '報單/文件號碼', width: 200, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceDate', headerName: '憑證日期', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'buyerTaxId', headerName: '買方統編', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'sellerTaxId', headerName: '賣方統編', width: 150, cellClassName: getCellClassName, editable: true },
