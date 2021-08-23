@@ -49,6 +49,8 @@ const isSendToIdentifyEnable = (data) => {
 
 const ScannedImageList = (props) => {
 
+  console.log('ScannedImageList',props)
+
   const [dataRows, setDataRows] = useState([])
 
 
@@ -60,6 +62,7 @@ const ScannedImageList = (props) => {
       setDataRows(rowData)
     }
     initDataRows(props.data, props.username, props.clientTaxId)
+    console.log('ScannedImageList', dataRows)
   }, [props.data, props.clientTaxId])
 
   const classes = scannedImageListStyles()

@@ -89,7 +89,6 @@ const Main = (props) => {
   }
   const handleSelectionChange = (event) => {
     const { name, value } = event.target
-    console.log(name, value)
     setDeclareProperties(prevState => {
       return {
         ...prevState,
@@ -188,6 +187,7 @@ const Main = (props) => {
           <Select
             labelId='reporting-period-select-label'
             id='reporting-period-select'
+            name='reportingPeriod'
             value={declareProperties.reportingPeriod}
             onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇申報期別</MenuItem>
@@ -209,6 +209,7 @@ const Main = (props) => {
           <Select
             labelId='deduction-type-select-label'
             id='deduction-type-select'
+            name='deductionType'
             value={declareProperties.deductionType}
             onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇扣抵代號</MenuItem>
@@ -230,12 +231,32 @@ const Main = (props) => {
           <Select
             labelId='client-taxId-select-label'
             id='client-taxId-select'
+            name='clientTaxId'
             value={declareProperties.clientTaxId}
             onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇營利事業人</MenuItem>
             {appState.appData.clientLists.map(client => {
               return (<MenuItem key={client.taxId.id} value={client.taxId.id}>{client.name}</MenuItem>)
             })}
+          </Select>
+        </FormControl>
+      </>
+    )
+  }
+
+  const renderEvidenceType = () => {
+    console.log('renderEvidenceType')
+    return (
+      <>
+        <FormControl className={classes.formControl}>
+          <InputLabel id='evidence-type-select-label'>憑證種類</InputLabel>
+          <Select
+            labelId='evidence-type-select-label'
+            id='evidence-type-select'
+            name='evidenceType'
+            value={declareProperties.evidenceType}
+            onChange={handleSelectionChange}>
+            <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
           </Select>
         </FormControl>
       </>
@@ -249,10 +270,10 @@ const Main = (props) => {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
-          <h1>Main</h1>
           {renderClientSelect()}
           {renderReportingPeriod()}
           {renderDeductionType()}
+          {renderEvidenceType()}
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
@@ -266,7 +287,7 @@ const Main = (props) => {
                 <TabPanel value={value} index={0}>
                   <ScannedImageList data={appState.appData.fileLists['01']}
                                     username={appState.auth.user.username}
-                                    clientTaxId={clientTaxId.toString()}
+                                    clientTaxId={declareProperties.clientTaxId}
                                     onScanClick={handleScanImage}
                                     onSendToIdentifyClick={handleSendImageToIdentify}
                                     onSaveImageClick={handleSaveImage}
@@ -276,14 +297,13 @@ const Main = (props) => {
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
-                                          clientTaxId={clientTaxId.toString()}
+                                          clientTaxId={declareProperties.clientTaxId}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}></IdentifiedEvidenceList>
                 </TabPanel>
-                {/*appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token*/}
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
-                                         clientTaxId={clientTaxId.toString()}
+                                         clientTaxId={declareProperties.clientTaxId}
                                          user={appState.auth.user}
                                          onGwUploaded={handleGwUploaded}></ConfirmedEvidenceList>
                 </TabPanel>
