@@ -65,7 +65,6 @@ const uploadToGwStrategy = {
 }
 
 async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
-  console.log('uploadGUI', payload, imageBlob, accountingFirmTaxId, token)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
@@ -110,9 +109,43 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
 //TODO
 async function uploadBill(payload, accountingFirmTaxId, token) {
   try {
-
+    const req = {
+      'businessEntityTaxId': payload.buyerTaxId,
+      'evidenceType': payload.evidenceType,
+      'reportingPeriod': '11002',
+      'deductionType': 'PURCHASE_AND_FEE',
+      'isDeclareBusinessTax': true,
+      'buyerTaxId': payload.buyerTaxId,
+      'sellerTaxId': payload.sellerTaxId,
+      'taxType': payload.taxType,
+      'taxableSalesValue': payload.taxableSalesValue,
+      'zeroTaxSalesValue': payload.zeroTaxSalesValue,
+      'dutyFreeSalesValue': payload.dutyFreeSalesValue,
+      'withoutTaxAmount': parseInt(payload.taxableSalesValue) + parseInt(payload.zeroTaxSalesValue) + parseInt(payload.dutyFreeSalesValue),
+      'businessTaxValue': payload.businessTaxValue,
+      'totalAmount': payload.totalAmount,
+      'evidenceTimestamp': payload.evidenceDate,
+      'guiId': payload.evidenceNumber,
+      'commentType': 'WHITE_SPACE',
+      'summaryCount': 1,
+      'groupName': null,
+      'remarkText': payload.remark
+    }
+    const url = ROOT_URL + '/evidence/gui'
+    let bodyFormData = new FormData()
+    bodyFormData.append('input', JSON.stringify(req))
+    bodyFormData.append('file', imageBlob)
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'taxId': accountingFirmTaxId,
+        'Authorization': token
+      }
+    }
+    const result = await gwAxios.post(url, bodyFormData, config)
+    return true
   } catch (error) {
-
+    return false
   }
 }
 
