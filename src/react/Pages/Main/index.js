@@ -70,6 +70,12 @@ const Main = (props) => {
   const appState = useAppState()
   const [value, setValue] = React.useState(0)
   const [clientTaxId, setClientTaxId] = React.useState('')
+  const [declareProperties, setDeclareProperties] = React.useState({
+    'clientTaxId': '',
+    'reportingPeriod': '',
+    'deductionType': '',
+    'evidenceType': ''
+  })
   const classes = mainStyles()
 
   useEffect(async () => {
@@ -81,8 +87,16 @@ const Main = (props) => {
   const handleTabChange = (event, newValue) => {
     setValue(newValue)
   }
-  const handleClientSelectChange = (event) => {
-    setClientTaxId(event.target.value)
+  const handleSelectionChange = (event) => {
+    const { name, value } = event.target
+    console.log(name, value)
+    setDeclareProperties(prevState => {
+      return {
+        ...prevState,
+        [name]: value
+      }
+    })
+    console.log(declareProperties)
   }
   //endregion
 
@@ -170,12 +184,12 @@ const Main = (props) => {
     return (
       <>
         <FormControl className={classes.formControl}>
-          <InputLabel id='client-taxId-select-label'>申報期別</InputLabel>
+          <InputLabel id='reporting-period-select-label'>申報期別</InputLabel>
           <Select
-            labelId='client-taxId-select-label'
-            id='client-taxId-select'
-            value={clientTaxId}
-            onChange={handleClientSelectChange}>
+            labelId='reporting-period-select-label'
+            id='reporting-period-select'
+            value={declareProperties.reportingPeriod}
+            onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇申報期別</MenuItem>
             {toPeriodTime().filter(period => period % 2 === 0).map(period => {
               return (<MenuItem key={period} value={period}>{period}</MenuItem>)
@@ -191,12 +205,12 @@ const Main = (props) => {
     return (
       <>
         <FormControl className={classes.formControl}>
-          <InputLabel id='client-taxId-select-label'>扣抵代號</InputLabel>
+          <InputLabel id='deduction-type-select-label'>扣抵代號</InputLabel>
           <Select
-            labelId='client-taxId-select-label'
-            id='client-taxId-select'
-            value={clientTaxId}
-            onChange={handleClientSelectChange}>
+            labelId='deduction-type-select-label'
+            id='deduction-type-select'
+            value={declareProperties.deductionType}
+            onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇扣抵代號</MenuItem>
             {DEDUCTION_TYPE.map(obj => {
               return <MenuItem key={obj.value} value={obj.value}>{obj.key}</MenuItem>
@@ -216,8 +230,8 @@ const Main = (props) => {
           <Select
             labelId='client-taxId-select-label'
             id='client-taxId-select'
-            value={clientTaxId}
-            onChange={handleClientSelectChange}>
+            value={declareProperties.clientTaxId}
+            onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇營利事業人</MenuItem>
             {appState.appData.clientLists.map(client => {
               return (<MenuItem key={client.taxId.id} value={client.taxId.id}>{client.name}</MenuItem>)
