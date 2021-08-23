@@ -57,7 +57,7 @@ const IdentifiedEvidenceList = (props) => {
       <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
       <Button variant='contained' onClick={handleReadImage}>載入圖檔</Button>
-      <EvidenceList data={rowData}></EvidenceList>
+      <EvidenceList data={rowData} checkboxSelection={true}></EvidenceList>
     </div>
   )
 }

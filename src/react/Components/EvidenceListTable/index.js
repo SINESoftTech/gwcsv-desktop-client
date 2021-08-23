@@ -62,7 +62,7 @@ const EvidenceList = (props) => {
                 onPageChange={e => setPageNumber(e.page)}
                 onPageSizeChange={e => setPageSize(e.pageSize)}
                 rowsPerPageOptions={[10, 20, 30, 40, 50]}
-                checkboxSelection
+                checkboxSelection={props.checkboxSelection}
         //todo return row id and field name ,field value
                 onCellEditCommit={handleCellEditCommit}
         //TODO save return row id

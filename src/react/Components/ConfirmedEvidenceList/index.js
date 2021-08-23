@@ -67,7 +67,7 @@ const ConfirmedEvidenceList = (props) => {
   return (
     <div>
       <Button variant='contained' onClick={handleUpload}>上傳</Button>
-      <EvidenceList data={rowData}></EvidenceList>
+      <EvidenceList data={rowData} checkboxSelection={false}></EvidenceList>
     </div>
   )
 }
