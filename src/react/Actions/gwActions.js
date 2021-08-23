@@ -65,6 +65,7 @@ const uploadToGwStrategy = {
 }
 
 async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
+  console.log('uploadGUI', payload, imageBlob, accountingFirmTaxId, token)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
@@ -75,13 +76,13 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
       'buyerTaxId': payload.buyerTaxId,
       'sellerTaxId': payload.sellerTaxId,
       'taxType': payload.taxType,
-      'taxableSalesValue': taxableSalesValue,
-      'zeroTaxSalesValue': zeroTaxSalesValue,
-      'dutyFreeSalesValue': dutyFreeSalesValue,
-      'withoutTaxAmount': parseInt(taxableSalesValue) + parseInt(zeroTaxSalesValue) + parseInt(dutyFreeSalesValue),
+      'taxableSalesValue': payload.taxableSalesValue,
+      'zeroTaxSalesValue': payload.zeroTaxSalesValue,
+      'dutyFreeSalesValue': payload.dutyFreeSalesValue,
+      'withoutTaxAmount': parseInt(payload.taxableSalesValue) + parseInt(payload.zeroTaxSalesValue) + parseInt(payload.dutyFreeSalesValue),
       'businessTaxValue': payload.businessTaxValue,
       'totalAmount': payload.totalAmount,
-      'evidenceTimestamp': timestamp,
+      'evidenceTimestamp': payload.evidenceDate,
       'guiId': payload.evidenceNumber,
       'commentType': 'WHITE_SPACE',
       'summaryCount': 1,
@@ -129,7 +130,7 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
   for (let i = 0; i < payload.length; i++) {
     const data = payload[i]
     console.log('uploadToGw', data)
-    const uploadResult = await uploadToGwStrategy[data['json'].evidenceType](data['json'], data['jpg'], accountingFirmTaxId, token)
+    const uploadResult = await uploadToGwStrategy[data['json'].evidenceType](data['json'], data['image'], accountingFirmTaxId, token)
     if (uploadResult) {
       result.push({
         'status': true,
