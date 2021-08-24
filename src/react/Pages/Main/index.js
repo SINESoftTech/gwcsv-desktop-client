@@ -20,6 +20,7 @@ import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
 import {
+  getImageFile,
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
@@ -155,11 +156,14 @@ const Main = (props) => {
 
   }
 
-  const handleScanImage = (event) => {
-    scan(dispatch, appState.appData.scannerName)
-    if (appState.appData.tempFilePath.length > 0) {
-      console.log('handleScanImage()', appState.appData.tempFilePath)
-    }
+  const handleScanImage = () => {
+    scan(appState.appData.scannerName, handleMoveImage)
+  }
+
+  const handleMoveImage = (filePath) => {
+    console.log(appState)
+    electronActions.getImageFile(dispatch, filePath, appState.auth.user.username, declareProperties.clientTaxId)
+    console.log('handleMoveImage', filePath)
   }
 
   //endregion

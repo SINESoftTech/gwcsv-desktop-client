@@ -13,9 +13,8 @@ export const openScanner = (dispatch) => {
   }
 }
 
-export const scan = (dispatch, deviceName) => {
+export const scan = (deviceName, handleMoveFile) => {
   console.log('scan() deviceName', deviceName)
-  //filePath:C:\Users\bda60\AppData\Local\Temp\WebFXScan
   const paramJson = {
     'device-name': deviceName,
     'scanmode': 'scan',
@@ -43,12 +42,12 @@ export const scan = (dispatch, deviceName) => {
   const url = apiPath + '/SetParams?' + new URLSearchParams(paramJson).toString()
   const ws = new WebSocket(url, 'webfxscan')
   ws.onopen = () => console.log('ws opened')
-  ws.onmessage = async (message) => {
+  ws.onmessage = (message) => {
     const data = message.data
     if (data.startsWith('FilePath:')) {
       const splitData = data.split('FilePath:')
-      const filePath = splitData[1]
-      dispatch({ type: 'SCAN_IMAGE_FILE', payload: filePath })
+      const filePath = splitData[1].split('\x00')[0]
+      handleMoveFile(filePath)
     }
   }
   ws.onclose = () => {

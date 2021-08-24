@@ -37,8 +37,16 @@ export async function getFileLists(dispatch) {
   }
 }
 
-export async function getImageFile(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
+export async function getImageFile(dispatch, filePath, username, clientTaxId) {
+  console.log('getImageFile() filePath', filePath)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getImageFile', filePath, username, clientTaxId)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 export async function scanImages(dispatch, payload) {

@@ -167,19 +167,14 @@ ipcMain.handle('evidence:getFileLists', (event, ...args) => {
   return fileList
 })
 
-ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
-  // console.log(event)
-  // console.log(fullPath)
-  // return '1'
+ipcMain.handle('evidence:getImageFile', (event, fullPath, username, clientTaxId) => {
+  const sourceFileExt = fullPath.split('.')[1]
+  const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
+  const targetFilePath = targetFolderPath + '/' + username + '_' + clientTaxId + '_' + Date.now() + '.' + sourceFileExt
+  fse.copySync(fullPath, targetFilePath)
   return getFileContent(fullPath)
 })
 
-ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
-  // console.log(event)
-  // console.log(fullPath)
-  // return '1'
-  return fse.readFileSync(fullPath, { encoding: 'base64' })
-})
 
 ipcMain.handle('evidence:identifyResultConfirmed', (event, payload) => {
   console.log('identifyResultConfirmed', payload)
