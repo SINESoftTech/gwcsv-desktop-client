@@ -28,6 +28,7 @@ import {
 import { getIdentifyResult } from '../../Actions/sightourActions'
 import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
 import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
+import { openScanner, scan } from '../../Actions/scanAction'
 
 const R = require('ramda')
 const electron = isElectron() ? window.electron : null
@@ -84,6 +85,7 @@ const Main = (props) => {
   useEffect(async () => {
     await electronActions.getFileLists(dispatch)
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
+    await openScanner(dispatch)
   }, [])
 
   //region Main Events
@@ -154,7 +156,9 @@ const Main = (props) => {
   }
 
   const handleScanImage = (event) => {
-    console.log('handleScanImage event', event)
+    console.log('handleScanImage appState', appState)
+    scan(dispatch, appState.appData.scannerName)
+    // console.log('handleScanIm。ge, scannerName)
   }
 
   //endregion
