@@ -19,17 +19,34 @@ import mainStyles from './mainStyles'
 import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
-import { identifyResultReceived, identifySent } from '../../Actions/electionActions'
+import {
+  gwUploaded,
+  identifyResultConfirmed,
+  identifyResultReceived,
+  identifySent
+} from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-// import * as electronActions from '../../Actions/electionActions'
-// import * as sightTourActions from '../../Actions/sightourActions'
-// import axios from "axios";
+import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
+import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 
-// const R = require('ramda');
-// import electron from 'electron'
+const R = require('ramda')
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
+
+
+const toPeriodTime = (timestamp = Date.now()) => {
+  const date = new Date(timestamp)
+  const year = date.getFullYear() - 1911
+  const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+  const years = [year - 1, year, year + 1]
+  return years.flatMap(year => {
+    return months.map(m => {
+      return year + m
+    })
+  })
+}
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -55,7 +72,13 @@ const Main = (props) => {
   const dispatch = useAppDispatch()
   const appState = useAppState()
   const [value, setValue] = React.useState(0)
-  const [clientTaxId, setClientTaxId] = React.useState('')
+  const [declareProperties, setDeclareProperties] = React.useState({
+    'clientTaxId': '',
+    'reportingPeriod': '',
+    'deductionType': '',
+    'evidenceType': ''
+  })
+  const [disableSelection, setDisableSelection] = React.useState(true)
   const classes = mainStyles()
 
   useEffect(async () => {
@@ -67,15 +90,26 @@ const Main = (props) => {
   const handleTabChange = (event, newValue) => {
     setValue(newValue)
   }
-  const handleClientSelectChange = (event) => {
-    setClientTaxId(event.target.value)
+  const handleSelectionChange = (event) => {
+    const { name, value } = event.target
+    setDeclareProperties(prevState => {
+      return {
+        ...prevState,
+        [name]: value
+      }
+    })
+    if (name === 'clientTaxId') {
+      setDisableSelection(false)
+    }
   }
   //endregion
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
+    setDisableSelection(true)
+    //todo
     const accountingfirmTaxId = appState.auth.user.taxId
-    const businessEntityTaxId = clientTaxId
+    const businessEntityTaxId = declareProperties.clientTaxId
     const sendToIdentifyData = data.map(d => {
       return {
         'sourceFullPath': d.fullPath,
@@ -83,7 +117,7 @@ const Main = (props) => {
         'fileBlob': d.fileBlob,
         'accountingfirmTaxId': accountingfirmTaxId,
         'businessEntityTaxId': businessEntityTaxId,
-        'evidenceType': 'A5002'
+        'evidenceType': declareProperties.evidenceType
       }
     })
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
@@ -100,7 +134,6 @@ const Main = (props) => {
       const identifyResult = await getIdentifyResult(fileObj)
       identifyResultReceivedList.push(identifyResult)
     }
-    console.log('handleGetIdentifyResult', identifyResultReceivedList)
     identifyResultReceived(dispatch, identifyResultReceivedList)
   }
 
@@ -126,11 +159,78 @@ const Main = (props) => {
 
   //endregion
 
+  const handleResultAllConfirmed = async (filesByTicketId) => {
+    try {
+      const result = await identifyResultConfirmed(dispatch, filesByTicketId)
+      return result
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
+  const handleGwUploaded = async (data) => {
+    try {
+      const result = await gwUploaded(dispatch, data)
+      return result
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
   function a11yProps(index) {
     return {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`
     }
+  }
+
+  const renderReportingPeriod = () => {
+    console.log('renderReportingPeriod')
+
+    return (
+      <>
+        <FormControl className={classes.formControl}>
+          <InputLabel id='reporting-period-select-label'>申報期別</InputLabel>
+          <Select
+            labelId='reporting-period-select-label'
+            id='reporting-period-select'
+            name='reportingPeriod'
+            value={declareProperties.reportingPeriod}
+            onChange={handleSelectionChange}
+            disabled={disableSelection}
+          >
+
+            <MenuItem key={0} value={''}>請選擇申報期別</MenuItem>
+            {toPeriodTime().filter(period => period % 2 === 0).map(period => {
+              return (<MenuItem key={period} value={period}>{period}</MenuItem>)
+            })}
+          </Select>
+        </FormControl>
+      </>
+    )
+  }
+
+  const renderDeductionType = () => {
+    console.log('renderDeductionType')
+    return (
+      <>
+        <FormControl className={classes.formControl}>
+          <InputLabel id='deduction-type-select-label'>扣抵代號</InputLabel>
+          <Select
+            labelId='deduction-type-select-label'
+            id='deduction-type-select'
+            name='deductionType'
+            value={declareProperties.deductionType}
+            onChange={handleSelectionChange}
+            disabled={disableSelection}>
+            <MenuItem key={0} value={''}>請選擇扣抵代號</MenuItem>
+            {DEDUCTION_TYPE.map(obj => {
+              return <MenuItem key={obj.value} value={obj.value}>{obj.key}</MenuItem>
+            })}
+          </Select>
+        </FormControl>
+      </>
+    )
   }
 
   const renderClientSelect = () => {
@@ -142,11 +242,36 @@ const Main = (props) => {
           <Select
             labelId='client-taxId-select-label'
             id='client-taxId-select'
-            value={clientTaxId}
-            onChange={handleClientSelectChange}>
+            name='clientTaxId'
+            value={declareProperties.clientTaxId}
+            onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇營利事業人</MenuItem>
             {appState.appData.clientLists.map(client => {
               return (<MenuItem key={client.taxId.id} value={client.taxId.id}>{client.name}</MenuItem>)
+            })}
+          </Select>
+        </FormControl>
+      </>
+    )
+  }
+
+  const renderEvidenceType = () => {
+    const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
+    return (
+      <>
+        <FormControl className={classes.formControl}>
+          <InputLabel id='evidence-type-select-label'>憑證種類</InputLabel>
+          <Select
+            labelId='evidence-type-select-label'
+            id='evidence-type-select'
+            name='evidenceType'
+            value={declareProperties.evidenceType}
+            onChange={handleSelectionChange}
+            disabled={disableSelection}>
+            <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
+            {keyList.map(key => {
+              return <MenuItem key={key}
+                               value={key}>{SIGOUTOUR_EVIDENCE_TYPE[key].name}</MenuItem>
             })}
           </Select>
         </FormControl>
@@ -161,8 +286,10 @@ const Main = (props) => {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
-          <h1>Main</h1>
           {renderClientSelect()}
+          {renderReportingPeriod()}
+          {renderDeductionType()}
+          {renderEvidenceType()}
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
@@ -170,13 +297,13 @@ const Main = (props) => {
                   <Tabs value={value} onChange={handleTabChange} aria-label='simple tabs example'>
                     <Tab key={0} label='已掃描圖檔' {...a11yProps(0)} />
                     <Tab key={1} label='已辨識憑證' {...a11yProps(1)} />
-                    <Tab key={2} label='已確認辨識結果' {...a11yProps(2)} />
+                    <Tab key={2} label='待上傳雲端' {...a11yProps(2)} />
                   </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
                   <ScannedImageList data={appState.appData.fileLists['01']}
                                     username={appState.auth.user.username}
-                                    clientTaxId={clientTaxId.toString()}
+                                    declareProperties={declareProperties}
                                     onScanClick={handleScanImage}
                                     onSendToIdentifyClick={handleSendImageToIdentify}
                                     onSaveImageClick={handleSaveImage}
@@ -186,10 +313,15 @@ const Main = (props) => {
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
-                                          onGetIdentifyResult={handleGetIdentifyResult}></IdentifiedEvidenceList>
+                                          clientTaxId={declareProperties.clientTaxId}
+                                          onGetIdentifyResult={handleGetIdentifyResult}
+                                          onResultAllConfirmed={handleResultAllConfirmed}></IdentifiedEvidenceList>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  <ConfirmedEvidenceList></ConfirmedEvidenceList>
+                  <ConfirmedEvidenceList data={appState.appData.fileLists}
+                                         clientTaxId={declareProperties.clientTaxId}
+                                         user={appState.auth.user}
+                                         onGwUploaded={handleGwUploaded}></ConfirmedEvidenceList>
                 </TabPanel>
               </Paper>
             </Grid>

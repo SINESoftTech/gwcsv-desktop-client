@@ -5,8 +5,22 @@ const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-const getFileList = async () => {
-
+export async function getJsonRawData(data, clientTaxId) {
+  try {
+    const filterJsonDataFilePathList = data.filter(d => {
+      return d.filename.endsWith('.json')
+    }).filter(d => {
+      const fileNameClientId = d.filename.split('_')[1]
+      return fileNameClientId === clientTaxId
+    }).map(d => {
+      return d.fullPath
+    })
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 export async function getFileLists(dispatch) {
@@ -58,9 +72,36 @@ export async function identifyResultReceived(dispatch, payload) {
 }
 
 export async function identifyResultConfirmed(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      return result
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 export async function gwUploaded(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:uploaded', payload)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      return result
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export async function getRawDataWithImage(payload) {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getRawDataWithImage', payload)
+      return result
+    }
+  } catch (error) {
+    // throw new Error(error)
+  }
 }

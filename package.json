@@ -5,7 +5,7 @@
   "main": "./public/electron.js",
   "dependencies": {
     "@material-ui/core": "^4.12.1",
-    "@material-ui/data-grid": "^4.0.0-alpha.33",
+    "@material-ui/data-grid": "^4.0.0-alpha.37",
     "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.0.0",
@@ -34,7 +34,7 @@
     "react-start": "react-scripts start",
     "electron-start": " electron .",
     "react-build": "react-scripts build",
-    "electron-build": "electron-packager ./ --overwrite"
+    "electron-build": "electron-packager ./ test --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +56,7 @@
   },
   "devDependencies": {
     "concurrently": "^6.2.0",
+    "electron-packager": "^15.3.0",
     "eslint": "^7.32.0",
     "eslint-plugin-suitescript": "^1.2.1",
     "prettier": "^2.3.2",

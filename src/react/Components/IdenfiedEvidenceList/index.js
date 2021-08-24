@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
-import * as mockData from '../../Pages/Main/mockDisplayData'
 import isElectron from 'is-electron'
-import { getIdentifyResult } from '../../Actions/sightourActions'
+import { getJsonRawData } from '../../Actions/electionActions'
+import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -15,31 +16,31 @@ const byTicketId = R.groupBy((fileObj) => {
 })
 
 const IdentifiedEvidenceList = (props) => {
-  console.log('IdentifiedEvidenceList', props.data)
-  const [rowData, setRowData] = useState()
-  const [localFiles, setLocalFiles] = useState(props.data)
+
+  const [rowData, setRowData] = useState([])
   const [imageUrl, setImageUrl] = useState('')
 
-  const handleResultAllConfirmed = () => {
-    console.log('localfiles 03', localFiles['03'])
-    var filesByTicketId = byTicketId(localFiles['03'])
-    let imageFileExtension = ['jpg', 'png', 'git']
-    Object.keys(filesByTicketId).forEach(async ticketId => {
-      if (ipcRenderer) {
-        let imageObj = filesByTicketId[ticketId].filter((fileObj) => {
-          return imageFileExtension.indexOf(fileObj.filename.split('.')[1]) > -1
-        })[0]
+  const [localFiles, setLocalFiles] = useState(props.data)
 
-        let sighttourObj = filesByTicketId[ticketId].filter(fileObj => {
-          return R.includes('sightour', fileObj.filename)
-        })[0]
-
-        console.log('imageObj', imageObj)
-        console.log('sightourObj', sighttourObj)
-        var updatedFiles = await ipcRenderer.invoke('evidence:evidenceSaved', JSON.stringify(imageObj), JSON.stringify(sighttourObj), null)
-        setLocalFiles(updatedFiles)
-      }
+  const initDataRows = async (data, clientTaxId) => {
+    const jsonDataList = await getJsonRawData(data, clientTaxId)
+    const parseJsonDataList = jsonDataList.map((json, idx) => {
+      const parseResult = SigoutourMapper.toView(json.data)
+      parseResult['id'] = idx + 1
+      return parseResult
     })
+    setRowData(parseJsonDataList)
+  }
+
+  useEffect(() => {
+    initDataRows(props.data['03'], props.clientTaxId)
+  }, [props.data, props.clientTaxId])
+
+
+  const handleResultAllConfirmed = async () => {
+    const filesByTicketId = byTicketId(localFiles['03'])
+    const result = await props.onResultAllConfirmed(filesByTicketId)
+    initDataRows(result['03'], props.clientTaxId)
   }
 
   const handleReadImage = async () => {
@@ -56,7 +57,7 @@ const IdentifiedEvidenceList = (props) => {
       <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
       <Button variant='contained' onClick={handleReadImage}>載入圖檔</Button>
-      <EvidenceList data={mockData.rows}></EvidenceList>
+      <EvidenceList data={rowData} checkboxSelection={true}></EvidenceList>
     </div>
   )
 }

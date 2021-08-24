@@ -1,63 +1,75 @@
-import React, {useEffect, useState} from 'react';
-import Button from "@material-ui/core/Button";
-import EvidenceList from "../EvidenceListTable";
-import * as mockData from "../../Pages/Main/mockDisplayData";
-import isElectron from "is-electron";
-const electron = isElectron() ? window.electron : null;
-const remote = isElectron() ? window.remote : null;
+import React, { useEffect, useState } from 'react'
+import Button from '@material-ui/core/Button'
+import EvidenceList from '../EvidenceListTable'
+import isElectron from 'is-electron'
+import { getJsonRawData, getRawDataWithImage } from '../../Actions/electionActions'
+import { uploadToGw } from '../../Actions/gwActions'
+import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+
+const electron = isElectron() ? window.electron : null
+const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-const R = require('ramda');
-const convertData = (fileList) => {
+const R = require('ramda')
 
-}
 
 const byTicketId = R.groupBy((fileObj) => {
   return fileObj.filename.split('_')[2].split('.')[0]
 })
-const uploadToGateweb = (imageObj, savedResultObj) => {
-  return {
-    success: true
-  }
-}
 
 const ConfirmedEvidenceList = (props) => {
+
   const [rowData, setRowData] = useState([])
+
+  const initDataRows = async (data, clientTaxId) => {
+    const jsonDataList = await getJsonRawData(data, clientTaxId)
+    const parseJsonDataList = jsonDataList.map((json, idx) => {
+      const parseResult = SigoutourMapper.toView(json.data)
+      parseResult['id'] = idx + 1
+      return parseResult
+    })
+    setRowData(parseJsonDataList)
+  }
+
   useEffect(() => {
-    setRowData(convertData())
-  }, [])
+    initDataRows(props.data['04'], props.clientTaxId)
+  }, [props.data, props.clientTaxId])
 
-
-  const handleUpload = () => {
-    var filesByTicketId = byTicketId(props.data['04'])
-    let imageFileExtension = ['jpg', 'png', 'git']
-    Object.keys(filesByTicketId).forEach(async ticketId => {
-      let imageObj = filesByTicketId[ticketId].filter((fileObj) => {
-        return imageFileExtension.indexOf(fileObj.filename.split('.')[1]) > -1
-      })[0]
-
-      let sighttourObj = filesByTicketId[ticketId].filter(fileObj => {
-        return R.includes('sightour', fileObj.filename)
-      })[0]
-
-      let savedResultObj = filesByTicketId[ticketId].filter(fileObj => {
-        return R.includes('saved', fileObj.filename)
-      })[0]
-      var uploadResult = uploadToGateweb(imageObj, savedResultObj)
-      if (uploadResult.success) {
-        if (ipcRenderer) {
-          var updatedFiles = await ipcRenderer.invoke('evidence:uploaded', JSON.stringify(imageObj), JSON.stringify(sighttourObj), JSON.stringify(savedResultObj))
-          setRowData(updatedFiles)
-        }
+  const handleUpload = async () => {
+    console.log('handleUpload', props.data['04'])
+    const filesByTicketId = byTicketId(props.data['04'])
+    let filterResult = []
+    for (let key in filesByTicketId) {
+      const filterData = filesByTicketId[key]
+        .filter(d => {
+          const taxId = d.filename.split('_')[1]
+          return taxId === props.clientTaxId
+        })
+      if (filterData.length) {
+        let json = {}
+        json[key] = filesByTicketId[key]
+        filterResult.push(json)
+      }
+    }
+    const getRawDataResult = await getRawDataWithImage(filterResult)
+    const parseRawDataResult = getRawDataResult.map(data => {
+      return {
+        'image': new File([data['image']], Date.now() + '.jpg'),
+        'imageFullPath': data['imageFullPath'],
+        'jsonFullPath': data['jsonFullPath'],
+        'json': SigoutourMapper.toGw(data['json'])
       }
     })
-  };
+    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
+    props.onGwUploaded(uploadResult)
+  }
+
   return (
     <div>
-      <Button variant="contained" onClick={handleUpload}>Upload to Gateweb</Button>
-      <EvidenceList data={mockData.rows}></EvidenceList>
+      <Button variant='contained' onClick={handleUpload}>上傳</Button>
+      <EvidenceList data={rowData} checkboxSelection={false}></EvidenceList>
     </div>
-  );
-};
+  )
+}
 
-export default ConfirmedEvidenceList;
+export default ConfirmedEvidenceList

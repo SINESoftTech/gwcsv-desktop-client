@@ -6,10 +6,10 @@ import scannedImageListStyles from './scannedImageListStyles'
 import { IconButton, ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core'
 import { Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon } from '@material-ui/icons'
 
+
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
-var fs = isElectron() ? remote.require('fs') : null
 
 const getRowData = async (fileObjects, username, clientTaxId) => {
   let rowData = []
@@ -42,8 +42,8 @@ const getImageFileBlob = async (fullPath) => {
 const isScanEnable = (taxIdSelected) => {
   return !!taxIdSelected
 }
-const isSendToIdentifyEnable = (data) => {
-  return data.length > 0
+const isRequiredEnable = (data, reportingPeriod, deductionCode, evidenceType) => {
+  return (reportingPeriod !== '' && deductionCode !== '' && evidenceType !== '') && data.length > 0
 }
 
 const ScannedImageList = (props) => {
@@ -57,8 +57,9 @@ const ScannedImageList = (props) => {
       console.log('in useEffect', rowData)
       setDataRows(rowData)
     }
-    initDataRows(props.data, props.username, props.clientTaxId)
-  }, [props.data, props.clientTaxId])
+    initDataRows(props.data, props.username, props.declareProperties.clientTaxId)
+    console.log('ScannedImageList', dataRows)
+  }, [props.data, props.declareProperties.clientTaxId])
 
   const classes = scannedImageListStyles()
 
@@ -71,10 +72,12 @@ const ScannedImageList = (props) => {
 
   return (
     <div style={{ height: 650, width: '100%' }}>
-      <Button variant='contained' onClick={props.onScanClick} disabled={!isScanEnable(props.clientTaxId)}>掃描文件</Button>
+      <Button variant='contained' onClick={props.onScanClick}
+              disabled={!isScanEnable(props.declareProperties.clientTaxId)}>掃描文件</Button>
       <Button variant='contained' onClick={(e) => {
         props.onSendToIdentifyClick(e, dataRows)
-      }} disabled={!isSendToIdentifyEnable(dataRows)}>送出辨識</Button>
+      }}
+              disabled={!isRequiredEnable(dataRows, props.declareProperties.reportingPeriod, props.declareProperties.deductionType, props.declareProperties.evidenceType)}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
           {dataRows.map((item) => (

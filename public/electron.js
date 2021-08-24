@@ -152,7 +152,10 @@ function getFileContent(fullPath) {
   if (R.endsWith('.jpg', fullPath)) {
     return fse.readFileSync(fullPath)
   }
-  if (R.endsWith('.js', fullPath) || R.endsWith('.txt', fullPath) || R.endsWith('.json', fullPath)) {
+  if (R.endsWith('.json', fullPath)) {
+    return fse.readJSONSync(fullPath)
+  }
+  if (R.endsWith('.js', fullPath) || R.endsWith('.txt', fullPath)) {
     return fse.readFileSync(fullPath, 'utf-8')
   }
 
@@ -172,10 +175,33 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
 })
 
 ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
-  // console.log(event)g
+  // console.log(event)
   // console.log(fullPath)
   // return '1'
   return fse.readFileSync(fullPath, { encoding: 'base64' })
+})
+
+ipcMain.handle('evidence:identifyResultConfirmed', (event, payload) => {
+  console.log('identifyResultConfirmed', payload)
+  Object.keys(payload).forEach(ticketId => {
+    const sourceImageFullPath = payload[ticketId][0].fullPath
+    const targetImageFullName = path.join(config.fileFolder, stageFolders.evidenceSaved.folder, payload[ticketId][0].filename)
+    fse.moveSync(sourceImageFullPath, targetImageFullName)
+    const sourceJsonFullPath = payload[ticketId][1].fullPath
+    const targetJsonFullName = path.join(config.fileFolder, stageFolders.evidenceSaved.folder, payload[ticketId][1].filename)
+    fse.moveSync(sourceJsonFullPath, targetJsonFullName)
+  })
+  return getAllFileLists()
+})
+
+ipcMain.handle('evidence:getJsonFileData', (event, fullPathList) => {
+  const jsonDataList = fullPathList.map(filePath => {
+    return {
+      'filePath': filePath,
+      'data': fse.readJSONSync(filePath)
+    }
+  })
+  return jsonDataList
 })
 
 ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
@@ -229,14 +255,44 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
   return getAllFileLists()
 })
 
-ipcMain.handle('evidence:uploaded', (event, imageFileObj, sightourFileObj, savedFileObj) => {
-  let targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
-  let imageFileObjObj = JSON.parse(imageFileObj)
-  let sightourResultFileObjObj = JSON.parse(sightourFileObj)
-  let savedFileObjObj = JSON.parse(savedFileObj)
-  fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))
-  fse.moveSync(sightourResultFileObjObj.fullPath, path.join(targetFolder, sightourResultFileObjObj.filename))
-  fse.moveSync(savedFileObjObj.fullPath, path.join(targetFolder, savedFileObjObj.filename))
+ipcMain.handle('evidence:uploaded', (event, payload) => {
+  console.log('evidence:uploaded payload', payload)
+  payload.map(data => {
+    if (data.status) {
+      const targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
+      const targetImagePath = targetFolder + data['imageFullPath'].split('04/')[1]
+      const targetJsonPath = targetFolder + data['jsonFullPath'].split('04/')[1]
+      fse.moveSync(data['imageFullPath'], targetImagePath)
+      fse.moveSync(data['jsonFullPath'], targetJsonPath)
+    }
+  })
   return getAllFileLists()
 })
 
+
+ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
+  const getFileExt = (fileName) => {
+    if (fileName.endsWith('jpg') || fileName.endsWith('png')) {
+      return 'image'
+    }
+    return 'json'
+  }
+  return fullPathList.map(d => {
+    const key = R.keys(d)[0]
+    let json = {}
+    const r = d[key].map(fileObj => {
+      const fileExt = getFileExt(fileObj.filename.split('.')[1])
+      const value = getFileContent(fileObj.fullPath)
+      let json = {}
+      json[fileExt] = value
+      const filePathKey = fileExt + 'FullPath'
+      json[filePathKey] = fileObj.fullPath
+      return json
+    })
+    json['imageFullPath'] = r[0]['imageFullPath']
+    json['image'] = r[0]['image']
+    json['json'] = r[1]['json']
+    json['jsonFullPath'] = r[1]['jsonFullPath']
+    return json
+  })
+})

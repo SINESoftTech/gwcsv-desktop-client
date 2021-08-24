@@ -15,7 +15,6 @@ const getToken = async (id, psw) => {
   }
 }
 
-
 export async function sendToIdentify(identifyData) {
   const apiPath = '/upload.php'
   const config = {
