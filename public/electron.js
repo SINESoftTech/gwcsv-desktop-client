@@ -161,13 +161,23 @@ function getFileContent(fullPath) {
 
 }
 
+ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
+  return getFileContent(fullPath)
+})
 
 ipcMain.handle('evidence:getFileLists', (event, ...args) => {
   const fileList = getAllFileLists()
   return fileList
 })
 
-ipcMain.handle('evidence:getImageFile', (event, fullPath, username, clientTaxId) => {
+ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
+  // console.log(event)
+  // console.log(fullPath)
+  // return '1'
+  return fse.readFileSync(fullPath, { encoding: 'base64' })
+})
+
+ipcMain.handle('evidence:scanImages', (event, fullPath, username, clientTaxId) => {
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
   const targetFilePath = targetFolderPath + '/' + username + '_' + clientTaxId + '_' + Date.now() + '.' + sourceFileExt

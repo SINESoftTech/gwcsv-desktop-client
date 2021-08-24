@@ -24,7 +24,7 @@ import {
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
-  identifySent
+  identifySent, scanImages
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
 import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
@@ -161,9 +161,7 @@ const Main = (props) => {
   }
 
   const handleMoveImage = (filePath) => {
-    console.log(appState)
-    electronActions.getImageFile(dispatch, filePath, appState.auth.user.username, declareProperties.clientTaxId)
-    console.log('handleMoveImage', filePath)
+    electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties.clientTaxId)
   }
 
   //endregion
