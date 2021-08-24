@@ -1,10 +1,12 @@
+const apiPath = 'ws://127.0.0.1:17777'
+
 export const openScanner = (dispatch) => {
-  const url = 'ws://127.0.0.1:17777/GetDevicesList'
+  const url = apiPath + '/GetDevicesList'
   const ws = new WebSocket(url, 'webfxscan')
   ws.onopen = () => console.log('ws opened')
   ws.onmessage = async message => {
     const scannerName = message.data.split(' ')[1]
-    await dispatch({ type: 'GET_SCAN_DEVICE', payload: scannerName })
+    dispatch({ type: 'GET_SCAN_DEVICE', payload: scannerName })
   }
   ws.onclose = () => {
     ws.close()
@@ -38,12 +40,16 @@ export const scan = (dispatch, deviceName) => {
     'recognize-lang': 'default'
   }
 
-  const url = 'ws://127.0.0.1:17777/SetParams?' + new URLSearchParams(paramJson).toString()
-  console.log(url)
+  const url = apiPath + '/SetParams?' + new URLSearchParams(paramJson).toString()
   const ws = new WebSocket(url, 'webfxscan')
   ws.onopen = () => console.log('ws opened')
   ws.onmessage = async (message) => {
-    console.log('scan() message', message)
+    const data = message.data
+    if (data.startsWith('FilePath:')) {
+      const splitData = data.split('FilePath:')
+      const filePath = splitData[1]
+      dispatch({ type: 'SCAN_IMAGE_FILE', payload: filePath })
+    }
   }
   ws.onclose = () => {
     ws.close()

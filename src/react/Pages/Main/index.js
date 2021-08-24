@@ -156,9 +156,10 @@ const Main = (props) => {
   }
 
   const handleScanImage = (event) => {
-    console.log('handleScanImage appState', appState)
     scan(dispatch, appState.appData.scannerName)
-    // console.log('handleScanIm。ge, scannerName)
+    if (appState.appData.tempFilePath.length > 0) {
+      console.log('handleScanImage()', appState.appData.tempFilePath)
+    }
   }
 
   //endregion
