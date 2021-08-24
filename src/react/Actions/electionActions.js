@@ -46,7 +46,8 @@ export async function scanImages(dispatch, filePath, username, clientTaxId) {
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
+    // throw new Error(error)
   }
 }
 
@@ -61,7 +62,7 @@ export async function identifySent(dispatch, payload) {
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
   }
 }
 
@@ -72,7 +73,7 @@ export async function identifyResultReceived(dispatch, payload) {
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
   }
 }
 
@@ -84,7 +85,7 @@ export async function identifyResultConfirmed(dispatch, payload) {
       return result
     }
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
   }
 }
 

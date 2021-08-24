@@ -118,7 +118,9 @@ const parseData = (jsonData) => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
     json[key] = data['text']
   })
-  json['taxType'] = TAX_TYPE[json.taxType]
+  if (json.taxType !== undefined) {
+    json['taxType'] = TAX_TYPE[json.taxType]
+  }
   if (jsonData['pageList'][0]['photoList'][0]['type'] === 'A5020') {
     json['waterFee'] = json['waterFee'] === '' ? 0 : json['waterFee']
     json['basicFee'] = json['basicFee'] === '' ? 0 : json['basicFee']
