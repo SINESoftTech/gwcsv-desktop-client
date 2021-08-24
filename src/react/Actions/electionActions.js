@@ -19,7 +19,7 @@ export async function getJsonRawData(data, clientTaxId) {
       return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
     }
   } catch (error) {
-    throw new Error(error)
+    console.log('getJsonRawData', error)
   }
 }
 
@@ -38,10 +38,11 @@ export async function getFileLists(dispatch) {
 }
 
 export async function scanImages(dispatch, filePath, username, clientTaxId) {
-  console.log('getImageFile() filePath', filePath)
+  console.log('scanImages() filePath', filePath)
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, clientTaxId)
+      console.log('scanImages result', result)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {

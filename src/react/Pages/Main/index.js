@@ -30,6 +30,7 @@ import { getIdentifyResult } from '../../Actions/sightourActions'
 import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
 import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 import { openScanner, scan } from '../../Actions/scanAction'
+import actionTypes from '../../Actions/actionTypes'
 
 const R = require('ramda')
 const electron = isElectron() ? window.electron : null

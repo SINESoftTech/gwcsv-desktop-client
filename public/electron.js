@@ -182,7 +182,7 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, clientTaxId) =
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
   const targetFilePath = targetFolderPath + '/' + username + '_' + clientTaxId + '_' + Date.now() + '.' + sourceFileExt
   fse.copySync(fullPath, targetFilePath)
-  return getFileContent(fullPath)
+  return getAllFileLists(fullPath)
 })
 
 

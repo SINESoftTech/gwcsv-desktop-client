@@ -48,18 +48,20 @@ const isRequiredEnable = (data, reportingPeriod, deductionCode, evidenceType) =>
 
 const ScannedImageList = (props) => {
 
+  console.log('ScannedImageList props', props)
+
   const [dataRows, setDataRows] = useState([])
 
   useEffect(() => {
     const initDataRows = async (data, username, clientTaxId) => {
       console.log('in useEffect clientTaxId', clientTaxId)
+      console.log('in useEffect data', props.data)
       const rowData = (props.data) ? await getRowData(data, username, clientTaxId) : []
       console.log('in useEffect', rowData)
       setDataRows(rowData)
     }
     initDataRows(props.data, props.username, props.declareProperties.clientTaxId)
-    console.log('ScannedImageList', dataRows)
-  }, [props.data, props.declareProperties.clientTaxId])
+  }, [props.data, props.declareProperties])
 
   const classes = scannedImageListStyles()
 
