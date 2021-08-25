@@ -52,6 +52,7 @@ const ConfirmedEvidenceList = (props) => {
       }
     }
     const getRawDataResult = await getRawDataWithImage(filterResult)
+    console.log('getRawDataResult()', getRawDataResult)
     const parseRawDataResult = getRawDataResult.map(data => {
       return {
         'image': new File([data['image']], Date.now() + '.jpg'),
@@ -62,7 +63,7 @@ const ConfirmedEvidenceList = (props) => {
     })
 
 
-    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token,props.declareProperties)
+    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token, props.declareProperties)
     props.onGwUploaded(uploadResult)
   }
 

@@ -10,7 +10,7 @@ const isDev = require('electron-is-dev')
 const BrowserWindow = electron.BrowserWindow
 const userHomedir = require('os').homedir()
 const url = require('url')
-
+const process = require('process')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -244,9 +244,7 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
   let sightourResultFileObjObj = JSON.parse(sightourFileObj)
   let resultObj = savedResult ? JSON.parse(savedResult) : null
   const filenameWithoutExt = imageFileObjObj.filename.split('.').slice(0, -1).join('.')
-  // console.log(filenameWithoutExt)
   const imageFileExt = imageFileObjObj.filename.split('.').slice(-1)[0]
-  // console.log(imageFileExt)
 
   if (resultObj) {
     // console.log('result exists')
@@ -263,10 +261,20 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
 ipcMain.handle('evidence:uploaded', (event, payload) => {
   console.log('evidence:uploaded payload', payload)
   payload.map(data => {
+    let imagePath = ''
+    let jsonPath = ''
+    const isWin = process.platform === 'win32'
+    if (isWin) {
+      imagePath = data['imageFullPath'].split('04\\')[1]
+      jsonPath = data['jsonFullPath'].split('04\\')[1]
+    } else {
+      imagePath = data['imageFullPath'].split('04/')[1]
+      jsonPath = data['jsonFullPath'].split('04/')[1]
+    }
     if (data.status) {
       const targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
-      const targetImagePath = targetFolder + data['imageFullPath'].split('04/')[1]
-      const targetJsonPath = targetFolder + data['jsonFullPath'].split('04/')[1]
+      const targetImagePath = targetFolder + '/' + imagePath
+      const targetJsonPath = targetFolder + '/' + jsonPath
       fse.moveSync(data['imageFullPath'], targetImagePath)
       fse.moveSync(data['jsonFullPath'], targetJsonPath)
     }
