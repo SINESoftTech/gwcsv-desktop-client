@@ -1,5 +1,6 @@
 const apiPath = 'ws://127.0.0.1:17777'
 
+//callback
 export const openScanner = (dispatch) => {
   const url = apiPath + '/GetDevicesList'
   const ws = new WebSocket(url, 'webfxscan')
@@ -13,7 +14,7 @@ export const openScanner = (dispatch) => {
   }
 }
 
-export const scan = (deviceName, handleMoveFile) => {
+export const scan = (deviceName, handleMoveFile, handleScannerError) => {
   console.log('scan() deviceName', deviceName)
   const paramJson = {
     'device-name': deviceName,
@@ -43,12 +44,16 @@ export const scan = (deviceName, handleMoveFile) => {
   const ws = new WebSocket(url, 'webfxscan')
   ws.onopen = () => console.log('ws opened')
   ws.onmessage = (message) => {
+    console.log(message)
     const data = message.data
     if (data.startsWith('FilePath:')) {
       const splitData = data.split('FilePath:')
       const filePath = splitData[1].split('\x00')[0]
       handleMoveFile(filePath)
+    } else {
+      handleScannerError(message.data)
     }
+    //todo
   }
   ws.onclose = () => {
     ws.close()

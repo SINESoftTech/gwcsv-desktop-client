@@ -107,6 +107,16 @@ const Main = (props) => {
     }
   }
   //endregion
+  const handleScannerError = (errorMsg) => {
+    if (errorMsg === 'error:feeding error') {
+      alert('無法掃描')
+    } else {
+      alert('無法與掃描機連線，請重新整理')
+    }
+
+    // const msg=errorMsg.split('')
+  }
+
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
@@ -158,7 +168,7 @@ const Main = (props) => {
   }
 
   const handleScanImage = () => {
-    scan(appState.appData.scannerName, handleMoveImage)
+    scan(appState.appData.scannerName, handleMoveImage, handleScannerError)
   }
 
   const handleMoveImage = (filePath) => {
