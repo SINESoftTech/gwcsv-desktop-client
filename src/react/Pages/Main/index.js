@@ -341,9 +341,10 @@ const Main = (props) => {
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
-                                         clientTaxId={declareProperties.clientTaxId}
+
                                          user={appState.auth.user}
-                                         onGwUploaded={handleGwUploaded}></ConfirmedEvidenceList>
+                                         onGwUploaded={handleGwUploaded}
+                                         declareProperties={declareProperties}></ConfirmedEvidenceList>
                 </TabPanel>
               </Paper>
             </Grid>

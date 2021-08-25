@@ -41,7 +41,6 @@ const IdentifiedEvidenceList = (props) => {
 
   const handleResultAllConfirmed = async () => {
     const filesByTicketId = byTicketId(localFiles['03'])
-    console.log('handleResultAllConfirmed filesByTicketId', filesByTicketId)
     const result = await props.onResultAllConfirmed(filesByTicketId)
     initDataRows(result['03'], props.clientTaxId)
   }
