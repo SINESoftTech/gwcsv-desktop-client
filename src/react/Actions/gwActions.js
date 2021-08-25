@@ -66,7 +66,7 @@ const uploadToGwStrategy = {
 }
 
 async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-  console.log('uploadGUI',payload)
+  console.log('uploadGUI', payload)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
@@ -109,14 +109,13 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declare
   }
 }
 
-//TODO
-async function uploadBill(payload, accountingFirmTaxId, token, declareProperties) {
+async function uploadBill(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
       'evidenceType': payload.evidenceType,
-      'reportingPeriod': '11002',
-      'deductionType': 'PURCHASE_AND_FEE',
+      'reportingPeriod': declareProperties.reportingPeriod,
+      'deductionType': declareProperties.deductionType,
       'isDeclareBusinessTax': true,
       'buyerTaxId': payload.buyerTaxId,
       'sellerTaxId': payload.sellerTaxId,
@@ -128,13 +127,13 @@ async function uploadBill(payload, accountingFirmTaxId, token, declareProperties
       'businessTaxValue': payload.businessTaxValue,
       'totalAmount': payload.totalAmount,
       'evidenceTimestamp': payload.evidenceDate,
-      'guiId': payload.evidenceNumber,
+      'evidenceId': payload.carrierNumber,
       'commentType': 'WHITE_SPACE',
       'summaryCount': 1,
       'groupName': null,
       'remarkText': payload.remark
     }
-    const url = ROOT_URL + '/evidence/gui'
+    const url = ROOT_URL + '/evidence/bill'
     let bodyFormData = new FormData()
     bodyFormData.append('input', JSON.stringify(req))
     bodyFormData.append('file', imageBlob)
@@ -165,7 +164,7 @@ export async function uploadToGw(payload, accountingFirmTaxId, token, declarePro
   const result = []
   for (let i = 0; i < payload.length; i++) {
     const data = payload[i]
-    console.log('uploadToGw', data)
+
     const uploadResult = await uploadToGwStrategy[SIGOUTOUR_EVIDENCE_TYPE[declareProperties.evidenceType].value](data['json'], data['image'], accountingFirmTaxId, token, declareProperties)
     if (uploadResult) {
       result.push({

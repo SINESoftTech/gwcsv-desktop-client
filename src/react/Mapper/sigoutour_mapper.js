@@ -130,12 +130,12 @@ const parseData = (jsonData) => {
     json['basicFee'] = json['basicFee'] === '' ? 0 : json['basicFee']
     json['taxableSalesValue'] = parseInt(json['waterFee']) + parseInt(json['basicFee'])
   }
-  json['taxableSalesValue'] = isEmptyOrUndefined(json['taxableSalesValue']) ? 0 : json['taxableSalesValue']
-  json['zeroTaxSalesValue'] = isEmptyOrUndefined(json['zeroTaxSalesValue']) ? 0 : json['zeroTaxSalesValue']
-  json['dutyFreeSalesValue'] = isEmptyOrUndefined(json['dutyFreeSalesValue']) ? 0 : json['dutyFreeSalesValue']
+  json['businessTaxValue'] = isEmptyOrUndefined(json['businessTaxValue']) ? 0 : parseInt(json['businessTaxValue'])
+  json['taxableSalesValue'] = isEmptyOrUndefined(json['taxableSalesValue']) ? 0 : parseInt(json['taxableSalesValue'])
+  json['zeroTaxSalesValue'] = isEmptyOrUndefined(json['zeroTaxSalesValue']) ? 0 : parseInt(json['zeroTaxSalesValue'])
+  json['dutyFreeSalesValue'] = isEmptyOrUndefined(json['dutyFreeSalesValue']) ? 0 : parseInt(json['dutyFreeSalesValue'])
   return json
 }
-
 
 
 class SigoutourMapperClass {

@@ -61,8 +61,6 @@ const ConfirmedEvidenceList = (props) => {
         'json': SigoutourMapper.toGw(data['json'])
       }
     })
-
-
     const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token, props.declareProperties)
     props.onGwUploaded(uploadResult)
   }
