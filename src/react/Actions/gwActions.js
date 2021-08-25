@@ -102,6 +102,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
     const result = await gwAxios.post(url, bodyFormData, config)
     return true
   } catch (error) {
+    console.log('uploadGUI', error)
     return false
   }
 }

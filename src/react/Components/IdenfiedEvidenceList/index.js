@@ -25,6 +25,7 @@ const IdentifiedEvidenceList = (props) => {
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
+      console.log('initDataRows', json, idx)
       const parseResult = SigoutourMapper.toView(json.data)
       parseResult['id'] = idx + 1
       return parseResult
@@ -34,11 +35,13 @@ const IdentifiedEvidenceList = (props) => {
 
   useEffect(() => {
     initDataRows(props.data['03'], props.clientTaxId)
+    setLocalFiles(props.data)
   }, [props.data, props.clientTaxId])
 
 
   const handleResultAllConfirmed = async () => {
     const filesByTicketId = byTicketId(localFiles['03'])
+    console.log('handleResultAllConfirmed filesByTicketId', filesByTicketId)
     const result = await props.onResultAllConfirmed(filesByTicketId)
     initDataRows(result['03'], props.clientTaxId)
   }
