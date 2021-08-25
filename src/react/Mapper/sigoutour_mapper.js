@@ -109,6 +109,10 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
   }
 }
 
+const isEmptyOrUndefined = (s) => {
+  return s === '' || s === undefined
+}
+
 const parseData = (jsonData) => {
   let json = {}
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
@@ -126,11 +130,13 @@ const parseData = (jsonData) => {
     json['basicFee'] = json['basicFee'] === '' ? 0 : json['basicFee']
     json['taxableSalesValue'] = parseInt(json['waterFee']) + parseInt(json['basicFee'])
   }
-  json['taxableSalesValue'] = json['taxableSalesValue'] === '' ? 0 : json['taxableSalesValue']
-  json['zeroTaxSalesValue'] = json['zeroTaxSalesValue'] === '' ? 0 : json['zeroTaxSalesValue']
-  json['dutyFreeSalesValue'] = json['dutyFreeSalesValue'] === '' ? 0 : json['dutyFreeSalesValue']
+  json['taxableSalesValue'] = isEmptyOrUndefined(json['taxableSalesValue']) ? 0 : json['taxableSalesValue']
+  json['zeroTaxSalesValue'] = isEmptyOrUndefined(json['zeroTaxSalesValue']) ? 0 : json['zeroTaxSalesValue']
+  json['dutyFreeSalesValue'] = isEmptyOrUndefined(json['dutyFreeSalesValue']) ? 0 : json['dutyFreeSalesValue']
   return json
 }
+
+
 
 class SigoutourMapperClass {
 

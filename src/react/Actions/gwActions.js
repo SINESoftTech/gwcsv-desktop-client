@@ -66,6 +66,7 @@ const uploadToGwStrategy = {
 }
 
 async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
+  console.log('uploadGUI',payload)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
