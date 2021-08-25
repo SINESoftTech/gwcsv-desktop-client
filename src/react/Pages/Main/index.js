@@ -108,10 +108,14 @@ const Main = (props) => {
   }
   //endregion
   const handleScannerError = (errorMsg) => {
-    if (errorMsg === 'error:feeding error') {
-      alert('無法掃描')
-    } else {
+    const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
+    if (isErrorMsgStartsWithError && errorMsg === 'error:feeding error') {
+      alert('無法掃描，請放入紙張')
+      return
+    }
+    if (isErrorMsgStartsWithError) {
       alert('無法與掃描機連線，請重新整理')
+      return
     }
 
     // const msg=errorMsg.split('')
