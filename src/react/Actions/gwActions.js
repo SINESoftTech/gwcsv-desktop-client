@@ -110,6 +110,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declare
 }
 
 async function uploadBill(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
+  console.log('uploadBill', payload)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
@@ -125,7 +126,9 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token, declar
       'dutyFreeSalesValue': payload.dutyFreeSalesValue,
       'withoutTaxAmount': parseInt(payload.taxableSalesValue) + parseInt(payload.zeroTaxSalesValue) + parseInt(payload.dutyFreeSalesValue),
       'businessTaxValue': payload.businessTaxValue,
+      'otherFee': payload.otherFee,
       'totalAmount': payload.totalAmount,
+      'totalPayAmount': payload.totalPayAmount,
       'evidenceTimestamp': payload.evidenceDate,
       'evidenceId': payload.carrierNumber,
       'commentType': 'WHITE_SPACE',
