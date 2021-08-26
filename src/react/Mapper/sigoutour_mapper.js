@@ -138,7 +138,14 @@ const parseData = (jsonData) => {
   if (jsonData['pageList'][0]['photoList'][0]['type'] === 'A5030') {
     json['totalAmount'] = json['taxableSalesValue'] + json['businessTaxValue']
   }
+  json['cellHighlight'] = []
   return json
+}
+
+const validData = (json) => {
+  console.log('validData()', json)
+  let errorList = []
+  
 }
 
 
@@ -149,6 +156,7 @@ class SigoutourMapperClass {
     json['evidenceType'] = json['evidenceType'].name
     console.log('toView', json)
     json['taxType'] = json['taxType'].name
+    validData(json)
     return json
   }
 
