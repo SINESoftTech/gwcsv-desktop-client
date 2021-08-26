@@ -109,6 +109,10 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
   }
 }
 
+const isEmptyOrUndefined = (s) => {
+  return s === '' || s === undefined
+}
+
 const parseData = (jsonData) => {
   let json = {}
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
@@ -118,17 +122,25 @@ const parseData = (jsonData) => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
     json[key] = data['text']
   })
-  json['taxType'] = TAX_TYPE[json.taxType]
+  json['taxType'] = isEmptyOrUndefined(TAX_TYPE[json.taxType]) ? '' : TAX_TYPE[json.taxType]
   if (jsonData['pageList'][0]['photoList'][0]['type'] === 'A5020') {
     json['waterFee'] = json['waterFee'] === '' ? 0 : json['waterFee']
     json['basicFee'] = json['basicFee'] === '' ? 0 : json['basicFee']
-    json['taxableSalesValue'] = parseInt(json['waterFee']) + parseInt(json['basicFee'])
+    json['taxableSalesValue'] = (parseFloat(json['waterFee']) + parseFloat(json['basicFee']))
   }
-  json['taxableSalesValue'] = json['taxableSalesValue'] === '' ? 0 : json['taxableSalesValue']
-  json['zeroTaxSalesValue'] = json['zeroTaxSalesValue'] === '' ? 0 : json['zeroTaxSalesValue']
-  json['dutyFreeSalesValue'] = json['dutyFreeSalesValue'] === '' ? 0 : json['dutyFreeSalesValue']
+  json['totalAmount'] = isEmptyOrUndefined(json['totalAmount']) ? 0 : parseInt(json['totalAmount'])
+  json['totalPayAmount'] = isEmptyOrUndefined(json['totalPayAmount']) ? 0 : parseInt(json['totalPayAmount'])
+  json['otherFee'] = isEmptyOrUndefined(json['otherFee']) ? 0 : parseInt(json['otherFee'])
+  json['businessTaxValue'] = isEmptyOrUndefined(json['businessTaxValue']) ? 0 : parseInt(json['businessTaxValue'])
+  json['taxableSalesValue'] = isEmptyOrUndefined(json['taxableSalesValue']) ? 0 : parseInt(json['taxableSalesValue'])
+  json['zeroTaxSalesValue'] = isEmptyOrUndefined(json['zeroTaxSalesValue']) ? 0 : parseInt(json['zeroTaxSalesValue'])
+  json['dutyFreeSalesValue'] = isEmptyOrUndefined(json['dutyFreeSalesValue']) ? 0 : parseInt(json['dutyFreeSalesValue'])
+  if (jsonData['pageList'][0]['photoList'][0]['type'] === 'A5030') {
+    json['totalAmount'] = json['taxableSalesValue'] + json['businessTaxValue']
+  }
   return json
 }
+
 
 class SigoutourMapperClass {
 

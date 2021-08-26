@@ -3,7 +3,8 @@ import actionTypes from '../Actions/actionTypes'
 
 export const initialMainState = {
   fileLists: {},
-  clientLists: []
+  clientLists: [],
+  scannerName: ''
 }
 
 export const MainReducer = (state = initialMainState, action) => {
@@ -15,6 +16,8 @@ export const MainReducer = (state = initialMainState, action) => {
       return { ...state, fileLists: action.payload }
     case actionTypes.GET_CLIENT_LIST_SUCCESS:
       return { ...state, clientLists: action.payload }
+    case actionTypes.GET_SCAN_DEVICE:
+      return { ...state, scannerName: action.payload }
     default:
       console.log('mainReducer initial state', state)
       return state

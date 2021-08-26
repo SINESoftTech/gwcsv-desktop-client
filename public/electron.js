@@ -10,7 +10,7 @@ const isDev = require('electron-is-dev')
 const BrowserWindow = electron.BrowserWindow
 const userHomedir = require('os').homedir()
 const url = require('url')
-
+const process = require('process')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -161,17 +161,13 @@ function getFileContent(fullPath) {
 
 }
 
+ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
+  return getFileContent(fullPath)
+})
 
 ipcMain.handle('evidence:getFileLists', (event, ...args) => {
   const fileList = getAllFileLists()
   return fileList
-})
-
-ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
-  // console.log(event)
-  // console.log(fullPath)
-  // return '1'
-  return getFileContent(fullPath)
 })
 
 ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
@@ -180,6 +176,15 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   // return '1'
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
+
+ipcMain.handle('evidence:scanImages', (event, fullPath, username, clientTaxId) => {
+  const sourceFileExt = fullPath.split('.')[1]
+  const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
+  const targetFilePath = targetFolderPath + '/' + username + '_' + clientTaxId + '_' + Date.now() + '.' + sourceFileExt
+  fse.copySync(fullPath, targetFilePath)
+  return getAllFileLists(fullPath)
+})
+
 
 ipcMain.handle('evidence:identifyResultConfirmed', (event, payload) => {
   console.log('identifyResultConfirmed', payload)
@@ -239,9 +244,7 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
   let sightourResultFileObjObj = JSON.parse(sightourFileObj)
   let resultObj = savedResult ? JSON.parse(savedResult) : null
   const filenameWithoutExt = imageFileObjObj.filename.split('.').slice(0, -1).join('.')
-  // console.log(filenameWithoutExt)
   const imageFileExt = imageFileObjObj.filename.split('.').slice(-1)[0]
-  // console.log(imageFileExt)
 
   if (resultObj) {
     // console.log('result exists')
@@ -258,10 +261,20 @@ ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, 
 ipcMain.handle('evidence:uploaded', (event, payload) => {
   console.log('evidence:uploaded payload', payload)
   payload.map(data => {
+    let imagePath = ''
+    let jsonPath = ''
+    const isWin = process.platform === 'win32'
+    if (isWin) {
+      imagePath = data['imageFullPath'].split('04\\')[1]
+      jsonPath = data['jsonFullPath'].split('04\\')[1]
+    } else {
+      imagePath = data['imageFullPath'].split('04/')[1]
+      jsonPath = data['jsonFullPath'].split('04/')[1]
+    }
     if (data.status) {
       const targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
-      const targetImagePath = targetFolder + data['imageFullPath'].split('04/')[1]
-      const targetJsonPath = targetFolder + data['jsonFullPath'].split('04/')[1]
+      const targetImagePath = targetFolder + '/' + imagePath
+      const targetJsonPath = targetFolder + '/' + jsonPath
       fse.moveSync(data['imageFullPath'], targetImagePath)
       fse.moveSync(data['jsonFullPath'], targetJsonPath)
     }

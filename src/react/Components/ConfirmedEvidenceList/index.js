@@ -32,8 +32,8 @@ const ConfirmedEvidenceList = (props) => {
   }
 
   useEffect(() => {
-    initDataRows(props.data['04'], props.clientTaxId)
-  }, [props.data, props.clientTaxId])
+    initDataRows(props.data['04'], props.declareProperties.clientTaxId)
+  }, [props.data, props.declareProperties.clientTaxId])
 
   const handleUpload = async () => {
     console.log('handleUpload', props.data['04'])
@@ -43,7 +43,7 @@ const ConfirmedEvidenceList = (props) => {
       const filterData = filesByTicketId[key]
         .filter(d => {
           const taxId = d.filename.split('_')[1]
-          return taxId === props.clientTaxId
+          return taxId === props.declareProperties.clientTaxId
         })
       if (filterData.length) {
         let json = {}
@@ -52,6 +52,7 @@ const ConfirmedEvidenceList = (props) => {
       }
     }
     const getRawDataResult = await getRawDataWithImage(filterResult)
+    console.log('getRawDataResult()', getRawDataResult)
     const parseRawDataResult = getRawDataResult.map(data => {
       return {
         'image': new File([data['image']], Date.now() + '.jpg'),
@@ -60,7 +61,7 @@ const ConfirmedEvidenceList = (props) => {
         'json': SigoutourMapper.toGw(data['json'])
       }
     })
-    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
+    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token, props.declareProperties)
     props.onGwUploaded(uploadResult)
   }
 

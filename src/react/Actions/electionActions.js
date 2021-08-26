@@ -19,7 +19,7 @@ export async function getJsonRawData(data, clientTaxId) {
       return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
     }
   } catch (error) {
-    throw new Error(error)
+    console.log('getJsonRawData', error)
   }
 }
 
@@ -37,12 +37,18 @@ export async function getFileLists(dispatch) {
   }
 }
 
-export async function getImageFile(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
-}
-
-export async function scanImages(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
+export async function scanImages(dispatch, filePath, username, clientTaxId) {
+  console.log('scanImages() filePath', filePath)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, clientTaxId)
+      console.log('scanImages result', result)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+    }
+  } catch (error) {
+    console.log(error)
+    // throw new Error(error)
+  }
 }
 
 export async function fileScanned(dispatch, payload) {
@@ -56,7 +62,7 @@ export async function identifySent(dispatch, payload) {
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
   }
 }
 
@@ -67,7 +73,7 @@ export async function identifyResultReceived(dispatch, payload) {
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
   }
 }
 
@@ -79,7 +85,7 @@ export async function identifyResultConfirmed(dispatch, payload) {
       return result
     }
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
   }
 }
 

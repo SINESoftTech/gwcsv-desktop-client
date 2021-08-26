@@ -34,7 +34,7 @@
     "react-start": "react-scripts start",
     "electron-start": " electron .",
     "react-build": "react-scripts build",
-    "electron-build": "electron-packager ./ test --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*"
+    "electron-build": "react-scripts build && electron-packager ./ test --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*"
   },
   "eslintConfig": {
     "extends": [

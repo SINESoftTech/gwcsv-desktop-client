@@ -20,14 +20,17 @@ import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
 import {
+  getImageFile,
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
-  identifySent
+  identifySent, scanImages
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
 import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
 import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
+import { openScanner, scan } from '../../Actions/scanAction'
+import actionTypes from '../../Actions/actionTypes'
 
 const R = require('ramda')
 const electron = isElectron() ? window.electron : null
@@ -84,6 +87,7 @@ const Main = (props) => {
   useEffect(async () => {
     await electronActions.getFileLists(dispatch)
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
+    await openScanner(dispatch)
   }, [])
 
   //region Main Events
@@ -103,6 +107,20 @@ const Main = (props) => {
     }
   }
   //endregion
+  const handleScannerError = (errorMsg) => {
+    const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
+    if (isErrorMsgStartsWithError && errorMsg === 'error:feeding error') {
+      alert('無法掃描，請放入紙張')
+      return
+    }
+    if (isErrorMsgStartsWithError) {
+      alert('無法與掃描機連線，請重新整理')
+      return
+    }
+
+    // const msg=errorMsg.split('')
+  }
+
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
@@ -153,8 +171,12 @@ const Main = (props) => {
 
   }
 
-  const handleScanImage = (event) => {
-    console.log('handleScanImage event', event)
+  const handleScanImage = () => {
+    scan(appState.appData.scannerName, handleMoveImage, handleScannerError)
+  }
+
+  const handleMoveImage = (filePath) => {
+    electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties.clientTaxId)
   }
 
   //endregion
@@ -319,9 +341,10 @@ const Main = (props) => {
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
-                                         clientTaxId={declareProperties.clientTaxId}
+
                                          user={appState.auth.user}
-                                         onGwUploaded={handleGwUploaded}></ConfirmedEvidenceList>
+                                         onGwUploaded={handleGwUploaded}
+                                         declareProperties={declareProperties}></ConfirmedEvidenceList>
                 </TabPanel>
               </Paper>
             </Grid>
