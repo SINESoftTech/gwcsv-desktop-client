@@ -19,6 +19,7 @@ const ColumnDefinitions: GridColDef[] = [
   { field: 'businessTaxValue', headerName: '税額', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'otherFee', headerName: '其他金額', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'totalAmount', headerName: '總額', width: 150, cellClassName: getCellClassName, editable: true },
+  { field: 'totalPayAmount', headerName: '付款總金額', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'rowStatus', hide: true },
   { field: 'cellHighlight', hide: true }
 ]

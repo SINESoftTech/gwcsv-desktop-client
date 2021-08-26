@@ -150,6 +150,7 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token, declar
     const result = await gwAxios.post(url, bodyFormData, config)
     return true
   } catch (error) {
+    //todo error handle
     return false
   }
 }
