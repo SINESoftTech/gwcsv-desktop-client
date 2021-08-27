@@ -5,6 +5,7 @@ import isElectron from 'is-electron'
 import { getJsonRawData, getRawDataWithImage } from '../../Actions/electionActions'
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+import { validSigoutourData } from '../../Valid/valid'
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -25,7 +26,7 @@ const ConfirmedEvidenceList = (props) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
-      const parseResult = SigoutourMapper.toView(reportingPeriod, json.data)
+      const parseResult = validSigoutourData(SigoutourMapper.toView(reportingPeriod, json.data))
       parseResult['id'] = idx + 1
       return parseResult
     })

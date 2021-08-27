@@ -4,6 +4,7 @@ import EvidenceList from '../EvidenceListTable'
 import isElectron from 'is-electron'
 import { getJsonRawData } from '../../Actions/electionActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+import { validSigoutourData } from '../../Valid/valid'
 
 
 const electron = isElectron() ? window.electron : null
@@ -24,12 +25,11 @@ const IdentifiedEvidenceList = (props) => {
   const [localFiles, setLocalFiles] = useState(props.data)
 
   const initDataRows = async (data, clientTaxId) => {
-    console.log('initDataRows() data=', data)
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       console.log('initDataRows', json, idx)
       const reportingPeriod = json.filePath.split('_')[2]
-      const parseResult = SigoutourMapper.toView(reportingPeriod, json.data)
+      const parseResult = validSigoutourData(SigoutourMapper.toView(reportingPeriod, json.data))
       parseResult['id'] = idx + 1
       return parseResult
     })

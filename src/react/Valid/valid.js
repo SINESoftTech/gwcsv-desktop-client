@@ -1,0 +1,92 @@
+const validSigoutourData = (json) => {
+  console.log('validSigoutourData json', JSON.stringify(json))
+  let validResult = validTaxMoney(json)
+  if (json['sellerTaxId'].length !== 8) {
+    validResult.push('sellerTaxId')
+  }
+  if (json['buyerTaxId'].length !== 8) {
+    validResult.push('buyerTaxId')
+  }
+  validResult.push(validEvidenceType[json['evidenceType']](json))
+  json['cellHighlight'] = [...new Set(validResult)]
+  return json
+}
+
+const validEvidenceType = {
+  '三聯式統一發票': (json) => {
+    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+  },
+  '二聯式收銀發票': (json) => {
+    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+  },
+  '三聯式收銀機發票': (json) => {
+    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+  },
+  '電子發票證明聯-格式一': (json) => {
+    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+  },
+  '電子發票證明聯-格式二': (json) => {
+    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+  },
+  '電力帳單': (json) => {
+    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+  },
+  '水費帳單-台灣自來水': (json) => {
+    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+  },
+  '水費帳單-台北自來水': (json) => {
+    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+  },
+  '電信費帳單-中華電信': (json) => {
+    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+  },
+  '電信費帳單-台灣大哥大': (json) => {
+    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+  },
+  '電信費帳單-遠傳': (json) => {
+    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+  },
+  '電信費帳單-亞太': (json) => {
+    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+  },
+  '海關代徵營業稅繳納證': (json) => {
+    //todo
+  }
+}
+
+const validTaxType = {
+  '應稅': (json) => {
+    const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'] === 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueGte0 = json['taxableSalesValue'] >= 0 ? '' : 'taxableSalesValue'
+    return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueEq0, isTaxableSalesValueGte0]
+  },
+  '免稅': (json) => {
+    const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueGte0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
+    return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueGte0, isTaxableSalesValueEq0]
+  },
+  '零稅': (json) => {
+    const isZeroTaxSalesValueGte0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
+    return [isZeroTaxSalesValueGte0, isDutyFreeSalesValueEq0, isTaxableSalesValueEq0]
+  }
+}
+
+const validTaxMoney = (json) => {
+  let validResult = validTaxType[json['taxType']](json)
+  const withoutTotalAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
+  const totalAmount = withoutTotalAmount + json['businessTaxValue']
+  if (totalAmount !== json['totalAmount']) {
+    validResult.push('totalAmount', 'zeroTaxSalesValue', 'dutyFreeSalesValue', 'taxableSalesValue')
+  }
+  const payAmount = totalAmount + json['otherFee']
+  if (payAmount !== json['totalPayAmount']) {
+    validResult.push('totalAmount', 'otherFee')
+  }
+  return [...new Set(validResult)]
+}
+
+export { validSigoutourData }
