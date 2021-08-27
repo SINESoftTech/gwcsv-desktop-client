@@ -17,6 +17,7 @@ const byTicketId = R.groupBy((fileObj) => {
 
 const IdentifiedEvidenceList = (props) => {
 
+
   const [rowData, setRowData] = useState([])
   const [imageUrl, setImageUrl] = useState('')
 
@@ -26,7 +27,8 @@ const IdentifiedEvidenceList = (props) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       console.log('initDataRows', json, idx)
-      const parseResult = SigoutourMapper.toView(json.data)
+      const reportingPeriod = props.declareProperties.reportingPeriod
+      const parseResult = SigoutourMapper.toView(reportingPeriod, json.data)
       parseResult['id'] = idx + 1
       return parseResult
     })
@@ -34,15 +36,15 @@ const IdentifiedEvidenceList = (props) => {
   }
 
   useEffect(() => {
-    initDataRows(props.data['03'], props.clientTaxId)
+    initDataRows(props.data['03'], props.declareProperties.clientTaxId)
     setLocalFiles(props.data)
-  }, [props.data, props.clientTaxId])
+  }, [props.data, props.declareProperties.clientTaxId])
 
 
   const handleResultAllConfirmed = async () => {
     const filesByTicketId = byTicketId(localFiles['03'])
     const result = await props.onResultAllConfirmed(filesByTicketId)
-    initDataRows(result['03'], props.clientTaxId)
+    initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
 
   // const handleReadImage = async () => {

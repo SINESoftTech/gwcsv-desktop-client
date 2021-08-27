@@ -145,15 +145,16 @@ const parseData = (jsonData) => {
 const validData = (json) => {
   console.log('validData()', json)
   let errorList = []
-  
+
 }
 
 
 class SigoutourMapperClass {
 
-  toView(jsonData) {
+  toView(reportingPeriod, jsonData) {
     const json = parseData(jsonData)
     json['evidenceType'] = json['evidenceType'].name
+    json['reportingPeriod'] = reportingPeriod
     console.log('toView', json)
     json['taxType'] = json['taxType'].name
     validData(json)

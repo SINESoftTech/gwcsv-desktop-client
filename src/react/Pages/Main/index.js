@@ -284,7 +284,7 @@ const Main = (props) => {
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
-                                          clientTaxId={declareProperties.clientTaxId}
+                                          declareProperties={declareProperties}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}></IdentifiedEvidenceList>
                 </TabPanel>
