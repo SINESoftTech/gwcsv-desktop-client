@@ -68,7 +68,10 @@ const DialogComponent = (props) => {
           {renderReportingPeriod()}
         </DialogContent>
         <DialogActions>
-          <Button onClick={(e) => props.handleClose()} color='primary'>
+          <Button onClick={(e) => {
+            props.handleClose()
+            props.onScan()
+          }} color='primary'>
             確認
           </Button>
           <Button onClick={(e) => {

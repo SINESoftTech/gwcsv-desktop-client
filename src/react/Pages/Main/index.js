@@ -87,9 +87,8 @@ const Main = (props) => {
       }
     })
     if (name === 'clientTaxId') {
-      handleOpen()
+      handleReset()
     }
-
   }
   const handleScannerError = (errorMsg) => {
     const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
@@ -153,7 +152,9 @@ const Main = (props) => {
   }
 
   const handleScanImage = () => {
-    scan(appState.appData.scannerName, handleMoveImage, handleScannerError)
+    if (declareProperties.reportingPeriod !== '') {
+      scan(appState.appData.scannerName, handleMoveImage, handleScannerError)
+    }
   }
 
   const handleMoveImage = (filePath) => {
@@ -256,7 +257,8 @@ const Main = (props) => {
       <GwMenuTop />
       <main className={classes.content}>
         <DialogComponent declareProperties={declareProperties} handleSelectionChange={handleSelectionChange}
-                         handleReset={handleReset} handleClose={handleClose} open={openDialog} />
+                         handleReset={handleReset} handleClose={handleClose} open={openDialog}
+                         onScan={handleScanImage} />
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
@@ -275,6 +277,7 @@ const Main = (props) => {
                   <ScannedImageList data={appState.appData.fileLists['01']}
                                     username={appState.auth.user.username}
                                     declareProperties={declareProperties}
+                                    onOpenDialog={handleOpen}
                                     onScanClick={handleScanImage}
                                     onSendToIdentifyClick={handleSendImageToIdentify}
                                     onSaveImageClick={handleSaveImage}
