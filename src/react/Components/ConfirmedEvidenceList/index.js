@@ -24,7 +24,8 @@ const ConfirmedEvidenceList = (props) => {
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
-      const parseResult = SigoutourMapper.toView(props.declareProperties.reportingPeriod, json.data)
+      const reportingPeriod = json.filePath.split('_')[2]
+      const parseResult = SigoutourMapper.toView(reportingPeriod, json.data)
       parseResult['id'] = idx + 1
       return parseResult
     })
