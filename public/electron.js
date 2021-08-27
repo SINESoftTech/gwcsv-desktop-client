@@ -216,7 +216,7 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
     const data = identifyResult[i]
     if (data['result']) {
       const fileExt = data['sourceFileName'].split('.')[1]
-      const targetFileName = `${username}_${data['businessEntityTaxId']}_${data['ticketId']}.${fileExt}`
+      const targetFileName = `${username}_${data['businessEntityTaxId']}_${data['reportingPeriod']}_${data['ticketId']}.${fileExt}`
       const targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
     }

@@ -45,14 +45,14 @@ const IdentifiedEvidenceList = (props) => {
     initDataRows(result['03'], props.clientTaxId)
   }
 
-  const handleReadImage = async () => {
-    if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:getFileLists')
-      const image = await ipcRenderer.invoke('evidence:getImageFileContent', result['01'][0]['fullPath'])
-      const blob = new Blob([image])
-      setImageUrl(URL.createObjectURL(blob))
-    }
-  }
+  // const handleReadImage = async () => {
+  //   if (ipcRenderer) {
+  //     const result = await ipcRenderer.invoke('evidence:getFileLists')
+  //     const image = await ipcRenderer.invoke('evidence:getImageFileContent', result['01'][0]['fullPath'])
+  //     const blob = new Blob([image])
+  //     setImageUrl(URL.createObjectURL(blob))
+  //   }
+  // }
 
   return (
     <div>

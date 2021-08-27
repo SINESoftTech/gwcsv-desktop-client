@@ -40,14 +40,16 @@ export async function sendToIdentify(identifyData) {
           'businessEntityTaxId': data.businessEntityTaxId,
           'ticketId': result.data['ticket'],
           'sourceFullPath': data.sourceFullPath,
-          'sourceFileName': data.sourceFileName
+          'sourceFileName': data.sourceFileName,
+          'reportingPeriod': data.reportingPeriod
         })
       } else {
         resultList.push({
           'result': false,
           'businessEntityTaxId': data.businessEntityTaxId,
           'sourceFullPath': data.sourceFullPath,
-          'sourceFileName': data.sourceFileName
+          'sourceFileName': data.sourceFileName,
+          'reportingPeriod': data.reportingPeriod
         })
       }
     } catch (error) {
@@ -61,7 +63,7 @@ export async function getIdentifyResult(fileObj) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
-    const ticketId = fileObj.filename.split('_')[2]
+    const ticketId = fileObj.filename.split('_')[3]
     const formData = new FormData()
     formData.append('token', token)
     formData.append('ticket', ticketId)

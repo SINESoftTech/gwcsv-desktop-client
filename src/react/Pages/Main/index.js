@@ -116,7 +116,8 @@ const Main = (props) => {
         'fileBlob': d.fileBlob,
         'accountingfirmTaxId': accountingfirmTaxId,
         'businessEntityTaxId': businessEntityTaxId,
-        'evidenceType': declareProperties.evidenceType
+        'evidenceType': declareProperties.evidenceType,
+        'reportingPeriod': declareProperties.reportingPeriod
       }
     })
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
