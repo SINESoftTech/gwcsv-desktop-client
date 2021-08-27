@@ -66,7 +66,6 @@ const Main = (props) => {
     'reportingPeriod': '',
     'evidenceType': ''
   })
-  const [disableSelection, setDisableSelection] = React.useState(true)
   const classes = mainStyles()
 
   useEffect(async () => {
@@ -88,8 +87,9 @@ const Main = (props) => {
       }
     })
     if (name === 'clientTaxId') {
-      setDisableSelection(false)
+      handleOpen()
     }
+
   }
   const handleScannerError = (errorMsg) => {
     const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
@@ -220,8 +220,7 @@ const Main = (props) => {
             id='evidence-type-select'
             name='evidenceType'
             value={declareProperties.evidenceType}
-            onChange={handleSelectionChange}
-            disabled={disableSelection}>
+            onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
             {keyList.map(key => {
               return <MenuItem key={key}
@@ -233,9 +232,8 @@ const Main = (props) => {
     )
   }
 
-  console.log('Main', declareProperties)
 
-  const handleReset = (reportingPeriod) => {
+  const handleReset = () => {
     setDeclareProperties(prevState => {
       return {
         ...prevState,
@@ -244,13 +242,22 @@ const Main = (props) => {
     })
   }
 
+  console.log('Main', declareProperties)
+  const [openDialog, setOpenDialog] = React.useState(false)
+  const handleClose = () => {
+    setOpenDialog(false)
+  }
+  const handleOpen = () => {
+    setOpenDialog(true)
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
       <GwMenuTop />
       <main className={classes.content}>
         <DialogComponent declareProperties={declareProperties} handleSelectionChange={handleSelectionChange}
-                         handleReset={handleReset} />
+                         handleReset={handleReset} handleClose={handleClose} open={openDialog} />
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
@@ -284,7 +291,6 @@ const Main = (props) => {
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
-
                                          user={appState.auth.user}
                                          onGwUploaded={handleGwUploaded}
                                          declareProperties={declareProperties}></ConfirmedEvidenceList>

@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useTheme } from '@material-ui/core/styles'
-import { DialogContentText, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core'
+import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import mainStyles from '../Pages/Main/mainStyles'
 
 const toPeriodTime = (timestamp = Date.now()) => {
@@ -23,7 +23,6 @@ const toPeriodTime = (timestamp = Date.now()) => {
 
 const DialogComponent = (props) => {
 
-  const [open, setOpen] = React.useState(false)
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -32,14 +31,6 @@ const DialogComponent = (props) => {
   const handleChange = (event) => {
     props.handleSelectionChange(event)
   }
-
-  
-
-  const handleClose = (event) => {
-    setOpen(false)
-    props.handleReset('')
-  }
-
 
   const renderReportingPeriod = () => {
     return (
@@ -63,13 +54,12 @@ const DialogComponent = (props) => {
     )
   }
 
-
   return (
     <div>
       <Dialog
         fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
+        open={props.open}
+        onClose={props.handleClose}
         aria-labelledby='responsive-dialog-title'
       >
         <DialogTitle id='responsive-dialog-title'>請選擇申報期別</DialogTitle>
@@ -78,10 +68,13 @@ const DialogComponent = (props) => {
           {renderReportingPeriod()}
         </DialogContent>
         <DialogActions>
-          <Button onClick={(e) => setOpen(false)} color='primary'>
+          <Button onClick={(e) => props.handleClose()} color='primary'>
             確認
           </Button>
-          <Button onClick={handleClose} color='primary'>
+          <Button onClick={(e) => {
+            props.handleClose()
+            props.handleReset()
+          }} color='primary'>
             取消
           </Button>
         </DialogActions>
