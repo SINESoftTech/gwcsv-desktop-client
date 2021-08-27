@@ -180,7 +180,7 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
-  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + declareProperties.reportingPeriod + '_' + Date.now() + '.' + sourceFileExt
+  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + Date.now() + '.' + sourceFileExt
   fse.copySync(fullPath, targetFilePath)
   return getAllFileLists(fullPath)
 })
