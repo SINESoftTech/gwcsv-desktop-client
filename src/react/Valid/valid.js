@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 const validSigoutourData = (json) => {
   console.log('validSigoutourData json', JSON.stringify(json))
   let validResult = validTaxMoney(json)
@@ -8,6 +10,9 @@ const validSigoutourData = (json) => {
     validResult.push('buyerTaxId')
   }
   validResult.push(validEvidenceType[json['evidenceType']](json))
+  if (!moment(json['evidenceDate'], 'YYYYMMDD', true).isValid()) {
+    validResult.push('evidenceDate')
+  }
   json['cellHighlight'] = [...new Set(validResult)]
   return json
 }
@@ -80,7 +85,7 @@ const validTaxMoney = (json) => {
   const withoutTotalAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
   const totalAmount = withoutTotalAmount + json['businessTaxValue']
   if (totalAmount !== json['totalAmount']) {
-    validResult.push('totalAmount', 'zeroTaxSalesValue', 'dutyFreeSalesValue', 'taxableSalesValue')
+    validResult.push('totalAmount', 'zeroTaxSalesValue', 'businessTaxValue', 'dutyFreeSalesValue', 'taxableSalesValue')
   }
   const payAmount = totalAmount + json['otherFee']
   if (payAmount !== json['totalPayAmount']) {
