@@ -187,6 +187,7 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
 
 
 ipcMain.handle('evidence:identifyResultConfirmed', (event, payload) => {
+  console.log('identifyResultConfirmed', payload)
   Object.keys(payload).forEach(period => {
     const data = payload[period]
     for (let i = 0; i < data.length; i++) {

@@ -64,9 +64,9 @@ const EvidenceList = (props) => {
                 rowsPerPageOptions={[10, 20, 30, 40, 50]}
                 checkboxSelection={props.checkboxSelection}
         //todo return row id and field name ,field value
+                onSelectionModelChange={props.handleSelection}
                 onCellEditCommit={handleCellEditCommit}
         //TODO save return row id
-                onSelectionModelChange={(e) => console.log('onSelectionModelChange', e)}
                 getCellClassName={getRowClassName}
       />
     </div>

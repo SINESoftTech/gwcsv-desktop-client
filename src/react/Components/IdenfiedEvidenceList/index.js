@@ -18,7 +18,6 @@ const byTicketId = R.groupBy((fileObj) => {
 
 const IdentifiedEvidenceList = (props) => {
 
-
   const [rowData, setRowData] = useState([])
   const [imageUrl, setImageUrl] = useState('')
 
@@ -26,11 +25,10 @@ const IdentifiedEvidenceList = (props) => {
 
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
-    const parseJsonDataList = jsonDataList.map((json, idx) => {
-      console.log('initDataRows', json, idx)
+    const parseJsonDataList = jsonDataList.map((json) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const parseResult = validSigoutourData(SigoutourMapper.toView(reportingPeriod, json.data))
-      parseResult['id'] = idx + 1
+      parseResult['id'] = json.data['ticket']
       return parseResult
     })
     setRowData(parseJsonDataList)
@@ -43,26 +41,27 @@ const IdentifiedEvidenceList = (props) => {
 
 
   const handleResultAllConfirmed = async () => {
-    const filesByTicketId = byTicketId(localFiles['03'])
+    console.log('handleResultAllConfirmed', selectionModel)
+    console.log('handleResultAllConfirmed', localFiles['03'])
+    const filterData = localFiles['03'].filter((obj) => {
+      const ticketId = obj.filename.split('.')[0].split('_')[3]
+      return selectionModel.includes(ticketId)
+    })
+    const filesByTicketId = byTicketId(filterData)
     console.log('handleResultAllConfirmed', filesByTicketId)
     const result = await props.onResultAllConfirmed(filesByTicketId)
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
 
-  // const handleReadImage = async () => {
-  //   if (ipcRenderer) {
-  //     const result = await ipcRenderer.invoke('evidence:getFileLists')
-  //     const image = await ipcRenderer.invoke('evidence:getImageFileContent', result['01'][0]['fullPath'])
-  //     const blob = new Blob([image])
-  //     setImageUrl(URL.createObjectURL(blob))
-  //   }
-  // }
+  const [selectionModel, setSelectionModel] = React.useState([])
+
+  const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
   return (
     <div>
       <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
-      <EvidenceList data={rowData} checkboxSelection={true}></EvidenceList>
+      <EvidenceList data={rowData} checkboxSelection={true} handleSelection={handleSelection} />
     </div>
   )
 }
