@@ -1,7 +1,6 @@
 import moment from 'moment'
 
 const validSigoutourData = (json) => {
-  console.log('validSigoutourData json', JSON.stringify(json))
   let validResult = validTaxMoney(json)
   if (json['sellerTaxId'].length !== 8) {
     validResult.push('sellerTaxId')
@@ -56,6 +55,9 @@ const validEvidenceType = {
   },
   '海關代徵營業稅繳納證': (json) => {
     //todo
+  },
+  undefined: (json) => {
+    return ['evidenceType']
   }
 }
 
@@ -77,10 +79,17 @@ const validTaxType = {
     const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
     const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
     return [isZeroTaxSalesValueGte0, isDutyFreeSalesValueEq0, isTaxableSalesValueEq0]
+  },
+  '': (json) => {
+    return ['zeroTaxSalesValue', 'dutyFreeSalesValue', 'taxableSalesValue', 'taxType']
+  },
+  undefined: (json) => {
+    return ['zeroTaxSalesValue', 'dutyFreeSalesValue', 'taxableSalesValue', 'taxType']
   }
 }
 
 const validTaxMoney = (json) => {
+  console.log('validTaxMoney', json)
   let validResult = validTaxType[json['taxType']](json)
   const withoutTotalAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
   const totalAmount = withoutTotalAmount + json['businessTaxValue']
