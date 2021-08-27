@@ -177,10 +177,10 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
 
-ipcMain.handle('evidence:scanImages', (event, fullPath, username, clientTaxId) => {
+ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
-  const targetFilePath = targetFolderPath + '/' + username + '_' + clientTaxId + '_' + Date.now() + '.' + sourceFileExt
+  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + declareProperties.reportingPeriod + '_' + Date.now() + '.' + sourceFileExt
   fse.copySync(fullPath, targetFilePath)
   return getAllFileLists(fullPath)
 })

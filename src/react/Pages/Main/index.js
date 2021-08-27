@@ -157,7 +157,7 @@ const Main = (props) => {
   }
 
   const handleMoveImage = (filePath) => {
-    electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties.clientTaxId)
+    electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
   }
 
   //endregion
