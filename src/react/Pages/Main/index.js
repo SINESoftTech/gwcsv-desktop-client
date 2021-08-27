@@ -164,6 +164,7 @@ const Main = (props) => {
   //endregion
 
   const handleResultAllConfirmed = async (filesByTicketId) => {
+    console.log('handleResultAllConfirmed()', filesByTicketId)
     try {
       const result = await identifyResultConfirmed(dispatch, filesByTicketId)
       return result
