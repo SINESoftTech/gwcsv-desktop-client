@@ -55,7 +55,7 @@ const mainStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 300,
   },
   menuButton: {
     marginRight: 36,

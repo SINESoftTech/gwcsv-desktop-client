@@ -31,25 +31,13 @@ import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
 import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 import { openScanner, scan } from '../../Actions/scanAction'
 import actionTypes from '../../Actions/actionTypes'
+import Button from '@material-ui/core/Button'
+import DialogComponent from '../../Dialog'
 
 const R = require('ramda')
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
-
-
-const toPeriodTime = (timestamp = Date.now()) => {
-  const date = new Date(timestamp)
-  const year = date.getFullYear() - 1911
-  const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-  const years = [year - 1, year, year + 1]
-  return years.flatMap(year => {
-    return months.map(m => {
-      return year + m
-    })
-  })
-}
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -206,32 +194,6 @@ const Main = (props) => {
     }
   }
 
-  const renderReportingPeriod = () => {
-    console.log('renderReportingPeriod')
-
-    return (
-      <>
-        <FormControl className={classes.formControl}>
-          <InputLabel id='reporting-period-select-label'>申報期別</InputLabel>
-          <Select
-            labelId='reporting-period-select-label'
-            id='reporting-period-select'
-            name='reportingPeriod'
-            value={declareProperties.reportingPeriod}
-            onChange={handleSelectionChange}
-            disabled={disableSelection}
-          >
-
-            <MenuItem key={0} value={''}>請選擇申報期別</MenuItem>
-            {toPeriodTime().filter(period => period % 2 === 0).map(period => {
-              return (<MenuItem key={period} value={period}>{period}</MenuItem>)
-            })}
-          </Select>
-        </FormControl>
-      </>
-    )
-  }
-
   const renderDeductionType = () => {
     console.log('renderDeductionType')
     return (
@@ -307,10 +269,10 @@ const Main = (props) => {
       <CssBaseline />
       <GwMenuTop />
       <main className={classes.content}>
+        <DialogComponent/>
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
-          {renderReportingPeriod()}
           {renderDeductionType()}
           {renderEvidenceType()}
           <Grid container spacing={3}>
