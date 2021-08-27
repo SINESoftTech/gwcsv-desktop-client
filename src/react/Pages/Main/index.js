@@ -1,18 +1,20 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import { gwActions, sightTourActions, electronActions, useAppDispatch, useAppState } from '../../Context'
+import React, { useEffect } from 'react'
+import { electronActions, gwActions, sightTourActions, useAppDispatch, useAppState } from '../../Context'
 import isElectron from 'is-electron'
 import {
-  Box,
   AppBar,
+  Box,
   Container,
   CssBaseline,
+  FormControl,
   Grid,
   InputLabel,
   MenuItem,
-  Paper, Select,
+  Paper,
+  Select,
   Tab,
   Tabs,
-  Typography, FormControl
+  Typography
 } from '@material-ui/core'
 import GwMenuTop from './GwMenuTop'
 import mainStyles from './mainStyles'
@@ -20,18 +22,14 @@ import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
 import {
-  getImageFile,
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
-  identifySent, scanImages
+  identifySent
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
 import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 import { openScanner, scan } from '../../Actions/scanAction'
-import actionTypes from '../../Actions/actionTypes'
-import Button from '@material-ui/core/Button'
 import DialogComponent from '../../Dialog'
 
 const R = require('ramda')
@@ -66,7 +64,6 @@ const Main = (props) => {
   const [declareProperties, setDeclareProperties] = React.useState({
     'clientTaxId': '',
     'reportingPeriod': '',
-    'deductionType': '',
     'evidenceType': ''
   })
   const [disableSelection, setDisableSelection] = React.useState(true)
@@ -94,7 +91,6 @@ const Main = (props) => {
       setDisableSelection(false)
     }
   }
-  //endregion
   const handleScannerError = (errorMsg) => {
     const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
     if (isErrorMsgStartsWithError && errorMsg === 'error:feeding error') {
@@ -106,9 +102,7 @@ const Main = (props) => {
       return
     }
 
-    // const msg=errorMsg.split('')
   }
-
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
@@ -142,7 +136,6 @@ const Main = (props) => {
     }
     identifyResultReceived(dispatch, identifyResultReceivedList)
   }
-
 
   const handleSaveImage = (event, data) => {
     console.log('handleSaveImage event', event)
@@ -194,29 +187,6 @@ const Main = (props) => {
     }
   }
 
-  const renderDeductionType = () => {
-    console.log('renderDeductionType')
-    return (
-      <>
-        <FormControl className={classes.formControl}>
-          <InputLabel id='deduction-type-select-label'>扣抵代號</InputLabel>
-          <Select
-            labelId='deduction-type-select-label'
-            id='deduction-type-select'
-            name='deductionType'
-            value={declareProperties.deductionType}
-            onChange={handleSelectionChange}
-            disabled={disableSelection}>
-            <MenuItem key={0} value={''}>請選擇扣抵代號</MenuItem>
-            {DEDUCTION_TYPE.map(obj => {
-              return <MenuItem key={obj.value} value={obj.value}>{obj.key}</MenuItem>
-            })}
-          </Select>
-        </FormControl>
-      </>
-    )
-  }
-
   const renderClientSelect = () => {
     console.log('renderClientSelect appState', appState)
     return (
@@ -263,17 +233,27 @@ const Main = (props) => {
     )
   }
 
+  console.log('Main', declareProperties)
+
+  const handleReset = (reportingPeriod) => {
+    setDeclareProperties(prevState => {
+      return {
+        ...prevState,
+        'reportingPeriod': ''
+      }
+    })
+  }
 
   return (
     <div className={classes.root}>
       <CssBaseline />
       <GwMenuTop />
       <main className={classes.content}>
-        <DialogComponent/>
+        <DialogComponent declareProperties={declareProperties} handleSelectionChange={handleSelectionChange}
+                         handleReset={handleReset} />
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
-          {renderDeductionType()}
           {renderEvidenceType()}
           <Grid container spacing={3}>
             <Grid item xs={12}>

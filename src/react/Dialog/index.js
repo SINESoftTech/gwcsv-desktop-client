@@ -23,14 +23,21 @@ const toPeriodTime = (timestamp = Date.now()) => {
 
 const DialogComponent = (props) => {
 
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState(false)
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
 
   const classes = mainStyles()
 
-  const handleClose = () => {
+  const handleChange = (event) => {
+    props.handleSelectionChange(event)
+  }
+
+  
+
+  const handleClose = (event) => {
     setOpen(false)
+    props.handleReset('')
   }
 
 
@@ -43,9 +50,8 @@ const DialogComponent = (props) => {
             labelId='reporting-period-select-label'
             id='reporting-period-select'
             name='reportingPeriod'
-            // value={declareProperties.reportingPeriod}
-            // onChange={handleSelectionChange}
-            // disabled={disableSelection}
+            value={props.declareProperties.reportingPeriod}
+            onChange={handleChange}
           >
             <MenuItem key={0} value={''}>請選擇申報期別</MenuItem>
             {toPeriodTime().filter(period => period % 2 === 0).map(period => {
@@ -67,15 +73,16 @@ const DialogComponent = (props) => {
         aria-labelledby='responsive-dialog-title'
       >
         <DialogTitle id='responsive-dialog-title'>請選擇申報期別</DialogTitle>
+
         <DialogContent>
           {renderReportingPeriod()}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color='primary'>
-            取消
+          <Button onClick={(e) => setOpen(false)} color='primary'>
+            確認
           </Button>
-          <Button onClick={handleClose} color='primary' autoFocus>
-            選擇
+          <Button onClick={handleClose} color='primary'>
+            取消
           </Button>
         </DialogActions>
       </Dialog>
