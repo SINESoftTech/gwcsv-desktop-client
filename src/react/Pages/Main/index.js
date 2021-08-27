@@ -106,7 +106,6 @@ const Main = (props) => {
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
-    setDisableSelection(true)
     //todo
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = declareProperties.clientTaxId
@@ -242,7 +241,6 @@ const Main = (props) => {
     })
   }
 
-  console.log('Main', declareProperties)
   const [openDialog, setOpenDialog] = React.useState(false)
   const handleClose = () => {
     setOpenDialog(false)
