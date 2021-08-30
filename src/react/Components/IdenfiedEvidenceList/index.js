@@ -57,9 +57,18 @@ const IdentifiedEvidenceList = (props) => {
 
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
-  const handleEditRow = (editData) => {
-    console.log('handleEditRow', editData)
+  const handleEditRow = async (editData) => {
+    console.log('handleEditRow data', props.data)
+    console.log('handleEditRow id', props.declareProperties.clientTaxId)
+    const jsonDataList = await getJsonRawData(props.data['03'], props.declareProperties.clientTaxId)
+    const json = jsonDataList.filter(obj => {
+      return obj.data.ticket === editData.id
+    })[0]
+    SigoutourMapper.toSigoutour(json, editData)
+    //TODO
   }
+
+
 
   return (
     <div>

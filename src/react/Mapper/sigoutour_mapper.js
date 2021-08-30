@@ -161,6 +161,11 @@ class SigoutourMapperClass {
     return json
   }
 
+  toSigoutour(json, data) {
+    console.log('toSigoutour json', json)
+    console.log('toSigoutour data', data)
+  }
+
 }
 
 

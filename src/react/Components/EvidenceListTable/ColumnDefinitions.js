@@ -1,9 +1,10 @@
 import { Button } from '@material-ui/core'
 import React from 'react'
 import { GridColDef } from '@material-ui/data-grid'
+import { electronActions, sightTourActions } from '../../Context'
 
 const ColumnDefinitions: GridColDef[] = [
-  { field: '', headerName: '', width: 150, renderCell: renderActionCell },
+  { field: '', headerName: '', width: 150, renderCell: renderDeleteBtnCell },
   { field: 'evidenceType', headerName: '憑證類型', width: 150, cellClassName: getCellClassName, editable: false },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceNumber', headerName: '發票號碼', width: 150, cellClassName: getCellClassName, editable: true },
@@ -36,13 +37,7 @@ function renderImageCell() {
   )
 }
 
-function renderActionCell(param) {
-  return <Button variant='contained' color='primary' onClick={(e) => handleDeleteRow(e, param.row)}>刪除</Button>
+function renderDeleteBtnCell(param) {
+  return <Button variant='contained' color='primary'>刪除</Button>
 }
-
-function handleDeleteRow(event, rowData) {
-  console.log('handleButtonClicked event', event)
-  console.log('handleButtonClicked event', rowData)
-}
-
 export default ColumnDefinitions

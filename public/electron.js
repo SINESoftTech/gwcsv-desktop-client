@@ -177,6 +177,21 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
 
+ipcMain.handle('evidence:deleteSigoutourData', (event, ticketId) => {
+  const fileList03 = getAllFileLists()['03']
+  console.log(fileList03)
+  const filterFileList = fileList03.filter(obj => {
+    const fileName = obj.filename
+    const id = fileName.split('.')[0].split('_')[3]
+    return id === ticketId
+  })
+  for (let i = 0; i < filterFileList.length; i++) {
+    const data = filterFileList[i]
+    fse.removeSync(data.fullPath)
+  }
+  return getAllFileLists()
+})
+
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)

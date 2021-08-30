@@ -5,6 +5,16 @@ const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
+export async function deleteSigoutourData(ticketId) {
+  try {
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:deleteSigoutourData', ticketId)
+    }
+  } catch (error) {
+    console.log('deleteSigoutourData', error)
+  }
+}
+
 export async function getJsonRawData(data, clientTaxId) {
   try {
     const filterJsonDataFilePathList = data.filter(d => {
