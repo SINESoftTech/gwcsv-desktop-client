@@ -66,10 +66,14 @@ function renderDeductionType(param) {
         name='deductionType'
         value={deductionType}
       >
-        <MenuItem value={'PURCHASE_AND_FEE'}>1 進項可扣抵之進貨及費用</MenuItem>
-        <MenuItem value={'FIXED_ASSETS'}>2 進項可扣抵之固定資產</MenuItem>
-        <MenuItem value={'NON_PURCHASE_AND_FEE'}>3 進項不可扣抵之進貨及費用</MenuItem>
-        <MenuItem value={'NON_FIXED_ASSETS'}>4 進項不可扣抵之固定資產</MenuItem>
+        {/*<MenuItem value={'PURCHASE_AND_FEE'}>1 進項可扣抵之進貨及費用</MenuItem>*/}
+        {/*<MenuItem value={'FIXED_ASSETS'}>2 進項可扣抵之固定資產</MenuItem>*/}
+        {/*<MenuItem value={'NON_PURCHASE_AND_FEE'}>3 進項不可扣抵之進貨及費用</MenuItem>*/}
+        {/*<MenuItem value={'NON_FIXED_ASSETS'}>4 進項不可扣抵之固定資產</MenuItem>*/}
+        <MenuItem value={'1'}>1 進項可扣抵之進貨及費用</MenuItem>
+        <MenuItem value={'2'}>2 進項可扣抵之固定資產</MenuItem>
+        <MenuItem value={'3'}>3 進項不可扣抵之進貨及費用</MenuItem>
+        <MenuItem value={'4'}>4 進項不可扣抵之固定資產</MenuItem>
       </Select>
     </FormControl>
   )

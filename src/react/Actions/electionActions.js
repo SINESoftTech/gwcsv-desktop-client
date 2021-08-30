@@ -5,10 +5,10 @@ const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-export async function updateSigoutourData(ticketId, period, json) {
+export async function updateSigoutourData(ticketId,deductionType, period, json) {
   try {
     if (ipcRenderer) {
-      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId, period, json)
+      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId,deductionType, period, json)
     }
   } catch (error) {
     console.log('updateSigoutourData', error)

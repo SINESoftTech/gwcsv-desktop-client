@@ -68,7 +68,7 @@ const IdentifiedEvidenceList = (props) => {
       return obj.data.ticket === editData.id
     })[0]
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
-    const result = await electronActions.updateSigoutourData(editData.id, editData.reportingPeriod, sigoutourJson)
+    const result = await electronActions.updateSigoutourData(editData.id,editData.deductionType, editData.reportingPeriod, sigoutourJson)
     setLocalFiles(result)
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }

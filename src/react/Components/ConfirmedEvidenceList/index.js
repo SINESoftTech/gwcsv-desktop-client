@@ -28,7 +28,8 @@ const ConfirmedEvidenceList = (props) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
-      const parseResult = validSigoutourData(SigoutourMapper.toView(reportingPeriod, json.data))
+      const deductionType = json.filePath.split('_')[3]
+      const parseResult = validSigoutourData(SigoutourMapper.toView(deductionType,reportingPeriod, json.data))
       parseResult['id'] = idx + 1
       return parseResult
     })
