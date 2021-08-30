@@ -20,7 +20,6 @@ const EvidenceList = (props) => {
   const [pageNumber, setPageNumber] = useState(0)
   const [pageSize, setPageSize] = useState(10)
 
-
   const handleCellEditCommit = useCallback(
     ({ id, field, value }) => {
       const ticketId = id
@@ -30,6 +29,14 @@ const EvidenceList = (props) => {
     }, [dataRows])
 
   const handleCellClick = async (param, event) => {
+    console.log('handleCellClick', param)
+    if (event.target.name === 'taxType') {
+      //todo change
+      const taxType = event.target.value
+      //todo save change
+      param.row['taxType'] = taxType
+      props.handleEditRow(param.row)
+    }
     if (event.target.innerText === '刪除') {
       const ticketId = param.row.id
       const filePathList = await electronActions.deleteSigoutourData(ticketId)

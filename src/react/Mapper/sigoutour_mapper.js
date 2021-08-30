@@ -22,14 +22,17 @@ const SIGOUTOUR_FIELD_TYPE = {
 const TAX_TYPE = {
   '1': {
     'name': '應稅',
+    'number': 1,
     'value': 'TAXABLE'
   },
   '2': {
     'name': '零税',
+    'number': 2,
     'value': 'ZERO_TAX'
   },
   '3': {
     'name': '免稅',
+    'number': 3,
     'value': 'DUTY_FEE'
   },
   '9': {
@@ -150,7 +153,7 @@ class SigoutourMapperClass {
   toView(reportingPeriod, jsonData) {
     const json = parseData(jsonData)
     json['reportingPeriod'] = reportingPeriod
-    json['taxType'] = json['taxType'].name
+    json['taxType'] = json['taxType'].number
     json['evidenceType'] = json['evidenceType'].name
     return json
   }

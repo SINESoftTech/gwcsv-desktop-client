@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import { Button, FormControl, MenuItem, Select } from '@material-ui/core'
 import React from 'react'
 import { GridColDef } from '@material-ui/data-grid'
 
@@ -30,7 +30,14 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: 'evidenceDate', headerName: '憑證日期', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'buyerTaxId', headerName: '買方統編', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'sellerTaxId', headerName: '賣方統編', width: 150, cellClassName: getCellClassName, editable: true },
-  { field: 'taxType', headerName: '課稅別', width: 150, cellClassName: getCellClassName, editable: true },
+  {
+    field: 'taxType',
+    headerName: '課稅別',
+    width: 150,
+    cellClassName: getCellClassName,
+    editable: true,
+    renderCell: renderTaxType
+  },
   { field: 'taxableSalesValue', headerName: '應稅銷售額', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'dutyFreeSalesValue', headerName: '免稅銷售額', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'zeroTaxSalesValue', headerName: '零税銷售額', width: 150, cellClassName: getCellClassName, editable: true },
@@ -40,6 +47,24 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: 'totalPayAmount', headerName: '付款總金額', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'cellHighlight', hide: true }
 ]
+
+function renderTaxType(param) {
+  const taxType = param.row.taxType === undefined || param.row.taxType === '' ? '' : param.row.taxType
+  return (
+    <FormControl>
+      <Select
+        labelId='demo-simple-select-label'
+        id='demo-simple-select'
+        name='taxType'
+        value={taxType}
+      >
+        <MenuItem value={1}>應税</MenuItem>
+        <MenuItem value={2}>零税</MenuItem>
+        <MenuItem value={3}>免稅</MenuItem>
+      </Select>
+    </FormControl>
+  )
+}
 
 function getCellClassName(cellValues) {
   if (cellValues.row.cellHighlight && cellValues.row.cellHighlight.indexOf(cellValues.field) > -1) {
