@@ -5,6 +5,7 @@ import isElectron from 'is-electron'
 import { getJsonRawData } from '../../Actions/electionActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
+import { electronActions } from '../../Context'
 
 
 const electron = isElectron() ? window.electron : null
@@ -19,7 +20,7 @@ const byTicketId = R.groupBy((fileObj) => {
 const IdentifiedEvidenceList = (props) => {
 
   const [rowData, setRowData] = useState([])
-  const [imageUrl, setImageUrl] = useState('')
+  // const [imageUrl, setImageUrl] = useState('')
 
   const [localFiles, setLocalFiles] = useState(props.data)
 
@@ -35,8 +36,8 @@ const IdentifiedEvidenceList = (props) => {
   }
 
   useEffect(() => {
-    initDataRows(props.data['03'], props.declareProperties.clientTaxId)
     setLocalFiles(props.data)
+    initDataRows(localFiles['03'], props.declareProperties.clientTaxId)
   }, [props.data, props.declareProperties.clientTaxId])
 
 
@@ -58,16 +59,17 @@ const IdentifiedEvidenceList = (props) => {
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
   const handleEditRow = async (editData) => {
-    console.log('handleEditRow data', props.data)
-    console.log('handleEditRow id', props.declareProperties.clientTaxId)
-    const jsonDataList = await getJsonRawData(props.data['03'], props.declareProperties.clientTaxId)
+    console.log('handleEditRow editData', editData)
+    console.log('handleEditRow localFiles', localFiles['03'])
+    const jsonDataList = await getJsonRawData(localFiles['03'], props.declareProperties.clientTaxId)
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
-    SigoutourMapper.toSigoutour(json.data, editData)
-    //TODO
+    const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
+    const result = await electronActions.updateSigoutourData(editData.id, editData.reportingPeriod, sigoutourJson)
+    setLocalFiles(result)
+    initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
-
 
 
   return (

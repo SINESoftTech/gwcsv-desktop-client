@@ -89,7 +89,6 @@ const validTaxType = {
 }
 
 const validTaxMoney = (json) => {
-  console.log('validTaxMoney', json)
   let validResult = validTaxType[json['taxType']](json)
   const withoutTotalAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
   const totalAmount = withoutTotalAmount + json['businessTaxValue']

@@ -161,6 +161,7 @@ function getFileContent(fullPath) {
 
 }
 
+
 ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
   return getFileContent(fullPath)
 })
@@ -176,6 +177,40 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   // return '1'
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
+
+ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, period, json) => {
+  console.log('updateSigoutourData', ticketId)
+  console.log('updateSigoutourData', period)
+  console.log('updateSigoutourData', json)
+  //json remove old and save
+  const fileList03 = getAllFileLists()['03']
+  const filterFileList = fileList03.filter(obj => {
+    const fileName = obj.filename
+    const id = fileName.split('.')[0].split('_')[3]
+    return id === ticketId
+  })
+  const targetFolderPath = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
+  filterFileList.map(file => {
+    const fileName = file.filename
+    const splitFileName = fileName.split('_')
+    splitFileName[2] = period
+    const targetFileName = splitFileName.join('_')
+    const targetFilePath = path.join(targetFolderPath, targetFileName)
+    if (getFileExt(fileName) === 'json') {
+      fse.removeSync(file.fullPath)
+      fse.writeJSONSync(targetFilePath, json)
+    } else {
+      if (targetFileName !== fileName) {
+        fse.copySync(file.fullPath, targetFilePath, { overwrite: true })
+        fse.removeSync(file.fullPath)
+      }
+    }
+  })
+  const result = getAllFileLists()
+  console.log(result)
+  return getAllFileLists()
+})
+
 
 ipcMain.handle('evidence:deleteSigoutourData', (event, ticketId) => {
   const fileList03 = getAllFileLists()['03']
@@ -296,15 +331,15 @@ ipcMain.handle('evidence:uploaded', (event, payload) => {
   })
   return getAllFileLists()
 })
-
+const getFileExt = (fileName) => {
+  if (fileName.endsWith('jpg') || fileName.endsWith('png')) {
+    return 'image'
+  }
+  return 'json'
+}
 
 ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
-  const getFileExt = (fileName) => {
-    if (fileName.endsWith('jpg') || fileName.endsWith('png')) {
-      return 'image'
-    }
-    return 'json'
-  }
+
   return fullPathList.map(d => {
     const key = R.keys(d)[0]
     let json = {}

@@ -165,12 +165,8 @@ class SigoutourMapperClass {
   }
 
   toSigoutour(sigoutourJson, data) {
-    console.log('toSigoutour json', JSON.stringify(sigoutourJson))
-    console.log('toSigoutour data', data)
-    const reverseSigoutourFieldType = reverseIndex(SIGOUTOUR_FIELD_TYPE)
     const jsonDataBody = sigoutourJson['pageList'][0]['photoList'][0]['result']
     const evidenceType = SIGOUTOUR_EVIDENCE_TYPE[sigoutourJson['pageList'][0]['photoList'][0]['type']].value
-    console.log('toSigoutour', evidenceType)
     const isBillType = evidenceType === 'TELECOM_BILL' || evidenceType === 'WATER_BILL' || evidenceType === 'ELECTRIC_BILL'
     jsonDataBody.forEach(obj => {
       if (isBillType && obj['key'] === 'KEY_COMN') {
@@ -178,23 +174,21 @@ class SigoutourMapperClass {
       } else {
         const key = SIGOUTOUR_FIELD_TYPE[obj['key']]
         const value = data[key]
-        //todo type and evidence
         obj['text'] = value
       }
     })
-    console.log('toSigoutour data', sigoutourJson)
-    console.log('toSigoutour data', jsonDataBody)
+    return sigoutourJson
   }
 
 }
 
-const reverseIndex = (obj) => {
-  const ret = {}
-  Object.keys(obj).forEach(key => {
-    ret[obj[key]] = key
-  })
-  return ret
-}
+// const reverseIndex = (obj) => {
+//   const ret = {}
+//   Object.keys(obj).forEach(key => {
+//     ret[obj[key]] = key
+//   })
+//   return ret
+// }
 
 
 const SigoutourMapper = new SigoutourMapperClass()
