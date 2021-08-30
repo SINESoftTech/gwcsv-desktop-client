@@ -6,6 +6,8 @@ import { getJsonRawData, getRawDataWithImage } from '../../Actions/electionActio
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
+import { ConfirmedColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
+
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -70,7 +72,7 @@ const ConfirmedEvidenceList = (props) => {
   return (
     <div>
       <Button variant='contained' onClick={handleUpload}>上傳</Button>
-      <EvidenceList data={rowData} checkboxSelection={false}></EvidenceList>
+      <EvidenceList data={rowData} checkboxSelection={false} columns={ConfirmedColumnDefinitions}></EvidenceList>
     </div>
   )
 }

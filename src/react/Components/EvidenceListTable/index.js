@@ -4,8 +4,6 @@ import ColumnDefinitions from './ColumnDefinitions'
 import { Button } from '@material-ui/core'
 import { electronActions } from '../../Context'
 
-const columns = ColumnDefinitions
-
 
 const getRowClassName = (params) => {
   if (params.row.rowStatus === 'error') {
@@ -45,7 +43,7 @@ const EvidenceList = (props) => {
   return (
     <div style={{ height: 650, width: '100%' }}>
       <DataGrid rows={dataRows}
-                columns={columns}
+                columns={props.columns}
                 page={pageNumber}
                 pageSize={pageSize}
                 onPageChange={e => setPageNumber(e.page)}

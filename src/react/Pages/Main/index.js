@@ -166,7 +166,6 @@ const Main = (props) => {
   const handleResultAllConfirmed = async (filesByTicketId) => {
     try {
       const result = await identifyResultConfirmed(dispatch, filesByTicketId)
-
       return result
     } catch (e) {
       throw new Error(e)

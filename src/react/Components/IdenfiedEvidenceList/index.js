@@ -6,6 +6,7 @@ import { getJsonRawData } from '../../Actions/electionActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
 import { electronActions } from '../../Context'
+import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
 
 
 const electron = isElectron() ? window.electron : null
@@ -77,7 +78,7 @@ const IdentifiedEvidenceList = (props) => {
       <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
       <EvidenceList data={rowData} checkboxSelection={true} handleSelection={handleSelection}
-                    handleEditRow={handleEditRow} />
+                    handleEditRow={handleEditRow} columns={IdenfiedEvidenceColumnDefinitions} />
     </div>
   )
 }
