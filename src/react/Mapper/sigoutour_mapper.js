@@ -150,11 +150,12 @@ const parseData = (jsonData) => {
 
 class SigoutourMapperClass {
 
-  toView(reportingPeriod, jsonData) {
+  toView(deductionType, reportingPeriod, jsonData) {
     const json = parseData(jsonData)
     json['reportingPeriod'] = reportingPeriod
     json['taxType'] = json['taxType'].number
     json['evidenceType'] = json['evidenceType'].name
+    json['deductionType'] = deductionType
     return json
   }
 
