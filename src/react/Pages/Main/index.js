@@ -116,7 +116,6 @@ const Main = (props) => {
         'accountingfirmTaxId': accountingfirmTaxId,
         'businessEntityTaxId': businessEntityTaxId,
         'evidenceType': declareProperties.evidenceType,
-        'reportingPeriod': declareProperties.reportingPeriod
       }
     })
     console.log('handleSendImageToIdentify()', sendToIdentifyData)

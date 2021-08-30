@@ -35,13 +35,13 @@ export async function sendToIdentify(identifyData) {
       formData.append('token', token)
       const result = await signtTourAxios.post(apiPath, formData, config)
       if (result.data['result'] === 0) {
+        console.log('sendToIdentify', data)
         resultList.push({
           'result': true,
           'businessEntityTaxId': data.businessEntityTaxId,
           'ticketId': result.data['ticket'],
           'sourceFullPath': data.sourceFullPath,
           'sourceFileName': data.sourceFileName,
-          'reportingPeriod': data.reportingPeriod
         })
       } else {
         resultList.push({
@@ -49,7 +49,6 @@ export async function sendToIdentify(identifyData) {
           'businessEntityTaxId': data.businessEntityTaxId,
           'sourceFullPath': data.sourceFullPath,
           'sourceFileName': data.sourceFileName,
-          'reportingPeriod': data.reportingPeriod
         })
       }
     } catch (error) {
@@ -63,7 +62,7 @@ export async function getIdentifyResult(fileObj) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
-    const ticketId = fileObj.filename.split('_')[4]
+    const ticketId = fileObj.filename.split('_')[4].split(".")[0]
     const formData = new FormData()
     formData.append('token', token)
     formData.append('ticket', ticketId)
