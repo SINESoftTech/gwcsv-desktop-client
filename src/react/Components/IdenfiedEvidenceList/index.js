@@ -57,11 +57,16 @@ const IdentifiedEvidenceList = (props) => {
 
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
+  const handleEditRow = (editData) => {
+    console.log('handleEditRow', editData)
+  }
+
   return (
     <div>
       <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
-      <EvidenceList data={rowData} checkboxSelection={true} handleSelection={handleSelection} />
+      <EvidenceList data={rowData} checkboxSelection={true} handleSelection={handleSelection}
+                    handleEditRow={handleEditRow} />
     </div>
   )
 }

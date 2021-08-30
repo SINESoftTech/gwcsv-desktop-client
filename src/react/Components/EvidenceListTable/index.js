@@ -11,32 +11,6 @@ const getRowClassName = (params) => {
     return 'highlight'
   }
 }
-
-
-const handleRowClick = (param, event) => {
-  console.log('Row:')
-  console.log(param)
-  console.log(event)
-}
-const handleCellDoubleClicked = (param, event) => {
-  console.log('handleCellDoubleClicked param', param)
-  console.log('handleCellDoubleClicked event', event)
-}
-
-const handleEditRowModeChanged = (param, event) => {
-  console.log('handleEditRowModeChanged param', param)
-  console.log('handleEditRowModeChanged event', event)
-}
-const handleRowLeft = (param, event) => {
-  console.log('handleRowLeft param', param)
-  console.log('handleRowLeft event', event)
-}
-
-const handleRowOut = (param, event) => {
-  console.log('handleRowOut param', param)
-  console.log('handleRowOut event', event)
-}
-
 const EvidenceList = (props) => {
 
   useEffect(() => {
@@ -47,10 +21,14 @@ const EvidenceList = (props) => {
   const [pageNumber, setPageNumber] = useState(0)
   const [pageSize, setPageSize] = useState(10)
 
-  //TODO
   const handleCellEditCommit = useCallback(
     ({ id, field, value }) => {
-      console.log('handleCellEditCommit', id, field, value)
+      const ticketId = id
+      const rowData = dataRows.filter(d => d.id === ticketId)[0]
+      // console.log('handleCellEditCommit()', rowData)
+      // console.log('handleCellEditCommit()', id, field, value)
+      rowData[field] = value
+      props.handleEditRow(rowData)
     }, [dataRows])
 
   return (
