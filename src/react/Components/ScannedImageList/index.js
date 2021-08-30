@@ -19,7 +19,7 @@ const getRowData = async (fileObjects, username, clientTaxId) => {
       let imageFileBlob = await getImageFileBlob(item.fullPath)
       let rowItem = {
         id: idx + 1,
-        fileName: item.filename.split('_')[2],
+        fileName: item.filename,
         fileBlob: imageFileBlob,
         imageUrl: URL.createObjectURL(imageFileBlob),
         fullPath: item.fullPath
@@ -42,8 +42,8 @@ const getImageFileBlob = async (fullPath) => {
 const isScanEnable = (taxIdSelected) => {
   return !!taxIdSelected
 }
-const isRequiredEnable = (data, reportingPeriod, evidenceType) => {
-  return (reportingPeriod !== '' && evidenceType !== '') && data.length > 0
+const isRequiredEnable = (data, evidenceType) => {
+  return (evidenceType !== '') && data.length > 0
 }
 
 const ScannedImageList = (props) => {
@@ -79,7 +79,7 @@ const ScannedImageList = (props) => {
       <Button variant='contained' onClick={(e) => {
         props.onSendToIdentifyClick(e, dataRows)
       }}
-              disabled={!isRequiredEnable(dataRows, props.declareProperties.reportingPeriod, props.declareProperties.evidenceType)}>送出辨識</Button>
+              disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
           {dataRows.map((item) => (

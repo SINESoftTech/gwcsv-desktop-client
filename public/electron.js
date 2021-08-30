@@ -230,7 +230,7 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, ticketId) => {
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
-  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_1' + +'_' + Date.now() + '.' + sourceFileExt
+  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_1' + '_' + Date.now() + '.' + sourceFileExt
   fse.copySync(fullPath, targetFilePath)
   return getAllFileLists(fullPath)
 })
@@ -264,9 +264,10 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
   const identifyResult = sentIdentifyResult['result']
   for (let i = 0; i < identifyResult.length; i++) {
     const data = identifyResult[i]
+    console.log(data)
     if (data['result']) {
       const fileExt = data['sourceFileName'].split('.')[1]
-      const targetFileName = `${username}_${data['businessEntityTaxId']}_${data['reportingPeriod']}_${data['ticketId']}.${fileExt}`
+      const targetFileName = `${username}_${data['businessEntityTaxId']}_${data['reportingPeriod']}_1_${data['ticketId']}.${fileExt}`
       const targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
     }
