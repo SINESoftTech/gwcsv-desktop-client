@@ -28,6 +28,14 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'declarationId', headerName: '報單/文件號碼', width: 200, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceDate', headerName: '憑證日期', width: 150, cellClassName: getCellClassName, editable: true },
+  {
+    field: 'deductionType',
+    headerName: '扣抵代號',
+    width: 150,
+    cellClassName: getCellClassName,
+    editable: true,
+    renderCell: renderDeductionType
+  },
   { field: 'buyerTaxId', headerName: '買方統編', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'sellerTaxId', headerName: '賣方統編', width: 150, cellClassName: getCellClassName, editable: true },
   {
@@ -48,6 +56,25 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: 'cellHighlight', hide: true }
 ]
 
+function renderDeductionType(param) {
+  const deductionType = param.row.deductionType === undefined || param.row.deductionType === '' ? 'PURCHASE_AND_FEE' : param.row.deductionType
+  return (
+    <FormControl>
+      <Select
+        labelId='demo-simple-select-label'
+        id='demo-simple-select'
+        name='deductionType'
+        value={deductionType}
+      >
+        <MenuItem value={'PURCHASE_AND_FEE'}>1 進項可扣抵之進貨及費用</MenuItem>
+        <MenuItem value={'FIXED_ASSETS'}>2 進項可扣抵之固定資產</MenuItem>
+        <MenuItem value={'NON_PURCHASE_AND_FEE'}>3 進項不可扣抵之進貨及費用</MenuItem>
+        <MenuItem value={'NON_FIXED_ASSETS'}>4 進項不可扣抵之固定資產</MenuItem>
+      </Select>
+    </FormControl>
+  )
+}
+
 function renderTaxType(param) {
   const taxType = param.row.taxType === undefined || param.row.taxType === '' ? '' : param.row.taxType
   return (
@@ -58,9 +85,9 @@ function renderTaxType(param) {
         name='taxType'
         value={taxType}
       >
-        <MenuItem value={1}>應税</MenuItem>
-        <MenuItem value={2}>零税</MenuItem>
-        <MenuItem value={3}>免稅</MenuItem>
+        <MenuItem value={1}>應</MenuItem>
+        <MenuItem value={2}>零</MenuItem>
+        <MenuItem value={3}>免</MenuItem>
       </Select>
     </FormControl>
   )

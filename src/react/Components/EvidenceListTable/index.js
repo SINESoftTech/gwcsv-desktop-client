@@ -29,13 +29,13 @@ const EvidenceList = (props) => {
     }, [dataRows])
 
   const handleCellClick = async (param, event) => {
-    console.log('handleCellClick', param)
     if (event.target.name === 'taxType') {
-      //todo change
-      const taxType = event.target.value
-      //todo save change
-      param.row['taxType'] = taxType
+      param.row['taxType'] = event.target.value
       props.handleEditRow(param.row)
+    }
+    if (event.target.name === 'deductionType') {
+      param.row['deductionType'] = event.target.value
+      // props.handleEditRow(param.row)
     }
     if (event.target.innerText === '刪除') {
       const ticketId = param.row.id
