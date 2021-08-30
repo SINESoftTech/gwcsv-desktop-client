@@ -37,13 +37,11 @@ const IdentifiedEvidenceList = (props) => {
 
   useEffect(() => {
     setLocalFiles(props.data)
-    initDataRows(localFiles['03'], props.declareProperties.clientTaxId)
+    initDataRows(props.data['03'], props.declareProperties.clientTaxId)
   }, [props.data, props.declareProperties.clientTaxId])
 
 
   const handleResultAllConfirmed = async () => {
-    console.log('handleResultAllConfirmed', selectionModel)
-    console.log('handleResultAllConfirmed', localFiles['03'])
     const filterData = localFiles['03'].filter((obj) => {
       const ticketId = obj.filename.split('.')[0].split('_')[3]
       return selectionModel.includes(ticketId)
@@ -51,6 +49,8 @@ const IdentifiedEvidenceList = (props) => {
     const filesByTicketId = byTicketId(filterData)
     console.log('handleResultAllConfirmed', filesByTicketId)
     const result = await props.onResultAllConfirmed(filesByTicketId)
+    console.log('handleResultAllConfirmed', result)
+    setLocalFiles(result)
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
 
