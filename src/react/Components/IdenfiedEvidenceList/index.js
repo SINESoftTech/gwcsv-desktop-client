@@ -64,7 +64,7 @@ const IdentifiedEvidenceList = (props) => {
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
-    SigoutourMapper.toSigoutour(json, editData)
+    SigoutourMapper.toSigoutour(json.data, editData)
     //TODO
   }
 
