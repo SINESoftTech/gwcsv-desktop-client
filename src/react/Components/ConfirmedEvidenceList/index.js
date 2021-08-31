@@ -28,7 +28,8 @@ const ConfirmedEvidenceList = (props) => {
     const parseJsonDataList = jsonDataList.map(json => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
-      const parseResult = SigoutourMapper.toView(deductionType, reportingPeriod, json.data)
+      const ticketId = json.filePath.split('_')[4]
+      const parseResult = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data)
       parseResult['id'] = json.data['ticket']
       return parseResult
     })

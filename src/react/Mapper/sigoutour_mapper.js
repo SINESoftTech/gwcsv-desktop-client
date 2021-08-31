@@ -126,6 +126,7 @@ const isEmptyOrUndefined = (s) => {
 
 const parseData = (jsonData) => {
   let json = {}
+  console.log('parseData', jsonData)
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
 
   json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']]
@@ -159,7 +160,6 @@ const parseData = (jsonData) => {
 class SigoutourMapperClass {
 
   toView(ticketId, deductionType, reportingPeriod, jsonData) {
-    console.log('toView', jsonData)
     const json = parseData(jsonData)
     json['reportingPeriod'] = reportingPeriod
     json['taxType'] = json['taxType'].number
