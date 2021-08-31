@@ -188,8 +188,8 @@ const Main = (props) => {
     }
   }
 
-  const handleDeleteEvidence = (folder, ticketId) => {
-    electronActions.deleteSigoutourData(dispatch, ticketId)
+  const handleDeleteEvidence = (eventName, ticketId) => {
+    electronActions.deleteSigoutourData(dispatch, eventName, ticketId)
   }
 
   const renderClientSelect = () => {
@@ -300,7 +300,8 @@ const Main = (props) => {
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
                                          user={appState.auth.user}
                                          onGwUploaded={handleGwUploaded}
-                                         declareProperties={declareProperties}></ConfirmedEvidenceList>
+                                         declareProperties={declareProperties}
+                                         OnDeleteEvdience={handleDeleteEvidence}></ConfirmedEvidenceList>
                 </TabPanel>
               </Paper>
             </Grid>

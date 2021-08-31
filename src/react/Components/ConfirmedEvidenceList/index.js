@@ -29,8 +29,8 @@ const ConfirmedEvidenceList = (props) => {
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
-      const parseResult = validSigoutourData(SigoutourMapper.toView(deductionType,reportingPeriod, json.data))
-      parseResult['id'] = idx + 1
+      const parseResult = validSigoutourData(SigoutourMapper.toView(deductionType, reportingPeriod, json.data))
+      parseResult['id'] = json.data['ticket']
       return parseResult
     })
     setRowData(parseJsonDataList)
@@ -70,10 +70,17 @@ const ConfirmedEvidenceList = (props) => {
     props.onGwUploaded(uploadResult)
   }
 
+  const handleDelete = async (ticket) => {
+    await props.OnDeleteEvdience('evidenceSaved', ticket)
+  }
+
   return (
     <div>
       <Button variant='contained' onClick={handleUpload}>上傳</Button>
-      <EvidenceList data={rowData} checkboxSelection={false} columns={ConfirmedColumnDefinitions}></EvidenceList>
+      <EvidenceList data={rowData}
+                    checkboxSelection={false}
+                    columns={ConfirmedColumnDefinitions}
+                    handleDelete={handleDelete}></EvidenceList>
     </div>
   )
 }
