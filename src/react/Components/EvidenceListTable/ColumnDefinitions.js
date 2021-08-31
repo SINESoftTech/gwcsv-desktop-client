@@ -3,7 +3,8 @@ import React from 'react'
 import { GridColDef } from '@material-ui/data-grid'
 
 export const ConfirmedColumnDefinitions: GridColDef[] = [
-  { field: '', headerName: '', width: 150, renderCell: renderDeleteBtnCell },
+  { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
+  { field: 'sn', headerName: '序號', width: 120, editable: false },
   { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false },
   { field: 'evidenceType', headerName: '憑證類型', width: 150, editable: false },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, editable: false },
@@ -23,7 +24,8 @@ export const ConfirmedColumnDefinitions: GridColDef[] = [
 ]
 
 export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
-  { field: '', headerName: '', width: 150, renderCell: renderDeleteBtnCell },
+  { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
+  { field: 'sn', headerName: '序號', width: 120, editable: false },
   { field: 'evidenceType', headerName: '憑證類型', width: 150, cellClassName: getCellClassName, editable: false },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, cellClassName: getCellClassName, editable: true },

@@ -27,11 +27,12 @@ const IdentifiedEvidenceList = (props) => {
 
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
-    const parseJsonDataList = jsonDataList.map((json) => {
+    const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
       const ticketId = json.filePath.split('_')[4]
       const parseResult = validSigoutourData(SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data))
+      parseResult['sn'] = idx + 1
       parseResult['id'] = json.data['ticket']
       return parseResult
     })
