@@ -31,6 +31,9 @@ const validSigoutourData = (json) => {
     validResult.push('evidenceDate')
   }
   json['cellHighlight'] = [...new Set(validResult)]
+  json['cellHighlight'] = json['cellHighlight'].filter(value => {
+    return value !== ''
+  })
   return json
 }
 
