@@ -41,6 +41,14 @@ const TAX_TYPE = {
   }
 }
 
+
+const DEDUCTION_TYPE = {
+  '1': 'PURCHASE_AND_FEE',
+  '2': 'FIXED_ASSETS',
+  '3': 'NON_PURCHASE_AND_FEE',
+  '4': 'NON_FIXED_ASSETS'
+}
+
 const SIGOUTOUR_EVIDENCE_TYPE = {
   'A1001': {
     'name': '三聯式統一發票',
@@ -144,26 +152,31 @@ const parseData = (jsonData) => {
   if (json['evidenceNumber'] === undefined) {
     json['evidenceNumber'] = json['carrierNumber']
   }
-
   return json
 }
+
 
 class SigoutourMapperClass {
 
   toView(deductionType, reportingPeriod, jsonData) {
+    console.log('toView', jsonData)
     const json = parseData(jsonData)
     json['reportingPeriod'] = reportingPeriod
     json['taxType'] = json['taxType'].number
     json['evidenceType'] = json['evidenceType'].name
     json['deductionType'] = deductionType
+    json['errorMsg'] = jsonData['errorMsg']
     return json
   }
 
-  toGw(jsonData) {
+  toGw(ticketId, reportingPeriod, deductionType, jsonData) {
     const json = parseData(jsonData)
+    json['id'] = ticketId
     json['evidenceType'] = json['evidenceType'].value
     json['taxType'] = json['taxType'].value
     const evidenceDate = json['evidenceDate']
+    json['reportingPeriod'] = reportingPeriod
+    json['deductionType'] = DEDUCTION_TYPE[deductionType]
     json['evidenceDate'] = new Date(evidenceDate.substring(0, 4) + '-' + evidenceDate.substring(4, 6) + '-' + evidenceDate.substring(6, 8)).getTime()
     return json
   }

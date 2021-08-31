@@ -161,8 +161,6 @@ const Main = (props) => {
     electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
   }
 
-  //endregion
-
   const handleResultAllConfirmed = async (filesByTicketId) => {
     try {
       const result = await identifyResultConfirmed(dispatch, filesByTicketId)

@@ -39,40 +39,40 @@ export async function logout(dispatch) {
 }
 
 const uploadToGwStrategy = {
-  'TRIPLE_GUI': async function(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declareProperties)
+  'TRIPLE_GUI': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'DUPLICATE_CASH_REGISTER_GUI': async function(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declareProperties)
+  'DUPLICATE_CASH_REGISTER_GUI': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'TRIPLE_CASH_REGISTER_GUI': async function(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declareProperties)
+  'TRIPLE_CASH_REGISTER_GUI': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'EGUI': async function(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declareProperties)
+  'EGUI': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadGUI(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'ELECTRIC_BILL': async function(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token, declareProperties)
+  'ELECTRIC_BILL': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'WATER_BILL': async function(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token, declareProperties)
+  'WATER_BILL': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'TELECOM_BILL': async function(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token, declareProperties)
+  'TELECOM_BILL': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadBill(payload, imageBlob, accountingFirmTaxId, token)
   },
-  'CUSTOMS_TAXABLE_EVIDENCE': async function(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
-    return await uploadCustoms(payload, imageBlob, accountingFirmTaxId, token, declareProperties)
+  'CUSTOMS_TAXABLE_EVIDENCE': async function(payload, imageBlob, accountingFirmTaxId, token) {
+    return await uploadCustoms(payload, imageBlob, accountingFirmTaxId, token)
   }
 }
 
-async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
+async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   console.log('uploadGUI', payload)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
       'evidenceType': payload.evidenceType,
-      'reportingPeriod': declareProperties.reportingPeriod,
-      'deductionType': declareProperties.deductionType,
+      'reportingPeriod': payload.reportingPeriod,
+      'deductionType': payload.deductionType,
       'isDeclareBusinessTax': true,
       'buyerTaxId': payload.buyerTaxId,
       'sellerTaxId': payload.sellerTaxId,
@@ -102,21 +102,32 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token, declare
       }
     }
     const result = await gwAxios.post(url, bodyFormData, config)
-    return true
+    return {
+      'status': true,
+      'errorMsg': ''
+    }
   } catch (error) {
-    console.log('uploadGUI', error)
-    return false
+    let errorMsg = ''
+    if (error.response === undefined) {
+      errorMsg = '網路錯誤'
+    } else {
+      errorMsg = error.response.data.errorMsg
+    }
+    return {
+      'status': false,
+      'errorMsg': errorMsg
+    }
   }
 }
 
-async function uploadBill(payload, imageBlob, accountingFirmTaxId, token, declareProperties) {
+async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
   console.log('uploadBill', payload)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
       'evidenceType': payload.evidenceType,
-      'reportingPeriod': declareProperties.reportingPeriod,
-      'deductionType': declareProperties.deductionType,
+      'reportingPeriod': payload.reportingPeriod,
+      'deductionType': payload.deductionType,
       'isDeclareBusinessTax': true,
       'buyerTaxId': payload.buyerTaxId,
       'sellerTaxId': payload.sellerTaxId,
@@ -148,15 +159,26 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token, declar
       }
     }
     const result = await gwAxios.post(url, bodyFormData, config)
-    return true
+    return {
+      'status': true,
+      'errorMsg': ''
+    }
   } catch (error) {
-    //todo error handle
-    return false
+    let errorMsg = ''
+    if (error.response === undefined) {
+      errorMsg = '網路錯誤'
+    } else {
+      errorMsg = error.response.data.errorMsg
+    }
+    return {
+      'status': false,
+      'errorMsg': errorMsg
+    }
   }
 }
 
 //TODO
-async function uploadCustoms(payload, accountingFirmTaxId, token, declareProperties) {
+async function uploadCustoms(payload, accountingFirmTaxId, token) {
   try {
 
   } catch (error) {
@@ -164,21 +186,24 @@ async function uploadCustoms(payload, accountingFirmTaxId, token, declarePropert
   }
 }
 
-export async function uploadToGw(payload, accountingFirmTaxId, token, declareProperties) {
+export async function uploadToGw(payload, accountingFirmTaxId, token) {
   const result = []
   for (let i = 0; i < payload.length; i++) {
     const data = payload[i]
-
-    const uploadResult = await uploadToGwStrategy[SIGOUTOUR_EVIDENCE_TYPE[declareProperties.evidenceType].value](data['json'], data['image'], accountingFirmTaxId, token, declareProperties)
-    if (uploadResult) {
+    const uploadResult = await uploadToGwStrategy[data['json']['evidenceType']](data['json'], data['image'], accountingFirmTaxId, token)
+    if (uploadResult.status) {
       result.push({
         'status': true,
+        'json': data['json'],
+        'errorMsg': '',
         'imageFullPath': data['imageFullPath'],
         'jsonFullPath': data['jsonFullPath']
       })
     } else {
+      data['json']['errorMsg'] = uploadResult.errorMsg
       result.push({
         'status': false,
+        'json': data['json'],
         'imageFullPath': data['imageFullPath'],
         'jsonFullPath': data['jsonFullPath']
       })

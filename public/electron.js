@@ -328,6 +328,10 @@ ipcMain.handle('evidence:uploaded', (event, payload) => {
       const targetJsonPath = targetFolder + '/' + jsonPath
       fse.moveSync(data['imageFullPath'], targetImagePath)
       fse.moveSync(data['jsonFullPath'], targetJsonPath)
+    } else {
+      const json = fse.readJSONSync(data['jsonFullPath'])
+      json['errorMsg'] = data['json']['errorMsg']
+      fse.writeJSONSync(data['jsonFullPath'], json)
     }
   })
   return getAllFileLists()

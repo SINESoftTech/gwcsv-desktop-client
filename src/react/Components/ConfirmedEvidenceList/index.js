@@ -5,7 +5,6 @@ import isElectron from 'is-electron'
 import { getJsonRawData, getRawDataWithImage } from '../../Actions/electionActions'
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
-import { validSigoutourData } from '../../Valid/valid'
 import { ConfirmedColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
 
 
@@ -26,10 +25,10 @@ const ConfirmedEvidenceList = (props) => {
 
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
-    const parseJsonDataList = jsonDataList.map((json, idx) => {
+    const parseJsonDataList = jsonDataList.map(json => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
-      const parseResult = validSigoutourData(SigoutourMapper.toView(deductionType, reportingPeriod, json.data))
+      const parseResult = SigoutourMapper.toView(deductionType, reportingPeriod, json.data)
       parseResult['id'] = json.data['ticket']
       return parseResult
     })
@@ -57,16 +56,18 @@ const ConfirmedEvidenceList = (props) => {
       }
     }
     const getRawDataResult = await getRawDataWithImage(filterResult)
-    console.log('getRawDataResult()', getRawDataResult)
     const parseRawDataResult = getRawDataResult.map(data => {
+      const reportingPeriod = data['imageFullPath'].split('_')[2]
+      const deductionType = data['imageFullPath'].split('_')[3]
+      const ticketId = data['imageFullPath'].split('_')[4].split('.')[0]
       return {
         'image': new File([data['image']], Date.now() + '.jpg'),
         'imageFullPath': data['imageFullPath'],
         'jsonFullPath': data['jsonFullPath'],
-        'json': SigoutourMapper.toGw(data['json'])
+        'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, data['json'])
       }
     })
-    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token, props.declareProperties)
+    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
     props.onGwUploaded(uploadResult)
   }
 
