@@ -68,18 +68,30 @@ const IdentifiedEvidenceList = (props) => {
       return obj.data.ticket === editData.id
     })[0]
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
-    const result = await electronActions.updateSigoutourData(editData.id,editData.deductionType, editData.reportingPeriod, sigoutourJson)
+    const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, sigoutourJson)
     setLocalFiles(result)
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
 
+  const handleDelete = async (ticket) => {
+    console.log('handleDelete', ticket)
+    const filePathList = await props.OnDeleteEvdience('03', ticket)
+    // console.log('handleDelete() filePathList', filePathList)
+    // const filterDeleteData = props.data.filter(d => {
+    //   return d.id !== ticket
+    // })
+    // console.log('handleDelete() filterDeleteData', filterDeleteData)
+    // setLocalFiles(filterDeleteData)
+    // initDataRows(result['03'], props.declareProperties.clientTaxId)
+  }
 
   return (
     <div>
       <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
       <EvidenceList data={rowData} checkboxSelection={true} handleSelection={handleSelection}
-                    handleEditRow={handleEditRow} columns={IdenfiedEvidenceColumnDefinitions} />
+                    handleEditRow={handleEditRow} columns={IdenfiedEvidenceColumnDefinitions}
+                    handleDelete={handleDelete} />
     </div>
   )
 }

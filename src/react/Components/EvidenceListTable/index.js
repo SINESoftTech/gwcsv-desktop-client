@@ -37,11 +37,7 @@ const EvidenceList = (props) => {
     }
     if (event.target.innerText === '刪除') {
       const ticketId = param.row.id
-      const filePathList = await electronActions.deleteSigoutourData(ticketId)
-      const filterDeleteData = props.data.filter(d => {
-        return d.id !== ticketId
-      })
-      setDataRows(filterDeleteData)
+      props.handleDelete(ticketId)
     }
   }
 

@@ -5,20 +5,22 @@ const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-export async function updateSigoutourData(ticketId,deductionType, period, json) {
+export async function updateSigoutourData(ticketId, deductionType, period, json) {
   try {
     if (ipcRenderer) {
-      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId,deductionType, period, json)
+      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId, deductionType, period, json)
     }
   } catch (error) {
     console.log('updateSigoutourData', error)
   }
 }
 
-export async function deleteSigoutourData(ticketId) {
+export async function deleteSigoutourData(dispatch, ticketId) {
   try {
     if (ipcRenderer) {
-      return await ipcRenderer.invoke('evidence:deleteSigoutourData', ticketId)
+      const result = await ipcRenderer.invoke('evidence:deleteSigoutourData', ticketId)
+      console.log(result)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
     console.log('deleteSigoutourData', error)

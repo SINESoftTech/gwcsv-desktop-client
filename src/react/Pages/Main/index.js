@@ -115,7 +115,7 @@ const Main = (props) => {
         'fileBlob': d.fileBlob,
         'accountingfirmTaxId': accountingfirmTaxId,
         'businessEntityTaxId': businessEntityTaxId,
-        'evidenceType': declareProperties.evidenceType,
+        'evidenceType': declareProperties.evidenceType
       }
     })
     console.log('handleSendImageToIdentify()', sendToIdentifyData)
@@ -186,6 +186,10 @@ const Main = (props) => {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`
     }
+  }
+
+  const handleDeleteEvidence = (folder, ticketId) => {
+    electronActions.deleteSigoutourData(dispatch, ticketId)
   }
 
   const renderClientSelect = () => {
@@ -289,7 +293,8 @@ const Main = (props) => {
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
                                           declareProperties={declareProperties}
                                           onGetIdentifyResult={handleGetIdentifyResult}
-                                          onResultAllConfirmed={handleResultAllConfirmed}></IdentifiedEvidenceList>
+                                          onResultAllConfirmed={handleResultAllConfirmed}
+                                          OnDeleteEvdience={handleDeleteEvidence}></IdentifiedEvidenceList>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
