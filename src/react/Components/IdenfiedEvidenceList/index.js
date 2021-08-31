@@ -45,13 +45,11 @@ const IdentifiedEvidenceList = (props) => {
 
   const handleResultAllConfirmed = async () => {
     const filterData = localFiles['03'].filter((obj) => {
-      const ticketId = obj.filename.split('.')[0].split('_')[3]
+      const ticketId = obj.filename.split('.')[0].split('_')[4]
       return selectionModel.includes(ticketId)
     })
     const filesByTicketId = byTicketId(filterData)
-    console.log('handleResultAllConfirmed', filesByTicketId)
     const result = await props.onResultAllConfirmed(filesByTicketId)
-    console.log('handleResultAllConfirmed', result)
     setLocalFiles(result)
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
@@ -74,15 +72,7 @@ const IdentifiedEvidenceList = (props) => {
   }
 
   const handleDelete = async (ticket) => {
-    console.log('handleDelete', ticket)
-    const filePathList = await props.OnDeleteEvdience('03', ticket)
-    // console.log('handleDelete() filePathList', filePathList)
-    // const filterDeleteData = props.data.filter(d => {
-    //   return d.id !== ticket
-    // })
-    // console.log('handleDelete() filterDeleteData', filterDeleteData)
-    // setLocalFiles(filterDeleteData)
-    // initDataRows(result['03'], props.declareProperties.clientTaxId)
+    await props.OnDeleteEvdience('identifyResultReceived', ticket)
   }
 
   return (

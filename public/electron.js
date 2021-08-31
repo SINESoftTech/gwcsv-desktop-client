@@ -178,7 +178,7 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
 
-ipcMain.handle('evidence:updateSigoutourData', (event, ticketId,deductionType, period, json) => {
+ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, period, json) => {
   //json remove old and save
   const fileList03 = getAllFileLists()['03']
   const filterFileList = fileList03.filter(obj => {
@@ -209,9 +209,13 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId,deductionType, p
 })
 
 
-ipcMain.handle('evidence:deleteSigoutourData', (event, ticketId) => {
-  const fileList03 = getAllFileLists()['03']
-  const filterFileList = fileList03.filter(obj => {
+ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
+  let folderId = '03'
+  if (eventName === 'evidenceSaved') {
+    folderId = '04'
+  }
+  const fileList = getAllFileLists()[folderId]
+  const filterFileList = fileList.filter(obj => {
     const fileName = obj.filename
     const id = fileName.split('.')[0].split('_')[4]
     return id === ticketId

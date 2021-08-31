@@ -15,11 +15,10 @@ export async function updateSigoutourData(ticketId, deductionType, period, json)
   }
 }
 
-export async function deleteSigoutourData(dispatch, ticketId) {
+export async function deleteSigoutourData(dispatch, eventName, ticketId) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:deleteSigoutourData', ticketId)
-      console.log(result)
+      const result = await ipcRenderer.invoke('evidence:deleteSigoutourData', eventName, ticketId)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
