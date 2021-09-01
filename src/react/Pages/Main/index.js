@@ -110,7 +110,6 @@ const Main = (props) => {
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
-    //todo
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = declareProperties.clientTaxId
     const sendToIdentifyData = data.map(d => {
@@ -172,11 +171,7 @@ const Main = (props) => {
     setScanCount(prevState => {
       return prevState + 1
     })
-    // setScanCount(prevState => {
-    //   return prevState++
-    // })
     await electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
-    //todo open scanImage
   }
 
   const handleResultAllConfirmed = async (filesByTicketId) => {
@@ -209,7 +204,6 @@ const Main = (props) => {
   }
 
   const renderClientSelect = () => {
-    console.log('renderClientSelect appState', appState)
     return (
       <>
         <FormControl className={classes.formControl}>
@@ -266,6 +260,7 @@ const Main = (props) => {
   }
 
   const [openDialog, setOpenDialog] = React.useState(false)
+  
   const handleClose = () => {
     setOpenDialog(false)
   }
