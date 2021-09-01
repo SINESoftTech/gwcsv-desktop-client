@@ -88,7 +88,6 @@ const Main = (props) => {
       }
     })
     if (name === 'clientTaxId') {
-      setScanDisable(false)
       handleReset()
     }
   }
@@ -155,17 +154,18 @@ const Main = (props) => {
 
   const handleScanImage = () => {
     if (declareProperties.reportingPeriod !== '') {
-      // set
-      //todo disable
       setScanDisable(true)
-      // scan(appState.appData.scannerName, handleMoveImage, handleScannerError)
+      scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
+  }
+
+  const handleCloseDisable = () => {
+    setScanDisable(false)
   }
 
   const handleMoveImage = async (filePath) => {
     await electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
     //todo open scanImage
-    setScanDisable(false)
   }
 
   const handleResultAllConfirmed = async (filesByTicketId) => {
@@ -208,7 +208,9 @@ const Main = (props) => {
             id='client-taxId-select'
             name='clientTaxId'
             value={declareProperties.clientTaxId}
-            onChange={handleSelectionChange}>
+            onChange={handleSelectionChange}
+            disabled={scanDisable}
+          >
             <MenuItem key={0} value={''}>請選擇營利事業人</MenuItem>
             {appState.appData.clientLists.map(client => {
               return (<MenuItem key={client.taxId.id} value={client.taxId.id}>{client.name}</MenuItem>)
