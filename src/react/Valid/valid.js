@@ -54,25 +54,25 @@ const validEvidenceType = {
     return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
   },
   '電力帳單': (json) => {
-    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
   },
   '水費帳單-台灣自來水': (json) => {
-    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
   },
   '水費帳單-台北自來水': (json) => {
-    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
   },
   '電信費帳單-中華電信': (json) => {
-    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
   },
   '電信費帳單-台灣大哥大': (json) => {
-    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
   },
   '電信費帳單-遠傳': (json) => {
-    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
   },
   '電信費帳單-亞太': (json) => {
-    return json['carrierNumber'].length === 10 ? '' : 'carrierNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
   },
   '海關代徵營業稅繳納證': (json) => {
     //todo
@@ -109,10 +109,16 @@ const validTaxType = {
   }
 }
 
+const validTax = (json) => {
+
+}
+
 const validTaxMoney = (json) => {
+  console.log('validTaxMoney', json)
   let validResult = validTaxType[json['taxType']](json)
   const withoutTotalAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
   const totalAmount = withoutTotalAmount + json['businessTaxValue']
+
   if (totalAmount !== json['totalAmount']) {
     validResult.push('totalAmount', 'zeroTaxSalesValue', 'businessTaxValue', 'dutyFreeSalesValue', 'taxableSalesValue')
   }
@@ -122,5 +128,6 @@ const validTaxMoney = (json) => {
   }
   return [...new Set(validResult)]
 }
+
 
 export { validSigoutourData }
