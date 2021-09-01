@@ -71,6 +71,7 @@ const Main = (props) => {
   const classes = mainStyles()
   const [scanCount, setScanCount] = React.useState(0)
   const [scanDisable, setScanDisable] = React.useState(false)
+  const [scanAlert, setScanAlert] = React.useState(false)
 
   useEffect(async () => {
     await electronActions.getFileLists(dispatch)
@@ -158,6 +159,7 @@ const Main = (props) => {
   const handleScanImage = () => {
     if (declareProperties.reportingPeriod !== '') {
       setScanDisable(true)
+      setScanAlert(true)
       scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
@@ -166,7 +168,13 @@ const Main = (props) => {
     setScanDisable(false)
   }
 
-  const handleMoveImage = async (filePath) => {
+  const handleMoveImage = async (count, filePath) => {
+    setScanCount(prevState => {
+      return prevState + 1
+    })
+    // setScanCount(prevState => {
+    //   return prevState++
+    // })
     await electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
     //todo open scanImage
   }
@@ -262,6 +270,7 @@ const Main = (props) => {
     setOpenDialog(false)
   }
   const handleOpen = () => {
+    setScanCount(0)
     setOpenDialog(true)
   }
 
@@ -277,7 +286,7 @@ const Main = (props) => {
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
           {renderEvidenceType()}
-          <Collapse in={scanDisable}>
+          <Collapse in={scanAlert}>
             <Alert
               severity='info'
               action={
@@ -286,7 +295,7 @@ const Main = (props) => {
                   color='inherit'
                   size='small'
                   onClick={() => {
-                    setScanDisable(false)
+                    setScanAlert(false)
                   }}
                 >
                   <CloseIcon fontSize='inherit' />
