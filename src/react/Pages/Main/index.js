@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import { electronActions, gwActions, sightTourActions, useAppDispatch, useAppState } from '../../Context'
 import isElectron from 'is-electron'
+import { Alert, AlertTitle } from '@material-ui/lab'
+import CloseIcon from '@material-ui/icons/Close'
 import {
   AppBar,
-  Box,
+  Box, Collapse,
   Container,
   CssBaseline,
   FormControl,
-  Grid,
+  Grid, IconButton,
   InputLabel,
   MenuItem,
   Paper,
@@ -67,6 +69,7 @@ const Main = (props) => {
     'evidenceType': ''
   })
   const classes = mainStyles()
+  const [scanCount, setScanCount] = React.useState(0)
   const [scanDisable, setScanDisable] = React.useState(false)
 
   useEffect(async () => {
@@ -274,6 +277,26 @@ const Main = (props) => {
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
           {renderEvidenceType()}
+          <Collapse in={scanDisable}>
+            <Alert
+              severity='info'
+              action={
+                <IconButton
+                  aria-label='close'
+                  color='inherit'
+                  size='small'
+                  onClick={() => {
+                    setScanDisable(false)
+                  }}
+                >
+                  <CloseIcon fontSize='inherit' />
+                </IconButton>
+              }
+            >
+              此次掃描 {scanCount} 筆資料
+            </Alert>
+          </Collapse>
+
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paper}>

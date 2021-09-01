@@ -47,6 +47,7 @@ export const scan = (deviceName, handleMoveFile, handleScannerError, handleClose
     console.log('scan()', message)
     const data = message.data
     if (data.startsWith('FilePath:')) {
+      console.log(data)
       const splitData = data.split('FilePath:')
       const filePath = splitData[1].split('\x00')[0]
       handleMoveFile(filePath)
