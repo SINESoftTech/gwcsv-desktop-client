@@ -68,7 +68,6 @@ export async function scanImages(dispatch, filePath, username, declareProperties
     }
   } catch (error) {
     console.log(error)
-    // throw new Error(error)
   }
 }
 

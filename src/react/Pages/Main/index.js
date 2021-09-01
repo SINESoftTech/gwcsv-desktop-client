@@ -67,6 +67,7 @@ const Main = (props) => {
     'evidenceType': ''
   })
   const classes = mainStyles()
+  const [scanDisable, setScanDisable] = React.useState(false)
 
   useEffect(async () => {
     await electronActions.getFileLists(dispatch)
@@ -87,6 +88,7 @@ const Main = (props) => {
       }
     })
     if (name === 'clientTaxId') {
+      setScanDisable(false)
       handleReset()
     }
   }
@@ -153,12 +155,17 @@ const Main = (props) => {
 
   const handleScanImage = () => {
     if (declareProperties.reportingPeriod !== '') {
-      scan(appState.appData.scannerName, handleMoveImage, handleScannerError)
+      // set
+      //todo disable
+      setScanDisable(true)
+      // scan(appState.appData.scannerName, handleMoveImage, handleScannerError)
     }
   }
 
-  const handleMoveImage = (filePath) => {
-    electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
+  const handleMoveImage = async (filePath) => {
+    await electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
+    //todo open scanImage
+    setScanDisable(false)
   }
 
   const handleResultAllConfirmed = async (filesByTicketId) => {
@@ -285,6 +292,7 @@ const Main = (props) => {
                                     onSaveImageClick={handleSaveImage}
                                     onImageOriginalViewClick={handleViewImage}
                                     onDeleteImageClick={handleDeleteImage}
+                                    scanDisable={scanDisable}
                   />
                 </TabPanel>
                 <TabPanel value={value} index={1}>

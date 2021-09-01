@@ -75,7 +75,7 @@ const ScannedImageList = (props) => {
   return (
     <div style={{ height: 650, width: '100%' }}>
       <Button variant='contained' onClick={props.onOpenDialog}
-              disabled={!isScanEnable(props.declareProperties.clientTaxId)}>掃描文件</Button>
+              disabled={!isScanEnable(props.declareProperties.clientTaxId) || props.scanDisable}>掃描文件</Button>
       <Button variant='contained' onClick={(e) => {
         props.onSendToIdentifyClick(e, dataRows)
       }}
