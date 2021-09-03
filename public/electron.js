@@ -346,10 +346,9 @@ const getFileExt = (fileName) => {
 }
 
 ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
-
+  console.log('getRawDataWithImage', fullPathList)
   return fullPathList.map(d => {
     const key = R.keys(d)[0]
-    let json = {}
     const r = d[key].map(fileObj => {
       const fileExt = getFileExt(fileObj.filename.split('.')[1])
       const value = getFileContent(fileObj.fullPath)
@@ -359,10 +358,15 @@ ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
       json[filePathKey] = fileObj.fullPath
       return json
     })
-    json['imageFullPath'] = r[0]['imageFullPath']
-    json['image'] = r[0]['image']
-    json['json'] = r[1]['json']
-    json['jsonFullPath'] = r[1]['jsonFullPath']
-    return json
+    const byTicketId = R.groupBy(function(data) {
+      let ticketId = ''
+      if (data['image'] === undefined) {
+        ticketId = data['json']['ticket']
+      } else {
+        ticketId = data['imageFullPath'].split('_')[5].split('.')[0]
+      }
+      return ticketId
+    })
+    return byTicketId(r)
   })
 })

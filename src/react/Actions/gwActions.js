@@ -121,7 +121,6 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
 }
 
 async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
-  console.log('uploadBill', payload)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
@@ -209,6 +208,7 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
       })
     }
   }
+  console.log('uploadToGw result', result)
   return result
 }
 
