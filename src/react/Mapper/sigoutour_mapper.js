@@ -152,6 +152,8 @@ const parseData = (jsonData) => {
   if (json['evidenceNumber'] === undefined) {
     json['evidenceNumber'] = json['carrierNumber']
   }
+  json['buyerTaxId'] = json['buyerTaxId'] === undefined ? '' : json['buyerTaxId']
+  json['sellerTaxId'] = json['sellerTaxId'] === undefined ? '' : json['sellerTaxId']
   return json
 }
 

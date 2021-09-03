@@ -81,7 +81,7 @@ const ConfirmedEvidenceList = (props) => {
       return result
     })
     const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
-    
+
     props.onGwUploaded(uploadResult)
   }
 
