@@ -125,7 +125,6 @@ const Main = (props) => {
         'evidenceType': declareProperties.evidenceType
       }
     })
-    console.log('handleSendImageToIdentify()', sendToIdentifyData)
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
     identifySent(dispatch, {
       'user': appState.auth.user.username,
