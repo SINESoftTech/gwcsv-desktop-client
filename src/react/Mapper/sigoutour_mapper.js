@@ -169,7 +169,7 @@ class SigoutourMapperClass {
     return json
   }
 
-  toGw(ticketId, reportingPeriod, deductionType, jsonData) {
+  toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, jsonData) {
     const json = parseData(jsonData)
     json['id'] = ticketId
     json['evidenceType'] = json['evidenceType'].value
@@ -177,6 +177,7 @@ class SigoutourMapperClass {
     const evidenceDate = json['evidenceDate']
     json['reportingPeriod'] = reportingPeriod
     json['deductionType'] = DEDUCTION_TYPE[deductionType]
+    json['isDeclareBusinessTax'] = isDeclareBusinessTax
     json['evidenceDate'] = new Date(evidenceDate.substring(0, 4) + '-' + evidenceDate.substring(4, 6) + '-' + evidenceDate.substring(6, 8)).getTime()
     return json
   }

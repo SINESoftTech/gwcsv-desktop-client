@@ -30,7 +30,7 @@ const IdentifiedEvidenceList = (props) => {
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
-      const ticketId = json.filePath.split('_')[4]
+      const ticketId = json.filePath.split('_')[5]
       const parseResult = validSigoutourData(SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data))
       parseResult['sn'] = idx + 1
       parseResult['id'] = json.data['ticket']
@@ -52,13 +52,15 @@ const IdentifiedEvidenceList = (props) => {
       return obj.ticketId
     })
     const filterData = localFiles['03'].filter((obj) => {
-      const ticketId = obj.filename.split('.')[0].split('_')[4]
+      const ticketId = obj.filename.split('.')[0].split('_')[5]
+
       return selectionModel.includes(ticketId)
     }).filter(obj => {
-      const ticketId = obj.filename.split('.')[0].split('_')[4]
+      const ticketId = obj.filename.split('.')[0].split('_')[5]
       return !errorTicketIdList.includes(ticketId)
     })
     const filesByTicketId = byTicketId(filterData)
+    console.log('handleResultAllConfirmed', filesByTicketId)
     const result = await props.onResultAllConfirmed(filesByTicketId)
     setLocalFiles(result)
     initDataRows(result['03'], props.declareProperties.clientTaxId)

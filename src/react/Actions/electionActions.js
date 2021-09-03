@@ -101,7 +101,6 @@ export async function identifyResultConfirmed(dispatch, payload) {
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
-      console.log('identifyResultConfirmed', result)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }

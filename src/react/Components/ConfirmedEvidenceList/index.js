@@ -28,7 +28,7 @@ const ConfirmedEvidenceList = (props) => {
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
-      const ticketId = json.filePath.split('_')[4]
+      const ticketId = json.filePath.split('_')[5]
       const parseResult = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data)
       parseResult['sn'] = idx + 1
       parseResult['id'] = json.data['ticket']
@@ -61,12 +61,13 @@ const ConfirmedEvidenceList = (props) => {
     const parseRawDataResult = getRawDataResult.map(data => {
       const reportingPeriod = data['imageFullPath'].split('_')[2]
       const deductionType = data['imageFullPath'].split('_')[3]
-      const ticketId = data['imageFullPath'].split('_')[4].split('.')[0]
+      const isDeclareBusinessTax = data['imageFullPath'].split('_')[4]
+      const ticketId = data['imageFullPath'].split('_')[5].split('.')[0]
       return {
         'image': new File([data['image']], Date.now() + '.jpg'),
         'imageFullPath': data['imageFullPath'],
         'jsonFullPath': data['jsonFullPath'],
-        'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, data['json'])
+        'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType,isDeclareBusinessTax, data['json'])
       }
     })
     const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
@@ -74,6 +75,7 @@ const ConfirmedEvidenceList = (props) => {
   }
 
   const handleDelete = async (ticket) => {
+    console.log('handleDelete',ticket)
     await props.OnDeleteEvdience('evidenceSaved', ticket)
   }
 

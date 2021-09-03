@@ -183,7 +183,7 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
   const fileList03 = getAllFileLists()['03']
   const filterFileList = fileList03.filter(obj => {
     const fileName = obj.filename
-    const id = fileName.split('.')[0].split('_')[4]
+    const id = fileName.split('.')[0].split('_')[5]
     return id === ticketId
   })
 
@@ -217,7 +217,7 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
   const fileList = getAllFileLists()[folderId]
   const filterFileList = fileList.filter(obj => {
     const fileName = obj.filename
-    const id = fileName.split('.')[0].split('_')[4]
+    const id = fileName.split('.')[0].split('_')[5]
     return id === ticketId
   })
   for (let i = 0; i < filterFileList.length; i++) {
@@ -228,6 +228,7 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
 })
 
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
+
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
   const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + Date.now() + '.' + sourceFileExt
@@ -267,7 +268,8 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
     if (data['result']) {
       const fileExt = data['sourceFileName'].split('.')[1]
       const reportingPeriod = data['sourceFileName'].split('_')[2]
-      const targetFileName = `${username}_${data['businessEntityTaxId']}_${reportingPeriod}_1_${data['ticketId']}.${fileExt}`
+      const isDeclareBusinessTax = data['sourceFileName'].split('_')[4]
+      const targetFileName = `${username}_${data['businessEntityTaxId']}_${reportingPeriod}_1_${isDeclareBusinessTax}_${data['ticketId']}.${fileExt}`
       const targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
     }
