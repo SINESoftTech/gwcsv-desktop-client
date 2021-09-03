@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button'
 import isElectron from 'is-electron'
 import PropTypes from 'prop-types'
 import scannedImageListStyles from './scannedImageListStyles'
-import { IconButton, ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core'
+import { Checkbox, IconButton, ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core'
 import { Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon } from '@material-ui/icons'
 
 
@@ -51,7 +51,7 @@ const ScannedImageList = (props) => {
   console.log('ScannedImageList props', props)
 
   const [dataRows, setDataRows] = useState([])
-
+  const [selectionDataRows, setSelectionDataRow] = useState([])
   useEffect(() => {
     const initDataRows = async (data, username, clientTaxId) => {
       console.log('in useEffect clientTaxId', clientTaxId)
@@ -65,42 +65,74 @@ const ScannedImageList = (props) => {
 
   const classes = scannedImageListStyles()
 
-
   const handleViewOriginalImage = (selectedImageUrl) => {
     // console.log('handleViewOriginalImage event', event)
     // console.log('handleViewOriginalImage target', target)
     // TODO Open Image view modal, too hard
   }
+  //TODO
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    const selectData = dataRows.filter(obj => {
+      return obj.fullPath === value
+    })[0]
+    const isExist = selectionDataRows.includes(selectData)
+    if (!isExist) {
 
+      setSelectionDataRow(prevState => {
+        return [...prevState, selectData]
+      })
+    } else {
+      setSelectionDataRow(prevState => {
+        return [prevState.filter(obj => {
+          return selectData.fullPath !== obj.fullPath
+        })]
+      })
+    }
+
+  }
   return (
     <div style={{ height: 650, width: '100%' }}>
       <Button variant='contained' onClick={props.onOpenDialog}
               disabled={!isScanEnable(props.declareProperties.clientTaxId) || props.scanDisable}>掃描文件</Button>
       <Button variant='contained' onClick={(e) => {
-        props.onSendToIdentifyClick(e, dataRows)
+        props.onSendToIdentifyClick(e, selectionDataRows)
       }}
               disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
           {dataRows.map((item) => (
             <ImageListItem key={item.id}>
-              <img src={item.imageUrl} alt={item.fileName} />
+              <img src={item.imageUrl} alt={item.fileName} loading='lazy' />
               <ImageListItemBar
-                title={item.fileName}
+                position='top'
+                actionPosition='left'
+                actionIcon={
+                  <div>
+                    <Checkbox
+                      name='fullPath'
+                      value={item.fullPath} onChange={handleChange}
+                    />
+                  </div>
+                }
+              />
+              <ImageListItemBar
+                title={item.fileName.split('_')[5]}
                 actionIcon={
                   <div>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                                onClick={e => props.onImageOriginalViewClick(e, item)}>
+                                onClick={e => props.onImageOriginalViewClick(item)}>
                       <ZoomInIcon />
                     </IconButton>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                                onClick={e => props.onSaveImageClick(e, item)}>
+                                onClick={e => props.onSaveImageClick(item)}>
                       <SaveIcon />
                     </IconButton>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                                onClick={e => props.onDeleteImageClick(e.item)}>
+                                onClick={e => props.onDeleteImageClick(item)}>
                       <DeleteIcon />
                     </IconButton>
+
                   </div>
                 }
               />

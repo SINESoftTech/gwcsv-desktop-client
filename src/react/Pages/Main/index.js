@@ -112,6 +112,7 @@ const Main = (props) => {
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
+    console.log(data)
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = declareProperties.clientTaxId
     const sendToIdentifyData = data.map(d => {
@@ -141,19 +142,16 @@ const Main = (props) => {
     identifyResultReceived(dispatch, identifyResultReceivedList)
   }
 
-  const handleSaveImage = (event, data) => {
-    console.log('handleSaveImage event', event)
+
+
+  const handleSaveImage = (data) => {
     console.log('handleSaveImage data', data)
   }
-  const handleViewImage = (event, data) => {
-    console.log('handleViewImage event', event)
+  const handleViewImage = (data) => {
     console.log('handleViewImage data', data)
-
   }
-  const handleDeleteImage = (event, data) => {
-    console.log('handleDeleteImage event', event)
+  const handleDeleteImage = (data) => {
     console.log('handleDeleteImage data', data)
-
   }
 
   const handleScanImage = () => {
