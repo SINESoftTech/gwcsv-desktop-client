@@ -43,6 +43,7 @@ export const scan = (deviceName, handleMoveFile, handleScannerError, handleClose
   const url = apiPath + '/SetParams?' + new URLSearchParams(paramJson).toString()
   const ws = new WebSocket(url, 'webfxscan')
   ws.onopen = () => console.log('ws opened')
+  ws.onerror= ()=>  handleScannerError('error:')
   ws.onmessage = (message) => {
     console.log('scan()', message)
     const data = message.data

@@ -98,6 +98,8 @@ const Main = (props) => {
   }
   const handleScannerError = (errorMsg) => {
     const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
+    setScanDisable(false)
+    setScanAlert(false)
     if (isErrorMsgStartsWithError && errorMsg === 'error:feeding error') {
       alert('無法掃描，請放入紙張')
       return
@@ -157,7 +159,7 @@ const Main = (props) => {
   }
 
   const handleScanImage = () => {
-    if (declareProperties.reportingPeriod !== '') {
+    if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
       setScanDisable(true)
       setScanAlert(true)
       scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
