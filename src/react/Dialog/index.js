@@ -53,6 +53,26 @@ const DialogComponent = (props) => {
       </>
     )
   }
+  const renderIsDeclareBusinessTax = () => {
+    return (
+      <>
+        <FormControl className={classes.formControl}>
+          <InputLabel id='is-declare-business-select-label'>是否申報營業稅</InputLabel>
+          <Select
+            labelId='is-declare-business-select'
+            id='is-declare-business-select'
+            name='isDeclareBusinessTax'
+            value={props.declareProperties.isDeclareBusinessTax}
+            onChange={handleChange}
+          >
+            <MenuItem key={0} value={''}>請選擇是否申報營業稅</MenuItem>
+            <MenuItem key={1} value={true+''}>是</MenuItem>
+            <MenuItem key={2} value={false+""}>否</MenuItem>
+          </Select>
+        </FormControl>
+      </>
+    )
+  }
 
   return (
     <div>
@@ -62,10 +82,11 @@ const DialogComponent = (props) => {
         onClose={props.handleClose}
         aria-labelledby='responsive-dialog-title'
       >
-        <DialogTitle id='responsive-dialog-title'>請選擇申報期別</DialogTitle>
+        <DialogTitle id='responsive-dialog-title'>請選擇</DialogTitle>
 
         <DialogContent>
           {renderReportingPeriod()}
+          {renderIsDeclareBusinessTax()}
         </DialogContent>
         <DialogActions>
           <Button onClick={(e) => {

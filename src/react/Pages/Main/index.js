@@ -66,7 +66,8 @@ const Main = (props) => {
   const [declareProperties, setDeclareProperties] = React.useState({
     'clientTaxId': '',
     'reportingPeriod': '',
-    'evidenceType': ''
+    'evidenceType': '',
+    isDeclareBusinessTax: true
   })
   const classes = mainStyles()
   const [scanCount, setScanCount] = React.useState(0)
@@ -260,7 +261,7 @@ const Main = (props) => {
   }
 
   const [openDialog, setOpenDialog] = React.useState(false)
-  
+
   const handleClose = () => {
     setOpenDialog(false)
   }
