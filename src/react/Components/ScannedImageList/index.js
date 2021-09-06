@@ -121,11 +121,10 @@ const ScannedImageList = (props) => {
                 title={item.fileName.split('_')[5]}
                 actionIcon={
                   <div>
-                    {/*  TODO*/}
-                    {/*<IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}*/}
-                    {/*onClick={e => props.onImageOriginalViewClick(item)}>*/}
-                    {/*<ZoomInIcon />*/}
-                    {/*</IconButton>*/}
+                    <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
+                    onClick={e => props.onImageOriginalViewClick(item)}>
+                    <ZoomInIcon />
+                    </IconButton>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
                                 onClick={e => props.onSaveImageClick(item)}>
                       <SaveIcon />

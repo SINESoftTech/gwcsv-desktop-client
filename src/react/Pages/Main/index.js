@@ -154,6 +154,11 @@ const Main = (props) => {
   }
 
   const handleViewImage = (data) => {
+    //fullPath
+    console.log(data.fullPath)
+    const windowProxy = window.open('', null, '')
+    windowProxy.postMessage(data.fullPath, '*')
+    windowProxy.postMessage(data.fullPath, '*')
     console.log('handleViewImage data', data)
   }
 

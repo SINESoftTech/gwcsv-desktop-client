@@ -75,6 +75,20 @@ function createWindow() {
   // mainWindow.loadURL(fileLocation)
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    return { action: 'allow' }
+  })
+
+  mainWindow.webContents.on('did-create-window', (childWindow) => {
+    // For example...
+    childWindow.webContents.openDevTools()
+    var fileLocation = `file://${path.join(__dirname, '../public/image.html')}`
+    //todo
+    childWindow.loadURL(fileLocation)
+    childWindow.webContents.on('will-navigate', (e) => {
+      e.preventDefault()
+    })
+  })
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
     // Dereference the window object, usually you would store windows
@@ -83,7 +97,6 @@ function createWindow() {
     mainWindow = null
   })
 }
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -383,3 +396,4 @@ ipcMain.handle('evidence:getAssign', (event) => {
   const targetFilePath = config.fileFolder + '/' + 'assign.json'
   return fse.readJSONSync(targetFilePath)
 })
+
