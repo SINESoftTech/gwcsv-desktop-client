@@ -97,53 +97,54 @@ const ScannedImageList = (props) => {
         props.onSendToIdentifyClick(e, selectionDataRows)
         setSelectionDataRow([])
       }}
-        disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
-        <div className={classes.root}>
+              disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
+      <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
-      {dataRows.map((item) => (
-        <ImageListItem key={item.id}>
-        <img src={item.imageUrl} alt={item.fileName} loading='lazy' />
-        <ImageListItemBar
-        position='top'
-        actionPosition='left'
-        actionIcon={
-        <div>
-        <Checkbox
-        id={item.id}
-        name={item.id}
-        value={item.fullPath}
-        onChange={handleChange}
-        />
-        </div>
-      }
-        />
-        <ImageListItemBar
-        title={item.fileName.split('_')[5]}
-        actionIcon={
-        <div>
-        <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-        onClick={e => props.onImageOriginalViewClick(item)}>
-        <ZoomInIcon />
-        </IconButton>
-        <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-        onClick={e => props.onSaveImageClick(item)}>
-        <SaveIcon />
-        </IconButton>
-        <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-        onClick={e => props.onDeleteImageClick(item)}>
-        <DeleteIcon />
-        </IconButton>
+          {dataRows.map((item) => (
+            <ImageListItem key={item.id}>
+              <img src={item.imageUrl} alt={item.fileName} loading='lazy' />
+              <ImageListItemBar
+                position='top'
+                actionPosition='left'
+                actionIcon={
+                  <div>
+                    <Checkbox
+                      id={item.id}
+                      name={item.id}
+                      value={item.fullPath}
+                      onChange={handleChange}
+                    />
+                  </div>
+                }
+              />
+              <ImageListItemBar
+                title={item.fileName.split('_')[5]}
+                actionIcon={
+                  <div>
+                    {/*  TODO*/}
+                    {/*<IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}*/}
+                    {/*onClick={e => props.onImageOriginalViewClick(item)}>*/}
+                    {/*<ZoomInIcon />*/}
+                    {/*</IconButton>*/}
+                    <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
+                                onClick={e => props.onSaveImageClick(item)}>
+                      <SaveIcon />
+                    </IconButton>
+                    <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
+                                onClick={e => props.onDeleteImageClick(item)}>
+                      <DeleteIcon />
+                    </IconButton>
 
-        </div>
-      }
-        />
-        </ImageListItem>
-        ))}
+                  </div>
+                }
+              />
+            </ImageListItem>
+          ))}
         </ImageList>
-        </div>
-        </div>
-        )
-      }
+      </div>
+    </div>
+  )
+}
 
 ScannedImageList.propTypes = {
   onScanClick: PropTypes.func,

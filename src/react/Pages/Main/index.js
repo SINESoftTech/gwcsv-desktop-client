@@ -143,11 +143,17 @@ const Main = (props) => {
   }
 
 
-
   const handleSaveImage = (data) => {
-    console.log('handleSaveImage data', data)
+    const url = window.URL.createObjectURL(data.fileBlob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', data.fileName)
+    document.body.appendChild(link)
+    link.click()
   }
   const handleViewImage = (data) => {
+    const windowProxy = window.open('', 'mywindow', 'minimizable=false')
+    windowProxy.postMessage('hi', '*')
     console.log('handleViewImage data', data)
   }
   const handleDeleteImage = (data) => {
