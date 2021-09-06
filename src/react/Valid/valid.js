@@ -18,12 +18,13 @@ const validTaxId = (taxId) => {
   return sum % 10 === 0 || (taxId[6] === '7' && (sum + 1) % 10 === 0)
 }
 
-const validSigoutourData = (json) => {
+const validSigoutourData = (clientTaxId, json) => {
+  console.log('validSigoutourData', clientTaxId, json)
   let validResult = validTaxMoney(json)
   if (json['sellerTaxId'].length !== 8 || !validTaxId(json['sellerTaxId'])) {
     validResult.push('sellerTaxId')
   }
-  if (json['buyerTaxId'].length !== 8 || !validTaxId(json['buyerTaxId'])) {
+  if (json['buyerTaxId'].length !== 8 || !validTaxId(json['buyerTaxId']) || json['buyerTaxId'] !== clientTaxId) {
     validResult.push('buyerTaxId')
   }
   validResult.push(validEvidenceType[json['evidenceType']](json))

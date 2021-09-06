@@ -210,9 +210,13 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
 
 
 ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
+
   let folderId = '03'
   if (eventName === 'evidenceSaved') {
     folderId = '04'
+  }
+  if (eventName === 'scanned') {
+    folderId = '01'
   }
   const fileList = getAllFileLists()[folderId]
   const filterFileList = fileList.filter(obj => {

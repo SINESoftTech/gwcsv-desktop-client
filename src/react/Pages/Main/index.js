@@ -152,11 +152,14 @@ const Main = (props) => {
     link.click()
   }
   const handleViewImage = (data) => {
-    const windowProxy = window.open('', 'mywindow', 'minimizable=false')
-    windowProxy.postMessage('hi', '*')
     console.log('handleViewImage data', data)
   }
   const handleDeleteImage = (data) => {
+    //todo
+    console.log()
+    const timestamp = data.fileName.split('_')[5].split('.')[0]
+    const eventName = 'scanned'
+    electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
     console.log('handleDeleteImage data', data)
   }
 
