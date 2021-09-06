@@ -175,12 +175,12 @@ function getFileContent(fullPath) {
 }
 
 ipcMain.handle('evidence:saveAssign', (event, payload) => {
-  console.log('evidence:saveAssign() payload', payload)
   const targetFilePath = config.fileFolder + '/' + 'assign.json'
   fse.writeJSONSync(targetFilePath, payload, { encoding: 'utf8', flag: 'w' })
 })
 
 ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
+  console.log(fullPath)
   return getFileContent(fullPath)
 })
 

@@ -1,24 +1,39 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <meta charset='UTF-8'>
-  <title>Title</title>
-  <script>
-    console.log('AAA')
-    window.addEventListener('message', receiveMessage, false)
+    <meta charset='UTF-8'>
+    <script>
+        window.addEventListener('message', receiveMessage, false)
+        const electron = require('electron')
+        const ipcRenderer = electron.ipcRenderer;
+        const remote = electron.remote;
 
-    function receiveMessage(event) {
-      // For Chrome, the origin property is in the event.originalEvent
-      // object.
-      // 这里不准确，chrome没有这个属性
-      // var origin = event.origin || event.originalEvent.origin;
-      console.log(event.data)
-    }
+        async function receiveMessage(event) {
+            console.log(event.data)
+            console.log()
+            const json = JSON.parse(event.data)
+            const result = await getImage(json.fullPath)
+            console.log(result)
+            const blob = new Blob([result])
+            console.log(blob)
+            document.getElementById("root").src = URL.createObjectURL(blob)
+        }
 
-    //todo
-  </script>
+        const getImage = async (payload) => {
+            try {
+                if (ipcRenderer) {
+                    const result = await ipcRenderer.invoke('evidence:getImageFileContent', payload)
+                    return result
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        //todo
+    </script>
 </head>
 <body>
-<h1>I m Image</h1>
+<img id="root"></img>
 </body>
 </html>
