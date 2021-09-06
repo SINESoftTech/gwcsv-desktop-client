@@ -35,9 +35,7 @@ import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 
 const R = require('ramda')
-const electron = isElectron() ? window.electron : null
-const remote = isElectron() ? window.remote : null
-const ipcRenderer = isElectron() ? electron.ipcRenderer : null
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -60,6 +58,7 @@ function TabPanel(props) {
 }
 
 const Main = (props) => {
+
   const dispatch = useAppDispatch()
   const appState = useAppState()
   const [value, setValue] = React.useState(0)
@@ -77,6 +76,8 @@ const Main = (props) => {
   useEffect(async () => {
     await electronActions.getFileLists(dispatch)
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
+    const assign = await gwActions.getAssign()
+    await electronActions.saveAssign(assign)
     await openScanner(dispatch)
   }, [])
 
@@ -151,9 +152,11 @@ const Main = (props) => {
     document.body.appendChild(link)
     link.click()
   }
+
   const handleViewImage = (data) => {
     console.log('handleViewImage data', data)
   }
+
   const handleDeleteImage = (data) => {
     //todo
     console.log()

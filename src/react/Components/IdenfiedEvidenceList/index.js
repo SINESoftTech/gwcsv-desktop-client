@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
-import { getJsonRawData } from '../../Actions/electionActions'
+import { getAssign, getJsonRawData } from '../../Actions/electionActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
 import { electronActions } from '../../Context'
@@ -21,12 +21,14 @@ const IdentifiedEvidenceList = (props) => {
 
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
+    //read assign
+    const assignMap = await getAssign()
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
       const ticketId = json.filePath.split('_')[5]
       const clientTaxId = json.filePath.split('_')[1]
-      const parseResult = validSigoutourData(clientTaxId,SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data))
+      const parseResult = validSigoutourData(clientTaxId, SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data), assignMap)
       parseResult['sn'] = idx + 1
       parseResult['id'] = json.data['ticket']
       return parseResult

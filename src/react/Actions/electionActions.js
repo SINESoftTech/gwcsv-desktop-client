@@ -5,6 +5,19 @@ const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
+export const saveAssign = async (payload) => {
+  console.log('saveAssign', payload)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:saveAssign', payload)
+      return result
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
 export async function updateSigoutourData(ticketId, deductionType, period, json) {
   try {
     if (ipcRenderer) {
@@ -129,5 +142,16 @@ export async function getRawDataWithImage(payload) {
     }
   } catch (error) {
     // throw new Error(error)
+  }
+}
+
+export async function getAssign() {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getAssign')
+      return result
+    }
+  } catch (error) {
+    console.log(error)
   }
 }

@@ -212,6 +212,15 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
   return result
 }
 
+export const getAssign = async () => {
+  try {
+    let response = await axios.get('/assign/year')
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const getAllClientList = async (dispatch, username, taxId, token) => {
   const requestOptions = {
     headers: { 'Content-Type': 'application/json', 'Authorization': token, taxId: taxId }

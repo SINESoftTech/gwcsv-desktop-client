@@ -161,6 +161,11 @@ function getFileContent(fullPath) {
 
 }
 
+ipcMain.handle('evidence:saveAssign', (event, payload) => {
+  console.log('evidence:saveAssign() payload', payload)
+  const targetFilePath = config.fileFolder + '/' + 'assign.json'
+  fse.writeJSONSync(targetFilePath, payload, { encoding: 'utf8', flag: 'w' })
+})
 
 ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
   return getFileContent(fullPath)
@@ -232,7 +237,6 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
 })
 
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
-
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
   const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + Date.now() + '.' + sourceFileExt
@@ -373,4 +377,9 @@ ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
     })
     return byTicketId(r)
   })
+})
+
+ipcMain.handle('evidence:getAssign', (event) => {
+  const targetFilePath = config.fileFolder + '/' + 'assign.json'
+  return fse.readJSONSync(targetFilePath)
 })
