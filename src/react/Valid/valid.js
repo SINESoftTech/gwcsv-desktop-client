@@ -45,10 +45,10 @@ const getPeriod = (json) => {
   return period
 }
 
-const validGUI = (json, assignMap) => {
+const validGUI = (typeValue, json, assignMap) => {
   const yyyymm = getPeriod(json)
   const trackId = json['evidenceNumber'].substring(0, 2)
-  const isTrackIdIncludeAssign = assignMap['22'][yyyymm] === undefined ? false : assignMap['22'][yyyymm].includes(trackId)
+  const isTrackIdIncludeAssign = assignMap[typeValue][yyyymm] === undefined ? false : assignMap[typeValue][yyyymm].includes(trackId)
   return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
 }
 
@@ -58,22 +58,22 @@ const validBill = (json) => {
 
 const validEvidenceType = {
   '三聯式統一發票': (json, assignMap) => {
-    return validGUI(json, assignMap)
+    return validGUI(21, json, assignMap)
   },
   '二聯式收銀發票': (json, assignMap) => {
-    return validGUI(json, assignMap)
+    return validGUI(22, json, assignMap)
   },
   '三聯式收銀機發票': (json, assignMap) => {
-    return validGUI(json, assignMap)
+    return validGUI(25, json, assignMap)
   },
   '電子發票證明聯-格式一': (json, assignMap) => {
-    return validGUI(json, assignMap)
+    return validGUI(25, json, assignMap)
   },
   '電子發票證明聯-格式二': (json, assignMap) => {
-    return validGUI(json, assignMap)
+    return validGUI(25, json, assignMap)
   },
   '電力帳單': (json, assignMap) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+    return validBill(json)
   },
   '水費帳單-台灣自來水': (json, assignMap) => {
     return validBill(json)
