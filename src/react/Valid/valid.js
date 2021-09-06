@@ -45,57 +45,53 @@ const getPeriod = (json) => {
   return period
 }
 
+const validGUI = (json, assignMap) => {
+  const yyyymm = getPeriod(json)
+  const trackId = json['evidenceNumber'].substring(0, 2)
+  const isTrackIdIncludeAssign = assignMap['22'][yyyymm] === undefined ? false : assignMap['22'][yyyymm].includes(trackId)
+  return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
+}
+
+const validBill = (json) => {
+  return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+}
+
 const validEvidenceType = {
   '三聯式統一發票': (json, assignMap) => {
-    const yyyymm = getPeriod(json)
-    const trackId = json['evidenceNumber'].substring(0, 2)
-    const isTrackIdIncludeAssign = assignMap['22'][yyyymm] === undefined ? false : assignMap['22'][yyyymm].includes(trackId)
-    return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
+    return validGUI(json, assignMap)
   },
   '二聯式收銀發票': (json, assignMap) => {
-    const yyyymm = getPeriod(json)
-    const trackId = json['evidenceNumber'].substring(0, 2)
-    const isTrackIdIncludeAssign = assignMap['22'][yyyymm] === undefined ? false : assignMap['22'][yyyymm].includes(trackId)
-    return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
+    return validGUI(json, assignMap)
   },
   '三聯式收銀機發票': (json, assignMap) => {
-    const yyyymm = getPeriod(json)
-    const trackId = json['evidenceNumber'].substring(0, 2)
-    const isTrackIdIncludeAssign = assignMap['22'][yyyymm] === undefined ? false : assignMap['22'][yyyymm].includes(trackId)
-    return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
+    return validGUI(json, assignMap)
   },
   '電子發票證明聯-格式一': (json, assignMap) => {
-    const yyyymm = getPeriod(json)
-    const trackId = json['evidenceNumber'].substring(0, 2)
-    const isTrackIdIncludeAssign = assignMap['22'][yyyymm] === undefined ? false : assignMap['22'][yyyymm].includes(trackId)
-    return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
+    return validGUI(json, assignMap)
   },
   '電子發票證明聯-格式二': (json, assignMap) => {
-    const yyyymm = getPeriod(json)
-    const trackId = json['evidenceNumber'].substring(0, 2)
-    const isTrackIdIncludeAssign = assignMap['22'][yyyymm] === undefined ? false : assignMap['22'][yyyymm].includes(trackId)
-    return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
+    return validGUI(json, assignMap)
   },
   '電力帳單': (json, assignMap) => {
     return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
   },
   '水費帳單-台灣自來水': (json, assignMap) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+    return validBill(json)
   },
   '水費帳單-台北自來水': (json, assignMap) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+    return validBill(json)
   },
   '電信費帳單-中華電信': (json, assignMap) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+    return validBill(json)
   },
   '電信費帳單-台灣大哥大': (json, assignMap) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+    return validBill(json)
   },
   '電信費帳單-遠傳': (json, assignMap) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+    return validBill(json)
   },
   '電信費帳單-亞太': (json, assignMap) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+    return validBill(json)
   },
   '海關代徵營業稅繳納證': (json, assignMap) => {
     //todo
