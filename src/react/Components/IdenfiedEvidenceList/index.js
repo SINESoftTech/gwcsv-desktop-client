@@ -21,14 +21,11 @@ const byTicketId = R.groupBy((fileObj) => {
 const IdentifiedEvidenceList = (props) => {
 
   const [rowData, setRowData] = useState([])
-  // const [imageUrl, setImageUrl] = useState('')
-
   const [localFiles, setLocalFiles] = useState(props.data)
 
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
-      console.log('parseJsonDataList', json)
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
       const ticketId = json.filePath.split('_')[5]

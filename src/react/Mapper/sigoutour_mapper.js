@@ -127,7 +127,9 @@ const isEmptyOrUndefined = (s) => {
 const parseData = (jsonData) => {
   let json = {}
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
-
+  if (jsonDataBody.length <= 0) {
+    return json
+  }
   json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']]
   jsonDataBody.forEach(data => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
@@ -162,9 +164,11 @@ class SigoutourMapperClass {
 
   toView(ticketId, deductionType, reportingPeriod, jsonData) {
     const json = parseData(jsonData)
+    json['sellerTaxId'] = isEmptyOrUndefined(json['sellerTaxId']) ? '' : json['sellerTaxId']
+    json['buyerTaxId'] = isEmptyOrUndefined(json['buyerTaxId']) ? '' : json['buyerTaxId']
+    json['taxType'] = isEmptyOrUndefined(json['taxType']) ? '' : json['taxType'].number
+    json['evidenceType'] = isEmptyOrUndefined(json['evidenceType']) ? '' : json['evidenceType'].name
     json['reportingPeriod'] = reportingPeriod
-    json['taxType'] = json['taxType'].number
-    json['evidenceType'] = json['evidenceType'].name
     json['deductionType'] = deductionType
     json['ticketId'] = ticketId
     json['errorMsg'] = jsonData['errorMsg']

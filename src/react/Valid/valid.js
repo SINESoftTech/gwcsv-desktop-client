@@ -19,7 +19,6 @@ const validTaxId = (taxId) => {
 }
 
 const validSigoutourData = (clientTaxId, json) => {
-  console.log('validSigoutourData', clientTaxId, json)
   let validResult = validTaxMoney(json)
   if (json['sellerTaxId'].length !== 8 || !validTaxId(json['sellerTaxId'])) {
     validResult.push('sellerTaxId')
@@ -27,7 +26,7 @@ const validSigoutourData = (clientTaxId, json) => {
   if (json['buyerTaxId'].length !== 8 || !validTaxId(json['buyerTaxId']) || json['buyerTaxId'] !== clientTaxId) {
     validResult.push('buyerTaxId')
   }
-  validResult.push(validEvidenceType[json['evidenceType']](json))
+  validResult = validResult.concat(validEvidenceType[json['evidenceType']](json))
   if (!moment(json['evidenceDate'], 'YYYYMMDD', true).isValid()) {
     validResult.push('evidenceDate')
   }
@@ -40,46 +39,49 @@ const validSigoutourData = (clientTaxId, json) => {
 
 const validEvidenceType = {
   '三聯式統一發票': (json) => {
-    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 ? [''] : ['evidenceNumber']
   },
   '二聯式收銀發票': (json) => {
-    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 ? [''] : ['evidenceNumber']
   },
   '三聯式收銀機發票': (json) => {
-    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 ? [''] : ['evidenceNumber']
   },
   '電子發票證明聯-格式一': (json) => {
-    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 ? [''] : ['evidenceNumber']
   },
   '電子發票證明聯-格式二': (json) => {
-    return json['evidenceNumber'].length === 10 ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 ? [''] : ['evidenceNumber']
   },
   '電力帳單': (json) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
   },
   '水費帳單-台灣自來水': (json) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
   },
   '水費帳單-台北自來水': (json) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
   },
   '電信費帳單-中華電信': (json) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
   },
   '電信費帳單-台灣大哥大': (json) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
   },
   '電信費帳單-遠傳': (json) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
   },
   '電信費帳單-亞太': (json) => {
-    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? '' : 'evidenceNumber'
+    return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
   },
   '海關代徵營業稅繳納證': (json) => {
     //todo
   },
+  '': (json) => {
+    return ['evidenceType', 'evidenceNumber']
+  },
   undefined: (json) => {
-    return ['evidenceType']
+    return ['evidenceType', 'evidenceNumber']
   }
 }
 
