@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
-import isElectron from 'is-electron'
 import { getJsonRawData } from '../../Actions/electionActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
@@ -9,9 +8,6 @@ import { electronActions } from '../../Context'
 import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
 
 
-const electron = isElectron() ? window.electron : null
-const remote = isElectron() ? window.remote : null
-const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 const R = require('ramda')
 
 const byTicketId = R.groupBy((fileObj) => {

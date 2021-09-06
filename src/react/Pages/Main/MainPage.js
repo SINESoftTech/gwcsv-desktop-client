@@ -27,7 +27,7 @@ function Copyright() {
 
 
 export default function MainPage() {
-  // const [state, dispatch] = useReducer(mainReducer, inititalState)
+
   const classes = mainStyles()
   return (
     <div className={classes.root}>
