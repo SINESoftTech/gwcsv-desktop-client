@@ -76,7 +76,15 @@ function createWindow() {
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    return { action: 'allow' }
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: {
+        webPreferences: {
+          preload: path.join(__dirname, 'image_preload.js'),
+          contextIsolation: true
+        }
+      }
+    }
   })
 
   mainWindow.webContents.on('did-create-window', (childWindow) => {
@@ -396,4 +404,3 @@ ipcMain.handle('evidence:getAssign', (event) => {
   const targetFilePath = config.fileFolder + '/' + 'assign.json'
   return fse.readJSONSync(targetFilePath)
 })
-

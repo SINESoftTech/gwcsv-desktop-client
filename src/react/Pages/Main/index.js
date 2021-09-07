@@ -157,7 +157,7 @@ const Main = (props) => {
     //fullPath
     console.log(data.fullPath)
     const windowProxy = window.open('', null, '')
-    windowProxy.postMessage(JSON.stringify(data), '*')
+    // windowProxy.postMessage(JSON.stringify(data), '*')
     windowProxy.postMessage(JSON.stringify(data), '*')
     console.log('handleViewImage data', data)
   }
