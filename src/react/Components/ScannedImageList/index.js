@@ -3,7 +3,15 @@ import Button from '@material-ui/core/Button'
 import isElectron from 'is-electron'
 import PropTypes from 'prop-types'
 import scannedImageListStyles from './scannedImageListStyles'
-import { Checkbox, IconButton, ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core'
+import {
+  Checkbox,
+  FormControlLabel,
+  IconButton,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  Radio
+} from '@material-ui/core'
 import { Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon } from '@material-ui/icons'
 
 
@@ -51,7 +59,7 @@ const ScannedImageList = (props) => {
   console.log('ScannedImageList props', props)
 
   const [dataRows, setDataRows] = useState([])
-  const [selectionDataRows, setSelectionDataRow] = useState([])
+  const [selectionDataRows, setSelectionDataRow] = useState({ selection: [] })
   useEffect(() => {
     const initDataRows = async (data, username, clientTaxId) => {
       console.log('in useEffect clientTaxId', clientTaxId)
@@ -76,26 +84,30 @@ const ScannedImageList = (props) => {
     const selectData = dataRows.filter(obj => {
       return obj.fullPath === value
     })[0]
-    const isExist = selectionDataRows.includes(selectData)
+    const isExist = selectionDataRows.selection.filter(obj => {
+      return selectData.fullPath === obj.fullPath
+    }).length > 0
     if (!isExist) {
-      setSelectionDataRow(prevState => {
-        return [...prevState, selectData]
-      })
+      setSelectionDataRow(prevState => ({
+        selection: [...prevState.selection, selectData]
+      }))
     } else {
-      setSelectionDataRow(prevState => {
-        return [prevState.filter(obj => {
+      setSelectionDataRow(prevState => ({
+        selection: prevState.selection.filter(obj => {
           return selectData.fullPath !== obj.fullPath
-        })]
-      })
+        })
+      }))
     }
   }
+  console.log('selection', selectionDataRows.selection)
+
   return (
     <div style={{ height: 650, width: '100%' }}>
       <Button variant='contained' onClick={props.onOpenDialog}
               disabled={!isScanEnable(props.declareProperties.clientTaxId) || props.scanDisable}>掃描文件</Button>
       <Button variant='contained' onClick={(e) => {
-        props.onSendToIdentifyClick(e, selectionDataRows)
-        setSelectionDataRow([])
+        props.onSendToIdentifyClick(e, selectionDataRows.selection)
+        setSelectionDataRow({ selection: [] })
       }}
               disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
       <div className={classes.root}>
@@ -108,12 +120,20 @@ const ScannedImageList = (props) => {
                 actionPosition='left'
                 actionIcon={
                   <div>
-                    <Checkbox
-                      id={item.id}
-                      name={item.id}
-                      value={item.fullPath}
-                      onChange={handleChange}
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          id={item.id}
+                          name={item.id}
+                          value={item.fullPath}
+                          onChange={handleChange}
+                          checked={selectionDataRows.selection.filter(obj => {
+                            return item.fullPath === obj.fullPath
+                          }).length > 0}
+                        />
+                      }
                     />
+
                   </div>
                 }
               />
@@ -122,8 +142,8 @@ const ScannedImageList = (props) => {
                 actionIcon={
                   <div>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
-                    onClick={e => props.onImageOriginalViewClick(item)}>
-                    <ZoomInIcon />
+                                onClick={e => props.onImageOriginalViewClick(item)}>
+                      <ZoomInIcon />
                     </IconButton>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
                                 onClick={e => props.onSaveImageClick(item)}>
