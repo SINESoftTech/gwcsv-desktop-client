@@ -8,7 +8,7 @@
     const imgBlob = async () => {
       const imageJson = JSON.parse(window.api.image())
       const result = await window.api.getImage(imageJson.fullPath)
-      console.log('imageBlob', result)
+
       const blob = new Blob([result])
       const url = URL.createObjectURL(blob)
       document.getElementById('root').src = url
@@ -18,13 +18,14 @@
     document.addEventListener('mouseup', mouseClick)
 
     function mouseClick(event) {
-      console.log('mouseClick', event)
-      console.log('mouseClick', event.button)
       if (event.button === 0) {
         //左鍵
+        const img = document.getElementById('root')
+        img.style.width = img.width * 1.2 + 'px'
       }
       if (event.button === 2) {
-        //右鍵
+        const img = document.getElementById('root')
+        img.style.width = img.width / 1.2 + 'px'
       }
     }
   </script>
