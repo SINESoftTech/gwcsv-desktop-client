@@ -34,34 +34,7 @@ contextBridge.exposeInMainWorld(
     },
     getImage: async (fullPath) => {
       console.log('getImage', fullPath)
-      const result = await getImageFromIPC(fullPath)
-      console.log('getImage', result)
-      const blob = new Blob([result])
-      return URL.createObjectURL(blob)
+      return await getImageFromIPC(fullPath)
     }
-    // send: (channel) => {
-    //   // whitelist channels
-    //   console.log('send channel', channel)
-    //   console.log('send image', imageJson)
-    //   if (channel === 'getImageJson') {
-    //     ipcRenderer.send('sendImageJson', imageJson)
-    //   }
-    // },
-    // receive: (channel, data) => {
-    //   console.log('receive channel', channel)
-    //   console.log('receive data', data)
-    //   // let validChannels = ['fromMain']
-    //
-    //   if ('getImageJson' === channel) {
-    //     console.log('send2 image', imageJson)
-    //     ipcRenderer.on(channel, (event, ...args) => console.log('on', args))
-    //   }
-    //
-    //   // ipcRenderer.on(channel, (event, ...args) => console.log('on', args))
-    //   // if (validChannels.includes(channel)) {
-    //   //   // Deliberately strip event as it includes `sender`
-    //   //
-    //   // }
-    // }
   }
 )
