@@ -1,6 +1,5 @@
 import { signtTourAxios } from './axios'
 
-const R = require('ramda')
 
 const getToken = async (id, psw) => {
   try {
@@ -41,14 +40,14 @@ export async function sendToIdentify(identifyData) {
           'businessEntityTaxId': data.businessEntityTaxId,
           'ticketId': result.data['ticket'],
           'sourceFullPath': data.sourceFullPath,
-          'sourceFileName': data.sourceFileName,
+          'sourceFileName': data.sourceFileName
         })
       } else {
         resultList.push({
           'result': false,
           'businessEntityTaxId': data.businessEntityTaxId,
           'sourceFullPath': data.sourceFullPath,
-          'sourceFileName': data.sourceFileName,
+          'sourceFileName': data.sourceFileName
         })
       }
     } catch (error) {
@@ -62,7 +61,7 @@ export async function getIdentifyResult(fileObj) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
-    const ticketId = fileObj.filename.split('_')[5].split(".")[0]
+    const ticketId = fileObj.filename.split('_')[5].split('.')[0]
     const formData = new FormData()
     formData.append('token', token)
     formData.append('ticket', ticketId)
@@ -85,6 +84,19 @@ export async function getIdentifyResult(fileObj) {
   }
 }
 
-export async function sendConfirmedResult(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
+export async function sendConfirmedResult(payload) {
+  try {
+    const apiPath = '/feedbackResult.php'
+    const token = await getToken('gateweb1', 'qwe123')
+    const data = [payload.data]
+    const photoId = payload.photoId
+    const formData = new FormData()
+    formData.append('token', token)
+    formData.append('data', data)
+    formData.append('photo', photoId)
+    const result = await signtTourAxios.post(apiPath, formData)
+    return result.data['token']
+  } catch (error) {
+    throw new Error(error)
+  }
 }

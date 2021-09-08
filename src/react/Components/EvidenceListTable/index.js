@@ -23,13 +23,13 @@ const EvidenceList = (props) => {
       const ticketId = id
       const rowData = dataRows.filter(d => d.id === ticketId)[0]
       rowData[field] = value
-      props.handleEditRow(rowData)
+      props.handleEditRow(rowData, field)
     }, [dataRows])
 
   const handleCellClick = async (param, event) => {
     if (event.target.name === 'taxType') {
       param.row['taxType'] = event.target.value
-      props.handleEditRow(param.row)
+      props.handleEditRow(param.row, 'taxType')
     }
     if (event.target.name === 'deductionType') {
       param.row['deductionType'] = event.target.value

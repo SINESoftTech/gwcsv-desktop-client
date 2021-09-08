@@ -73,11 +73,6 @@ const ScannedImageList = (props) => {
 
   const classes = scannedImageListStyles()
 
-  const handleViewOriginalImage = (selectedImageUrl) => {
-    // console.log('handleViewOriginalImage event', event)
-    // console.log('handleViewOriginalImage target', target)
-    // TODO Open Image view modal, too hard
-  }
   //TODO
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -153,7 +148,6 @@ const ScannedImageList = (props) => {
                                 onClick={e => props.onDeleteImageClick(item)}>
                       <DeleteIcon />
                     </IconButton>
-
                   </div>
                 }
               />

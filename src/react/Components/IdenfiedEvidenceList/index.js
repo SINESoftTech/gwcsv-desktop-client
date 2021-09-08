@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import { getAssign, getJsonRawData } from '../../Actions/electionActions'
-import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+import SigoutourMapper, { reverseIndex, SIGOUTOUR_FIELD_TYPE } from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
-import { electronActions } from '../../Context'
+import { electronActions, sightTourActions } from '../../Context'
 import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
 
 
@@ -13,6 +13,22 @@ const R = require('ramda')
 const byTicketId = R.groupBy((fileObj) => {
   return fileObj.filename.split('_')[2].split('.')[0]
 })
+
+export const handleSendConfirmedResultData = (field, editData, sigoutourJson) => {
+  const reverse = reverseIndex(SIGOUTOUR_FIELD_TYPE)
+  if (field === 'evidenceNumber' && editData['carrierNumber'] != undefined) {
+    field = 'carrierNumber'
+  }
+  const data = {
+    'key': reverse[field],
+    'text': editData[field]
+  }
+  const photoId = sigoutourJson['pageList'][0]['photoList'][0]['photo']
+  return {
+    data: data,
+    photoId: photoId
+  }
+}
 
 const IdentifiedEvidenceList = (props) => {
 
@@ -66,18 +82,21 @@ const IdentifiedEvidenceList = (props) => {
 
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
-  const handleEditRow = async (editData) => {
+  const handleEditRow = async (editData, field = '') => {
     console.log('handleEditRow editData', editData)
     console.log('handleEditRow localFiles', localFiles['03'])
+    console.log('handleEditRow', field)
     const jsonDataList = await getJsonRawData(localFiles['03'], props.declareProperties.clientTaxId)
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
     const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, sigoutourJson)
+    const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
     setLocalFiles(result)
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
+
 
   const handleDelete = async (ticket) => {
     await props.OnDeleteEvdience('identifyResultReceived', ticket)
