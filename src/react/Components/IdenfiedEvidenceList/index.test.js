@@ -289,7 +289,6 @@ test('success handleSendConfirmedResultData case2', () => {
   }
 
   const result = handleSendConfirmedResultData(field, editData, sigoutourJson)
-  console.log('result',result)
   expect(result).toMatchObject({
     data: {
       'id': 'KEY_COMN',
