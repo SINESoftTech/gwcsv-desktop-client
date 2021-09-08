@@ -11,12 +11,13 @@ const getRowClassName = (params) => {
 
 const EvidenceList = (props) => {
   useEffect(() => {
+    console.log('EvidenceList', props.data)
     setDataRows(props.data)
   }, [props.data])
 
   const [dataRows, setDataRows] = useState(props.data)
   const [pageNumber, setPageNumber] = useState(0)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(5)
 
   const handleCellEditCommit = useCallback(
     ({ id, field, value }) => {
@@ -41,14 +42,21 @@ const EvidenceList = (props) => {
     }
   }
 
+  const handlePageChange = (e) => {
+    setPageNumber(e)
+  }
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(e)
+  }
   return (
     <div style={{ height: 650, width: '100%' }}>
       <DataGrid rows={dataRows}
                 columns={props.columns}
                 page={pageNumber}
                 pageSize={pageSize}
-                onPageChange={e => setPageNumber(e.page)}
-                onPageSizeChange={e => setPageSize(e.pageSize)}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
                 rowsPerPageOptions={[10, 20, 30, 40, 50]}
                 checkboxSelection={props.checkboxSelection}
                 onSelectionModelChange={props.handleSelection}
