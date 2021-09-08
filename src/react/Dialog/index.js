@@ -8,18 +8,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useTheme } from '@material-ui/core/styles'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import mainStyles from '../Pages/Main/mainStyles'
-
-const toPeriodTime = (timestamp = Date.now()) => {
-  const date = new Date(timestamp)
-  const year = date.getFullYear() - 1911
-  const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-  const years = [year - 1, year, year + 1]
-  return years.flatMap(year => {
-    return months.map(m => {
-      return year + m
-    })
-  })
-}
+import { toPeriodTime } from '../Util/Time'
 
 const DialogComponent = (props) => {
 
@@ -66,8 +55,8 @@ const DialogComponent = (props) => {
             onChange={handleChange}
           >
             <MenuItem key={0} value={''}>請選擇是否申報營業稅</MenuItem>
-            <MenuItem key={1} value={true+''}>是</MenuItem>
-            <MenuItem key={2} value={false+""}>否</MenuItem>
+            <MenuItem key={1} value={true + ''}>是</MenuItem>
+            <MenuItem key={2} value={false + ''}>否</MenuItem>
           </Select>
         </FormControl>
       </>
