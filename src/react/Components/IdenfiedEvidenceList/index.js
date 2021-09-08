@@ -38,7 +38,7 @@ const IdentifiedEvidenceList = (props) => {
   const [selectionModel, setSelectionModel] = React.useState([])
   const [assignMap, setAssignMap] = React.useState()
 
-  const initDataRows = async (data, clientTaxId) => {
+  const initDataRows = async (data, clientTaxId, assignMap) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     //read assign
     const parseJsonDataList = jsonDataList.map((json, idx) => {
@@ -55,13 +55,14 @@ const IdentifiedEvidenceList = (props) => {
   }
 
   useEffect(() => {
-    const setAssign = async () => {
+    const init = async () => {
       const result = await getAssign()
+      console.log('init()', result)
       setAssignMap(result)
+      setLocalFiles(props.data)
+      initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
     }
-    setAssign()
-    setLocalFiles(props.data)
-    initDataRows(props.data['03'], props.declareProperties.clientTaxId)
+    init()
   }, [props.data, props.declareProperties.clientTaxId])
 
 
@@ -100,7 +101,7 @@ const IdentifiedEvidenceList = (props) => {
       sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
     }
     setLocalFiles(result)
-    initDataRows(result['03'], props.declareProperties.clientTaxId)
+    initDataRows(result['03'], props.declareProperties.clientTaxId, assignMap)
   }
 
 
