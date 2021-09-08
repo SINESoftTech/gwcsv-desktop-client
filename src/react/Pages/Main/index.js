@@ -282,7 +282,7 @@ const Main = (props) => {
     setScanCount(0)
     setOpenDialog(true)
   }
-  
+
   return (
     <div className={classes.root}>
       <CssBaseline />
