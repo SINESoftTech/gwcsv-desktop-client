@@ -115,13 +115,15 @@ const validTaxType = {
     const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
     const isDutyFreeSalesValueGte0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
     const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
-    return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueGte0, isTaxableSalesValueEq0]
+    const isBusinessTaxValueEq0 = json['businessTaxValue'] === 0 ? '' : 'businessTaxValue'
+    return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueGte0, isTaxableSalesValueEq0, isBusinessTaxValueEq0]
   },
   '2': (json) => {
     const isZeroTaxSalesValueGte0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
     const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
     const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
-    return [isZeroTaxSalesValueGte0, isDutyFreeSalesValueEq0, isTaxableSalesValueEq0]
+    const isBusinessTaxValueEq0 = json['businessTaxValue'] === 0 ? '' : 'businessTaxValue'
+    return [isZeroTaxSalesValueGte0, isDutyFreeSalesValueEq0, isTaxableSalesValueEq0, isBusinessTaxValueEq0]
   },
   '': (json) => {
     return ['zeroTaxSalesValue', 'dutyFreeSalesValue', 'taxableSalesValue', 'taxType', 'businessTaxValue']

@@ -143,7 +143,7 @@ test('success handleSendConfirmedResultData case1', () => {
 
   expect(result).toMatchObject({
     data: {
-      'key': 'KEY_INVD',
+      'id': 'KEY_INVD',
       'text': '1090225'
     },
     photoId: '0907175959174992_1_1'
@@ -289,10 +289,10 @@ test('success handleSendConfirmedResultData case2', () => {
   }
 
   const result = handleSendConfirmedResultData(field, editData, sigoutourJson)
-
+  console.log('result',result)
   expect(result).toMatchObject({
     data: {
-      'key': 'KEY_COMN',
+      'id': 'KEY_COMN',
       'text': 'BB20050951'
     },
     photoId: '0907175959174992_1_1'

@@ -85,7 +85,6 @@ export async function getIdentifyResult(fileObj) {
 }
 
 export async function sendConfirmedResult(payload) {
-  console.log('sendConfirmedResult', payload)
   try {
     const apiPath = '/feedbackResult.php'
     const token = await getToken('gateweb1', 'qwe123')
