@@ -4,7 +4,7 @@ import isElectron from 'is-electron'
 import { Alert, AlertTitle } from '@material-ui/lab'
 import CloseIcon from '@material-ui/icons/Close'
 import {
-  AppBar,
+  AppBar, Badge,
   Box, Collapse,
   Container,
   CssBaseline,
@@ -155,11 +155,9 @@ const Main = (props) => {
 
   const handleViewImage = (data) => {
     //fullPath
-    console.log(data.fullPath)
     const windowProxy = window.open('', null, '')
     // windowProxy.postMessage(JSON.stringify(data), '*')
     windowProxy.postMessage(JSON.stringify(data), '*')
-    console.log('handleViewImage data', data)
   }
 
   const handleDeleteImage = (data) => {
@@ -284,7 +282,7 @@ const Main = (props) => {
     setScanCount(0)
     setOpenDialog(true)
   }
-
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -321,9 +319,18 @@ const Main = (props) => {
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <AppBar position='static'>
+
                   <Tabs value={value} onChange={handleTabChange} aria-label='simple tabs example'>
                     <Tab key={0} label='已掃描圖檔' {...a11yProps(0)} />
-                    <Tab key={1} label='已辨識憑證' {...a11yProps(1)} />
+                    <Tab label={<Badge
+                      badgeContent={appState.appData.fileLists['02'] === undefined ? 0 : appState.appData.fileLists['02']
+                        .filter(obj => {
+                          const clientTaxId = obj.filename.split('_')[1]
+                          return clientTaxId === declareProperties.clientTaxId
+                        }).length}
+                      color='secondary' {...a11yProps(1)}>
+                      已辨識憑證
+                    </Badge>} />
                     <Tab key={2} label='待上傳雲端' {...a11yProps(2)} />
                   </Tabs>
                 </AppBar>

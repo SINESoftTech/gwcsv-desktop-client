@@ -61,11 +61,11 @@ const GwMenuTop = (props) => {
             Gateweb
           </Typography>
           {renderUserMenu()}
-          <IconButton color='inherit'>
-            <Badge badgeContent={4} color='secondary'>
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          {/*<IconButton color='inherit'>*/}
+            {/*<Badge badgeContent={4} color='secondary'>*/}
+            {/*  <NotificationsIcon />*/}
+            {/*</Badge>*/}
+          {/*</IconButton>*/}
         </Toolbar>
       </AppBar>
       <Drawer
