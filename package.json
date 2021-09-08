@@ -32,6 +32,7 @@
     "start": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000/ && yarn electron-start\"",
     "build": "yarn react-build && yarn electron-build",
     "test": "react-scripts test --env=jsdom",
+    "ci": "CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "react-start": "react-scripts start",
     "electron-start": " electron .",
