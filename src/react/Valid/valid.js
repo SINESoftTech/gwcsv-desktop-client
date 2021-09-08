@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { getPeriod } from '../Util/Time'
 
 const validTaxId = (taxId) => {
   var invalidList = '00000000,11111111'
@@ -37,16 +38,8 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
   return json
 }
 
-const getPeriod = (json) => {
-  let period = parseInt(json['evidenceDate'].substring(0, 6)) - 191100
-  if (period % 2 === 1) {
-    period += 1
-  }
-  return period
-}
-
 const validGUI = (typeValue, json, assignMap) => {
-  const yyyymm = getPeriod(json)
+  const yyyymm = getPeriod(json['evidenceDate'])
   const trackId = json['evidenceNumber'].substring(0, 2)
   const isTrackIdIncludeAssign = assignMap[typeValue][yyyymm] === undefined ? false : assignMap[typeValue][yyyymm].includes(trackId)
   return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']

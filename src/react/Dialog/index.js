@@ -8,7 +8,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useTheme } from '@material-ui/core/styles'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import mainStyles from '../Pages/Main/mainStyles'
-import { toPeriodTime } from '../Util/Time'
+import { toPeriodList } from '../Util/Time'
 
 const DialogComponent = (props) => {
 
@@ -34,7 +34,7 @@ const DialogComponent = (props) => {
             onChange={handleChange}
           >
             <MenuItem key={0} value={''}>請選擇申報期別</MenuItem>
-            {toPeriodTime().filter(period => period % 2 === 0).map(period => {
+            {toPeriodList().filter(period => period % 2 === 0).map(period => {
               return (<MenuItem key={period} value={period}>{period}</MenuItem>)
             })}
           </Select>

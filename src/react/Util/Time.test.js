@@ -1,10 +1,10 @@
-import { toPeriodTime } from './Time'
+import { toPeriodList, getPeriod } from './Time'
 
 
-test('success get Period', () => {
+test('ts to Period', () => {
   const utcTime = 1631081797628
 
-  const result = toPeriodTime(utcTime)
+  const result = toPeriodList(utcTime)
 
   expect(result).toMatchObject([
     '10901', '10902', '10903', '10904',
@@ -17,4 +17,12 @@ test('success get Period', () => {
     '11105', '11106', '11107', '11108',
     '11109', '11110', '11111', '11112'
   ])
+})
+
+test('success yyyymmdd to period', () => {
+  const yyyymmdd = '20210101'
+
+  const result = getPeriod(yyyymmdd)
+
+  expect(result).toEqual(11002)
 })
