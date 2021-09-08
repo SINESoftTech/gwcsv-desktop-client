@@ -14,7 +14,7 @@ pipeline {
            }
       }
       steps {
-          sh 'npm install --global yarn'
+        
           sh 'npm install'
           sh 'npm run test'
       }
