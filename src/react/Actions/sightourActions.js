@@ -85,6 +85,7 @@ export async function getIdentifyResult(fileObj) {
 }
 
 export async function sendConfirmedResult(payload) {
+  console.log('sendConfirmedResult', payload)
   try {
     const apiPath = '/feedbackResult.php'
     const token = await getToken('gateweb1', 'qwe123')
@@ -92,7 +93,7 @@ export async function sendConfirmedResult(payload) {
     const photoId = payload.photoId
     const formData = new FormData()
     formData.append('token', token)
-    formData.append('data', data)
+    formData.append('data', JSON.stringify(data))
     formData.append('photo', photoId)
     const result = await signtTourAxios.post(apiPath, formData)
     return result.data['token']

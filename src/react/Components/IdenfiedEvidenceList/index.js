@@ -16,11 +16,11 @@ const byTicketId = R.groupBy((fileObj) => {
 
 export const handleSendConfirmedResultData = (field, editData, sigoutourJson) => {
   const reverse = reverseIndex(SIGOUTOUR_FIELD_TYPE)
-  if (field === 'evidenceNumber' && editData['carrierNumber'] != undefined) {
+  if (field === 'evidenceNumber' && editData['carrierNumber'] !== undefined) {
     field = 'carrierNumber'
   }
   const data = {
-    'key': reverse[field],
+    'id': reverse[field],
     'text': editData[field]
   }
   const photoId = sigoutourJson['pageList'][0]['photoList'][0]['photo']
@@ -30,15 +30,17 @@ export const handleSendConfirmedResultData = (field, editData, sigoutourJson) =>
   }
 }
 
+
 const IdentifiedEvidenceList = (props) => {
 
   const [rowData, setRowData] = useState([])
   const [localFiles, setLocalFiles] = useState(props.data)
+  const [selectionModel, setSelectionModel] = React.useState([])
+  const [assignMap, setAssignMap] = React.useState()
 
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     //read assign
-    const assignMap = await getAssign()
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
@@ -53,6 +55,11 @@ const IdentifiedEvidenceList = (props) => {
   }
 
   useEffect(() => {
+    const setAssign = async () => {
+      const result = await getAssign()
+      setAssignMap(result)
+    }
+    setAssign()
     setLocalFiles(props.data)
     initDataRows(props.data['03'], props.declareProperties.clientTaxId)
   }, [props.data, props.declareProperties.clientTaxId])
@@ -66,7 +73,6 @@ const IdentifiedEvidenceList = (props) => {
     })
     const filterData = localFiles['03'].filter((obj) => {
       const ticketId = obj.filename.split('.')[0].split('_')[5]
-
       return selectionModel.includes(ticketId)
     }).filter(obj => {
       const ticketId = obj.filename.split('.')[0].split('_')[5]
@@ -78,21 +84,21 @@ const IdentifiedEvidenceList = (props) => {
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
 
-  const [selectionModel, setSelectionModel] = React.useState([])
 
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
   const handleEditRow = async (editData, field = '') => {
-    console.log('handleEditRow editData', editData)
-    console.log('handleEditRow localFiles', localFiles['03'])
-    console.log('handleEditRow', field)
     const jsonDataList = await getJsonRawData(localFiles['03'], props.declareProperties.clientTaxId)
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
     const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, sigoutourJson)
-    const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
+    const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
+    if (!validResult.includes(field)) {
+      const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
+      sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
+    }
     setLocalFiles(result)
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
