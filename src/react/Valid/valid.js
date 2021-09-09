@@ -21,7 +21,8 @@ const validTaxId = (taxId) => {
 
 const validSigoutourData = (clientTaxId, json, assignMap) => {
   let validResult = validTaxMoney(json)
-  if (json['sellerTaxId'].length !== 8 || !validTaxId(json['sellerTaxId'])) {
+  const isCustom = json['evidenceType'] === '海關代徵營業稅繳納證'
+  if (!isCustom && (json['sellerTaxId'].length !== 8 || !validTaxId(json['sellerTaxId']))) {
     validResult.push('sellerTaxId')
   }
   if (json['buyerTaxId'].length !== 8 || !validTaxId(json['buyerTaxId']) || json['buyerTaxId'] !== clientTaxId) {
@@ -31,6 +32,7 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
   if (!moment(json['evidenceDate'], 'YYYYMMDD', true).isValid()) {
     validResult.push('evidenceDate')
   }
+
   json['cellHighlight'] = [...new Set(validResult)]
   json['cellHighlight'] = json['cellHighlight']
     .filter(value => {

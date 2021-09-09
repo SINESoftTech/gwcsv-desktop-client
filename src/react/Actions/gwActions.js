@@ -1,4 +1,4 @@
-import {gwAxios, gwAxios as axios} from './axios'
+import { gwAxios, gwAxios as axios } from './axios'
 import actionTypes from '../Actions/actionTypes'
 
 const ROOT_URL = 'http://test.gwis.com.tw:8596'
@@ -176,11 +176,57 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
 }
 
 //TODO
-async function uploadCustoms(payload, accountingFirmTaxId, token) {
+async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
   try {
-
+    const req = {
+      'businessEntityTaxId': payload.buyerTaxId,
+      'evidenceType': payload.evidenceType,
+      'reportingPeriod': payload.reportingPeriod,
+      'deductionType': payload.deductionType,
+      'isDeclareBusinessTax': payload.isDeclareBusinessTax,
+      'buyerTaxId': payload.buyerTaxId,
+      'taxType': payload.taxType,
+      'taxableSalesValue': payload.taxableSalesValue,
+      'zeroTaxSalesValue': null,
+      'dutyFreeSalesValue': payload.dutyFreeSalesValue,
+      'withoutTaxAmount': parseInt(payload.taxableSalesValue) + parseInt(payload.zeroTaxSalesValue) + parseInt(payload.dutyFreeSalesValue),
+      'businessTaxValue': payload.businessTaxValue,
+      'otherFee': payload.otherFee,
+      'totalAmount': payload.totalAmount,
+      'totalPayAmount': payload.totalPayAmount,
+      'evidenceTimestamp': payload.evidenceDate,
+      'evidenceId': payload.carrierNumber,
+      'declarationId': payload.declarationId,
+      'groupName': payload.groupName,
+      'remarkText': payload.remarkText
+    }
+    const url = ROOT_URL + '/evidence/customs'
+    let bodyFormData = new FormData()
+    bodyFormData.append('input', JSON.stringify(req))
+    bodyFormData.append('file', imageBlob)
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'taxId': accountingFirmTaxId,
+        'Authorization': token
+      }
+    }
+    const result = await gwAxios.post(url, bodyFormData, config)
+    return {
+      'status': true,
+      'errorMsg': ''
+    }
   } catch (error) {
-
+    let errorMsg = ''
+    if (error.response === undefined) {
+      errorMsg = '網路錯誤'
+    } else {
+      errorMsg = error.response.data.errorMsg
+    }
+    return {
+      'status': false,
+      'errorMsg': errorMsg
+    }
   }
 }
 
