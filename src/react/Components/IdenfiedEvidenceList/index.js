@@ -72,8 +72,6 @@ const IdentifiedEvidenceList = (props) => {
     }).map(obj => {
       return obj.ticketId
     })
-    console.log('handleResultAllConfirmed', rowData)
-    console.log('handleResultAllConfirmed', errorTicketIdList)
     const filterData = localFiles['03'].filter((obj) => {
       const ticketId = obj.filename.split('.')[0].split('_')[5]
       return selectionModel.includes(ticketId)
@@ -81,7 +79,6 @@ const IdentifiedEvidenceList = (props) => {
       const ticketId = obj.filename.split('.')[0].split('_')[5]
       return !errorTicketIdList.includes(ticketId)
     })
-    console.log('handleResultAllConfirmed', filterData)
     const filesByTicketId = byTicketId(filterData)
     const result = await props.onResultAllConfirmed(filesByTicketId)
     setLocalFiles(result)

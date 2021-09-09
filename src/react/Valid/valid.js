@@ -32,7 +32,6 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
   if (!moment(json['evidenceDate'], 'YYYYMMDD', true).isValid()) {
     validResult.push('evidenceDate')
   }
-
   json['cellHighlight'] = [...new Set(validResult)]
   json['cellHighlight'] = json['cellHighlight']
     .filter(value => {
@@ -81,6 +80,9 @@ const validEvidenceType = {
     return validBill(json)
   },
   '電信費帳單-台灣大哥大': (json, assignMap) => {
+    return validBill(json)
+  },
+  '電信費帳單-台灣之星': (json, assignMap) => {
     return validBill(json)
   },
   '電信費帳單-遠傳': (json, assignMap) => {

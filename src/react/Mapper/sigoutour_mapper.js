@@ -130,17 +130,19 @@ const parseData = (jsonData) => {
   if (jsonDataBody.length <= 0) {
     return json
   }
-  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[jsonData['pageList'][0]['photoList'][0]['type']]
+  const type = jsonData['pageList'][0]['photoList'][0]['type']
+  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[type]
   jsonDataBody.forEach(data => {
     const key = SIGOUTOUR_FIELD_TYPE[data['key']]
     json[key] = data['text']
   })
   json['taxType'] = isEmptyOrUndefined(TAX_TYPE[json.taxType]) ? '' : TAX_TYPE[json.taxType]
-  if (jsonData['pageList'][0]['photoList'][0]['type'] === 'A5020') {
+  if (type === 'A5020') {
     json['waterFee'] = json['waterFee'] === '' ? 0 : json['waterFee']
     json['basicFee'] = json['basicFee'] === '' ? 0 : json['basicFee']
     json['taxableSalesValue'] = (parseFloat(json['waterFee']) + parseFloat(json['basicFee']))
   }
+
   json['totalAmount'] = isEmptyOrUndefined(json['totalAmount']) ? 0 : parseInt(json['totalAmount'])
   json['totalPayAmount'] = isEmptyOrUndefined(json['totalPayAmount']) ? 0 : parseInt(json['totalPayAmount'])
   json['otherFee'] = isEmptyOrUndefined(json['otherFee']) ? 0 : parseInt(json['otherFee'])
@@ -148,8 +150,8 @@ const parseData = (jsonData) => {
   json['taxableSalesValue'] = isEmptyOrUndefined(json['taxableSalesValue']) ? 0 : parseInt(json['taxableSalesValue'])
   json['zeroTaxSalesValue'] = isEmptyOrUndefined(json['zeroTaxSalesValue']) ? 0 : parseInt(json['zeroTaxSalesValue'])
   json['dutyFreeSalesValue'] = isEmptyOrUndefined(json['dutyFreeSalesValue']) ? 0 : parseInt(json['dutyFreeSalesValue'])
-  if (jsonData['pageList'][0]['photoList'][0]['type'] === 'A5030') {
-    json['totalAmount'] = json['taxableSalesValue'] + json['businessTaxValue']
+  if (type === 'A5030' || type === 'A5033' || type === 'A5031' || type === 'A5032') {
+    json['totalAmount'] = json['taxableSalesValue'] + json['businessTaxValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
   }
   if (json['evidenceNumber'] === undefined) {
     json['evidenceNumber'] = json['carrierNumber']
@@ -172,6 +174,7 @@ class SigoutourMapperClass {
     json['deductionType'] = deductionType
     json['ticketId'] = ticketId
     json['errorMsg'] = jsonData['errorMsg']
+    console.log('toView', json)
     return json
   }
 
