@@ -192,6 +192,8 @@ class SigoutourMapperClass {
     const jsonDataBody = sigoutourJson['pageList'][0]['photoList'][0]['result']
     const evidenceType = SIGOUTOUR_EVIDENCE_TYPE[sigoutourJson['pageList'][0]['photoList'][0]['type']].value
     const isBillType = evidenceType === 'TELECOM_BILL' || evidenceType === 'WATER_BILL' || evidenceType === 'ELECTRIC_BILL'
+    const isCustomsType = evidenceType === 'CUSTOMS_TAXABLE_EVIDENCE'
+
     jsonDataBody.forEach(obj => {
       if (isBillType && obj['key'] === 'KEY_COMN') {
         obj['text'] = data['evidenceNumber']
@@ -201,6 +203,19 @@ class SigoutourMapperClass {
         obj['text'] = value
       }
     })
+    if (isCustomsType) {
+      jsonDataBody.push({
+          h: 0,
+          key: 'KEY_SEL',
+          name: 'seller',
+          score: [],
+          text: data['sellerTaxId'],
+          w: 0,
+          x: 0,
+          y: 0
+        }
+      )
+    }
     return sigoutourJson
   }
 

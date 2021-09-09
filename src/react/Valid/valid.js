@@ -32,9 +32,10 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
     validResult.push('evidenceDate')
   }
   json['cellHighlight'] = [...new Set(validResult)]
-  json['cellHighlight'] = json['cellHighlight'].filter(value => {
-    return value !== ''
-  })
+  json['cellHighlight'] = json['cellHighlight']
+    .filter(value => {
+      return value !== ''
+    })
   return json
 }
 
@@ -87,7 +88,16 @@ const validEvidenceType = {
     return validBill(json)
   },
   '海關代徵營業稅繳納證': (json, assignMap) => {
-    //todo
+    const evidenceNumber = json['evidenceNumber']
+    const isLenEqual14 = evidenceNumber.length === 14
+    const firstAlpha = evidenceNumber.substring(0, 1)
+    const isBlank = firstAlpha !== ' '
+    const thirdAlpha = evidenceNumber.substring(2, 3)
+    const isEqual1 = thirdAlpha !== '1'
+    const isEvidenceNumberOk = isLenEqual14 && isBlank && isEqual1 ? '' : 'evidenceNumber'
+    const declarationId = json['declarationId']
+    const isDeclarationIdOk = 14 === declarationId.length ? '' : 'declarationId'
+    return [isEvidenceNumberOk, isDeclarationIdOk]
   },
   '': (json, assignMap) => {
     return ['evidenceType', 'evidenceNumber']

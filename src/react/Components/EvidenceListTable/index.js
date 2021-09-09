@@ -11,7 +11,6 @@ const getRowClassName = (params) => {
 
 const EvidenceList = (props) => {
   useEffect(() => {
-    console.log('EvidenceList', props.data)
     setDataRows(props.data)
   }, [props.data])
 
