@@ -74,7 +74,35 @@ function createWindow() {
   mainWindow.loadURL(isDev ? devServerUrl : fileLocation)
   // mainWindow.loadURL(fileLocation)
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  if(isDev){
+    mainWindow.webContents.openDevTools()
+  }
+  //
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: {
+        webPreferences: {
+          preload: path.join(__dirname, 'image_preload.js'),
+          contextIsolation: true
+        }
+      }
+    }
+  })
+
+  mainWindow.webContents.on('did-create-window', (childWindow) => {
+    // For example...
+    if(isDev){
+      childWindow.webContents.openDevTools()
+    }
+    // 
+    var fileLocation = `file://${path.join(__dirname, '../public/image.html')}`
+    //todo
+    childWindow.loadURL(fileLocation)
+    childWindow.webContents.on('will-navigate', (e) => {
+      e.preventDefault()
+    })
+  })
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
     // Dereference the window object, usually you would store windows
@@ -83,7 +111,6 @@ function createWindow() {
     mainWindow = null
   })
 }
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -161,7 +188,13 @@ function getFileContent(fullPath) {
 
 }
 
+ipcMain.handle('evidence:saveAssign', (event, payload) => {
+  const targetFilePath = config.fileFolder + '/' + 'assign.json'
+  fse.writeJSONSync(targetFilePath, payload, { encoding: 'utf8', flag: 'w' })
+})
+
 ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
+  console.log(fullPath)
   return getFileContent(fullPath)
 })
 
@@ -177,10 +210,63 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
 
-ipcMain.handle('evidence:scanImages', (event, fullPath, username, clientTaxId) => {
+ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, period, json) => {
+  //json remove old and save
+  const fileList03 = getAllFileLists()['03']
+  const filterFileList = fileList03.filter(obj => {
+    const fileName = obj.filename
+    const id = fileName.split('.')[0].split('_')[5]
+    return id === ticketId
+  })
+
+  const targetFolderPath = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
+  filterFileList.map(file => {
+    const fileName = file.filename
+    const splitFileName = fileName.split('_')
+    splitFileName[2] = period
+    splitFileName[3] = deductionType
+    const targetFileName = splitFileName.join('_')
+    const targetFilePath = path.join(targetFolderPath, targetFileName)
+    if (getFileExt(fileName) === 'json') {
+      fse.removeSync(file.fullPath)
+      fse.writeJSONSync(targetFilePath, json)
+    } else {
+      if (targetFileName !== fileName) {
+        fse.copySync(file.fullPath, targetFilePath, { overwrite: true })
+        fse.removeSync(file.fullPath)
+      }
+    }
+  })
+  return getAllFileLists()
+})
+
+
+ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
+
+  let folderId = '03'
+  if (eventName === 'evidenceSaved') {
+    folderId = '04'
+  }
+  if (eventName === 'scanned') {
+    folderId = '01'
+  }
+  const fileList = getAllFileLists()[folderId]
+  const filterFileList = fileList.filter(obj => {
+    const fileName = obj.filename
+    const id = fileName.split('.')[0].split('_')[5]
+    return id === ticketId
+  })
+  for (let i = 0; i < filterFileList.length; i++) {
+    const data = filterFileList[i]
+    fse.removeSync(data.fullPath)
+  }
+  return getAllFileLists()
+})
+
+ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
-  const targetFilePath = targetFolderPath + '/' + username + '_' + clientTaxId + '_' + Date.now() + '.' + sourceFileExt
+  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + Date.now() + '.' + sourceFileExt
   fse.copySync(fullPath, targetFilePath)
   return getAllFileLists(fullPath)
 })
@@ -188,13 +274,13 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, clientTaxId) =
 
 ipcMain.handle('evidence:identifyResultConfirmed', (event, payload) => {
   console.log('identifyResultConfirmed', payload)
-  Object.keys(payload).forEach(ticketId => {
-    const sourceImageFullPath = payload[ticketId][0].fullPath
-    const targetImageFullName = path.join(config.fileFolder, stageFolders.evidenceSaved.folder, payload[ticketId][0].filename)
-    fse.moveSync(sourceImageFullPath, targetImageFullName)
-    const sourceJsonFullPath = payload[ticketId][1].fullPath
-    const targetJsonFullName = path.join(config.fileFolder, stageFolders.evidenceSaved.folder, payload[ticketId][1].filename)
-    fse.moveSync(sourceJsonFullPath, targetJsonFullName)
+  Object.keys(payload).forEach(period => {
+    const data = payload[period]
+    for (let i = 0; i < data.length; i++) {
+      const sourceImageFullPath = data[i].fullPath
+      const targetImageFullName = path.join(config.fileFolder, stageFolders.evidenceSaved.folder, data[i].filename)
+      fse.moveSync(sourceImageFullPath, targetImageFullName)
+    }
   })
   return getAllFileLists()
 })
@@ -216,7 +302,9 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
     const data = identifyResult[i]
     if (data['result']) {
       const fileExt = data['sourceFileName'].split('.')[1]
-      const targetFileName = `${username}_${data['businessEntityTaxId']}_${data['ticketId']}.${fileExt}`
+      const reportingPeriod = data['sourceFileName'].split('_')[2]
+      const isDeclareBusinessTax = data['sourceFileName'].split('_')[4]
+      const targetFileName = `${username}_${data['businessEntityTaxId']}_${reportingPeriod}_1_${isDeclareBusinessTax}_${data['ticketId']}.${fileExt}`
       const targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
     }
@@ -277,22 +365,25 @@ ipcMain.handle('evidence:uploaded', (event, payload) => {
       const targetJsonPath = targetFolder + '/' + jsonPath
       fse.moveSync(data['imageFullPath'], targetImagePath)
       fse.moveSync(data['jsonFullPath'], targetJsonPath)
+    } else {
+      const json = fse.readJSONSync(data['jsonFullPath'])
+      json['errorMsg'] = data['json']['errorMsg']
+      fse.writeJSONSync(data['jsonFullPath'], json)
     }
   })
   return getAllFileLists()
 })
-
+const getFileExt = (fileName) => {
+  if (fileName.endsWith('jpg') || fileName.endsWith('png')) {
+    return 'image'
+  }
+  return 'json'
+}
 
 ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
-  const getFileExt = (fileName) => {
-    if (fileName.endsWith('jpg') || fileName.endsWith('png')) {
-      return 'image'
-    }
-    return 'json'
-  }
+  console.log('getRawDataWithImage', fullPathList)
   return fullPathList.map(d => {
     const key = R.keys(d)[0]
-    let json = {}
     const r = d[key].map(fileObj => {
       const fileExt = getFileExt(fileObj.filename.split('.')[1])
       const value = getFileContent(fileObj.fullPath)
@@ -302,10 +393,20 @@ ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
       json[filePathKey] = fileObj.fullPath
       return json
     })
-    json['imageFullPath'] = r[0]['imageFullPath']
-    json['image'] = r[0]['image']
-    json['json'] = r[1]['json']
-    json['jsonFullPath'] = r[1]['jsonFullPath']
-    return json
+    const byTicketId = R.groupBy(function(data) {
+      let ticketId = ''
+      if (data['image'] === undefined) {
+        ticketId = data['json']['ticket']
+      } else {
+        ticketId = data['imageFullPath'].split('_')[5].split('.')[0]
+      }
+      return ticketId
+    })
+    return byTicketId(r)
   })
+})
+
+ipcMain.handle('evidence:getAssign', (event) => {
+  const targetFilePath = config.fileFolder + '/' + 'assign.json'
+  return fse.readJSONSync(targetFilePath)
 })

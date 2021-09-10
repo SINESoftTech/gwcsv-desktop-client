@@ -1,9 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { DataGrid, GridRowsProp, GridColDef } from '@material-ui/data-grid'
-import ColumnDefinitions from './ColumnDefinitions'
-import { Button } from '@material-ui/core'
-
-const columns = ColumnDefinitions
+import React, { useCallback, useEffect, useState } from 'react'
+import { DataGrid } from '@material-ui/data-grid'
+import { electronActions } from '../../Context'
 
 
 const getRowClassName = (params) => {
@@ -12,62 +9,59 @@ const getRowClassName = (params) => {
   }
 }
 
-
-const handleRowClick = (param, event) => {
-  console.log('Row:')
-  console.log(param)
-  console.log(event)
-}
-const handleCellDoubleClicked = (param, event) => {
-  console.log('handleCellDoubleClicked param', param)
-  console.log('handleCellDoubleClicked event', event)
-}
-
-const handleEditRowModeChanged = (param, event) => {
-  console.log('handleEditRowModeChanged param', param)
-  console.log('handleEditRowModeChanged event', event)
-}
-const handleRowLeft = (param, event) => {
-  console.log('handleRowLeft param', param)
-  console.log('handleRowLeft event', event)
-}
-
-const handleRowOut = (param, event) => {
-  console.log('handleRowOut param', param)
-  console.log('handleRowOut event', event)
-}
-
 const EvidenceList = (props) => {
-
   useEffect(() => {
     setDataRows(props.data)
   }, [props.data])
 
   const [dataRows, setDataRows] = useState(props.data)
   const [pageNumber, setPageNumber] = useState(0)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(5)
 
-  //TODO
   const handleCellEditCommit = useCallback(
     ({ id, field, value }) => {
-      console.log('handleCellEditCommit', id, field, value)
+      const ticketId = id
+      const rowData = dataRows.filter(d => d.id === ticketId)[0]
+      rowData[field] = value
+      props.handleEditRow(rowData, field)
     }, [dataRows])
 
+  const handleCellClick = async (param, event) => {
+    if (event.target.name === 'taxType') {
+      param.row['taxType'] = event.target.value
+      props.handleEditRow(param.row, 'taxType')
+    }
+    if (event.target.name === 'deductionType') {
+      param.row['deductionType'] = event.target.value
+      props.handleEditRow(param.row)
+    }
+    if (event.target.innerText === '刪除') {
+      const ticketId = param.row.id
+      props.handleDelete(ticketId)
+    }
+  }
+
+  const handlePageChange = (e) => {
+    setPageNumber(e)
+  }
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(e)
+  }
   return (
     <div style={{ height: 650, width: '100%' }}>
       <DataGrid rows={dataRows}
-                columns={columns}
+                columns={props.columns}
                 page={pageNumber}
                 pageSize={pageSize}
-                onPageChange={e => setPageNumber(e.page)}
-                onPageSizeChange={e => setPageSize(e.pageSize)}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
                 rowsPerPageOptions={[10, 20, 30, 40, 50]}
                 checkboxSelection={props.checkboxSelection}
-        //todo return row id and field name ,field value
+                onSelectionModelChange={props.handleSelection}
                 onCellEditCommit={handleCellEditCommit}
-        //TODO save return row id
-                onSelectionModelChange={(e) => console.log('onSelectionModelChange', e)}
                 getCellClassName={getRowClassName}
+                onCellClick={handleCellClick}
       />
     </div>
   )

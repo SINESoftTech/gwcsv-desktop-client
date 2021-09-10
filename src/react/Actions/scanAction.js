@@ -14,7 +14,7 @@ export const openScanner = (dispatch) => {
   }
 }
 
-export const scan = (deviceName, handleMoveFile, handleScannerError) => {
+export const scan = (deviceName, handleMoveFile, handleScannerError, handleCloseDisable) => {
   console.log('scan() deviceName', deviceName)
   const paramJson = {
     'device-name': deviceName,
@@ -43,13 +43,17 @@ export const scan = (deviceName, handleMoveFile, handleScannerError) => {
   const url = apiPath + '/SetParams?' + new URLSearchParams(paramJson).toString()
   const ws = new WebSocket(url, 'webfxscan')
   ws.onopen = () => console.log('ws opened')
+  ws.onerror= ()=>  handleScannerError('error:')
   ws.onmessage = (message) => {
-    console.log(message)
+    console.log('scan()', message)
     const data = message.data
     if (data.startsWith('FilePath:')) {
       const splitData = data.split('FilePath:')
       const filePath = splitData[1].split('\x00')[0]
-      handleMoveFile(filePath)
+      handleMoveFile(1, filePath)
+    } else if (data === 'finish') {
+      //todo
+      handleCloseDisable()
     } else {
       handleScannerError(message.data)
     }

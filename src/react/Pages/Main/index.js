@@ -1,18 +1,22 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import { gwActions, sightTourActions, electronActions, useAppDispatch, useAppState } from '../../Context'
+import React, { useEffect } from 'react'
+import { electronActions, gwActions, sightTourActions, useAppDispatch, useAppState } from '../../Context'
 import isElectron from 'is-electron'
+import { Alert, AlertTitle } from '@material-ui/lab'
+import CloseIcon from '@material-ui/icons/Close'
 import {
-  Box,
-  AppBar,
+  AppBar, Badge,
+  Box, Collapse,
   Container,
   CssBaseline,
-  Grid,
+  FormControl,
+  Grid, IconButton,
   InputLabel,
   MenuItem,
-  Paper, Select,
+  Paper,
+  Select,
   Tab,
   Tabs,
-  Typography, FormControl
+  Typography
 } from '@material-ui/core'
 import GwMenuTop from './GwMenuTop'
 import mainStyles from './mainStyles'
@@ -20,35 +24,17 @@ import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
 import {
-  getImageFile,
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
-  identifySent, scanImages
+  identifySent
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-import { DEDUCTION_TYPE } from '../../Enum/gateweb_type'
 import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 import { openScanner, scan } from '../../Actions/scanAction'
-import actionTypes from '../../Actions/actionTypes'
+import DialogComponent from '../../Dialog'
 
 const R = require('ramda')
-const electron = isElectron() ? window.electron : null
-const remote = isElectron() ? window.remote : null
-const ipcRenderer = isElectron() ? electron.ipcRenderer : null
-
-
-const toPeriodTime = (timestamp = Date.now()) => {
-  const date = new Date(timestamp)
-  const year = date.getFullYear() - 1911
-  const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-  const years = [year - 1, year, year + 1]
-  return years.flatMap(year => {
-    return months.map(m => {
-      return year + m
-    })
-  })
-}
 
 
 function TabPanel(props) {
@@ -72,21 +58,26 @@ function TabPanel(props) {
 }
 
 const Main = (props) => {
+
   const dispatch = useAppDispatch()
   const appState = useAppState()
   const [value, setValue] = React.useState(0)
   const [declareProperties, setDeclareProperties] = React.useState({
     'clientTaxId': '',
     'reportingPeriod': '',
-    'deductionType': '',
-    'evidenceType': ''
+    'evidenceType': '',
+    isDeclareBusinessTax: true
   })
-  const [disableSelection, setDisableSelection] = React.useState(true)
   const classes = mainStyles()
+  const [scanCount, setScanCount] = React.useState(0)
+  const [scanDisable, setScanDisable] = React.useState(false)
+  const [scanAlert, setScanAlert] = React.useState(false)
 
   useEffect(async () => {
     await electronActions.getFileLists(dispatch)
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
+    const assign = await gwActions.getAssign()
+    await electronActions.saveAssign(assign)
     await openScanner(dispatch)
   }, [])
 
@@ -103,12 +94,12 @@ const Main = (props) => {
       }
     })
     if (name === 'clientTaxId') {
-      setDisableSelection(false)
+      handleReset()
     }
   }
-  //endregion
   const handleScannerError = (errorMsg) => {
     const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
+    setScanDisable(false)
     if (isErrorMsgStartsWithError && errorMsg === 'error:feeding error') {
       alert('無法掃描，請放入紙張')
       return
@@ -118,14 +109,10 @@ const Main = (props) => {
       return
     }
 
-    // const msg=errorMsg.split('')
   }
-
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
-    setDisableSelection(true)
-    //todo
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = declareProperties.clientTaxId
     const sendToIdentifyData = data.map(d => {
@@ -138,6 +125,7 @@ const Main = (props) => {
         'evidenceType': declareProperties.evidenceType
       }
     })
+    console.log(sendToIdentifyData)
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
     identifySent(dispatch, {
       'user': appState.auth.user.username,
@@ -156,30 +144,49 @@ const Main = (props) => {
   }
 
 
-  const handleSaveImage = (event, data) => {
-    console.log('handleSaveImage event', event)
-    console.log('handleSaveImage data', data)
+  const handleSaveImage = (data) => {
+    const url = window.URL.createObjectURL(data.fileBlob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', data.fileName)
+    document.body.appendChild(link)
+    link.click()
   }
-  const handleViewImage = (event, data) => {
-    console.log('handleViewImage event', event)
-    console.log('handleViewImage data', data)
 
+  const handleViewImage = (data) => {
+    //fullPath
+    const windowProxy = window.open('', null, '')
+    // windowProxy.postMessage(JSON.stringify(data), '*')
+    windowProxy.postMessage(JSON.stringify(data), '*')
   }
-  const handleDeleteImage = (event, data) => {
-    console.log('handleDeleteImage event', event)
+
+  const handleDeleteImage = (data) => {
+    //todo
+    console.log()
+    const timestamp = data.fileName.split('_')[5].split('.')[0]
+    const eventName = 'scanned'
+    electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
     console.log('handleDeleteImage data', data)
-
   }
 
   const handleScanImage = () => {
-    scan(appState.appData.scannerName, handleMoveImage, handleScannerError)
+    if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
+      setScanDisable(true)
+      setScanAlert(true)
+      scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
+    }
   }
 
-  const handleMoveImage = (filePath) => {
-    electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties.clientTaxId)
+  const handleCloseDisable = () => {
+    setScanDisable(false)
   }
 
-  //endregion
+  const handleMoveImage = async (count, filePath) => {
+    setScanCount(prevState => {
+      return prevState + 1
+    })
+    await electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
+  }
 
   const handleResultAllConfirmed = async (filesByTicketId) => {
     try {
@@ -206,57 +213,11 @@ const Main = (props) => {
     }
   }
 
-  const renderReportingPeriod = () => {
-    console.log('renderReportingPeriod')
-
-    return (
-      <>
-        <FormControl className={classes.formControl}>
-          <InputLabel id='reporting-period-select-label'>申報期別</InputLabel>
-          <Select
-            labelId='reporting-period-select-label'
-            id='reporting-period-select'
-            name='reportingPeriod'
-            value={declareProperties.reportingPeriod}
-            onChange={handleSelectionChange}
-            disabled={disableSelection}
-          >
-
-            <MenuItem key={0} value={''}>請選擇申報期別</MenuItem>
-            {toPeriodTime().filter(period => period % 2 === 0).map(period => {
-              return (<MenuItem key={period} value={period}>{period}</MenuItem>)
-            })}
-          </Select>
-        </FormControl>
-      </>
-    )
-  }
-
-  const renderDeductionType = () => {
-    console.log('renderDeductionType')
-    return (
-      <>
-        <FormControl className={classes.formControl}>
-          <InputLabel id='deduction-type-select-label'>扣抵代號</InputLabel>
-          <Select
-            labelId='deduction-type-select-label'
-            id='deduction-type-select'
-            name='deductionType'
-            value={declareProperties.deductionType}
-            onChange={handleSelectionChange}
-            disabled={disableSelection}>
-            <MenuItem key={0} value={''}>請選擇扣抵代號</MenuItem>
-            {DEDUCTION_TYPE.map(obj => {
-              return <MenuItem key={obj.value} value={obj.value}>{obj.key}</MenuItem>
-            })}
-          </Select>
-        </FormControl>
-      </>
-    )
+  const handleDeleteEvidence = (eventName, ticketId) => {
+    electronActions.deleteSigoutourData(dispatch, eventName, ticketId)
   }
 
   const renderClientSelect = () => {
-    console.log('renderClientSelect appState', appState)
     return (
       <>
         <FormControl className={classes.formControl}>
@@ -266,7 +227,9 @@ const Main = (props) => {
             id='client-taxId-select'
             name='clientTaxId'
             value={declareProperties.clientTaxId}
-            onChange={handleSelectionChange}>
+            onChange={handleSelectionChange}
+            disabled={scanDisable}
+          >
             <MenuItem key={0} value={''}>請選擇營利事業人</MenuItem>
             {appState.appData.clientLists.map(client => {
               return (<MenuItem key={client.taxId.id} value={client.taxId.id}>{client.name}</MenuItem>)
@@ -288,8 +251,7 @@ const Main = (props) => {
             id='evidence-type-select'
             name='evidenceType'
             value={declareProperties.evidenceType}
-            onChange={handleSelectionChange}
-            disabled={disableSelection}>
+            onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
             {keyList.map(key => {
               return <MenuItem key={key}
@@ -301,24 +263,74 @@ const Main = (props) => {
     )
   }
 
+
+  const handleReset = () => {
+    setDeclareProperties(prevState => {
+      return {
+        ...prevState,
+        'reportingPeriod': ''
+      }
+    })
+  }
+
+  const [openDialog, setOpenDialog] = React.useState(false)
+
+  const handleClose = () => {
+    setOpenDialog(false)
+  }
+  const handleOpen = () => {
+    setScanCount(0)
+    setOpenDialog(true)
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
       <GwMenuTop />
       <main className={classes.content}>
+        <DialogComponent declareProperties={declareProperties} handleSelectionChange={handleSelectionChange}
+                         handleReset={handleReset} handleClose={handleClose} open={openDialog}
+                         onScan={handleScanImage} />
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
-          {renderReportingPeriod()}
-          {renderDeductionType()}
           {renderEvidenceType()}
+          <Collapse in={scanAlert}>
+            <Alert
+              severity='info'
+              action={
+                <IconButton
+                  aria-label='close'
+                  color='inherit'
+                  size='small'
+                  onClick={() => {
+                    setScanAlert(false)
+                  }}
+                >
+                  <CloseIcon fontSize='inherit' />
+                </IconButton>
+              }
+            >
+              此次掃描 {scanCount} 筆資料
+            </Alert>
+          </Collapse>
+
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <AppBar position='static'>
+
                   <Tabs value={value} onChange={handleTabChange} aria-label='simple tabs example'>
                     <Tab key={0} label='已掃描圖檔' {...a11yProps(0)} />
-                    <Tab key={1} label='已辨識憑證' {...a11yProps(1)} />
+                    <Tab label={<Badge
+                      badgeContent={appState.appData.fileLists['02'] === undefined ? 0 : appState.appData.fileLists['02']
+                        .filter(obj => {
+                          const clientTaxId = obj.filename.split('_')[1]
+                          return clientTaxId === declareProperties.clientTaxId
+                        }).length}
+                      color='secondary' {...a11yProps(1)}>
+                      已辨識憑證
+                    </Badge>} />
                     <Tab key={2} label='待上傳雲端' {...a11yProps(2)} />
                   </Tabs>
                 </AppBar>
@@ -326,25 +338,28 @@ const Main = (props) => {
                   <ScannedImageList data={appState.appData.fileLists['01']}
                                     username={appState.auth.user.username}
                                     declareProperties={declareProperties}
+                                    onOpenDialog={handleOpen}
                                     onScanClick={handleScanImage}
                                     onSendToIdentifyClick={handleSendImageToIdentify}
                                     onSaveImageClick={handleSaveImage}
                                     onImageOriginalViewClick={handleViewImage}
                                     onDeleteImageClick={handleDeleteImage}
+                                    scanDisable={scanDisable}
                   />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
-                                          clientTaxId={declareProperties.clientTaxId}
+                                          declareProperties={declareProperties}
                                           onGetIdentifyResult={handleGetIdentifyResult}
-                                          onResultAllConfirmed={handleResultAllConfirmed}></IdentifiedEvidenceList>
+                                          onResultAllConfirmed={handleResultAllConfirmed}
+                                          OnDeleteEvdience={handleDeleteEvidence}></IdentifiedEvidenceList>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
-
                                          user={appState.auth.user}
                                          onGwUploaded={handleGwUploaded}
-                                         declareProperties={declareProperties}></ConfirmedEvidenceList>
+                                         declareProperties={declareProperties}
+                                         OnDeleteEvdience={handleDeleteEvidence}></ConfirmedEvidenceList>
                 </TabPanel>
               </Paper>
             </Grid>

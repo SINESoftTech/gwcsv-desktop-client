@@ -1,6 +1,5 @@
 import { signtTourAxios } from './axios'
 
-const R = require('ramda')
 
 const getToken = async (id, psw) => {
   try {
@@ -35,6 +34,7 @@ export async function sendToIdentify(identifyData) {
       formData.append('token', token)
       const result = await signtTourAxios.post(apiPath, formData, config)
       if (result.data['result'] === 0) {
+        console.log('sendToIdentify', data)
         resultList.push({
           'result': true,
           'businessEntityTaxId': data.businessEntityTaxId,
@@ -61,7 +61,7 @@ export async function getIdentifyResult(fileObj) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
-    const ticketId = fileObj.filename.split('_')[2]
+    const ticketId = fileObj.filename.split('_')[5].split('.')[0]
     const formData = new FormData()
     formData.append('token', token)
     formData.append('ticket', ticketId)
@@ -84,6 +84,19 @@ export async function getIdentifyResult(fileObj) {
   }
 }
 
-export async function sendConfirmedResult(dispatch, payload) {
-  dispatch({ type: 'LOGOUT' })
+export async function sendConfirmedResult(payload) {
+  try {
+    const apiPath = '/feedbackResult.php'
+    const token = await getToken('gateweb1', 'qwe123')
+    const data = [payload.data]
+    const photoId = payload.photoId
+    const formData = new FormData()
+    formData.append('token', token)
+    formData.append('data', JSON.stringify(data))
+    formData.append('photo', photoId)
+    const result = await signtTourAxios.post(apiPath, formData)
+    return result.data['token']
+  } catch (error) {
+    throw new Error(error)
+  }
 }

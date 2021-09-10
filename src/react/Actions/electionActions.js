@@ -5,6 +5,40 @@ const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
+export const saveAssign = async (payload) => {
+  console.log('saveAssign', payload)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:saveAssign', payload)
+      return result
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+export async function updateSigoutourData(ticketId, deductionType, period, json) {
+  try {
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId, deductionType, period, json)
+    }
+  } catch (error) {
+    console.log('updateSigoutourData', error)
+  }
+}
+
+export async function deleteSigoutourData(dispatch, eventName, ticketId) {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:deleteSigoutourData', eventName, ticketId)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+    }
+  } catch (error) {
+    console.log('deleteSigoutourData', error)
+  }
+}
+
 export async function getJsonRawData(data, clientTaxId) {
   try {
     const filterJsonDataFilePathList = data.filter(d => {
@@ -37,17 +71,16 @@ export async function getFileLists(dispatch) {
   }
 }
 
-export async function scanImages(dispatch, filePath, username, clientTaxId) {
+export async function scanImages(dispatch, filePath, username, declareProperties) {
   console.log('scanImages() filePath', filePath)
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, clientTaxId)
+      const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, declareProperties)
       console.log('scanImages result', result)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
     console.log(error)
-    // throw new Error(error)
   }
 }
 
@@ -109,5 +142,16 @@ export async function getRawDataWithImage(payload) {
     }
   } catch (error) {
     // throw new Error(error)
+  }
+}
+
+export async function getAssign() {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getAssign')
+      return result
+    }
+  } catch (error) {
+    console.log(error)
   }
 }

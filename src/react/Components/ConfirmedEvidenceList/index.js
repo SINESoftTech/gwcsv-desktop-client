@@ -5,6 +5,8 @@ import isElectron from 'is-electron'
 import { getJsonRawData, getRawDataWithImage } from '../../Actions/electionActions'
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+import { ConfirmedColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
+
 
 const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
@@ -24,8 +26,12 @@ const ConfirmedEvidenceList = (props) => {
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
-      const parseResult = SigoutourMapper.toView(json.data)
-      parseResult['id'] = idx + 1
+      const reportingPeriod = json.filePath.split('_')[2]
+      const deductionType = json.filePath.split('_')[3]
+      const ticketId = json.filePath.split('_')[5]
+      const parseResult = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data)
+      parseResult['sn'] = idx + 1
+      parseResult['id'] = json.data['ticket']
       return parseResult
     })
     setRowData(parseJsonDataList)
@@ -52,23 +58,45 @@ const ConfirmedEvidenceList = (props) => {
       }
     }
     const getRawDataResult = await getRawDataWithImage(filterResult)
-    console.log('getRawDataResult()', getRawDataResult)
-    const parseRawDataResult = getRawDataResult.map(data => {
-      return {
-        'image': new File([data['image']], Date.now() + '.jpg'),
-        'imageFullPath': data['imageFullPath'],
-        'jsonFullPath': data['jsonFullPath'],
-        'json': SigoutourMapper.toGw(data['json'])
+    console.log(getRawDataResult)
+    const parseRawDataResult = getRawDataResult.flatMap(data => {
+      const keys = R.keys(data)
+      let result = []
+      for (let i = 0; i < keys.length; i++) {
+        let json = {}
+        for (let j = 0; j < data[keys[i]].length; j++) {
+          json = Object.assign(json, data[keys[i]][j])
+        }
+        const reportingPeriod = json['imageFullPath'].split('_')[2]
+        const deductionType = json['imageFullPath'].split('_')[3]
+        const isDeclareBusinessTax = json['imageFullPath'].split('_')[4]
+        const ticketId = json['imageFullPath'].split('_')[5].split('.')[0]
+        result.push({
+          'image': new File([json['image']], Date.now() + '.jpg'),
+          'imageFullPath': json['imageFullPath'],
+          'jsonFullPath': json['jsonFullPath'],
+          'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, json['json'])
+        })
       }
+      return result
     })
-    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token, props.declareProperties)
+    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
+
     props.onGwUploaded(uploadResult)
+  }
+
+  const handleDelete = async (ticket) => {
+    console.log('handleDelete', ticket)
+    await props.OnDeleteEvdience('evidenceSaved', ticket)
   }
 
   return (
     <div>
       <Button variant='contained' onClick={handleUpload}>上傳</Button>
-      <EvidenceList data={rowData} checkboxSelection={false}></EvidenceList>
+      <EvidenceList data={rowData}
+                    checkboxSelection={false}
+                    columns={ConfirmedColumnDefinitions}
+                    handleDelete={handleDelete}></EvidenceList>
     </div>
   )
 }
