@@ -74,7 +74,10 @@ function createWindow() {
   mainWindow.loadURL(isDev ? devServerUrl : fileLocation)
   // mainWindow.loadURL(fileLocation)
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  if(isDev){
+    mainWindow.webContents.openDevTools()
+  }
+  //
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     return {
       action: 'allow',
@@ -89,7 +92,10 @@ function createWindow() {
 
   mainWindow.webContents.on('did-create-window', (childWindow) => {
     // For example...
-    childWindow.webContents.openDevTools()
+    if(isDev){
+      childWindow.webContents.openDevTools()
+    }
+    // 
     var fileLocation = `file://${path.join(__dirname, '../public/image.html')}`
     //todo
     childWindow.loadURL(fileLocation)
