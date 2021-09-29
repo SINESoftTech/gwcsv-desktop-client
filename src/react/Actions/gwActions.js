@@ -1,8 +1,6 @@
 import { gwAxios, gwAxios as axios } from './axios'
 import actionTypes from '../Actions/actionTypes'
 
-const ROOT_URL = 'http://test.gwis.com.tw:8596'
-
 export async function loginUser(dispatch, loginPayload) {
   const requestOptions = {
     method: 'POST',
@@ -89,7 +87,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
       'groupName': null,
       'remarkText': payload.remark
     }
-    const url = ROOT_URL + '/evidence/gui'
+    const url = '/evidence/gui'
     let bodyFormData = new FormData()
     bodyFormData.append('input', JSON.stringify(req))
     bodyFormData.append('file', imageBlob)
@@ -100,7 +98,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
         'Authorization': token
       }
     }
-    const result = await gwAxios.post(url, bodyFormData, config)
+    const result = await axios.post(url, bodyFormData, config)
     return {
       'status': true,
       'errorMsg': ''
@@ -145,7 +143,7 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
       'groupName': null,
       'remarkText': payload.remark
     }
-    const url = ROOT_URL + '/evidence/bill'
+    const url = '/evidence/bill'
     let bodyFormData = new FormData()
     bodyFormData.append('input', JSON.stringify(req))
     bodyFormData.append('file', imageBlob)
@@ -156,7 +154,7 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
         'Authorization': token
       }
     }
-    const result = await gwAxios.post(url, bodyFormData, config)
+    const result = await axios.post(url, bodyFormData, config)
     return {
       'status': true,
       'errorMsg': ''
@@ -200,7 +198,7 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
       'groupName': payload.groupName,
       'remarkText': payload.remarkText
     }
-    const url = ROOT_URL + '/evidence/customs'
+    const url ='/evidence/customs'
     let bodyFormData = new FormData()
     bodyFormData.append('input', JSON.stringify(req))
     bodyFormData.append('file', imageBlob)
@@ -211,7 +209,7 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
         'Authorization': token
       }
     }
-    const result = await gwAxios.post(url, bodyFormData, config)
+    const result = await axios.post(url, bodyFormData, config)
     return {
       'status': true,
       'errorMsg': ''

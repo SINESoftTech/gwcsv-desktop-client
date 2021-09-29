@@ -1,6 +1,6 @@
 import axios from "axios";
 const SIGHT_TOUR_ROOT_URL = 'http://aiocr.sightour.com/gateweb/api'
-const GW_ROOT_URL = 'http://test.gwis.com.tw:8596'
+const GW_ROOT_URL = 'http://35.236.168.181'
 const gwAxios = axios.create({
   baseURL: GW_ROOT_URL,
   headers: {'Content-Type': 'application/json'}
