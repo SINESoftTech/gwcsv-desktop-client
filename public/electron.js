@@ -58,8 +58,6 @@ function createWindow() {
   // Create the browser window.
   // console.log(path.join(__dirname, 'preload.js'))
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
@@ -67,7 +65,7 @@ function createWindow() {
       contextIsolation: false
     }
   })
-
+  mainWindow.maximize()
   // and load the index.html of the app.
   var fileLocation = `file://${path.join(__dirname, '../build/index.html')}`
   var devServerUrl = 'http://localhost:3000'
