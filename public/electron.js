@@ -213,7 +213,7 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
   const fileList03 = getAllFileLists()['03']
   const filterFileList = fileList03.filter(obj => {
     const fileName = obj.filename
-    const id = fileName.split('.')[0].split('_')[5]
+    const id = fileName.split('.')[0].split('_')[6]
     return id === ticketId
   })
 
