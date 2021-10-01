@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { DataGrid } from '@material-ui/data-grid'
-import { electronActions } from '../../Context'
 
 
 const getRowClassName = (params) => {

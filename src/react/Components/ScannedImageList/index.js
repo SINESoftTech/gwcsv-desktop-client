@@ -107,7 +107,7 @@ const ScannedImageList = (props) => {
               disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
-          {dataRows.map((item) => (
+          {dataRows.sort().reverse().map((item) => (
             <ImageListItem key={item.id}>
               <img src={item.imageUrl} alt={item.fileName} loading='lazy' />
               <ImageListItemBar
