@@ -206,11 +206,11 @@ const validTaxMoney = (json) => {
   let validResult = validTaxType[json['taxType']](json).concat(validTax(json))
   const withoutTotalAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
   const totalAmount = withoutTotalAmount + json['businessTaxValue']
-  if (totalAmount !== json['totalAmount']) {
+  if (totalAmount !== json['totalAmount'] || totalAmount === 0) {
     validResult.push('totalAmount', 'zeroTaxSalesValue', 'businessTaxValue', 'dutyFreeSalesValue', 'taxableSalesValue')
   }
   const payAmount = totalAmount + json['otherFee']
-  if (payAmount !== json['totalPayAmount']) {
+  if (payAmount !== json['totalPayAmount'] || payAmount === 0) {
     validResult.push('totalAmount', 'otherFee', 'totalPayAmount')
   }
   return [...new Set(validResult)]
