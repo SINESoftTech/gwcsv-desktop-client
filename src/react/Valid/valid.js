@@ -37,6 +37,8 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
     .filter(value => {
       return value !== ''
     })
+  json['cellHighlight'] = json['cellHighlight'].length > 0 ? json['cellHighlight'].concat('sn') : json['cellHighlight']
+  console.log(json['cellHighlight'])
   return json
 }
 
