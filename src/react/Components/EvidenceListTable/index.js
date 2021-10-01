@@ -16,7 +16,7 @@ const EvidenceList = (props) => {
 
   const [dataRows, setDataRows] = useState(props.data)
   const [pageNumber, setPageNumber] = useState(0)
-  const [pageSize, setPageSize] = useState(5)
+  const [pageSize, setPageSize] = useState(10)
 
   const handleCellEditCommit = useCallback(
     ({ id, field, value }) => {
