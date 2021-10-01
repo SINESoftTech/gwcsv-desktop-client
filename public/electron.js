@@ -251,7 +251,7 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
   const fileList = getAllFileLists()[folderId]
   const filterFileList = fileList.filter(obj => {
     const fileName = obj.filename
-    const id = fileName.split('.')[0].split('_')[5]
+    const id = fileName.split('.')[0].split('_')[6]
     return id === ticketId
   })
   for (let i = 0; i < filterFileList.length; i++) {
@@ -396,7 +396,7 @@ ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
       if (data['image'] === undefined) {
         ticketId = data['json']['ticket']
       } else {
-        ticketId = data['imageFullPath'].split('_')[5].split('.')[0]
+        ticketId = data['imageFullPath'].split('_')[6].split('.')[0]
       }
       return ticketId
     })

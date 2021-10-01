@@ -73,10 +73,10 @@ const IdentifiedEvidenceList = (props) => {
       return obj.ticketId
     })
     const filterData = localFiles['03'].filter((obj) => {
-      const ticketId = obj.filename.split('.')[0].split('_')[5]
+      const ticketId = obj.filename.split('.')[0].split('_')[6]
       return selectionModel.includes(ticketId)
     }).filter(obj => {
-      const ticketId = obj.filename.split('.')[0].split('_')[5]
+      const ticketId = obj.filename.split('.')[0].split('_')[6]
       return !errorTicketIdList.includes(ticketId)
     })
     const filesByTicketId = byTicketId(filterData)

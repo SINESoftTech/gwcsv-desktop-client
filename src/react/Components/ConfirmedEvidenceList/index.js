@@ -28,7 +28,7 @@ const ConfirmedEvidenceList = (props) => {
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
-      const ticketId = json.filePath.split('_')[5]
+      const ticketId = json.filePath.split('_')[6]
       const parseResult = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data)
       parseResult['sn'] = idx + 1
       parseResult['id'] = json.data['ticket']
@@ -42,7 +42,6 @@ const ConfirmedEvidenceList = (props) => {
   }, [props.data, props.declareProperties.clientTaxId])
 
   const handleUpload = async () => {
-    console.log('handleUpload', props.data['04'])
     const filesByTicketId = byTicketId(props.data['04'])
     let filterResult = []
     for (let key in filesByTicketId) {
@@ -58,7 +57,6 @@ const ConfirmedEvidenceList = (props) => {
       }
     }
     const getRawDataResult = await getRawDataWithImage(filterResult)
-    console.log(getRawDataResult)
     const parseRawDataResult = getRawDataResult.flatMap(data => {
       const keys = R.keys(data)
       let result = []
@@ -70,7 +68,7 @@ const ConfirmedEvidenceList = (props) => {
         const reportingPeriod = json['imageFullPath'].split('_')[2]
         const deductionType = json['imageFullPath'].split('_')[3]
         const isDeclareBusinessTax = json['imageFullPath'].split('_')[4]
-        const ticketId = json['imageFullPath'].split('_')[5].split('.')[0]
+        const ticketId = json['imageFullPath'].split('_')[6].split('.')[0]
         result.push({
           'image': new File([json['image']], Date.now() + '.jpg'),
           'imageFullPath': json['imageFullPath'],
