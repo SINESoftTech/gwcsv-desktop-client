@@ -3,15 +3,7 @@ import Button from '@material-ui/core/Button'
 import isElectron from 'is-electron'
 import PropTypes from 'prop-types'
 import scannedImageListStyles from './scannedImageListStyles'
-import {
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-  Radio
-} from '@material-ui/core'
+import { Checkbox, FormControlLabel, IconButton, ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core'
 import { Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon } from '@material-ui/icons'
 
 

@@ -254,8 +254,10 @@ const Main = (props) => {
             onChange={handleSelectionChange}>
             <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
             {keyList.map(key => {
+              const id = SIGOUTOUR_EVIDENCE_TYPE[key].id === '' ? '99 ' : SIGOUTOUR_EVIDENCE_TYPE[key].id + ' '
+              const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
               return <MenuItem key={key}
-                               value={key}>{SIGOUTOUR_EVIDENCE_TYPE[key].name}</MenuItem>
+                               value={key}>{(id + name)}</MenuItem>
             })}
           </Select>
         </FormControl>
