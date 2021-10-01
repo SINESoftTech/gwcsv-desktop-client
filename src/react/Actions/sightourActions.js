@@ -63,7 +63,7 @@ export async function getIdentifyResult(fileObj) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
-    const ticketId = fileObj.filename.split('_')[5].split('.')[0]
+    const ticketId = fileObj.filename.split('_')[6].split('.')[0]
     const formData = new FormData()
     formData.append('token', token)
     formData.append('ticket', ticketId)
