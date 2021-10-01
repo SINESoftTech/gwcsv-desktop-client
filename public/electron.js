@@ -72,7 +72,7 @@ function createWindow() {
   mainWindow.loadURL(isDev ? devServerUrl : fileLocation)
   // mainWindow.loadURL(fileLocation)
   // Open the DevTools.
-  if(isDev){
+  if (isDev) {
     mainWindow.webContents.openDevTools()
   }
   //
@@ -90,7 +90,7 @@ function createWindow() {
 
   mainWindow.webContents.on('did-create-window', (childWindow) => {
     // For example...
-    if(isDev){
+    if (isDev) {
       childWindow.webContents.openDevTools()
     }
     // 
@@ -302,7 +302,7 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
       const fileExt = data['sourceFileName'].split('.')[1]
       const reportingPeriod = data['sourceFileName'].split('_')[2]
       const isDeclareBusinessTax = data['sourceFileName'].split('_')[4]
-      const targetFileName = `${username}_${data['businessEntityTaxId']}_${reportingPeriod}_1_${isDeclareBusinessTax}_${data['ticketId']}.${fileExt}`
+      const targetFileName = `${username}_${data['businessEntityTaxId']}_${reportingPeriod}_1_${isDeclareBusinessTax}_${data['type']}_${data['ticketId']}.${fileExt}`
       const targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
     }

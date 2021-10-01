@@ -37,6 +37,7 @@ export async function sendToIdentify(identifyData) {
         console.log('sendToIdentify', data)
         resultList.push({
           'result': true,
+          'type': data.evidenceType,
           'businessEntityTaxId': data.businessEntityTaxId,
           'ticketId': result.data['ticket'],
           'sourceFullPath': data.sourceFullPath,
@@ -45,6 +46,7 @@ export async function sendToIdentify(identifyData) {
       } else {
         resultList.push({
           'result': false,
+          'type': data.evidenceType,
           'businessEntityTaxId': data.businessEntityTaxId,
           'sourceFullPath': data.sourceFullPath,
           'sourceFileName': data.sourceFileName
