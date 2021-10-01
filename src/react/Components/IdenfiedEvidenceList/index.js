@@ -44,7 +44,8 @@ const IdentifiedEvidenceList = (props) => {
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
-      const ticketId = json.filePath.split('_')[5]
+      const ticketId = json.filePath.split('_')[6]
+      const evidenceType = json.filePath.split('_')[5]
       const clientTaxId = json.filePath.split('_')[1]
       const parseResult = validSigoutourData(clientTaxId, SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data), assignMap)
       parseResult['sn'] = idx + 1
@@ -93,7 +94,9 @@ const IdentifiedEvidenceList = (props) => {
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
+    console.log("handleEditRow",json)
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
+    console.log("handleEditRow",sigoutourJson)
     const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, sigoutourJson)
     const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
     if (!validResult.includes(field)) {

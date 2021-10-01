@@ -34,6 +34,11 @@ const EvidenceList = (props) => {
       param.row['deductionType'] = event.target.value
       props.handleEditRow(param.row)
     }
+    if(event.target.name==='evidenceType'){
+      param.row['evidenceType'] = event.target.value
+      console.log("AA",event.target.value)
+      props.handleEditRow(param.row)
+    }
     if (event.target.innerText === '刪除') {
       const ticketId = param.row.id
       props.handleDelete(ticketId)

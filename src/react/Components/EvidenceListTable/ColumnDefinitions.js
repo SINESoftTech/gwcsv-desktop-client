@@ -5,12 +5,13 @@ import { GridColDef } from '@material-ui/data-grid'
 const R = require('ramda')
 import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 import { values } from 'ramda'
+import mainStyles from '../../Pages/Main/mainStyles'
 
 export const ConfirmedColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
-  { field: 'sn', headerName: '序號', width: 120, editable: false },
+  { field: 'sn', headerName: '序號', width: 110, editable: false },
   { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false },
-  { field: 'evidenceType', headerName: '憑證類型', width: 150, editable: false },
+  { field: 'evidenceType', headerName: 'GW憑證類型', width: 200, editable: false },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, editable: false },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, editable: false },
   { field: 'declarationId', headerName: '報單/文件號碼', width: 200, editable: false },
@@ -29,17 +30,17 @@ export const ConfirmedColumnDefinitions: GridColDef[] = [
 
 export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
-  { field: 'sn', headerName: '序號', width: 120, cellClassName: getCellClassName, editable: false },
+  { field: 'sn', headerName: '序號', width: 110, cellClassName: getCellClassName, editable: false },
   {
     field: 'evidenceType',
-    headerName: '憑證類型',
-    width: 150,
+    headerName: 'GW憑證類型',
+    width: 200,
     cellClassName: getCellClassName,
     editable: false,
     renderCell: renderEvidenceType
   },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, cellClassName: getCellClassName, editable: true },
-  { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, cellClassName: getCellClassName, editable: true },
+  { field: 'evidenceNumber', headerName: '憑證號碼', width: 200, cellClassName: getCellClassName, editable: true },
   { field: 'declarationId', headerName: '報單/文件號碼', width: 200, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceDate', headerName: '憑證日期', width: 150, cellClassName: getCellClassName, editable: true },
   {
@@ -70,12 +71,18 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: 'cellHighlight', hide: true }
 ]
 
+
 function renderEvidenceType(param) {
   console.log('renderEvidenceType', param.value)
   const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
+  // const selectionValue = keyList.filter(key => {
+  //   const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
+  //   return name === param.value
+  // })[0]
+  // console.log('renderEvidenceType', selectionValue)
   return (
     <>
-      <FormControl>
+      <FormControl className={mainStyles().formControl}>
         <Select
           labelId='evidence-type-select-label'
           id='evidence-type-select'
@@ -88,8 +95,6 @@ function renderEvidenceType(param) {
           })
           }
         </Select>
-
-
       </FormControl>
     </>
   )
