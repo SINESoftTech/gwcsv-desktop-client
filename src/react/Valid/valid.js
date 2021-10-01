@@ -28,16 +28,30 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
   if (json['buyerTaxId'].length !== 8 || !validTaxId(json['buyerTaxId']) || json['buyerTaxId'] !== clientTaxId) {
     validResult.push('buyerTaxId')
   }
-  validResult = validResult.concat(validEvidenceType[json['evidenceType']](json, assignMap))
-  if (!moment(json['evidenceDate'], 'YYYYMMDD', true).isValid()) {
-    validResult.push('evidenceDate')
-  }
+  validResult = validResult
+    .concat(validEvidenceType[json['evidenceType']](json, assignMap))
+    .concat(validEvidenceDate(json))
+
   json['cellHighlight'] = [...new Set(validResult)]
   json['cellHighlight'] = json['cellHighlight']
     .filter(value => {
       return value !== ''
     })
   return json
+}
+
+const validEvidenceDate = (json) => {
+  if (!moment(json['evidenceDate'], 'YYYYMMDD', true).isValid()) {
+    return 'evidenceDate'
+  }
+  const evidencePeriod = getPeriod(json['evidenceDate'])
+  const reportingPeriod = parseInt(json['reportingPeriod'])
+  const tenYearAgoPeriod = reportingPeriod - 1000
+  const isBetweenTenYearAgoPeriodAndReportingPeriod = (reportingPeriod >= evidencePeriod) && (tenYearAgoPeriod <= evidencePeriod)
+  if (!isBetweenTenYearAgoPeriodAndReportingPeriod) {
+    return 'evidenceDate'
+  }
+  return ''
 }
 
 const validGUI = (typeValue, json, assignMap) => {
