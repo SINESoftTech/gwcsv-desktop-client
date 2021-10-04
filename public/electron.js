@@ -253,6 +253,9 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
   const fileList = getAllFileLists()[folderId]
   const filterFileList = fileList.filter(obj => {
     const fileName = obj.filename
+    if (folderId === '01') {
+      return fileName.split('.')[0].split('_')[5] === ticketId
+    }
     const id = fileName.split('.')[0].split('_')[6]
     return id === ticketId
   })
