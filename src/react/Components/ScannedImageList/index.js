@@ -56,8 +56,17 @@ const ScannedImageList = (props) => {
     const initDataRows = async (data, username, clientTaxId) => {
       console.log('in useEffect clientTaxId', clientTaxId)
       console.log('in useEffect data', props.data)
-      const rowData = (props.data) ? await getRowData(data, username, clientTaxId) : []
+      let rowData = (props.data) ? await getRowData(data, username, clientTaxId) : []
       console.log('in useEffect', rowData)
+      rowData = rowData.sort((a, b) => {
+        const fileName1 = a.fileName.split('_')[5].split('.')[0]
+        const fileName2 = b.fileName.split('_')[5].split('.')[0]
+        if (fileName1 >= fileName2) {
+          return 0
+        } else {
+          return 1
+        }
+      }).reverse()
       setDataRows(rowData)
     }
     initDataRows(props.data, props.username, props.declareProperties.clientTaxId)
@@ -86,7 +95,6 @@ const ScannedImageList = (props) => {
       }))
     }
   }
-  console.log('selection', selectionDataRows.selection)
 
   return (
     <div style={{ height: 650, width: '100%' }}>
@@ -99,7 +107,7 @@ const ScannedImageList = (props) => {
               disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
-          {dataRows.sort().reverse().map((item) => (
+          {dataRows.map((item) => (
             <ImageListItem key={item.id}>
               <img src={item.imageUrl} alt={item.fileName} loading='lazy' />
               <ImageListItemBar
