@@ -67,7 +67,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
-      'evidenceType': payload.evidenceType,
+      'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
@@ -121,7 +121,7 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
-      'evidenceType': payload.evidenceType,
+      'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
@@ -178,7 +178,7 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
-      'evidenceType': payload.evidenceType,
+      'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
@@ -251,7 +251,6 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
       })
     }
   }
-  console.log('uploadToGw result', result)
   return result
 }
 

@@ -21,15 +21,16 @@ const validTaxId = (taxId) => {
 
 const validSigoutourData = (clientTaxId, json, assignMap) => {
   let validResult = validTaxMoney(json)
-  const isCustom = json['evidenceType'] === '海關代徵營業稅繳納證'
+  const isCustom = json['gwEvidenceType'] === '海關代徵營業稅繳納證'
   if (!isCustom && (json['sellerTaxId'].length !== 8 || !validTaxId(json['sellerTaxId']))) {
     validResult.push('sellerTaxId')
   }
   if (json['buyerTaxId'].length !== 8 || !validTaxId(json['buyerTaxId']) || json['buyerTaxId'] !== clientTaxId) {
     validResult.push('buyerTaxId')
   }
+  console.log('AAAA', json['gwEvidenceType'])
   validResult = validResult
-    .concat(validEvidenceType[json['evidenceType']](json, assignMap))
+    .concat(validEvidenceType[json['gwEvidenceType']](json, assignMap))
     .concat(validEvidenceDate(json))
 
   json['cellHighlight'] = [...new Set(validResult)]
@@ -38,7 +39,6 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
       return value !== ''
     })
   json['cellHighlight'] = json['cellHighlight'].length > 0 ? json['cellHighlight'].concat('sn') : json['cellHighlight']
-  console.log(json['cellHighlight'])
   return json
 }
 
@@ -120,10 +120,10 @@ const validEvidenceType = {
     return [isEvidenceNumberOk, isDeclarationIdOk]
   },
   '': (json, assignMap) => {
-    return ['evidenceType', 'evidenceNumber']
+    return ['gwEvidenceType', 'evidenceType', 'evidenceNumber']
   },
   undefined: (json, assignMap) => {
-    return ['evidenceType', 'evidenceNumber']
+    return ['gwEvidenceType', 'evidenceType', 'evidenceNumber']
   }
 }
 
@@ -196,7 +196,7 @@ const validTax = (json) => {
   if (json['taxType'] !== 1) {
     return []
   }
-  switch (json['evidenceType']) {
+  switch (json['gwEvidenceType']) {
     case '二聯式收銀發票':
       return validB2C(json)
     default:

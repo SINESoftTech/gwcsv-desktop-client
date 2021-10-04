@@ -11,7 +11,7 @@ export const ConfirmedColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
   { field: 'sn', headerName: '序號', width: 110, editable: false },
   { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false },
-  { field: 'evidenceType', headerName: 'GW憑證類型', width: 200, editable: false },
+  { field: 'gwEvidenceType', headerName: 'GW憑證類型', width: 200, editable: false },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, editable: false },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, editable: false },
   { field: 'declarationId', headerName: '報單/文件號碼', width: 200, editable: false },

@@ -76,7 +76,6 @@ const ConfirmedEvidenceList = (props) => {
           'image': new File([json['image']], Date.now() + '.jpg'),
           'imageFullPath': json['imageFullPath'],
           'jsonFullPath': json['jsonFullPath'],
-          //todo
           'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, json['json'])
         })
       }

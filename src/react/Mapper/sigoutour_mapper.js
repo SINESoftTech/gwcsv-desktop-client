@@ -218,7 +218,6 @@ class SigoutourMapperClass {
   }
 
   toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, jsonData) {
-    console.log('toGw1', ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, jsonData)
     const json = parseData(jsonData)
     json['id'] = ticketId
     json['evidenceType'] = json['evidenceType'].value
