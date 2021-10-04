@@ -50,6 +50,7 @@ export async function getJsonRawData(data, clientTaxId) {
       return d.fullPath
     })
     if (ipcRenderer) {
+      console.log("getJsonRawData",filterJsonDataFilePathList)
       return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
     }
   } catch (error) {

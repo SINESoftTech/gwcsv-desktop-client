@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import { getAssign, getJsonRawData } from '../../Actions/electionActions'
-import SigoutourMapper, { reverseIndex, SIGOUTOUR_FIELD_TYPE } from '../../Mapper/sigoutour_mapper'
+import SigoutourMapper, {
+  reverseIndex,
+  SIGOUTOUR_EVIDENCE_TYPE_REVERSE,
+  SIGOUTOUR_FIELD_TYPE
+} from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
 import { electronActions, sightTourActions } from '../../Context'
 import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
@@ -39,6 +43,7 @@ const IdentifiedEvidenceList = (props) => {
   const [assignMap, setAssignMap] = React.useState()
 
   const initDataRows = async (data, clientTaxId, assignMap) => {
+
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     //read assign
     const parseJsonDataList = jsonDataList.map((json, idx) => {
@@ -93,10 +98,7 @@ const IdentifiedEvidenceList = (props) => {
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
-    console.log('handleEditRow', json)
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
-    console.log('handleEditRow', sigoutourJson)
-    console.log('editData', editData)
     const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, SIGOUTOUR_EVIDENCE_TYPE_REVERSE[editData.gwEvidenceType], sigoutourJson)
     const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
     if (!validResult.includes(field)) {

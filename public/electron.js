@@ -210,11 +210,6 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
 
 ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, period, gwEvidenceType, json) => {
   //json remove old and save
-  console.log('ticketId', ticketId)
-  console.log('deductionType', deductionType)
-  console.log('period', period)
-  console.log('gwEvidenceType', gwEvidenceType)
-
   const fileList03 = getAllFileLists()['03']
   const filterFileList = fileList03.filter(obj => {
     const fileName = obj.filename
@@ -226,8 +221,10 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
   filterFileList.map(file => {
     const fileName = file.filename
     const splitFileName = fileName.split('_')
+    console.log(splitFileName)
     splitFileName[2] = period
     splitFileName[3] = deductionType
+    splitFileName[5] = gwEvidenceType
     const targetFileName = splitFileName.join('_')
     const targetFilePath = path.join(targetFolderPath, targetFileName)
     if (getFileExt(fileName) === 'json') {

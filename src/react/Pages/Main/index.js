@@ -79,7 +79,7 @@ const Main = (props) => {
     const assign = await gwActions.getAssign()
     await electronActions.saveAssign(assign)
     await openScanner(dispatch)
-  }, [])
+  }, [value])
 
   //region Main Events
   const handleTabChange = (event, newValue) => {
@@ -125,7 +125,6 @@ const Main = (props) => {
         'evidenceType': declareProperties.evidenceType
       }
     })
-    console.log(sendToIdentifyData)
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
     identifySent(dispatch, {
       'user': appState.auth.user.username,
@@ -161,11 +160,9 @@ const Main = (props) => {
 
   const handleDeleteImage = (data) => {
     //todo
-    console.log()
     const timestamp = data.fileName.split('_')[5].split('.')[0]
     const eventName = 'scanned'
     electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
-    console.log('handleDeleteImage data', data)
   }
 
   const handleScanImage = () => {
@@ -353,14 +350,14 @@ const Main = (props) => {
                                           declareProperties={declareProperties}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}
-                                          OnDeleteEvdience={handleDeleteEvidence}></IdentifiedEvidenceList>
+                                          OnDeleteEvdience={handleDeleteEvidence}/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
                                          user={appState.auth.user}
                                          onGwUploaded={handleGwUploaded}
                                          declareProperties={declareProperties}
-                                         OnDeleteEvdience={handleDeleteEvidence}></ConfirmedEvidenceList>
+                                         OnDeleteEvdience={handleDeleteEvidence}/>
                 </TabPanel>
               </Paper>
             </Grid>
