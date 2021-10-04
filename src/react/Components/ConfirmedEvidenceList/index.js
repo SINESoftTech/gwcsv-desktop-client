@@ -6,6 +6,7 @@ import { getJsonRawData, getRawDataWithImage } from '../../Actions/electionActio
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { ConfirmedColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
+import { validSigoutourData } from '../../Valid/valid'
 
 
 const electron = isElectron() ? window.electron : null
@@ -29,7 +30,8 @@ const ConfirmedEvidenceList = (props) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
       const ticketId = json.filePath.split('_')[6]
-      const parseResult = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data)
+      const gwEvidenceType = json.filePath.split('_')[5]
+      const parseResult = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, gwEvidenceType, json.data)
       parseResult['sn'] = idx + 1
       parseResult['id'] = json.data['ticket']
       return parseResult
@@ -94,7 +96,7 @@ const ConfirmedEvidenceList = (props) => {
       <EvidenceList data={rowData}
                     checkboxSelection={false}
                     columns={ConfirmedColumnDefinitions}
-                    handleDelete={handleDelete}></EvidenceList>
+                    handleDelete={handleDelete}/>
     </div>
   )
 }
