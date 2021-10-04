@@ -70,18 +70,19 @@ const ConfirmedEvidenceList = (props) => {
         const reportingPeriod = json['imageFullPath'].split('_')[2]
         const deductionType = json['imageFullPath'].split('_')[3]
         const isDeclareBusinessTax = json['imageFullPath'].split('_')[4]
+        const gwEvidenceType = json['imageFullPath'].split('_')[5]
         const ticketId = json['imageFullPath'].split('_')[6].split('.')[0]
         result.push({
           'image': new File([json['image']], Date.now() + '.jpg'),
           'imageFullPath': json['imageFullPath'],
           'jsonFullPath': json['jsonFullPath'],
-          'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, json['json'])
+          //todo
+          'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, json['json'])
         })
       }
       return result
     })
     const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
-
     props.onGwUploaded(uploadResult)
   }
 
@@ -96,7 +97,7 @@ const ConfirmedEvidenceList = (props) => {
       <EvidenceList data={rowData}
                     checkboxSelection={false}
                     columns={ConfirmedColumnDefinitions}
-                    handleDelete={handleDelete}/>
+                    handleDelete={handleDelete} />
     </div>
   )
 }

@@ -164,7 +164,6 @@ const isEmptyOrUndefined = (s) => {
 
 const parseData = (jsonData) => {
   let json = {}
-  console.log(jsonData)
   const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
   if (jsonDataBody.length <= 0) {
     return json
@@ -218,8 +217,8 @@ class SigoutourMapperClass {
     return json
   }
 
-  toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, jsonData) {
-    console.log('toGw', ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, jsonData)
+  toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, jsonData) {
+    console.log('toGw1', ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, jsonData)
     const json = parseData(jsonData)
     json['id'] = ticketId
     json['evidenceType'] = json['evidenceType'].value
@@ -228,6 +227,7 @@ class SigoutourMapperClass {
     json['reportingPeriod'] = reportingPeriod
     json['deductionType'] = DEDUCTION_TYPE[deductionType]
     json['isDeclareBusinessTax'] = isDeclareBusinessTax
+    json['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[gwEvidenceType].value
     json['evidenceDate'] = new Date(evidenceDate.substring(0, 4) + '-' + evidenceDate.substring(4, 6) + '-' + evidenceDate.substring(6, 8)).getTime()
     return json
   }

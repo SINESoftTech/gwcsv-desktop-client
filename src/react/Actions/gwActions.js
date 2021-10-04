@@ -232,7 +232,7 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
   const result = []
   for (let i = 0; i < payload.length; i++) {
     const data = payload[i]
-    const uploadResult = await uploadToGwStrategy[data['json']['evidenceType']](data['json'], data['image'], accountingFirmTaxId, token)
+    const uploadResult = await uploadToGwStrategy[data['json']['gwEvidenceType']](data['json'], data['image'], accountingFirmTaxId, token)
     if (uploadResult.status) {
       result.push({
         'status': true,
