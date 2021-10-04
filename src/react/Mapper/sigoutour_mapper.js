@@ -137,6 +137,27 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
   }
 }
 
+const SIGOUTOUR_EVIDENCE_TYPE_REVERSE = {
+  '三聯式統一發票': 'A1001',
+  '二聯式收銀發票': 'A2001',
+  '三聯式收銀機發票': 'A5001',
+  '電子發票證明聯-格式一': 'A5002',
+  '電子發票證明聯-格式二': 'A5003',
+  '電力帳單': 'A5010',
+  '水費帳單-台灣自來水': 'A5020',
+  '水費帳單-台北自來水': 'A5021',
+  '電信費帳單-中華電信': 'A5030',
+  '電信費帳單-台灣大哥大': 'A5031',
+  '電信費帳單-遠傳': 'A5032',
+  '電信費帳單-台灣之星': 'A5033',
+  '電信費帳單-亞太': 'A5034',
+  '海關代徵營業稅繳納證': 'A8001',
+  '勞保': 'A3001',
+  '勞退': 'A3002',
+  '健保': 'A4001'
+}
+
+
 const isEmptyOrUndefined = (s) => {
   return s === '' || s === undefined
 }
@@ -182,7 +203,7 @@ const parseData = (jsonData) => {
 
 class SigoutourMapperClass {
 
-  toView(ticketId, deductionType, reportingPeriod, jsonData) {
+  toView(ticketId, deductionType, reportingPeriod, evidenceType, jsonData) {
     const json = parseData(jsonData)
     json['sellerTaxId'] = isEmptyOrUndefined(json['sellerTaxId']) ? '' : json['sellerTaxId']
     json['buyerTaxId'] = isEmptyOrUndefined(json['buyerTaxId']) ? '' : json['buyerTaxId']
@@ -192,6 +213,7 @@ class SigoutourMapperClass {
     json['deductionType'] = deductionType
     json['ticketId'] = ticketId
     json['errorMsg'] = jsonData['errorMsg']
+    json['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[evidenceType].name
     console.log('toView', json)
     return json
   }
@@ -237,6 +259,6 @@ const reverseIndex = (obj) => {
 }
 
 const SigoutourMapper = new SigoutourMapperClass()
-export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, reverseIndex }
+export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, reverseIndex, SIGOUTOUR_EVIDENCE_TYPE_REVERSE }
 
 export default SigoutourMapper

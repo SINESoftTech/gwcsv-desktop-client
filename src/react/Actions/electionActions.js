@@ -18,10 +18,10 @@ export const saveAssign = async (payload) => {
 }
 
 
-export async function updateSigoutourData(ticketId, deductionType, period, json) {
+export async function updateSigoutourData(ticketId, deductionType, period, gwEvidenceType, json) {
   try {
     if (ipcRenderer) {
-      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId, deductionType, period, json)
+      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId, deductionType, period,gwEvidenceType, json)
     }
   } catch (error) {
     console.log('updateSigoutourData', error)

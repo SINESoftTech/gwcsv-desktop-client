@@ -45,9 +45,9 @@ const IdentifiedEvidenceList = (props) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
       const ticketId = json.filePath.split('_')[6]
-      const evidenceType = json.filePath.split('_')[5]
+      const gwEvidenceType = json.filePath.split('_')[5]
       const clientTaxId = json.filePath.split('_')[1]
-      const parseResult = validSigoutourData(clientTaxId, SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data), assignMap)
+      const parseResult = validSigoutourData(clientTaxId, SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, gwEvidenceType, json.data), assignMap)
       parseResult['sn'] = idx + 1
       parseResult['id'] = json.data['ticket']
       return parseResult
@@ -58,7 +58,6 @@ const IdentifiedEvidenceList = (props) => {
   useEffect(() => {
     const init = async () => {
       const result = await getAssign()
-      console.log('init()', result)
       setAssignMap(result)
       setLocalFiles(props.data)
       initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
@@ -94,10 +93,11 @@ const IdentifiedEvidenceList = (props) => {
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
-    console.log("handleEditRow",json)
+    console.log('handleEditRow', json)
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
-    console.log("handleEditRow",sigoutourJson)
-    const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, sigoutourJson)
+    console.log('handleEditRow', sigoutourJson)
+    console.log('editData', editData)
+    const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, SIGOUTOUR_EVIDENCE_TYPE_REVERSE[editData.gwEvidenceType], sigoutourJson)
     const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
     if (!validResult.includes(field)) {
       const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)

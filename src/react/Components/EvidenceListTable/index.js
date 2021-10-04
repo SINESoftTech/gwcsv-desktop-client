@@ -34,9 +34,9 @@ const EvidenceList = (props) => {
       param.row['deductionType'] = event.target.value
       props.handleEditRow(param.row)
     }
-    if(event.target.name==='evidenceType'){
-      param.row['evidenceType'] = event.target.value
-      console.log("AA",event.target.value)
+    if (event.target.name === 'gwEvidenceType') {
+      param.row['gwEvidenceType'] = event.target.value
+      console.log('AA', event.target.value)
       props.handleEditRow(param.row)
     }
     if (event.target.innerText === '刪除') {

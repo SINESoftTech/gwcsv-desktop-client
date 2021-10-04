@@ -32,12 +32,19 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
   { field: 'sn', headerName: '序號', width: 110, cellClassName: getCellClassName, editable: false },
   {
-    field: 'evidenceType',
+    field: 'gwEvidenceType',
     headerName: 'GW憑證類型',
     width: 200,
     cellClassName: getCellClassName,
     editable: false,
     renderCell: renderEvidenceType
+  },
+  {
+    field: 'evidenceType',
+    headerName: '辨識憑證類型',
+    width: 200,
+    cellClassName: getCellClassName,
+    editable: false
   },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 200, cellClassName: getCellClassName, editable: true },
@@ -75,18 +82,13 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
 function renderEvidenceType(param) {
   console.log('renderEvidenceType', param.value)
   const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
-  // const selectionValue = keyList.filter(key => {
-  //   const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
-  //   return name === param.value
-  // })[0]
-  // console.log('renderEvidenceType', selectionValue)
   return (
     <>
       <FormControl className={mainStyles().formControl}>
         <Select
           labelId='evidence-type-select-label'
           id='evidence-type-select'
-          name='evidenceType'
+          name='gwEvidenceType'
           value={param.value}
         >
           {keyList.map(key => {
