@@ -66,6 +66,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   console.log('uploadGUI', payload)
   try {
     const req = {
+      "inputOutputType": "OUTPUT",
       'businessEntityTaxId': payload.buyerTaxId,
       'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
@@ -85,7 +86,8 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
       'commentType': 'WHITE_SPACE',
       'summaryCount': 1,
       'groupName': null,
-      'remarkText': payload.remark
+      'remarkText': payload.remark,
+      "clearanceType": "BLANK",
     }
     const url = '/evidence/gui'
     let bodyFormData = new FormData()
