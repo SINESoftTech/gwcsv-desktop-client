@@ -66,7 +66,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   console.log('uploadGUI', payload)
   try {
     const req = {
-      "inputOutputType": "OUTPUT",
+      "inputOutputType": "INPUT",
       'businessEntityTaxId': payload.buyerTaxId,
       'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
