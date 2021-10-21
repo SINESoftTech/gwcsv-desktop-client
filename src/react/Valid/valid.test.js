@@ -713,6 +713,7 @@ const assignMap = {
 
 test('valid buyerTaxId error', () => {
   const data = {
+    'gwEvidenceType': '電信費帳單-中華電信',
     'evidenceType': '電信費帳單-中華電信',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
@@ -736,11 +737,13 @@ test('valid buyerTaxId error', () => {
     'id': '0907175959174992'
   }
   const validResult = validSigoutourData('24549210', data, assignMap)
-  expect(validResult.cellHighlight).toMatchObject(['buyerTaxId'])
+  console.log(validResult)
+  expect(validResult.cellHighlight).toMatchObject(['buyerTaxId','sn'])
 })
 
 test('valid sellerTaxId error', () => {
   const data = {
+    'gwEvidenceType': '電信費帳單-中華電信',
     'evidenceType': '電信費帳單-中華電信',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
@@ -764,11 +767,12 @@ test('valid sellerTaxId error', () => {
     'id': '0907175959174992'
   }
   const validResult = validSigoutourData('24549210', data, assignMap)
-  expect(validResult.cellHighlight).toMatchObject(['sellerTaxId'])
+  expect(validResult.cellHighlight).toMatchObject(['sellerTaxId','sn'])
 })
 
 test('valid taxType empty', () => {
   const data = {
+    'gwEvidenceType': '電信費帳單-中華電信',
     'evidenceType': '電信費帳單-中華電信',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
@@ -801,6 +805,7 @@ test('valid taxType empty', () => {
 
 test('valid taxType 2 error', () => {
   const data = {
+    'gwEvidenceType': '電信費帳單-中華電信',
     'evidenceType': '電信費帳單-中華電信',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
@@ -831,6 +836,7 @@ test('valid taxType 2 error', () => {
 
 test('valid taxType 3 error', () => {
   const data = {
+    'gwEvidenceType': '電信費帳單-中華電信',
     'evidenceType': '電信費帳單-中華電信',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
@@ -861,6 +867,7 @@ test('valid taxType 3 error', () => {
 
 test('valid evidenceType 5030', () => {
   const data = {
+    'gwEvidenceType': '電信費帳單-中華電信',
     'evidenceType': '電信費帳單-中華電信',
     'carrierNumber': 'BB21050951',
     'evidenceDate': '20210101',
