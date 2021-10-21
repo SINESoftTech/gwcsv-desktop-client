@@ -94,11 +94,14 @@ const IdentifiedEvidenceList = (props) => {
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
   const handleEditRow = async (editData, field = '') => {
+    console.log('handleEditRow()', editData, field)
     const jsonDataList = await getJsonRawData(localFiles['03'], props.declareProperties.clientTaxId)
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
+    console.log('handleEditRow() json=', json)
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
+    console.log('handleEditRow() sigoutourJson=', sigoutourJson)
     const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, SIGOUTOUR_EVIDENCE_TYPE_REVERSE[editData.gwEvidenceType], sigoutourJson)
     const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
     if (!validResult.includes(field)) {

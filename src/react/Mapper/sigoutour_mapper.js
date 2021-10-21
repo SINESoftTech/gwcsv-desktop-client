@@ -238,6 +238,15 @@ class SigoutourMapperClass {
     jsonDataBody.forEach(obj => {
       if (isBillType && obj['key'] === 'KEY_COMN') {
         obj['text'] = data['evidenceNumber']
+      } else if (sigoutourJson['pageList'][0]['photoList'][0]['type'] === 'A5020') {
+        const key = SIGOUTOUR_FIELD_TYPE[obj['key']]
+        if (key === 'waterFee') {
+          obj['text'] = 0
+        }
+        if (key === 'basicFee') {
+          const value = data['taxableSalesValue']
+          obj['text'] = value
+        }
       } else {
         const key = SIGOUTOUR_FIELD_TYPE[obj['key']]
         const value = data[key]
