@@ -28,7 +28,6 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
   if (json['buyerTaxId'].length !== 8 || !validTaxId(json['buyerTaxId']) || json['buyerTaxId'] !== clientTaxId) {
     validResult.push('buyerTaxId')
   }
-  console.log('AAAA', json['gwEvidenceType'])
   validResult = validResult
     .concat(validEvidenceType[json['gwEvidenceType']](json, assignMap))
     .concat(validEvidenceDate(json))
@@ -57,14 +56,17 @@ const validEvidenceDate = (json) => {
 }
 
 const validGUI = (typeValue, json, assignMap) => {
+  if(json['evidenceDate'] === undefined){
+    return ['evidenceNumber']
+  }
   const yyyymm = getPeriod(json['evidenceDate'])
   const trackId = json['evidenceNumber'].substring(0, 2)
   const isTrackIdIncludeAssign = assignMap[typeValue][yyyymm] === undefined ? false : assignMap[typeValue][yyyymm].includes(trackId)
-  return json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
+  return json['evidenceNumber'] !== undefined && json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
 }
 
 const validBill = (json) => {
-  return json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
+  return json['evidenceNumber'] !== undefined && json['evidenceNumber'].length === 10 && json['evidenceNumber'].startsWith('BB') ? [''] : ['evidenceNumber']
 }
 
 const validEvidenceType = {
@@ -109,7 +111,7 @@ const validEvidenceType = {
   },
   '海關代徵營業稅繳納證': (json, assignMap) => {
     const evidenceNumber = json['evidenceNumber']
-    const isLenEqual14 = evidenceNumber.length === 14
+    const isLenEqual14 = evidenceNumber !== undefined && evidenceNumber.length === 14
     const firstAlpha = evidenceNumber.substring(0, 1)
     const isBlank = firstAlpha !== ' '
     const thirdAlpha = evidenceNumber.substring(2, 3)
