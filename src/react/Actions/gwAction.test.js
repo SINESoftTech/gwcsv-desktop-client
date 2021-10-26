@@ -93,26 +93,45 @@ test('logout', async () => {
 })
 
 test('uploadToGw:uploadStrategy:GUI', async () => {
+  const commonGUI = {
+    buyerTaxId: 'buyerTaxId',
+    reportingPeriod: 'reportingPeriod',
+    deductionType: 'deductionType',
+    isDeclareBusinessTax: true,
+    sellerTaxId: 'sellerTaxId',
+    taxType: 'taxType',
+    taxableSalesValue: 0,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 0,
+    totalAmount: 0,
+    evidenceDate: 'date',
+    evidenceNumber: 'evidenceNumber',
+    remark: 'remark'
+  }
+  const tripleGUI = Object.assign({}, commonGUI)
+  tripleGUI['gwEvidenceType'] = 'TRIPLE_GUI'
+
+  const duplicateCashRegisterGUI = Object.assign({}, commonGUI)
+  duplicateCashRegisterGUI['gwEvidenceType'] = 'DUPLICATE_CASH_REGISTER_GUI'
+
+  const tripleCashRegisterGUI = Object.assign({}, commonGUI)
+  tripleCashRegisterGUI['gwEvidenceType'] = 'TRIPLE_CASH_REGISTER_GUI'
+
+  const eGUI = Object.assign({}, commonGUI)
+  eGUI['gwEvidenceType'] = 'EGUI'
 
   const payload = [{
-    json: {
-      gwEvidenceType: 'TRIPLE_GUI'
-    },
+    json: tripleGUI,
     image: ''
   }, {
-    json: {
-      gwEvidenceType: 'DUPLICATE_CASH_REGISTER_GUI'
-    },
+    json: duplicateCashRegisterGUI,
     image: ''
   }, {
-    json: {
-      gwEvidenceType: 'TRIPLE_CASH_REGISTER_GUI'
-    },
+    json: tripleCashRegisterGUI,
     image: ''
   }, {
-    json: {
-      gwEvidenceType: 'EGUI'
-    },
+    json: eGUI,
     image: ''
   }]
 
@@ -127,27 +146,55 @@ test('uploadToGw:uploadStrategy:GUI', async () => {
 
   await uploadToGw(payload, '', '')
 
-  ajaxCallArr.forEach(ajaxCall => {
+  ajaxCallArr.forEach((ajaxCall, index) => {
+    const input = JSON.parse(ajaxCall.bodyFormData.get('input'))
+    commonEvidenceExpected(input,payload[index].json);
+    expect(input).toHaveProperty('inputOutputType', 'INPUT')
+    expect(input).toHaveProperty('guiId', payload[index].json.evidenceNumber)
+    expect(input).toHaveProperty('commentType', 'WHITE_SPACE')
+    expect(input).toHaveProperty('clearanceType', 'BLANK')
     expect(ajaxCall).toHaveProperty('url', '/evidence/gui')
   })
 
 })
 
 test('uploadToGw:uploadStrategy:BILL', async () => {
+  const commonBill = {
+    'buyerTaxId': 'buyerTaxId',
+    'reportingPeriod': 'reportingPeriod',
+    'deductionType': 'deductionType',
+    'isDeclareBusinessTax': false,
+    'sellerTaxId': 'sellerTaxId',
+    'taxType': 'taxType',
+    'taxableSalesValue': 0,
+    'zeroTaxSalesValue': 0,
+    'dutyFreeSalesValue': 0,
+    'withoutTaxAmount': 0,
+    'businessTaxValue': 0,
+    'otherFee': 0,
+    'totalAmount': 0,
+    'totalPayAmount': 0,
+    'evidenceTimestamp': 'evidenceDate',
+    'evidenceId': 'carrierNumber',
+    'remarkText': 'remark'
+  }
+
+  const electricalBill = Object.assign({}, commonBill)
+  electricalBill.gwEvidenceType = 'ELECTRIC_BILL'
+
+  const waterBill = Object.assign({}, commonBill)
+  waterBill.gwEvidenceType = 'WATER_BILL'
+
+  const telecomBill = Object.assign({}, commonBill)
+  telecomBill.gwEvidenceType = 'TELECOM_BILL'
   const payload = [{
-    json: {
-      gwEvidenceType: 'ELECTRIC_BILL'
-    },
+    json: electricalBill,
     image: ''
   }, {
-    json: {
-      gwEvidenceType: 'WATER_BILL'
-    },
+    json: waterBill,
     image: ''
   }, {
-    json: {
-      gwEvidenceType: 'TELECOM_BILL'
-    },
+    json: telecomBill,
     image: ''
   }]
 
@@ -162,7 +209,9 @@ test('uploadToGw:uploadStrategy:BILL', async () => {
 
   await uploadToGw(payload, '', '')
 
-  ajaxCallArr.forEach(ajaxCall => {
+  ajaxCallArr.forEach((ajaxCall, index) => {
+    const input = JSON.parse(ajaxCall.bodyFormData.get('input'))
+    commonEvidenceExpected(input,payload[index].json);
     expect(ajaxCall).toHaveProperty('url', '/evidence/bill')
   })
 })
@@ -170,7 +219,24 @@ test('uploadToGw:uploadStrategy:BILL', async () => {
 test('uploadToGw:uploadStrategy:CUSTOMS', async () => {
   const payload = [{
     json: {
-      gwEvidenceType: 'CUSTOMS_TAXABLE_EVIDENCE'
+      gwEvidenceType: 'CUSTOMS_TAXABLE_EVIDENCE',
+      buyerTaxId: 'buyerTaxId',
+      reportingPeriod: 'reportingPeriod',
+      deductionType: 'deductionType',
+      isDeclareBusinessTax: true,
+      taxType: 'taxType',
+      taxableSalesValue: 0,
+      dutyFreeSalesValue: 0,
+      zeroTaxSalesValue: 0,
+      businessTaxValue: 0,
+      otherFee: 0,
+      totalAmount: 0,
+      totalPayAmount: 0,
+      evidenceDate: 'date',
+      carrierNumber: 'carrierNumber',
+      declarationId: 'declarationId',
+      groupName: 'groupName',
+      remarkText: 'remarkText'
     },
     image: ''
   }]
@@ -187,7 +253,54 @@ test('uploadToGw:uploadStrategy:CUSTOMS', async () => {
   await uploadToGw(payload, '', '')
 
   ajaxCallArr.forEach(ajaxCall => {
+    const input = ajaxCall.bodyFormData.get('input')
     expect(ajaxCall).toHaveProperty('url', '/evidence/customs')
+    const expectedObj = {
+      'businessEntityTaxId': 'buyerTaxId',
+      'evidenceType': 'CUSTOMS_TAXABLE_EVIDENCE',
+      'reportingPeriod': 'reportingPeriod',
+      'deductionType': 'deductionType',
+      'isDeclareBusinessTax': true,
+      'buyerTaxId': 'buyerTaxId',
+      'taxType': 'taxType',
+      'taxableSalesValue': 0,
+      'zeroTaxSalesValue': null,
+      'dutyFreeSalesValue': 0,
+      'withoutTaxAmount': 0,
+      'businessTaxValue': 0,
+      'otherFee': 0,
+      'totalAmount': 0,
+      'totalPayAmount': 0,
+      'evidenceTimestamp': 'date',
+      'evidenceId': 'carrierNumber',
+      'declarationId': 'declarationId',
+      'groupName': 'groupName',
+      'remarkText': 'remarkText'
+    }
+    expect(input).toEqual(JSON.stringify(expectedObj))
   })
 })
+
+function commonEvidenceExpected(input,source){
+  expect(input).toHaveProperty('businessEntityTaxId', source.buyerTaxId)
+  expect(input).toHaveProperty('evidenceType', source.gwEvidenceType)
+  expect(input).toHaveProperty('reportingPeriod', source.reportingPeriod)
+  expect(input).toHaveProperty('deductionType', source.deductionType)
+  expect(input).toHaveProperty('buyerTaxId', source.buyerTaxId)
+  expect(input).toHaveProperty('sellerTaxId', source.sellerTaxId)
+  expect(input).toHaveProperty('taxType', source.taxType)
+  expect(input).toHaveProperty('isDeclareBusinessTax', source.isDeclareBusinessTax)
+  expect(input).toHaveProperty('taxableSalesValue', source.taxableSalesValue)
+  expect(input).toHaveProperty('withoutTaxAmount',
+    parseInt(source.taxableSalesValue) + parseInt(source.zeroTaxSalesValue) + parseInt(source.dutyFreeSalesValue)
+  )
+  expect(input).toHaveProperty('zeroTaxSalesValue', source.zeroTaxSalesValue)
+  expect(input).toHaveProperty('dutyFreeSalesValue', source.dutyFreeSalesValue)
+  expect(input).toHaveProperty('businessTaxValue', source.businessTaxValue)
+  expect(input).toHaveProperty('totalAmount', source.totalAmount)
+  expect(input).toHaveProperty('evidenceTimestamp', source.evidenceDate)
+  expect(input).toHaveProperty('remarkText', source.remark)
+  expect(input).toHaveProperty('evidenceId', source.carrierNumber)
+}
+
 
