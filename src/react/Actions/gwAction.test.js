@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../Context'
-import { loginUser } from './gwActions'
+import { loginUser,logout } from './gwActions'
 import { gwAxios as axios } from './axios'
 
 jest.mock('./axios')
@@ -24,10 +24,10 @@ afterEach(() => {
   while (dispatchData.length > 0) {
     dispatchData.pop()
   }
-  expect(dispatchData).toEqual([]);
+  expect(dispatchData).toEqual([])
 })
 
-test('should fetch token', async () => {
+test('login successful', async () => {
 
   //arrange
   const loginPayload = { taxId: '24549210', username: 'string123' }
@@ -42,8 +42,8 @@ test('should fetch token', async () => {
 
   //act
   const result = await loginUser(dispatch, loginPayload)
-  //assert
 
+  //assert
   const user = localStorage.getItem('currentUser')
   expect(user).toEqual(JSON.stringify({ 'taxId': '24549210', 'username': 'string123', 'token': '1234' }))
   expect(dispatchData).toEqual([
@@ -55,6 +55,39 @@ test('should fetch token', async () => {
   ])
 })
 
-test('should dispatch error', () => {
+test('login error', async () => {
+  //arrange
+  const loginPayload = { taxId: '24549210', username: 'string123' }
 
+  axios.post.mockImplementationOnce(() => Promise.resolve({
+    data: {
+      'result': false
+    }
+  }))
+  const dispatch = useAppDispatch()
+
+  //act
+  const result = await loginUser(dispatch, loginPayload)
+  const user = localStorage.getItem('currentUser')
+  expect(user).toBeNull()
+  expect(dispatchData[0]).toHaveProperty('type', 'REQUEST_LOGIN')
+  expect(dispatchData[1]).toHaveProperty('type', 'LOGIN_ERROR')
+})
+
+test('logout', async () => {
+  localStorage.setItem('currentUser', JSON.stringify({
+    'taxId': '24549210',
+    'username': 'string123',
+    'token': '1234'
+  }))
+  localStorage.setItem('token', '123456')
+
+  const dispatch = useAppDispatch()
+  await logout(dispatch)
+
+  const currentUser = localStorage.getItem('currentUser')
+  const token = localStorage.getItem('token')
+  expect(dispatchData[0]).toHaveProperty('type', 'LOGOUT')
+  expect(currentUser).toBeNull()
+  expect(token).toBeNull()
 })
