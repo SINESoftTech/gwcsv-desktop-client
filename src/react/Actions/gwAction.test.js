@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../Context'
-import { loginUser,logout } from './gwActions'
+import { loginUser, logout, uploadGUI, uploadToGw } from './gwActions'
 import { gwAxios as axios } from './axios'
 
 jest.mock('./axios')
@@ -91,3 +91,103 @@ test('logout', async () => {
   expect(currentUser).toBeNull()
   expect(token).toBeNull()
 })
+
+test('uploadToGw:uploadStrategy:GUI', async () => {
+
+  const payload = [{
+    json: {
+      gwEvidenceType: 'TRIPLE_GUI'
+    },
+    image: ''
+  }, {
+    json: {
+      gwEvidenceType: 'DUPLICATE_CASH_REGISTER_GUI'
+    },
+    image: ''
+  }, {
+    json: {
+      gwEvidenceType: 'TRIPLE_CASH_REGISTER_GUI'
+    },
+    image: ''
+  }, {
+    json: {
+      gwEvidenceType: 'EGUI'
+    },
+    image: ''
+  }]
+
+  const ajaxCallArr = []
+  axios.post.mockImplementationOnce(function(url, bodyFormData, config) {
+    ajaxCallArr.push({
+      url: url,
+      bodyFormData: bodyFormData,
+      config: config
+    })
+  })
+
+  await uploadToGw(payload, '', '')
+
+  ajaxCallArr.forEach(ajaxCall => {
+    expect(ajaxCall).toHaveProperty('url', '/evidence/gui')
+  })
+
+})
+
+test('uploadToGw:uploadStrategy:BILL', async () => {
+  const payload = [{
+    json: {
+      gwEvidenceType: 'ELECTRIC_BILL'
+    },
+    image: ''
+  }, {
+    json: {
+      gwEvidenceType: 'WATER_BILL'
+    },
+    image: ''
+  }, {
+    json: {
+      gwEvidenceType: 'TELECOM_BILL'
+    },
+    image: ''
+  }]
+
+  const ajaxCallArr = []
+  axios.post.mockImplementationOnce(function(url, bodyFormData, config) {
+    ajaxCallArr.push({
+      url: url,
+      bodyFormData: bodyFormData,
+      config: config
+    })
+  })
+
+  await uploadToGw(payload, '', '')
+
+  ajaxCallArr.forEach(ajaxCall => {
+    expect(ajaxCall).toHaveProperty('url', '/evidence/bill')
+  })
+})
+
+test('uploadToGw:uploadStrategy:CUSTOMS', async () => {
+  const payload = [{
+    json: {
+      gwEvidenceType: 'CUSTOMS_TAXABLE_EVIDENCE'
+    },
+    image: ''
+  }]
+
+  const ajaxCallArr = []
+  axios.post.mockImplementationOnce(function(url, bodyFormData, config) {
+    ajaxCallArr.push({
+      url: url,
+      bodyFormData: bodyFormData,
+      config: config
+    })
+  })
+
+  await uploadToGw(payload, '', '')
+
+  ajaxCallArr.forEach(ajaxCall => {
+    expect(ajaxCall).toHaveProperty('url', '/evidence/customs')
+  })
+})
+
