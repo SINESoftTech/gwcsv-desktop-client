@@ -155,7 +155,8 @@ test('success SigoutourMapper toView 5002', () => {
       }
     ]
   }
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, sigoutourJson)
+  const evidenceType = 'A5002'
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, sigoutourJson)
 
   expect(result).toMatchObject({
     evidenceType: '電子發票證明聯-格式一',
@@ -294,7 +295,8 @@ test('success SigoutourMapper toView 中華電信', () => {
       }]
     }]
   }
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, sigoutourJson)
+  const evidenceType = 'A5030'
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, sigoutourJson)
 
   expect(result).toMatchObject({
     evidenceType: '電信費帳單-中華電信',
@@ -544,7 +546,8 @@ test('success SigoutourMapper toView 5003', () => {
       }
     ]
   }
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, sigoutourJson)
+  const evidenceType = 'A5003'
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, sigoutourJson)
   expect(result).toMatchObject({
     evidenceType: '電子發票證明聯-格式二',
     evidenceNumber: 'MQ04251629',
