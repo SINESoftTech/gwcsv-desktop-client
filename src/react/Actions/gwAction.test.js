@@ -144,11 +144,11 @@ test('uploadToGw:uploadStrategy:GUI', async () => {
     })
   })
 
-  await uploadToGw(payload, '', '')
+  const result = await uploadToGw(payload, '', '')
 
   ajaxCallArr.forEach((ajaxCall, index) => {
     const input = JSON.parse(ajaxCall.bodyFormData.get('input'))
-    commonEvidenceExpected(input,payload[index].json);
+    commonEvidenceExpected(input, payload[index].json)
     expect(input).toHaveProperty('inputOutputType', 'INPUT')
     expect(input).toHaveProperty('guiId', payload[index].json.evidenceNumber)
     expect(input).toHaveProperty('commentType', 'WHITE_SPACE')
@@ -207,11 +207,11 @@ test('uploadToGw:uploadStrategy:BILL', async () => {
     })
   })
 
-  await uploadToGw(payload, '', '')
+  const result = await uploadToGw(payload, '', '')
 
   ajaxCallArr.forEach((ajaxCall, index) => {
     const input = JSON.parse(ajaxCall.bodyFormData.get('input'))
-    commonEvidenceExpected(input,payload[index].json);
+    commonEvidenceExpected(input, payload[index].json)
     expect(ajaxCall).toHaveProperty('url', '/evidence/bill')
   })
 })
@@ -250,7 +250,7 @@ test('uploadToGw:uploadStrategy:CUSTOMS', async () => {
     })
   })
 
-  await uploadToGw(payload, '', '')
+  const result = await uploadToGw(payload, '', '')
 
   ajaxCallArr.forEach(ajaxCall => {
     const input = ajaxCall.bodyFormData.get('input')
@@ -281,7 +281,69 @@ test('uploadToGw:uploadStrategy:CUSTOMS', async () => {
   })
 })
 
-function commonEvidenceExpected(input,source){
+test('uploadToGw successful', async () => {
+  const commonGUI = {
+    buyerTaxId: 'buyerTaxId',
+    reportingPeriod: 'reportingPeriod',
+    deductionType: 'deductionType',
+    isDeclareBusinessTax: true,
+    sellerTaxId: 'sellerTaxId',
+    taxType: 'taxType',
+    taxableSalesValue: 0,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 0,
+    totalAmount: 0,
+    evidenceDate: 'date',
+    evidenceNumber: 'evidenceNumber',
+    remark: 'remark'
+  }
+  const eGUI = Object.assign({}, commonGUI)
+  eGUI.gwEvidenceType = 'EGUI'
+
+  const payload = [{
+    json: eGUI,
+    image: ''
+  }]
+  axios.post.mockImplementationOnce(() => {
+    return
+  })
+  const result = await uploadToGw(payload, '', '')
+  expect(result[0]).toHaveProperty('status', true)
+})
+
+test('uploadToGw error', async () => {
+  const commonGUI = {
+    buyerTaxId: 'buyerTaxId',
+    reportingPeriod: 'reportingPeriod',
+    deductionType: 'deductionType',
+    isDeclareBusinessTax: true,
+    sellerTaxId: 'sellerTaxId',
+    taxType: 'taxType',
+    taxableSalesValue: 0,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 0,
+    totalAmount: 0,
+    evidenceDate: 'date',
+    evidenceNumber: 'evidenceNumber',
+    remark: 'remark'
+  }
+  const eGUI = Object.assign({}, commonGUI)
+  eGUI.gwEvidenceType = 'EGUI'
+
+  const payload = [{
+    json: eGUI,
+    image: ''
+  }]
+  axios.post.mockImplementationOnce(() => {
+    throw new UserException('throw');
+  })
+  const result = await uploadToGw(payload, '', '')
+  expect(result[0]).toHaveProperty('status', false)
+})
+
+function commonEvidenceExpected(input, source) {
   expect(input).toHaveProperty('businessEntityTaxId', source.buyerTaxId)
   expect(input).toHaveProperty('evidenceType', source.gwEvidenceType)
   expect(input).toHaveProperty('reportingPeriod', source.reportingPeriod)
