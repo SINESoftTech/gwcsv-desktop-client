@@ -56,7 +56,7 @@ const validEvidenceDate = (json) => {
 }
 
 const validGUI = (typeValue, json, assignMap) => {
-  if(json['evidenceDate'] === undefined){
+  if (json['evidenceDate'] === undefined) {
     return ['evidenceNumber']
   }
   const yyyymm = getPeriod(json['evidenceDate'])
@@ -221,4 +221,4 @@ const validTaxMoney = (json) => {
 }
 
 
-export { validSigoutourData }
+export { validSigoutourData, validTaxId }

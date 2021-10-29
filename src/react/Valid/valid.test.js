@@ -1,4 +1,4 @@
-import { validSigoutourData } from './valid'
+import { validSigoutourData, validTaxId } from './valid'
 
 const assignMap = {
   '21': {
@@ -738,7 +738,7 @@ test('valid buyerTaxId error', () => {
   }
   const validResult = validSigoutourData('24549210', data, assignMap)
   console.log(validResult)
-  expect(validResult.cellHighlight).toMatchObject(['buyerTaxId','sn'])
+  expect(validResult.cellHighlight).toMatchObject(['buyerTaxId', 'sn'])
 })
 
 test('valid sellerTaxId error', () => {
@@ -767,7 +767,7 @@ test('valid sellerTaxId error', () => {
     'id': '0907175959174992'
   }
   const validResult = validSigoutourData('24549210', data, assignMap)
-  expect(validResult.cellHighlight).toMatchObject(['sellerTaxId','sn'])
+  expect(validResult.cellHighlight).toMatchObject(['sellerTaxId', 'sn'])
 })
 
 test('valid taxType empty', () => {
@@ -893,4 +893,26 @@ test('valid evidenceType 5030', () => {
   const validResult = validSigoutourData('24549210', data, assignMap)
 
   expect(validResult.cellHighlight).toContain('evidenceNumber')
+})
+
+test('valid taxId ', () => {
+  const taxIdArr = [
+    '24549210',
+    '11349370'
+  ]
+
+  taxIdArr.forEach(taxId => {
+    expect(validTaxId(taxId)).toBeTruthy()
+  })
+})
+
+test('invalid taxId', () => {
+  const taxIdArr = [
+    '24549211',
+    '11349377'
+  ]
+
+  taxIdArr.forEach(taxId => {
+    expect(validTaxId(taxId)).toBe(false)
+  })
 })
