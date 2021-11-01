@@ -1,4 +1,4 @@
-import SigoutourMapper, { reverseIndex } from './sigoutour_mapper'
+import SigoutourMapper, { reverseIndex, SIGOUTOUR_EVIDENCE_TYPE_REVERSE } from './sigoutour_mapper'
 
 
 test('success reverseIndex', () => {
@@ -570,6 +570,341 @@ test('success SigoutourMapper toView 5003', () => {
   })
 })
 
+const a1001SigoutourJson = {
+  'result': 0,
+  'ticket': '201202_095956_254241',
+  'agent': 'T10001',
+  'company': '54704907',
+  'pageList': [{
+    'page': '201202_095956_254241_1',
+    'photoList': [{
+      'photo': '201202_095956_254241_1_1',
+      'type': 'A1001',
+      'x': 0,
+      'y': 478,
+      'w': 1239,
+      'h': 947,
+      'result':
+        [{
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': 'HK58985633',
+          'key': 'KEY_INVN',
+          'name': 'invoiceNumber',
+          'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '20210112',
+          'key': 'KEY_INVD',
+          'name': 'invoiceDate',
+          'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '12345678',
+          'key': 'KEY_BUY',
+          'name': 'buyer',
+          'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '12345679',
+          'key': 'KEY_SEL',
+          'name': 'seller',
+          'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '1',
+          'key': 'KEY_TXT',
+          'name': 'taxType',
+          'score': [0.99]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '1000',
+          'key': 'KEY_SALA',
+          'name': 'salesAmount',
+          'score': [0.99, 0.98, 0.97, 0.97]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '50',
+          'key': 'KEY_TAXA',
+          'name': 'taxAmount',
+          'score': [0.99, 0.98]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '1050',
+          'key': 'KEY_PAYA',
+          'name': 'payAmount',
+          'score': [0.99, 0.98, 0.97, 0.97]
+        }
+        ]
+    }
+    ]
+  }
+  ]
+}
+const a2001SigoutourJson = {
+  'result': 0,
+  'ticket': '201202_095956_254241',
+  'agent': 'T10001',
+  'company': '54704907',
+  'pageList': [{
+    'page': '201202_095956_254241_1',
+    'photoList': [{
+      'photo': '201202_095956_254241_1_1',
+      'type': 'A2001',
+      'x': 0,
+      'y': 478,
+      'w': 1239,
+      'h': 947,
+      'result':
+        [{
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': 'HK58985633',
+          'key': 'KEY_INVN',
+          'name': 'invoiceNumber',
+          'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '20210112',
+          'key': 'KEY_INVD',
+          'name': 'invoiceDate',
+          'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '12345678',
+          'key': 'KEY_BUY',
+          'name': 'buyer',
+          'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '12345679',
+          'key': 'KEY_SEL',
+          'name': 'seller',
+          'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '1',
+          'key': 'KEY_TXT',
+          'name': 'taxType',
+          'score': [0.99]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '1000',
+          'key': 'KEY_SALA',
+          'name': 'salesAmount',
+          'score': [0.99, 0.98, 0.97, 0.97]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '50',
+          'key': 'KEY_TAXA',
+          'name': 'taxAmount',
+          'score': [0.99, 0.98]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '1050',
+          'key': 'KEY_PAYA',
+          'name': 'payAmount',
+          'score': [0.99, 0.98, 0.97, 0.97]
+        }, {
+          'x': 475,
+          'y': 158,
+          'w': 79,
+          'h': 21,
+          'text': '1050',
+          'key': 'KEY_TOTA',
+          'name': 'totalAmount',
+          'score': [0.99, 0.98, 0.97, 0.97]
+        },
+          {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'remark',
+            'key': 'KEY_REM	',
+            'name': 'remark',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }
+        ]
+    }
+    ]
+  }
+  ]
+}
+
+test('success SigoutourMapper toView A2001', () => {
+  const ticketId = '123'
+  const deductionType = '123'
+  const reportingPeriod = '11002'
+  const evidenceType = 'A2001'
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a2001SigoutourJson)
+  let expectObj = {
+    reportingPeriod: reportingPeriod,
+    deductionType: deductionType,
+    ticketId: ticketId,
+    evidenceType: evidenceType
+  }
+  shareEvidenceBlankExpect(result)
+  shareEvidenceNumericExpect(result)
+  shareDirectValueMappingExpect(result, expectObj)
+
+  expect(result).toMatchObject({
+    'evidenceType': '二聯式收銀發票',
+    'evidenceNumber': 'HK58985633',
+    'evidenceDate': '20210112',
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 1,
+    'taxableSalesValue': 1000,
+    'businessTaxValue': 50,
+    'totalPayAmount': 1050,
+    'totalAmount': 1050,
+    'undefined': 'remark',
+    'otherFee': 0,
+    'zeroTaxSalesValue': 0,
+    'dutyFreeSalesValue': 0,
+    'reportingPeriod': '11002',
+    'deductionType': '123',
+    'ticketId': '123',
+    'gwEvidenceType': '二聯式收銀發票'
+  })
+})
+
+test('success SigoutourMapper toView A1001', () => {
+  const ticketId = '123'
+  const deductionType = '123'
+  const reportingPeriod = '11002'
+  const evidenceType = 'A1001'
+
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a1001SigoutourJson)
+  let expectObj = {
+    reportingPeriod: reportingPeriod,
+    deductionType: deductionType,
+    ticketId: ticketId,
+    evidenceType: evidenceType
+  }
+
+  shareEvidenceBlankExpect(result)
+  shareEvidenceNumericExpect(result)
+  shareDirectValueMappingExpect(result, expectObj)
+
+  /**
+   * specific case mapping
+   */
+  expect(result).toMatchObject({
+    'evidenceType': '三聯式統一發票',
+    'evidenceNumber': 'HK58985633',
+    'evidenceDate': '20210112',
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 1,
+    'taxableSalesValue': 1000,
+    'businessTaxValue': 50,
+    'totalPayAmount': 1050,
+    'totalAmount': 0,
+    'otherFee': 0,
+    'zeroTaxSalesValue': 0,
+    'dutyFreeSalesValue': 0,
+    'reportingPeriod': '11002',
+    'deductionType': '123',
+    'ticketId': '123',
+    'gwEvidenceType': '三聯式統一發票'
+  })
+})
+
+function shareEvidenceBlankExpect(result) {
+  //欄位檢核
+  expect(notUndefined(result.evidenceType)).toBeTruthy()
+  expect(notUndefined(result.buyerTaxId)).toBeTruthy()
+  expect(notUndefined(result.sellerTaxId)).toBeTruthy()
+  expect(notUndefined(result.taxType)).toBeTruthy()
+}
+
+function shareEvidenceNumericExpect(result) {
+  //數值欄位檢核
+  isInstanceOfNumber(result.totalAmount)
+  isInstanceOfNumber(result.totalPayAmount)
+  isInstanceOfNumber(result.otherFee)
+  isInstanceOfNumber(result.businessTaxValue)
+  isInstanceOfNumber(result.taxableSalesValue)
+  isInstanceOfNumber(result.zeroTaxSalesValue)
+  isInstanceOfNumber(result.dutyFreeSalesValue)
+}
+
+function evidenceNumberModifierExpect(result, originEvidenceNumber, carrierNumber) {
+  expect(result.evidenceNumber).toEqual(carrierNumber)
+}
+
+/**
+ * A5030,A5031,A5032,A5033
+ * @param result
+ * @param expectTotalAmount
+ */
+function totalAmountSummaryExpect(result, expectTotalAmount) {
+  let realTotalAmount =
+    result.taxableSalesValue
+    + result.businessTaxValue
+    + result.zeroTaxSalesValue
+    + result.dutyFreeSalesValue
+
+  expect(realTotalAmount).toEqual(expectTotalAmount)
+}
+
+function shareDirectValueMappingExpect(result, expectObj) {
+  let resultObj = {
+    reportingPeriod: result.reportingPeriod,
+    deductionType: result.deductionType,
+    ticketId: result.ticketId,
+    evidenceType: SIGOUTOUR_EVIDENCE_TYPE_REVERSE[result.evidenceType]
+  }
+  expect(resultObj).toMatchObject(expectObj)
+}
 
 test('success toSigoutour 5002', () => {
   const editData = {
@@ -1124,3 +1459,12 @@ test('success toSigoutour 中華電信', () => {
     }]
   })
 })
+
+function notUndefined(value) {
+  return value != undefined
+}
+
+function isInstanceOfNumber(value) {
+  let type = typeof value
+  return type === 'number'
+}
