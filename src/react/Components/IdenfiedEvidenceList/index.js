@@ -94,7 +94,8 @@ const IdentifiedEvidenceList = (props) => {
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
   const handleEditRow = async (editData, field = '') => {
-    console.log('handleEditRow()', editData, field)
+    console.log('handleEditRow()', editData)
+    console.log('handleEditRow() field', field)
     const jsonDataList = await getJsonRawData(localFiles['03'], props.declareProperties.clientTaxId)
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
