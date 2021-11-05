@@ -1607,27 +1607,637 @@ test('success SigoutourMapper toView A5032', () => {
   totalAmountSummaryExpect(result, 1070)
 
   expect(result).toMatchObject({
-    "evidenceType": "電信費帳單-遠傳",
-    "carrierNumber": "HK58985633",
-    "evidenceDate": "20210112",
-    "buyerTaxId": "12345678",
-    "sellerTaxId": "12345679",
-    "taxType": 1,
-    "taxableSalesValue": 1000,
-    "zeroTaxSalesValue": 20,
-    "businessTaxValue": 50,
-    "otherFee": 15,
-    "totalPayAmount": 1050,
-    "remark": "remark",
-    "totalAmount": 1070,
-    "dutyFreeSalesValue": 0,
-    "evidenceNumber": "HK58985633",
-    "reportingPeriod": "11010",
-    "deductionType": "a5032",
-    "ticketId": "a5032",
-    "gwEvidenceType": "電信費帳單-遠傳"
+    'evidenceType': '電信費帳單-遠傳',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': '20210112',
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 1,
+    'taxableSalesValue': 1000,
+    'zeroTaxSalesValue': 20,
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'totalAmount': 1070,
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'reportingPeriod': '11010',
+    'deductionType': 'a5032',
+    'ticketId': 'a5032',
+    'gwEvidenceType': '電信費帳單-遠傳'
   })
 
+})
+
+test('success SigoutourMapper toView A5033', () => {
+  const a5033SigoutourJson = {
+    'result': 0,
+    'ticket': '201202_095956_254241',
+    'agent': 'T10001',
+    'company': '54704907',
+    'pageList': [{
+      'page': '201202_095956_254241_1',
+      'photoList': [{
+        'photo': '201202_095956_254241_1_1',
+        'type': 'A5033',
+        'x': 0,
+        'y': 478,
+        'w': 1239,
+        'h': 947,
+        'result':
+          [{
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'HK58985633',
+            'key': 'KEY_COMN',
+            'name': 'commonNumber',
+            'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20210112',
+            'key': 'KEY_INVD',
+            'name': 'invoiceDate',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '12345678',
+            'key': 'KEY_BUY',
+            'name': 'buyer',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '12345679',
+            'key': 'KEY_SEL',
+            'name': 'seller',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1',
+            'key': 'KEY_TXT',
+            'name': 'taxType',
+            'score': [0.99]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1000',
+            'key': 'KEY_SALA',
+            'name': 'salesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20',
+            'key': 'KEY_ZTSA',
+            'name': 'zeroTaxSalesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '50',
+            'key': 'KEY_TAXA',
+            'name': 'taxAmount',
+            'score': [0.99, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '15',
+            'key': 'KEY_OTHF',
+            'name': 'otherFee',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1050',
+            'key': 'KEY_PAYA',
+            'name': 'payAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'remark',
+            'key': 'KEY_REM',
+            'name': 'remark',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }
+          ]
+      }
+      ]
+    }
+    ]
+  }
+  const ticketId = 'a5033'
+  const deductionType = 'a5033'
+  const reportingPeriod = '11010'
+  const evidenceType = 'A5033'
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a5033SigoutourJson)
+
+  let expectObj = {
+    reportingPeriod: reportingPeriod,
+    deductionType: deductionType,
+    ticketId: ticketId,
+    evidenceType: evidenceType
+  }
+  shareEvidenceBlankExpect(result)
+  shareEvidenceNumericExpect(result)
+  shareDirectValueMappingExpect(result, expectObj)
+  totalAmountSummaryExpect(result, 1070)
+
+  expect(result).toMatchObject({
+    'evidenceType': '電信費帳單-台灣之星',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': '20210112',
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 1,
+    'taxableSalesValue': 1000,
+    'zeroTaxSalesValue': 20,
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'totalAmount': 1070,
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'reportingPeriod': '11010',
+    'deductionType': 'a5033',
+    'ticketId': 'a5033',
+    'gwEvidenceType': '電信費帳單-台灣之星'
+  })
+
+})
+
+test('success SigoutourMapper toView A5034', () => {
+  const a5034SigoutourJson = {
+    'result': 0,
+    'ticket': '201202_095956_254241',
+    'agent': 'T10001',
+    'company': '54704907',
+    'pageList': [{
+      'page': '201202_095956_254241_1',
+      'photoList': [{
+        'photo': '201202_095956_254241_1_1',
+        'type': 'A5034',
+        'x': 0,
+        'y': 478,
+        'w': 1239,
+        'h': 947,
+        'result':
+          [{
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'HK58985633',
+            'key': 'KEY_COMN',
+            'name': 'commonNumber',
+            'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20210112',
+            'key': 'KEY_INVD',
+            'name': 'invoiceDate',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '12345678',
+            'key': 'KEY_BUY',
+            'name': 'buyer',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '12345679',
+            'key': 'KEY_SEL',
+            'name': 'seller',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1',
+            'key': 'KEY_TXT',
+            'name': 'taxType',
+            'score': [0.99]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1000',
+            'key': 'KEY_SALA',
+            'name': 'salesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20',
+            'key': 'KEY_ZTSA',
+            'name': 'zeroTaxSalesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '50',
+            'key': 'KEY_TAXA',
+            'name': 'taxAmount',
+            'score': [0.99, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '15',
+            'key': 'KEY_OTHF',
+            'name': 'otherFee',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1050',
+            'key': 'KEY_TOTA',
+            'name': 'totalAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1050',
+            'key': 'KEY_PAYA',
+            'name': 'payAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'remark',
+            'key': 'KEY_REM',
+            'name': 'remark',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }
+          ]
+      }
+      ]
+    }
+    ]
+  }
+  const ticketId = 'a5034'
+  const deductionType = 'a5034'
+  const reportingPeriod = '11006'
+  const evidenceType = 'A5034'
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a5034SigoutourJson)
+
+  let expectObj = {
+    reportingPeriod: reportingPeriod,
+    deductionType: deductionType,
+    ticketId: ticketId,
+    evidenceType: evidenceType
+  }
+  shareEvidenceBlankExpect(result)
+  shareEvidenceNumericExpect(result)
+  shareDirectValueMappingExpect(result, expectObj)
+
+  expect(result).toMatchObject({
+    'evidenceType': '電信費帳單-亞太',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': '20210112',
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 1,
+    'taxableSalesValue': 1000,
+    'zeroTaxSalesValue': 20,
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalAmount': 1050,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'reportingPeriod': '11006',
+    'deductionType': 'a5034',
+    'ticketId': 'a5034',
+    'gwEvidenceType': '電信費帳單-亞太'
+  })
+})
+
+test('success SigoutourMapper toView A8001', () => {
+  const a8001igoutourJson = {
+    'result': 0,
+    'ticket': '201202_095956_254241',
+    'agent': 'T10001',
+    'company': '54704907',
+    'pageList': [{
+      'page': '201202_095956_254241_1',
+      'photoList': [{
+        'photo': '201202_095956_254241_1_1',
+        'type': 'A8001',
+        'x': 0,
+        'y': 478,
+        'w': 1239,
+        'h': 947,
+        'result':
+          [{
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'HK58985633',
+            'key': 'KEY_COMN',
+            'name': 'commonNumber',
+            'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'HK58985633',
+            'key': 'KEY_ORDN',
+            'name': 'orderNumber',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20210112',
+            'key': 'KEY_INVD',
+            'name': 'invoiceDate',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '12345678',
+            'key': 'KEY_BUY',
+            'name': 'buyer',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1',
+            'key': 'KEY_TXT',
+            'name': 'taxType',
+            'score': [0.99]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1000',
+            'key': 'KEY_SALA',
+            'name': 'salesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20',
+            'key': 'KEY_FTSA',
+            'name': 'freeTaxSalesAmount\t',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '50',
+            'key': 'KEY_TAXA',
+            'name': 'taxAmount',
+            'score': [0.99, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1050',
+            'key': 'KEY_PAYA',
+            'name': 'payAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }
+          ]
+      }
+      ]
+    }
+    ]
+  }
+
+  const ticketId = 'A8001'
+  const deductionType = 'A8001'
+  const reportingPeriod = '11006'
+  const evidenceType = 'A8001'
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a8001igoutourJson)
+  let expectObj = {
+    reportingPeriod: reportingPeriod,
+    deductionType: deductionType,
+    ticketId: ticketId,
+    evidenceType: evidenceType
+  }
+  shareEvidenceBlankExpect(result)
+  shareEvidenceNumericExpect(result)
+  shareDirectValueMappingExpect(result, expectObj)
+
+  expect(result).toMatchObject({
+    'evidenceType': '海關代徵營業稅繳納證',
+    'carrierNumber': 'HK58985633',
+    'declarationId': 'HK58985633',
+    'evidenceDate': '20210112',
+    'buyerTaxId': '12345678',
+    'taxType': 1,
+    'taxableSalesValue': 1000,
+    'dutyFreeSalesValue': 20,
+    'businessTaxValue': 50,
+    'totalPayAmount': 1050,
+    'totalAmount': 0,
+    'otherFee': 0,
+    'zeroTaxSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'sellerTaxId': '',
+    'reportingPeriod': '11006',
+    'deductionType': 'A8001',
+    'ticketId': 'A8001',
+    'gwEvidenceType': '海關代徵營業稅繳納證'
+  })
+})
+
+//todo:SUBA3的值對應有問題
+test('success SigoutourMapper toView A3001', () => {
+  const a3001igoutourJson = {
+    'result': 0,
+    'ticket': '201202_095956_254241',
+    'agent': 'T10001',
+    'company': '54704907',
+    'pageList': [{
+      'page': '201202_095956_254241_1',
+      'photoList': [{
+        'photo': '201202_095956_254241_1_1',
+        'type': 'A3001',
+        'x': 0,
+        'y': 478,
+        'w': 1239,
+        'h': 947,
+        'result':
+          [{
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20210112',
+            'key': 'KEY_INVD',
+            'name': 'invoiceDate',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '12345678',
+            'key': 'KEY_SUBF1',
+            'name': 'subFee1',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1',
+            'key': 'KEY_SUBF2',
+            'name': 'subFee2',
+            'score': [0.99]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1000',
+            'key': 'KEY_SUBA1',
+            'name': 'subAmount1',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20',
+            'key': 'KEY_SUBA2',
+            'name': 'subAmount2',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '50',
+            'key': 'KEY_SUBA3',
+            'name': 'subAmount3',
+            'score': [0.99, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1050',
+            'key': 'KEY_PAYA',
+            'name': 'payAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          },{
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'remark',
+            'key': 'KEY_REM',
+            'name': 'remark',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }
+          ]
+      }
+      ]
+    }
+    ]
+  }
+
+  const ticketId = 'A3001'
+  const deductionType = 'A3001'
+  const reportingPeriod = '11004'
+  const evidenceType = 'A3001'
+  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a3001igoutourJson)
+  let expectObj = {
+    reportingPeriod: reportingPeriod,
+    deductionType: deductionType,
+    ticketId: ticketId,
+    evidenceType: evidenceType
+  }
+  shareEvidenceBlankExpect(result)
+  shareEvidenceNumericExpect(result)
+  shareDirectValueMappingExpect(result, expectObj)
+
+  expect(result).toMatchObject({
+    "evidenceType": "勞保",
+    "evidenceDate": "20210112",
+    "undefined": "50",
+    "totalPayAmount": 1050,
+    "remark": "remark",
+    "taxType": "",
+    "totalAmount": 0,
+    "otherFee": 0,
+    "businessTaxValue": 0,
+    "taxableSalesValue": 0,
+    "zeroTaxSalesValue": 0,
+    "dutyFreeSalesValue": 0,
+    "buyerTaxId": "",
+    "sellerTaxId": "",
+    "reportingPeriod": "11004",
+    "deductionType": "A3001",
+    "ticketId": "A3001",
+    "gwEvidenceType": "勞保"
+  })
 })
 
 test('success SigoutourMapper toView A2001', () => {
