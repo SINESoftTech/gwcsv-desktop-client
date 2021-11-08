@@ -122,18 +122,6 @@ const DialogComponent = (props) => {
           {renderReportingPeriod()}
           {renderIsDeclareBusinessTax()}
           {renderEvidenceType(renderEvidenceTypeList)}
-          {/*  <FormControl className={classes.formControl}>
-            <InputLabel id='evidence-type-select-label'>憑證種類</InputLabel>
-            <Select
-              labelId='evidence-type-select-label'
-              id='evidence-type-select'
-              name='evidenceType'
-              value={props.declareProperties.evidenceType}
-              onChange={handleChange}>
-              <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
-              {renderEvidenceTypeList}
-            </Select>
-          </FormControl>*/}
         </DialogContent>
         <DialogActions>
           <Button onClick={(e) => {
