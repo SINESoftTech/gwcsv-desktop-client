@@ -129,7 +129,7 @@ const ScannedImageList = (props) => {
                 }
               />
               <ImageListItemBar
-                title={item.fileName.split('_')[6]}
+                title={item.fileName.split('_')[5] +'_'+ item.fileName.split('_')[6]}
                 actionIcon={
                   <div>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}

@@ -242,7 +242,6 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
 
 
 ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
-
   let folderId = '03'
   if (eventName === 'evidenceSaved') {
     folderId = '04'
@@ -254,7 +253,7 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
   const filterFileList = fileList.filter(obj => {
     const fileName = obj.filename
     if (folderId === '01') {
-      return fileName.split('.')[0].split('_')[5] === ticketId
+      return fileName.split('.')[0].split('_')[6] === ticketId
     }
     const id = fileName.split('.')[0].split('_')[6]
     return id === ticketId

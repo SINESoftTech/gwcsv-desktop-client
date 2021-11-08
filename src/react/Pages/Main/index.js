@@ -160,7 +160,9 @@ const Main = (props) => {
   }
 
   const handleDeleteImage = (data) => {
-    const timestamp = data.fileName.split('_')[5].split('.')[0]
+    console.log('handleDeleteImage',data)
+    const timestamp = data.fileName.split('_')[6].split('.')[0]
+    console.log(timestamp)
     const eventName = 'scanned'
     electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
   }
