@@ -123,7 +123,7 @@ const Main = (props) => {
         'fileBlob': d.fileBlob,
         'accountingfirmTaxId': accountingfirmTaxId,
         'businessEntityTaxId': businessEntityTaxId,
-        'evidenceType': declareProperties.evidenceType
+        'evidenceType': d.fileName.split('_')[5].split('.')[0]
       }
     })
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
@@ -269,7 +269,6 @@ const Main = (props) => {
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
-          {/*{renderEvidenceType()}*/}
           <Collapse in={scanAlert}>
             <Alert
               severity='info'

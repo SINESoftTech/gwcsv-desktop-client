@@ -267,9 +267,10 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
 })
 
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
+  console.log('scanImages', declareProperties)
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
-  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + Date.now() + '.' + sourceFileExt
+  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + declareProperties.evidenceType + '_' + Date.now() + '.' + sourceFileExt
   fse.copySync(fullPath, targetFilePath)
   return getAllFileLists(fullPath)
 })
