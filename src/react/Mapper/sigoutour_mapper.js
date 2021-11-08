@@ -136,6 +136,11 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
     'id': '',
     'name': '健保',
     'value': ''
+  },
+  'other': {
+    'id': '',
+    'name': '其他',
+    'value': ''
   }
 }
 

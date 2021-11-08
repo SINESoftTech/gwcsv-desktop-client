@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react'
 import { electronActions, gwActions, sightTourActions, useAppDispatch, useAppState } from '../../Context'
-import isElectron from 'is-electron'
-import { Alert, AlertTitle } from '@material-ui/lab'
+import { Alert } from '@material-ui/lab'
 import CloseIcon from '@material-ui/icons/Close'
 import {
-  AppBar, Badge,
-  Box, Collapse,
+  AppBar,
+  Badge,
+  Box,
+  Collapse,
   Container,
   CssBaseline,
   FormControl,
-  Grid, IconButton,
+  Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Paper,
@@ -30,11 +32,8 @@ import {
   identifySent
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
-
-const R = require('ramda')
 
 
 function TabPanel(props) {
@@ -85,6 +84,7 @@ const Main = (props) => {
   const handleTabChange = (event, newValue) => {
     setValue(newValue)
   }
+
   const handleSelectionChange = (event) => {
     const { name, value } = event.target
     setDeclareProperties(prevState => {
@@ -97,6 +97,7 @@ const Main = (props) => {
       handleReset()
     }
   }
+
   const handleScannerError = (errorMsg) => {
     const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
     setScanDisable(false)
@@ -159,7 +160,6 @@ const Main = (props) => {
   }
 
   const handleDeleteImage = (data) => {
-    //todo
     const timestamp = data.fileName.split('_')[5].split('.')[0]
     const eventName = 'scanned'
     electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
@@ -236,32 +236,6 @@ const Main = (props) => {
     )
   }
 
-  const renderEvidenceType = () => {
-    const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
-    return (
-      <>
-        <FormControl className={classes.formControl}>
-          <InputLabel id='evidence-type-select-label'>憑證種類</InputLabel>
-          <Select
-            labelId='evidence-type-select-label'
-            id='evidence-type-select'
-            name='evidenceType'
-            value={declareProperties.evidenceType}
-            onChange={handleSelectionChange}>
-            <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
-            {keyList.map(key => {
-              const id = SIGOUTOUR_EVIDENCE_TYPE[key].id === '' ? '99 ' : SIGOUTOUR_EVIDENCE_TYPE[key].id + ' '
-              const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
-              return <MenuItem key={key}
-                               value={key}>{(id + name)}</MenuItem>
-            })}
-          </Select>
-        </FormControl>
-      </>
-    )
-  }
-
-
   const handleReset = () => {
     setDeclareProperties(prevState => {
       return {
@@ -286,13 +260,16 @@ const Main = (props) => {
       <CssBaseline />
       <GwMenuTop />
       <main className={classes.content}>
-        <DialogComponent declareProperties={declareProperties} handleSelectionChange={handleSelectionChange}
-                         handleReset={handleReset} handleClose={handleClose} open={openDialog}
+        <DialogComponent declareProperties={declareProperties}
+                         handleSelectionChange={handleSelectionChange}
+                         handleReset={handleReset}
+                         handleClose={handleClose}
+                         open={openDialog}
                          onScan={handleScanImage} />
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
-          {renderEvidenceType()}
+          {/*{renderEvidenceType()}*/}
           <Collapse in={scanAlert}>
             <Alert
               severity='info'
@@ -350,14 +327,14 @@ const Main = (props) => {
                                           declareProperties={declareProperties}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}
-                                          OnDeleteEvdience={handleDeleteEvidence}/>
+                                          OnDeleteEvdience={handleDeleteEvidence} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
                                          user={appState.auth.user}
                                          onGwUploaded={handleGwUploaded}
                                          declareProperties={declareProperties}
-                                         OnDeleteEvdience={handleDeleteEvidence}/>
+                                         OnDeleteEvdience={handleDeleteEvidence} />
                 </TabPanel>
               </Paper>
             </Grid>
