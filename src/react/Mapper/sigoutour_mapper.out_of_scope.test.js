@@ -109,8 +109,8 @@ test('success SigoutourMapper toView A3001', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  ShareTest.shareEvidenceBlankExpect(result)
-  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareEvidenceExpect(result)
+
   ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
@@ -209,8 +209,8 @@ test('success SigoutourMapper toView A3002', () => {
   const reportingPeriod = '11006'
   const evidenceType = 'A3002'
   const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a3002SigoutourJson)
-  ShareTest.shareEvidenceBlankExpect(result)
-  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareEvidenceExpect(result)
+
   // shareDirectValueMappingExpect(result, a3002SigoutourJson)
 })
 

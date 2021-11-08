@@ -2,109 +2,14 @@ import SigoutourMapper from './sigoutour_mapper'
 import ShareTest from './sigoutour_mapper.share.test'
 
 test('success SigoutourMapper toGw A1001', () => {
-  const a1001SigoutourJson = {
-    'result': 0,
-    'ticket': '201202_095956_254241',
-    'agent': 'T10001',
-    'company': '54704907',
-    'pageList': [{
-      'page': '201202_095956_254241_1',
-      'photoList': [{
-        'photo': '201202_095956_254241_1_1',
-        'type': 'A1001',
-        'x': 0,
-        'y': 478,
-        'w': 1239,
-        'h': 947,
-        'result':
-          [{
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': 'HK58985633',
-            'key': 'KEY_INVN',
-            'name': 'invoiceNumber',
-            'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '20210112',
-            'key': 'KEY_INVD',
-            'name': 'invoiceDate',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '12345678',
-            'key': 'KEY_BUY',
-            'name': 'buyer',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '12345679',
-            'key': 'KEY_SEL',
-            'name': 'seller',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1',
-            'key': 'KEY_TXT',
-            'name': 'taxType',
-            'score': [0.99]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1000',
-            'key': 'KEY_SALA',
-            'name': 'salesAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '50',
-            'key': 'KEY_TAXA',
-            'name': 'taxAmount',
-            'score': [0.99, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1050',
-            'key': 'KEY_PAYA',
-            'name': 'payAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }
-          ]
-      }
-      ]
-    }
-    ]
-  }
-
+  const a1001SigoutourJson = ShareTest.jsonCases.A1001_HAPPY_CASE
   const ticketId = 'a1001'
   const deductionType = '2'
   const reportingPeriod = '11002'
   const evidenceType = 'A1001'
 
   const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, false, evidenceType, a1001SigoutourJson)
-  ShareTest.shareEvidenceBlankExpect(result)
-  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareEvidenceExpect(result)
 
   expect(result).toMatchObject({
     'evidenceType': 'TRIPLE_GUI',
@@ -132,119 +37,7 @@ test('success SigoutourMapper toGw A1001', () => {
  * todo: remark field is undefined
  */
 test('success SigoutourMapper toGw A2001', () => {
-  const a2001SigoutourJson = {
-    'result': 0,
-    'ticket': '201202_095956_254241',
-    'agent': 'T10001',
-    'company': '54704907',
-    'pageList': [{
-      'page': '201202_095956_254241_1',
-      'photoList': [{
-        'photo': '201202_095956_254241_1_1',
-        'type': 'A2001',
-        'x': 0,
-        'y': 478,
-        'w': 1239,
-        'h': 947,
-        'result':
-          [{
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': 'HK58985633',
-            'key': 'KEY_INVN',
-            'name': 'invoiceNumber',
-            'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '20210112',
-            'key': 'KEY_INVD',
-            'name': 'invoiceDate',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '12345678',
-            'key': 'KEY_BUY',
-            'name': 'buyer',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '12345679',
-            'key': 'KEY_SEL',
-            'name': 'seller',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1',
-            'key': 'KEY_TXT',
-            'name': 'taxType',
-            'score': [0.99]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1000',
-            'key': 'KEY_SALA',
-            'name': 'salesAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '50',
-            'key': 'KEY_TAXA',
-            'name': 'taxAmount',
-            'score': [0.99, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1050',
-            'key': 'KEY_PAYA',
-            'name': 'payAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1050',
-            'key': 'KEY_TOTA',
-            'name': 'totalAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          },
-            {
-              'x': 475,
-              'y': 158,
-              'w': 79,
-              'h': 21,
-              'text': 'remark',
-              'key': 'KEY_REM	',
-              'name': 'remark',
-              'score': [0.99, 0.98, 0.97, 0.97]
-            }
-          ]
-      }
-      ]
-    }
-    ]
-  }
+  const a2001SigoutourJson = ShareTest.jsonCases.A2001_HAPPY_CASE
 
   const ticketId = 'a2001'
   const deductionType = '1'
@@ -252,8 +45,8 @@ test('success SigoutourMapper toGw A2001', () => {
   const evidenceType = 'A2001'
 
   const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a2001SigoutourJson)
-  ShareTest.shareEvidenceBlankExpect(result)
-  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareEvidenceExpect(result)
+
   expect(result).toMatchObject({
     'evidenceType': 'DUPLICATE_CASH_REGISTER_GUI',
     'evidenceNumber': 'HK58985633',
@@ -277,139 +70,10 @@ test('success SigoutourMapper toGw A2001', () => {
   })
 })
 /**
- * todo:evidenceDate verify failed
+ * todo:evidenceDate verify failed,remark field is undefined
  */
 test('success SigoutourMapper toGw A5001', () => {
-  const a5001SigoutourJson = {
-    'result': 0,
-    'ticket': '201202_095956_254241',
-    'agent': 'T10001',
-    'company': '54704907',
-    'pageList': [{
-      'page': '201202_095956_254241_1',
-      'photoList': [{
-        'photo': '201202_095956_254241_1_1',
-        'type': 'A5001',
-        'x': 0,
-        'y': 478,
-        'w': 1239,
-        'h': 947,
-        'result':
-          [{
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': 'HK58985633',
-            'key': 'KEY_INVN',
-            'name': 'invoiceNumber',
-            'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '12345678',
-            'key': 'KEY_BUY',
-            'name': 'buyer',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '12345679',
-            'key': 'KEY_SEL',
-            'name': 'seller',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1',
-            'key': 'KEY_TXT',
-            'name': 'taxType',
-            'score': [0.99]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1000',
-            'key': 'KEY_SALA',
-            'name': 'salesAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '50',
-            'key': 'KEY_TAXA',
-            'name': 'taxAmount',
-            'score': [0.99, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1050',
-            'key': 'KEY_SALA',
-            'name': 'salesAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '20',
-            'key': 'KEY_ZTSA',
-            'name': 'zeroTaxSalesAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '30',
-            'key': 'KEY_FTSA',
-            'name': 'freeTaxSalesAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1050',
-            'key': 'KEY_TOTA',
-            'name': 'totalAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1050',
-            'key': 'KEY_PAYA',
-            'name': 'payAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': 'remark',
-            'key': 'KEY_REM	',
-            'name': 'remark',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }
-          ]
-      }
-      ]
-    }
-    ]
-  }
+  const a5001SigoutourJson = ShareTest.jsonCases.A5001_HAPPY_CASE
 
   const ticketId = 'a5001'
   const deductionType = '3'
@@ -443,3 +107,325 @@ test('success SigoutourMapper toGw A5001', () => {
   // })
 })
 
+test('success SigoutourMapper toGw A5002', () => {
+  const a5002SigoutourJson = ShareTest.jsonCases.A5002_MISSING_SALES_AMOUNT
+
+  const ticketId = 'a5002'
+  const deductionType = '2'
+  const reportingPeriod = '11002'
+  const evidenceType = 'A5002'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, false, evidenceType, a5002SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'EGUI',
+    'evidenceNumber': 'JD52291225',
+    'evidenceDate': 1609459200000,
+    'buyerTaxId': '24549210',
+    'sellerTaxId': '29278095',
+    'taxType': 'TAXABLE',
+    'taxableSalesValue': 86,
+    'zeroTaxSalesValue': 0,
+    'dutyFreeSalesValue': 0,
+    'businessTaxValue': 4,
+    'totalAmount': 90,
+    'totalPayAmount': 90,
+    'remark': '',
+    'otherFee': 0,
+    'id': 'a5002',
+    'reportingPeriod': '11002',
+    'deductionType': 'FIXED_ASSETS',
+    'isDeclareBusinessTax': false,
+    'gwEvidenceType': 'EGUI'
+  })
+})
+
+test('success SigoutourMapper toGw A5003', () => {
+  const a5003SigoutourJson = ShareTest.jsonCases.A5003_MISSING_SALES_AMOUNT
+
+  const ticketId = 'a5003'
+  const deductionType = '4'
+  const reportingPeriod = '11008'
+  const evidenceType = 'A5003'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5003SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'EGUI',
+    'evidenceNumber': 'MQ04251629',
+    'evidenceDate': 1611619200000,
+    'buyerTaxId': '24549210',
+    'sellerTaxId': '16151427',
+    'taxType': 'TAXABLE',
+    'taxableSalesValue': 8000,
+    'zeroTaxSalesValue': 0,
+    'dutyFreeSalesValue': 0,
+    'businessTaxValue': 400,
+    'totalAmount': 8400,
+    'totalPayAmount': 8400,
+    'remark': '統一資訊股份有限公司-數據服務費用',
+    'otherFee': 0,
+    'id': 'a5003',
+    'reportingPeriod': '11008',
+    'deductionType': 'NON_FIXED_ASSETS',
+    'isDeclareBusinessTax': true,
+    'gwEvidenceType': 'EGUI'
+  })
+
+})
+
+test('success SigoutourMapper toGw A5010', () => {
+  const a5010SigoutourJson = ShareTest.jsonCases.A5010_HAPPY_CASE
+
+  const ticketId = 'a5010'
+  const deductionType = '1'
+  const reportingPeriod = '11008'
+  const evidenceType = 'A5010'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5010SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'ELECTRIC_BILL',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': 1610409600000,
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 'TAXABLE',
+    'taxableSalesValue': 1050,
+    'businessTaxValue': 50,
+    'totalAmount': 1050,
+    'totalPayAmount': 1050,
+    'undefined': 'remark',
+    'otherFee': 0,
+    'zeroTaxSalesValue': 0,
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'id': 'a5010',
+    'reportingPeriod': '11008',
+    'deductionType': 'PURCHASE_AND_FEE',
+    'isDeclareBusinessTax': true,
+    'gwEvidenceType': 'ELECTRIC_BILL'
+  })
+
+})
+
+test('success SigoutourMapper toGw A5020', () => {
+  const a5020SigoutourJson = ShareTest.jsonCases.A5020_HAPPY_CASE
+
+  const ticketId = 'a5020'
+  const deductionType = '1'
+  const reportingPeriod = '11008'
+  const evidenceType = 'A5020'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5020SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'WATER_BILL',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': 1610409600000,
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 'TAXABLE',
+    'basicFee': '1000',
+    'waterFee': '50',
+    'rebate': '20',
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalAmount': 1050,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'taxableSalesValue': 1050,
+    'zeroTaxSalesValue': 0,
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'id': 'a5020',
+    'reportingPeriod': '11008',
+    'deductionType': 'PURCHASE_AND_FEE',
+    'isDeclareBusinessTax': true,
+    'gwEvidenceType': 'WATER_BILL'
+  })
+})
+
+test('success SigoutourMapper toGw A5021', () => {
+  const a5021SigoutourJson = ShareTest.jsonCases.A5021_HAPPY_CASE
+
+  const ticketId = 'a5021'
+  const deductionType = '1'
+  const reportingPeriod = '11010'
+  const evidenceType = 'A5021'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5021SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'WATER_BILL',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': 1610409600000,
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 'TAXABLE',
+    'taxableSalesValue': 1000,
+    'basicFee': '1000',
+    'waterFee': '50',
+    'rebate': '20',
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalAmount': 1050,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'zeroTaxSalesValue': 0,
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'id': 'a5021',
+    'reportingPeriod': '11010',
+    'deductionType': 'PURCHASE_AND_FEE',
+    'isDeclareBusinessTax': true,
+    'gwEvidenceType': 'WATER_BILL'
+  })
+})
+
+/**
+ * todo:taxType is undefined, evidenceType is NaN
+ */
+test('success SigoutourMapper toGw A5030', () => {
+  const a5030SigoutourJson = ShareTest.jsonCases.A5030_MISSING_TAX_TYPE
+
+  const ticketId = 'a5030'
+  const deductionType = '1'
+  const reportingPeriod = '11008'
+  const evidenceType = 'A5030'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5030SigoutourJson)
+  // ShareTest.shareEvidenceBlankExpect(result)
+  // ShareTest.shareEvidenceNumericExpect(result)
+
+  // expect(result).toMatchObject({
+  //   "evidenceType": "TELECOM_BILL",
+  //   "carrierNumber": "BB20050951",
+  //   "evidenceDate": null,
+  //   "buyerTaxId": "16151904",
+  //   "sellerTaxId": "8169178",
+  //   "taxableSalesValue": 6906,
+  //   "zeroTaxSalesValue": 0,
+  //   "dutyFreeSalesValue": 0,
+  //   "businessTaxValue": 345,
+  //   "otherFee": 0,
+  //   "totalPayAmount": 7475,
+  //   "remark": "",
+  //   "totalAmount": 7251,
+  //   "evidenceNumber": "BB20050951",
+  //   "id": "a5030",
+  //   "reportingPeriod": "11008",
+  //   "deductionType": "PURCHASE_AND_FEE",
+  //   "isDeclareBusinessTax": true,
+  //   "gwEvidenceType": "TELECOM_BILL"
+  // })
+})
+
+test('success SigoutourMapper toGw A5031', () => {
+  const a5031SigoutourJson = ShareTest.jsonCases.A5031_HAPPY_CASE
+  const ticketId = 'a5031'
+  const deductionType = '1'
+  const reportingPeriod = '11008'
+  const evidenceType = 'A5031'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5031SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'TELECOM_BILL',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': 1610409600000,
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 'TAXABLE',
+    'taxableSalesValue': 1000,
+    'zeroTaxSalesValue': 20,
+    'dutyFreeSalesValue': 30,
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalAmount': 1100,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'evidenceNumber': 'HK58985633',
+    'id': 'a5031',
+    'reportingPeriod': '11008',
+    'deductionType': 'PURCHASE_AND_FEE',
+    'isDeclareBusinessTax': true,
+    'gwEvidenceType': 'TELECOM_BILL'
+  })
+})
+
+test('success SigoutourMapper toGw A5032', () => {
+  const a5032SigoutourJson = ShareTest.jsonCases.A5032_HAPPY_CASE
+
+  const ticketId = 'a5032'
+  const deductionType = '1'
+  const reportingPeriod = '11010'
+  const evidenceType = 'A5032'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5032SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'TELECOM_BILL',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': 1610409600000,
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 'TAXABLE',
+    'taxableSalesValue': 1000,
+    'zeroTaxSalesValue': 20,
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'totalAmount': 1070,
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'id': 'a5032',
+    'reportingPeriod': '11010',
+    'deductionType': 'PURCHASE_AND_FEE',
+    'isDeclareBusinessTax': true,
+    'gwEvidenceType': 'TELECOM_BILL'
+  })
+})
+
+test('success SigoutourMapper toGw A5033', () => {
+  const a5033SigoutourJson = ShareTest.jsonCases.A5033_HAPPY_CASE
+
+  const ticketId = 'a5033'
+  const deductionType = '1'
+  const reportingPeriod = '11010'
+  const evidenceType = 'A5033'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5033SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'TELECOM_BILL',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': 1610409600000,
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 'TAXABLE',
+    'taxableSalesValue': 1000,
+    'zeroTaxSalesValue': 20,
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'totalAmount': 1070,
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'id': 'a5033',
+    'reportingPeriod': '11010',
+    'deductionType': 'PURCHASE_AND_FEE',
+    'isDeclareBusinessTax': true,
+    'gwEvidenceType': 'TELECOM_BILL'
+  })
+})
