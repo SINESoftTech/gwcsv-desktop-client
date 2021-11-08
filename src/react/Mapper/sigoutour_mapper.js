@@ -259,6 +259,6 @@ class SigoutourMapperClass {
 }
 
 const SigoutourMapper = new SigoutourMapperClass()
-export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, SIGOUTOUR_EVIDENCE_TYPE_REVERSE }
+export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, SIGOUTOUR_EVIDENCE_TYPE_REVERSE,DEDUCTION_TYPE }
 
 export default SigoutourMapper

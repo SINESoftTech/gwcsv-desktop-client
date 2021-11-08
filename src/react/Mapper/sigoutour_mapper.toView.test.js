@@ -1,4 +1,4 @@
-import SigoutourMapper, {  SIGOUTOUR_EVIDENCE_TYPE_REVERSE } from './sigoutour_mapper'
+import SigoutourMapper from './sigoutour_mapper'
 import ShareTest from './sigoutour_mapper.share.test'
 
 test('success SigoutourMapper toView 5002', () => {
@@ -714,7 +714,7 @@ test('success SigoutourMapper toView A5001', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '三聯式收銀機發票',
@@ -875,7 +875,7 @@ test('success SigoutourMapper toView A5010', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '電力帳單',
@@ -1054,7 +1054,7 @@ test('success SigoutourMapper toView A5020', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
   ShareTest.a5020TypeNumericExpect(result)
 
   expect(result).toMatchObject({
@@ -1246,7 +1246,7 @@ test('success SigoutourMapper toView A5021', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
   ShareTest.a5020TypeNumericExpect(result)
 
   expect(result).toMatchObject({
@@ -1429,7 +1429,7 @@ test('success SigoutourMapper toView A5031', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
   ShareTest.totalAmountSummaryExpect(result, 1100)
 
   expect(result).toMatchObject({
@@ -1593,7 +1593,7 @@ test('success SigoutourMapper toView A5032', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
   ShareTest.totalAmountSummaryExpect(result, 1070)
 
   expect(result).toMatchObject({
@@ -1756,7 +1756,7 @@ test('success SigoutourMapper toView A5033', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
   ShareTest.totalAmountSummaryExpect(result, 1070)
 
   expect(result).toMatchObject({
@@ -1928,7 +1928,7 @@ test('success SigoutourMapper toView A5034', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-亞太',
@@ -2071,7 +2071,7 @@ test('success SigoutourMapper toView A8001', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '海關代徵營業稅繳納證',
@@ -2224,7 +2224,7 @@ test('success SigoutourMapper toView A2001', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '二聯式收銀發票',
@@ -2359,7 +2359,7 @@ test('success SigoutourMapper toView A1001', () => {
 
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   /**
    * specific case mapping
@@ -2388,7 +2388,7 @@ test('success SigoutourMapper toView A1001', () => {
 /**
  * todo: 如果辨識結果中一個欄位都沒有出現，則evidenceType連原來給的也不會帶回來
  */
-test('verify failed toView A1001', () => {
+test('verify failed empty result toView A1001', () => {
   const a1001SigoutourJson = {
     'result': 0,
     'ticket': '201202_095956_254241',
@@ -2425,7 +2425,7 @@ test('verify failed toView A1001', () => {
 
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'sellerTaxId': '',
@@ -2437,6 +2437,24 @@ test('verify failed toView A1001', () => {
     'ticketId': 'a1001failed',
     'gwEvidenceType': '三聯式統一發票'
   })
+})
+
+test('verify failed invalid response toView A1001', () => {
+  const a1001SigoutourJson = {
+    "ticket": "1108092621205432",
+    "result": "-200003"
+  }
+
+  const ticketId = '123'
+  const deductionType = '123'
+  const reportingPeriod = '11002'
+  const evidenceType = 'A1001'
+
+  // const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a1001SigoutourJson)
+
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+
 })
 
 test('success toSigoutour 5002', () => {

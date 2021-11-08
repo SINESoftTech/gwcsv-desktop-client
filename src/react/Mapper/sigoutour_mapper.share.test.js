@@ -52,7 +52,7 @@ function isInstanceOfNumber(value) {
   return type === 'number'
 }
 
-const shareDirectValueMappingExpect = function shareDirectValueMappingExpect(result, expectObj) {
+const shareToViewDirectValueMappingExpect = function shareToViewDirectValueMappingExpect(result, expectObj) {
   let evidenceType = ''
   if (result.evidenceType) {
     evidenceType = SIGOUTOUR_EVIDENCE_TYPE_REVERSE[result.evidenceType]
@@ -76,5 +76,5 @@ export default {
   evidenceNumberModifierExpect,
   totalAmountSummaryExpect,
   a5020TypeNumericExpect,
-  shareDirectValueMappingExpect
+  shareToViewDirectValueMappingExpect
 }
