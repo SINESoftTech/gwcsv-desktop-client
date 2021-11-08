@@ -111,7 +111,7 @@ test('success SigoutourMapper toView A3001', () => {
   }
   ShareTest.shareEvidenceBlankExpect(result)
   ShareTest.shareEvidenceNumericExpect(result)
-  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareToViewDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '勞保',
