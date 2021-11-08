@@ -17,7 +17,7 @@ const DialogComponent = (props) => {
 
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
-  const [renderEvidenceTypeList, setRenderEvidenceTypeList] = useState()
+  const [renderEvidenceTypeList, setRenderEvidenceTypeList] = useState([])
   const classes = mainStyles()
 
   const handleChange = (event) => {
@@ -25,34 +25,29 @@ const DialogComponent = (props) => {
   }
 
   useEffect(() => {
-    console.log('AAAA')
     const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
     const isDeclareBusinessTax = props.declareProperties.isDeclareBusinessTax
-    console.log('isDeclareBusinessTax', isDeclareBusinessTax)
-    if (isDeclareBusinessTax) {
-      setRenderEvidenceTypeList(
-        ...[keyList
-          .filter(key => {
-            return SIGOUTOUR_EVIDENCE_TYPE[key].id !== ''
-          }).map(key => {
-            const id = SIGOUTOUR_EVIDENCE_TYPE[key].id + ' '
-            const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
-            return <MenuItem key={key}
-                             value={key}>{(id + name)}</MenuItem>
-          })]
-      )
+    if (isDeclareBusinessTax === 'true') {
+      const data = keyList
+        .filter(key => {
+          return SIGOUTOUR_EVIDENCE_TYPE[key].id !== ''
+        }).map(key => {
+          const id = SIGOUTOUR_EVIDENCE_TYPE[key].id + ' '
+          const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
+          return <MenuItem key={key}
+                           value={key}>{(id + name)}</MenuItem>
+        })
+      setRenderEvidenceTypeList([...data])
     } else {
-      setRenderEvidenceTypeList(
-        ...[keyList
-          .map(key => {
-            const id = SIGOUTOUR_EVIDENCE_TYPE[key].id === '' ? '99 ' : SIGOUTOUR_EVIDENCE_TYPE[key].id + ' '
-            const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
-            return <MenuItem key={key}
-                             value={key}>{(id + name)}</MenuItem>
-          })]
-      )
+      const data = keyList
+        .map(key => {
+          const id = SIGOUTOUR_EVIDENCE_TYPE[key].id === '' ? '99 ' : SIGOUTOUR_EVIDENCE_TYPE[key].id + ' '
+          const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
+          return <MenuItem key={key}
+                           value={key}>{(id + name)}</MenuItem>
+        })
+      setRenderEvidenceTypeList([...data])
     }
-    console.log('BBBB')
   }, [props.declareProperties.isDeclareBusinessTax])
 
   const renderReportingPeriod = () => {
@@ -98,6 +93,20 @@ const DialogComponent = (props) => {
     )
   }
 
+  const renderEvidenceType = (evidenceTypeList) => {
+    return <FormControl className={classes.formControl}>
+      <InputLabel id='evidence-type-select-label'>憑證種類</InputLabel>
+      <Select
+        labelId='evidence-type-select-label'
+        id='evidence-type-select'
+        name='evidenceType'
+        value={props.declareProperties.evidenceType}
+        onChange={handleChange}>
+        <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
+        {evidenceTypeList}
+      </Select>
+    </FormControl>
+  }
 
   return (
     <div>
@@ -112,7 +121,8 @@ const DialogComponent = (props) => {
         <DialogContent>
           {renderReportingPeriod()}
           {renderIsDeclareBusinessTax()}
-          <FormControl className={classes.formControl}>
+          {renderEvidenceType(renderEvidenceTypeList)}
+          {/*  <FormControl className={classes.formControl}>
             <InputLabel id='evidence-type-select-label'>憑證種類</InputLabel>
             <Select
               labelId='evidence-type-select-label'
@@ -123,7 +133,7 @@ const DialogComponent = (props) => {
               <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
               {renderEvidenceTypeList}
             </Select>
-          </FormControl>
+          </FormControl>*/}
         </DialogContent>
         <DialogActions>
           <Button onClick={(e) => {

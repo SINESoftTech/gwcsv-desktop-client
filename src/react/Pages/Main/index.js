@@ -65,7 +65,7 @@ const Main = (props) => {
     'clientTaxId': '',
     'reportingPeriod': '',
     'evidenceType': '',
-    isDeclareBusinessTax: true
+    'isDeclareBusinessTax': 'true'
   })
   const classes = mainStyles()
   const [scanCount, setScanCount] = React.useState(0)
