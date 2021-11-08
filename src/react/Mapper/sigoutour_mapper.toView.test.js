@@ -1,15 +1,5 @@
-import SigoutourMapper, { reverseIndex, SIGOUTOUR_EVIDENCE_TYPE_REVERSE } from './sigoutour_mapper'
-
-
-test('success reverseIndex', () => {
-  const json = {
-    'key': 'value'
-  }
-  const result = reverseIndex(json)
-  expect(result).toMatchObject({
-    'value': 'key'
-  })
-})
+import SigoutourMapper, {  SIGOUTOUR_EVIDENCE_TYPE_REVERSE } from './sigoutour_mapper'
+import ShareTest from './sigoutour_mapper.share.test'
 
 test('success SigoutourMapper toView 5002', () => {
   const ticketId = '123'
@@ -722,9 +712,9 @@ test('success SigoutourMapper toView A5001', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '三聯式收銀機發票',
@@ -883,9 +873,9 @@ test('success SigoutourMapper toView A5010', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '電力帳單',
@@ -1062,10 +1052,10 @@ test('success SigoutourMapper toView A5020', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
-  a5020TypeNumericExpect(result)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.a5020TypeNumericExpect(result)
 
   expect(result).toMatchObject({
     'evidenceType': '水費帳單-台灣自來水',
@@ -1254,10 +1244,10 @@ test('success SigoutourMapper toView A5021', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
-  a5020TypeNumericExpect(result)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.a5020TypeNumericExpect(result)
 
   expect(result).toMatchObject({
     'evidenceType': '水費帳單-台北自來水',
@@ -1437,10 +1427,10 @@ test('success SigoutourMapper toView A5031', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
-  totalAmountSummaryExpect(result, 1100)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.totalAmountSummaryExpect(result, 1100)
 
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-台灣大哥大',
@@ -1601,10 +1591,10 @@ test('success SigoutourMapper toView A5032', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
-  totalAmountSummaryExpect(result, 1070)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.totalAmountSummaryExpect(result, 1070)
 
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-遠傳',
@@ -1764,10 +1754,10 @@ test('success SigoutourMapper toView A5033', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
-  totalAmountSummaryExpect(result, 1070)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.totalAmountSummaryExpect(result, 1070)
 
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-台灣之星',
@@ -1936,9 +1926,9 @@ test('success SigoutourMapper toView A5034', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-亞太',
@@ -2079,9 +2069,9 @@ test('success SigoutourMapper toView A8001', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '海關代徵營業稅繳納證',
@@ -2103,140 +2093,6 @@ test('success SigoutourMapper toView A8001', () => {
     'deductionType': 'A8001',
     'ticketId': 'A8001',
     'gwEvidenceType': '海關代徵營業稅繳納證'
-  })
-})
-
-//todo:SUBA3的值對應有問題
-test('success SigoutourMapper toView A3001', () => {
-  const a3001igoutourJson = {
-    'result': 0,
-    'ticket': '201202_095956_254241',
-    'agent': 'T10001',
-    'company': '54704907',
-    'pageList': [{
-      'page': '201202_095956_254241_1',
-      'photoList': [{
-        'photo': '201202_095956_254241_1_1',
-        'type': 'A3001',
-        'x': 0,
-        'y': 478,
-        'w': 1239,
-        'h': 947,
-        'result':
-          [{
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '20210112',
-            'key': 'KEY_INVD',
-            'name': 'invoiceDate',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '12345678',
-            'key': 'KEY_SUBF1',
-            'name': 'subFee1',
-            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1',
-            'key': 'KEY_SUBF2',
-            'name': 'subFee2',
-            'score': [0.99]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1000',
-            'key': 'KEY_SUBA1',
-            'name': 'subAmount1',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '20',
-            'key': 'KEY_SUBA2',
-            'name': 'subAmount2',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '50',
-            'key': 'KEY_SUBA3',
-            'name': 'subAmount3',
-            'score': [0.99, 0.98]
-          }, {
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': '1050',
-            'key': 'KEY_PAYA',
-            'name': 'payAmount',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          },{
-            'x': 475,
-            'y': 158,
-            'w': 79,
-            'h': 21,
-            'text': 'remark',
-            'key': 'KEY_REM',
-            'name': 'remark',
-            'score': [0.99, 0.98, 0.97, 0.97]
-          }
-          ]
-      }
-      ]
-    }
-    ]
-  }
-
-  const ticketId = 'A3001'
-  const deductionType = 'A3001'
-  const reportingPeriod = '11004'
-  const evidenceType = 'A3001'
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a3001igoutourJson)
-  let expectObj = {
-    reportingPeriod: reportingPeriod,
-    deductionType: deductionType,
-    ticketId: ticketId,
-    evidenceType: evidenceType
-  }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
-
-  expect(result).toMatchObject({
-    "evidenceType": "勞保",
-    "evidenceDate": "20210112",
-    "undefined": "50",
-    "totalPayAmount": 1050,
-    "remark": "remark",
-    "taxType": "",
-    "totalAmount": 0,
-    "otherFee": 0,
-    "businessTaxValue": 0,
-    "taxableSalesValue": 0,
-    "zeroTaxSalesValue": 0,
-    "dutyFreeSalesValue": 0,
-    "buyerTaxId": "",
-    "sellerTaxId": "",
-    "reportingPeriod": "11004",
-    "deductionType": "A3001",
-    "ticketId": "A3001",
-    "gwEvidenceType": "勞保"
   })
 })
 
@@ -2366,9 +2222,9 @@ test('success SigoutourMapper toView A2001', () => {
     ticketId: ticketId,
     evidenceType: evidenceType
   }
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'evidenceType': '二聯式收銀發票',
@@ -2501,9 +2357,9 @@ test('success SigoutourMapper toView A1001', () => {
     evidenceType: evidenceType
   }
 
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
 
   /**
    * specific case mapping
@@ -2528,7 +2384,6 @@ test('success SigoutourMapper toView A1001', () => {
     'gwEvidenceType': '三聯式統一發票'
   })
 })
-
 
 /**
  * todo: 如果辨識結果中一個欄位都沒有出現，則evidenceType連原來給的也不會帶回來
@@ -2568,9 +2423,9 @@ test('verify failed toView A1001', () => {
     evidenceType: ''
   }
 
-  shareEvidenceBlankExpect(result)
-  shareEvidenceNumericExpect(result)
-  shareDirectValueMappingExpect(result, expectObj)
+  ShareTest.shareEvidenceBlankExpect(result)
+  ShareTest.shareEvidenceNumericExpect(result)
+  ShareTest.shareDirectValueMappingExpect(result, expectObj)
 
   expect(result).toMatchObject({
     'sellerTaxId': '',
@@ -2583,63 +2438,6 @@ test('verify failed toView A1001', () => {
     'gwEvidenceType': '三聯式統一發票'
   })
 })
-
-function shareEvidenceBlankExpect(result) {
-  //欄位檢核
-  expect(notUndefined(result.evidenceType)).toBeTruthy()
-  expect(notUndefined(result.buyerTaxId)).toBeTruthy()
-  expect(notUndefined(result.sellerTaxId)).toBeTruthy()
-  expect(notUndefined(result.taxType)).toBeTruthy()
-}
-
-function shareEvidenceNumericExpect(result) {
-  //數值欄位檢核
-  isInstanceOfNumber(result.totalAmount)
-  isInstanceOfNumber(result.totalPayAmount)
-  isInstanceOfNumber(result.otherFee)
-  isInstanceOfNumber(result.businessTaxValue)
-  isInstanceOfNumber(result.taxableSalesValue)
-  isInstanceOfNumber(result.zeroTaxSalesValue)
-  isInstanceOfNumber(result.dutyFreeSalesValue)
-}
-
-function a5020TypeNumericExpect(result) {
-  isInstanceOfNumber(result.waterFee)
-  isInstanceOfNumber(result.basicFee)
-}
-
-function evidenceNumberModifierExpect(result, originEvidenceNumber, carrierNumber) {
-  expect(result.evidenceNumber).toEqual(carrierNumber)
-}
-
-/**
- * A5030,A5031,A5032,A5033
- * @param result
- * @param expectTotalAmount
- */
-function totalAmountSummaryExpect(result, expectTotalAmount) {
-  let realTotalAmount =
-    result.taxableSalesValue
-    + result.businessTaxValue
-    + result.zeroTaxSalesValue
-    + result.dutyFreeSalesValue
-
-  expect(realTotalAmount).toEqual(expectTotalAmount)
-}
-
-function shareDirectValueMappingExpect(result, expectObj) {
-  let evidenceType = ''
-  if (result.evidenceType) {
-    evidenceType = SIGOUTOUR_EVIDENCE_TYPE_REVERSE[result.evidenceType]
-  }
-  let resultObj = {
-    reportingPeriod: result.reportingPeriod,
-    deductionType: result.deductionType,
-    ticketId: result.ticketId,
-    evidenceType: evidenceType
-  }
-  expect(resultObj).toMatchObject(expectObj)
-}
 
 test('success toSigoutour 5002', () => {
   const editData = {
@@ -3194,12 +2992,3 @@ test('success toSigoutour 中華電信', () => {
     }]
   })
 })
-
-function notUndefined(value) {
-  return value != undefined
-}
-
-function isInstanceOfNumber(value) {
-  let type = typeof value
-  return type === 'number'
-}

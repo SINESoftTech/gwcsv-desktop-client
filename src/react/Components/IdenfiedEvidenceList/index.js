@@ -3,13 +3,13 @@ import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import { getAssign, getJsonRawData } from '../../Actions/electionActions'
 import SigoutourMapper, {
-  reverseIndex,
   SIGOUTOUR_EVIDENCE_TYPE_REVERSE,
   SIGOUTOUR_FIELD_TYPE
 } from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
 import { electronActions, sightTourActions } from '../../Context'
 import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
+import ReverseIndex from '../../Util/ReverseIndex'
 
 
 const R = require('ramda')
@@ -19,7 +19,7 @@ const byTicketId = R.groupBy((fileObj) => {
 })
 
 export const handleSendConfirmedResultData = (field, editData, sigoutourJson) => {
-  const reverse = reverseIndex(SIGOUTOUR_FIELD_TYPE)
+  const reverse = ReverseIndex.reverseIndex(SIGOUTOUR_FIELD_TYPE)
   if (field === 'evidenceNumber' && editData['carrierNumber'] !== undefined) {
     field = 'carrierNumber'
   }

@@ -258,15 +258,7 @@ class SigoutourMapperClass {
 
 }
 
-const reverseIndex = (obj) => {
-  const ret = {}
-  Object.keys(obj).forEach(key => {
-    ret[obj[key]] = key
-  })
-  return ret
-}
-
 const SigoutourMapper = new SigoutourMapperClass()
-export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, reverseIndex, SIGOUTOUR_EVIDENCE_TYPE_REVERSE }
+export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, SIGOUTOUR_EVIDENCE_TYPE_REVERSE }
 
 export default SigoutourMapper
