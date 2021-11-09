@@ -1,4 +1,4 @@
-import { gwAxios, gwAxios as axios } from './axios'
+import { gwAxios as axios } from './axios'
 import actionTypes from '../Actions/actionTypes'
 
 export async function loginUser(dispatch, loginPayload) {

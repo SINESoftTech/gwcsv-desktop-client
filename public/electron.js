@@ -209,6 +209,7 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
 })
 
 ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, period, gwEvidenceType, json) => {
+  console.log('updateSigoutourData', json)
   //json remove old and save
   const fileList03 = getAllFileLists()['03']
   const filterFileList = fileList03.filter(obj => {
@@ -221,7 +222,6 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
   filterFileList.map(file => {
     const fileName = file.filename
     const splitFileName = fileName.split('_')
-    console.log(splitFileName)
     splitFileName[2] = period
     splitFileName[3] = deductionType
     splitFileName[5] = gwEvidenceType
@@ -242,7 +242,6 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
 
 
 ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
-
   let folderId = '03'
   if (eventName === 'evidenceSaved') {
     folderId = '04'
@@ -254,7 +253,7 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
   const filterFileList = fileList.filter(obj => {
     const fileName = obj.filename
     if (folderId === '01') {
-      return fileName.split('.')[0].split('_')[5] === ticketId
+      return fileName.split('.')[0].split('_')[6] === ticketId
     }
     const id = fileName.split('.')[0].split('_')[6]
     return id === ticketId
@@ -267,9 +266,10 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
 })
 
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
+  console.log('scanImages', declareProperties)
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
-  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + Date.now() + '.' + sourceFileExt
+  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + declareProperties.evidenceType + '_' + Date.now() + '.' + sourceFileExt
   fse.copySync(fullPath, targetFilePath)
   return getAllFileLists(fullPath)
 })
