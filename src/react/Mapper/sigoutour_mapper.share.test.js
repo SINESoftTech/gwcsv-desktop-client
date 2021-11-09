@@ -1,5 +1,3 @@
-import { SIGOUTOUR_EVIDENCE_TYPE_REVERSE } from './sigoutour_mapper'
-
 const jsonCases = {
   A1001_HAPPY_CASE: {
     'result': 0,
@@ -261,7 +259,7 @@ const jsonCases = {
             'y': 158,
             'w': 79,
             'h': 21,
-            'text': '20210112',
+            'text': '',
             'key': 'KEY_INVD',
             'name': 'invoiceDate',
             'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
@@ -371,7 +369,7 @@ const jsonCases = {
     }
     ]
   },
-  A5002_MISSING_SALES_AMOUNT:{
+  A5002_MISSING_SALES_AMOUNT: {
     'ticket': '0818085909997119',
     'pageList': [
       {
@@ -511,7 +509,7 @@ const jsonCases = {
       }
     ]
   },
-  A5003_MISSING_SALES_AMOUNT:{
+  A5003_MISSING_SALES_AMOUNT: {
     'ticket': '0825151837533806',
     'pageList': [
       {
@@ -1252,6 +1250,118 @@ const jsonCases = {
       }]
     }]
   },
+  A5030_HAPPY_CASE:{
+    'ticket': '0907175959174992', 'pageList': [{
+      'page': '0907175959174992_1', 'photoList': [{
+        'photo': '0907175959174992_1_1',
+        'type': 'A5030',
+        'x': 1,
+        'y': 1,
+        'w': 2422,
+        'h': 2807,
+        'result': [{
+          'x': 1077,
+          'y': 307,
+          'w': 319,
+          'h': 36,
+          'name': 'commonNumber',
+          'key': 'KEY_COMN',
+          'text': 'BB20050951',
+          'score': [1, 0.86, 1, 0.986, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.686, 1, 0.972]
+        }, {
+          'x': 614,
+          'y': 423,
+          'w': 176,
+          'h': 39,
+          'name': 'invoiceDate',
+          'key': 'KEY_INVD',
+          'text': '20210225',
+          'score': [0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98]
+        }, {
+          'x': 46,
+          'y': 1145,
+          'w': 474,
+          'h': 35,
+          'name': 'buyer',
+          'key': 'KEY_BUY',
+          'text': '16151904',
+          'score': [1, 1, 1, 1, 1, 1, 0.998, 1]
+        }, {
+          'x': 1062,
+          'y': 177,
+          'w': 334,
+          'h': 35,
+          'name': 'seller',
+          'key': 'KEY_SEL',
+          'text': '8169178',
+          'score': [1, 1, 0.977, 1, 1, 1, 1]
+        }, {
+          'x': 0,
+          'y': 0,
+          'w': 0,
+          'h': 0,
+          'name': 'taxType',
+          'key': 'KEY_TXT',
+          'text': '1',
+          'score': [0]
+        }, {
+          'x': 124,
+          'y': 2498,
+          'w': 379,
+          'h': 31,
+          'name': 'salesAmount',
+          'key': 'KEY_SALA',
+          'text': 6906,
+          'score': [1, 1, 1, 0.999]
+        }, {
+          'x': 0,
+          'y': 0,
+          'w': 0,
+          'h': 0,
+          'name': 'zeroTaxSalesAmount',
+          'key': 'KEY_ZTSA',
+          'text': 0,
+          'score': [0]
+        }, {
+          'x': 0,
+          'y': 0,
+          'w': 0,
+          'h': 0,
+          'name': 'freeTaxSalesAmount',
+          'key': 'KEY_FTSA',
+          'text': 0,
+          'score': [0]
+        }, {
+          'x': 124,
+          'y': 2531,
+          'w': 809,
+          'h': 29,
+          'name': 'taxAmount',
+          'key': 'KEY_TAXA',
+          'text': 345,
+          'score': [0.98, 0.98, 0.98]
+        }, {
+          'x': 1158,
+          'y': 2497,
+          'w': 300,
+          'h': 33,
+          'name': 'otherFee',
+          'key': 'KEY_OTHF',
+          'text': 0,
+          'score': [1]
+        }, {
+          'x': 182,
+          'y': 426,
+          'w': 210,
+          'h': 44,
+          'name': 'payAmount',
+          'key': 'KEY_PAYA',
+          'text': 7475,
+          'score': [1, 1, 1, 1]
+        }, { 'x': 0, 'y': 0, 'w': 0, 'h': 0, 'name': 'remark', 'key': 'KEY_REM', 'text': '', 'score': [0] }]
+      }]
+    }]
+  },
   A5031_HAPPY_CASE: {
     'result': 0,
     'ticket': '201202_095956_254241',
@@ -1890,10 +2000,6 @@ const a5020TypeNumericExpect = function a5020TypeNumericExpect(result) {
   isInstanceOfNumber(result.basicFee)
 }
 
-const evidenceNumberModifierExpect = function evidenceNumberModifierExpect(result, originEvidenceNumber, carrierNumber) {
-  expect(result.evidenceNumber).toEqual(carrierNumber)
-}
-
 /**
  * A5030,A5031,A5032,A5033
  * @param result
@@ -1918,29 +2024,14 @@ function isInstanceOfNumber(value) {
   return type === 'number'
 }
 
-const shareToViewDirectValueMappingExpect = function shareToViewDirectValueMappingExpect(result, expectObj) {
-  let evidenceType = ''
-  if (result.evidenceType) {
-    evidenceType = SIGOUTOUR_EVIDENCE_TYPE_REVERSE[result.evidenceType]
-  }
-  let resultObj = {
-    reportingPeriod: result.reportingPeriod,
-    deductionType: result.deductionType,
-    ticketId: result.ticketId,
-    evidenceType: evidenceType
-  }
-  expect(resultObj).toMatchObject(expectObj)
-}
-
 test('default', () => {
 
 })
 
-export default {
+//todo: remove
+export {
   jsonCases,
   shareEvidenceExpect,
-  evidenceNumberModifierExpect,
   totalAmountSummaryExpect,
-  a5020TypeNumericExpect,
-  shareToViewDirectValueMappingExpect
+  a5020TypeNumericExpect
 }
