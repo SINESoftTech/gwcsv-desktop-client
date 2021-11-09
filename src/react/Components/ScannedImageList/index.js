@@ -42,9 +42,6 @@ const getImageFileBlob = async (fullPath) => {
 const isScanEnable = (taxIdSelected) => {
   return !!taxIdSelected
 }
-const isRequiredEnable = (data, evidenceType) => {
-  return (evidenceType !== '') && data.length > 0
-}
 
 const ScannedImageList = (props) => {
 
@@ -59,8 +56,8 @@ const ScannedImageList = (props) => {
       let rowData = (props.data) ? await getRowData(data, username, clientTaxId) : []
       console.log('in useEffect', rowData)
       rowData = rowData.sort((a, b) => {
-        const fileName1 = a.fileName.split('_')[5].split('.')[0]
-        const fileName2 = b.fileName.split('_')[5].split('.')[0]
+        const fileName1 = a.fileName.split('_')[6].split('.')[0]
+        const fileName2 = b.fileName.split('_')[6].split('.')[0]
         if (fileName1 >= fileName2) {
           return 0
         } else {
@@ -103,8 +100,7 @@ const ScannedImageList = (props) => {
       <Button variant='contained' onClick={(e) => {
         props.onSendToIdentifyClick(e, selectionDataRows.selection)
         setSelectionDataRow({ selection: [] })
-      }}
-              disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
+      }}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
           {dataRows.map((item) => (
@@ -133,7 +129,7 @@ const ScannedImageList = (props) => {
                 }
               />
               <ImageListItemBar
-                title={item.fileName.split('_')[5]}
+                title={item.fileName.split('_')[5] +'_'+ item.fileName.split('_')[6]}
                 actionIcon={
                   <div>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}

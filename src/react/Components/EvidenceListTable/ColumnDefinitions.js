@@ -1,16 +1,15 @@
-import { Button, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
+import { Button, FormControl, MenuItem, Select } from '@material-ui/core'
 import React from 'react'
 import { GridColDef } from '@material-ui/data-grid'
+import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
+import mainStyles from '../../Pages/Main/mainStyles'
 
 const R = require('ramda')
-import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
-import { values } from 'ramda'
-import mainStyles from '../../Pages/Main/mainStyles'
 
 export const ConfirmedColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
   { field: 'sn', headerName: '序號', width: 110, editable: false },
-  { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false },
+  { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false, renderCell: renderSn },
   { field: 'gwEvidenceType', headerName: 'GW憑證類型', width: 200, editable: false },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, editable: false },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, editable: false },
@@ -139,6 +138,20 @@ function renderTaxType(param) {
       </Select>
     </FormControl>
   )
+}
+
+
+function renderSn(cellValues) {
+  const value = cellValues.value
+  const style = {
+    color: 'red'
+  }
+  if (value === '' || value === undefined) {
+    return <div></div>
+  } else {
+    return <div style={style}>{value}</div>
+  }
+
 }
 
 function getCellClassName(cellValues) {

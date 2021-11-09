@@ -1,3 +1,4 @@
+const R = require('ramda')
 const SIGOUTOUR_FIELD_TYPE = {
   'KEY_INVN': 'evidenceNumber',
   'KEY_INVD': 'evidenceDate',
@@ -16,7 +17,8 @@ const SIGOUTOUR_FIELD_TYPE = {
   'KEY_TAXA': 'businessTaxValue',
   'KEY_TOTA': 'totalAmount',
   'KEY_PAYA': 'totalPayAmount',
-  'KEY_REM': 'remark'
+  'KEY_REM': 'remark',
+  'KEY_EVIDENCE_DATE': 'gwEvidenceDate'
 }
 
 const TAX_TYPE = {
@@ -134,6 +136,11 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
     'id': '',
     'name': '健保',
     'value': ''
+  },
+  'other': {
+    'id': '',
+    'name': '其他',
+    'value': ''
   }
 }
 
@@ -191,6 +198,9 @@ const parseData = (jsonData) => {
   if (type === 'A5030' || type === 'A5033' || type === 'A5031' || type === 'A5032') {
     json['totalAmount'] = json['taxableSalesValue'] + json['businessTaxValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
   }
+  if (type === 'A5010' || type === 'A5020' || type === 'A5021' || type === 'A5030' || type === 'A5031' || type === 'A5032' || type === 'A5033' || type === 'A5034') {
+    json['evidenceDate'] = json['gwEvidenceDate']
+  }
   if (json['evidenceNumber'] === undefined) {
     json['evidenceNumber'] = json['carrierNumber']
   }
@@ -213,7 +223,6 @@ class SigoutourMapperClass {
     json['ticketId'] = ticketId
     json['errorMsg'] = jsonData['errorMsg']
     json['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[evidenceType].name
-    console.log('toView', json)
     return json
   }
 
@@ -238,21 +247,30 @@ class SigoutourMapperClass {
     jsonDataBody.forEach(obj => {
       if (isBillType && obj['key'] === 'KEY_COMN') {
         obj['text'] = data['evidenceNumber']
-      } else if (sigoutourJson['pageList'][0]['photoList'][0]['type'] === 'A5020') {
-        const key = SIGOUTOUR_FIELD_TYPE[obj['key']]
-        if (key === 'waterFee') {
-          obj['text'] = 0
-        }
-        if (key === 'basicFee') {
-          const value = data['taxableSalesValue']
-          obj['text'] = value
-        }
+      } else if (sigoutourJson['pageList'][0]['photoList'][0]['type'] === 'A5020' && SIGOUTOUR_FIELD_TYPE[obj['key']] === 'waterFee') {
+        obj['text'] = 0
+      } else if (sigoutourJson['pageList'][0]['photoList'][0]['type'] === 'A5020' && SIGOUTOUR_FIELD_TYPE[obj['key']] === 'basicFee') {
+        obj['text'] = data['taxableSalesValue']
       } else {
         const key = SIGOUTOUR_FIELD_TYPE[obj['key']]
-        const value = data[key]
-        obj['text'] = value
+        obj['text'] = data[key]
       }
     })
+    if (isBillType) {
+      const keys = jsonDataBody.map(obj => {
+        return obj['key']
+      })
+      if (keys.includes('KEY_EVIDENCE_DATE')) {
+        jsonDataBody.forEach(obj => {
+          if (obj['key'] === 'KEY_EVIDENCE_DATE') {
+            obj['text'] = data['evidenceDate']
+          }
+        })
+      } else {
+        jsonDataBody.push({ 'key': 'KEY_EVIDENCE_DATE', 'text': data['evidenceDate'] })
+
+      }
+    }
     return sigoutourJson
   }
 
