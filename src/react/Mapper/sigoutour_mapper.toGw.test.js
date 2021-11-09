@@ -289,10 +289,6 @@ test('success SigoutourMapper toGw A5021', () => {
   })
 })
 
-/**
- * todo:taxType is undefined, evidenceType is NaN
- * todo: happy path only.
- */
 test('success SigoutourMapper toGw A5030', () => {
   const a5030SigoutourJson = jsonCases.A5030_HAPPY_CASE
 
