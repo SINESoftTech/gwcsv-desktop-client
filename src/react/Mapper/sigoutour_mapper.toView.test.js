@@ -287,7 +287,7 @@ test('success SigoutourMapper toView A5010', () => {
   expect(result).toMatchObject({
     'evidenceType': '電力帳單',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': undefined,
+    'evidenceDate': '20210112',
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -327,7 +327,7 @@ test('success SigoutourMapper toView A5020', () => {
   expect(result).toMatchObject({
     'evidenceType': '水費帳單-台灣自來水',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': undefined,
+    'evidenceDate': '20210112',
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -364,7 +364,7 @@ test('success SigoutourMapper toView A5021', () => {
   expect(result).toMatchObject({
     'evidenceType': '水費帳單-台北自來水',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': undefined,
+    'evidenceDate': '20210112',
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -401,7 +401,7 @@ test('success SigoutourMapper toView A5031', () => {
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-台灣大哥大',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': undefined,
+    'evidenceDate': '20210112',
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -437,7 +437,7 @@ test('success SigoutourMapper toView A5032', () => {
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-遠傳',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': undefined,
+    'evidenceDate': '20210112',
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -478,7 +478,7 @@ test('success SigoutourMapper toView A5033', () => {
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-台灣之星',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': undefined,
+    'evidenceDate': '20210112',
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -512,7 +512,7 @@ test('success SigoutourMapper toView A5034', () => {
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-亞太',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': undefined,
+    'evidenceDate': '20210112',
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,

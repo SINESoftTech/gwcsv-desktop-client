@@ -303,7 +303,7 @@ test('success SigoutourMapper toGw A5030', () => {
   expect(result).toMatchObject({
     "evidenceType": "TELECOM_BILL",
     "carrierNumber": "BB20050951",
-    "evidenceDate": 1614211200000,
+    "evidenceDate": 1610409600000,
     "buyerTaxId": "16151904",
     "sellerTaxId": "8169178",
     "taxableSalesValue": 6906,

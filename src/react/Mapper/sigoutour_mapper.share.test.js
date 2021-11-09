@@ -754,6 +754,9 @@ const jsonCases = {
             'key': 'KEY_COMN',
             'name': 'commonNumber',
             'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+          },{
+            'key': 'KEY_EVIDENCE_DATE',
+            "text":'20210112'
           }, {
             'x': 475,
             'y': 158,
@@ -884,6 +887,9 @@ const jsonCases = {
             'key': 'KEY_INVD',
             'name': 'invoiceDate',
             'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          }, {
+            'text': '20210112',
+            'key': 'KEY_EVIDENCE_DATE'
           }, {
             'x': 475,
             'y': 158,
@@ -1023,6 +1029,9 @@ const jsonCases = {
             'key': 'KEY_INVD',
             'name': 'invoiceDate',
             'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          },{
+            'text': '20210112',
+            'key': 'KEY_EVIDENCE_DATE',
           }, {
             'x': 475,
             'y': 158,
@@ -1250,7 +1259,7 @@ const jsonCases = {
       }]
     }]
   },
-  A5030_HAPPY_CASE:{
+  A5030_HAPPY_CASE: {
     'ticket': '0907175959174992', 'pageList': [{
       'page': '0907175959174992_1', 'photoList': [{
         'photo': '0907175959174992_1_1',
@@ -1268,6 +1277,9 @@ const jsonCases = {
           'key': 'KEY_COMN',
           'text': 'BB20050951',
           'score': [1, 0.86, 1, 0.986, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.686, 1, 0.972]
+        },{
+          'text': '20210112',
+          'key': 'KEY_EVIDENCE_DATE',
         }, {
           'x': 614,
           'y': 423,
@@ -1395,6 +1407,9 @@ const jsonCases = {
             'key': 'KEY_INVD',
             'name': 'invoiceDate',
             'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          }, {
+            'text': '20210112',
+            'key': 'KEY_EVIDENCE_DATE'
           }, {
             'x': 475,
             'y': 158,
@@ -1526,6 +1541,9 @@ const jsonCases = {
             'name': 'commonNumber',
             'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
           }, {
+            'text': '20210112',
+            'key': 'KEY_EVIDENCE_DATE'
+          }, {
             'x': 475,
             'y': 158,
             'w': 79,
@@ -1656,6 +1674,9 @@ const jsonCases = {
             'name': 'invoiceDate',
             'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
           }, {
+            'text': '20210112',
+            'key': 'KEY_EVIDENCE_DATE'
+          }, {
             'x': 475,
             'y': 158,
             'w': 79,
@@ -1767,6 +1788,9 @@ const jsonCases = {
             'key': 'KEY_COMN',
             'name': 'commonNumber',
             'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+          }, {
+            'text': '20210112',
+            'key': 'KEY_EVIDENCE_DATE'
           }, {
             'x': 475,
             'y': 158,
