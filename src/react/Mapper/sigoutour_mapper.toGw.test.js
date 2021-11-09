@@ -429,3 +429,74 @@ test('success SigoutourMapper toGw A5033', () => {
     'gwEvidenceType': 'TELECOM_BILL'
   })
 })
+
+test('success SigoutourMapper toGw A5034', () => {
+  const a5033SigoutourJson = ShareTest.jsonCases.A5034_HAPPY_CASE
+
+  const ticketId = 'a5034'
+  const deductionType = '1'
+  const reportingPeriod = '11010'
+  const evidenceType = 'A5034'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a5033SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    'evidenceType': 'TELECOM_BILL',
+    'carrierNumber': 'HK58985633',
+    'evidenceDate': 1610409600000,
+    'buyerTaxId': '12345678',
+    'sellerTaxId': '12345679',
+    'taxType': 'TAXABLE',
+    'taxableSalesValue': 1000,
+    'zeroTaxSalesValue': 20,
+    'businessTaxValue': 50,
+    'otherFee': 15,
+    'totalAmount': 1050,
+    'totalPayAmount': 1050,
+    'remark': 'remark',
+    'dutyFreeSalesValue': 0,
+    'evidenceNumber': 'HK58985633',
+    'id': 'a5034',
+    'reportingPeriod': '11010',
+    'deductionType': 'PURCHASE_AND_FEE',
+    'isDeclareBusinessTax': true,
+    'gwEvidenceType': 'TELECOM_BILL'
+  })
+
+})
+
+test('success SigoutourMapper toGw A8001', () => {
+  const a8001SigoutourJson = ShareTest.jsonCases.A8001_HAPPY_CASE
+
+  const ticketId = 'a8001'
+  const deductionType = '1'
+  const reportingPeriod = '11010'
+  const evidenceType = 'A8001'
+
+  const result = SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, true, evidenceType, a8001SigoutourJson)
+  ShareTest.shareEvidenceExpect(result)
+
+  expect(result).toMatchObject({
+    "evidenceType": "CUSTOMS_TAXABLE_EVIDENCE",
+    "carrierNumber": "HK58985633",
+    "declarationId": "HK58985633",
+    "evidenceDate": 1610409600000,
+    "buyerTaxId": "12345678",
+    "taxType": "TAXABLE",
+    "taxableSalesValue": 1000,
+    "dutyFreeSalesValue": 20,
+    "businessTaxValue": 50,
+    "totalPayAmount": 1050,
+    "totalAmount": 0,
+    "otherFee": 0,
+    "zeroTaxSalesValue": 0,
+    "evidenceNumber": "HK58985633",
+    "sellerTaxId": "",
+    "id": "a8001",
+    "reportingPeriod": "11010",
+    "deductionType": "PURCHASE_AND_FEE",
+    "isDeclareBusinessTax": true,
+    "gwEvidenceType": "CUSTOMS_TAXABLE_EVIDENCE"
+  })
+})
