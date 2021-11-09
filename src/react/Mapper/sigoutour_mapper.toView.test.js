@@ -180,7 +180,7 @@ test('success SigoutourMapper toView 中華電信 5030', () => {
   expect(result).toMatchObject({
     evidenceType: '電信費帳單-中華電信',
     carrierNumber: 'BB20050951',
-    evidenceDate: '1090225',
+    evidenceDate: undefined,
     buyerTaxId: '16151904',
     sellerTaxId: '8169178',
     taxType: '',
@@ -287,7 +287,7 @@ test('success SigoutourMapper toView A5010', () => {
   expect(result).toMatchObject({
     'evidenceType': '電力帳單',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
+    'evidenceDate': undefined,
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -327,7 +327,7 @@ test('success SigoutourMapper toView A5020', () => {
   expect(result).toMatchObject({
     'evidenceType': '水費帳單-台灣自來水',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
+    'evidenceDate': undefined,
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -364,7 +364,7 @@ test('success SigoutourMapper toView A5021', () => {
   expect(result).toMatchObject({
     'evidenceType': '水費帳單-台北自來水',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
+    'evidenceDate': undefined,
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -401,7 +401,7 @@ test('success SigoutourMapper toView A5031', () => {
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-台灣大哥大',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
+    'evidenceDate': undefined,
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -437,7 +437,7 @@ test('success SigoutourMapper toView A5032', () => {
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-遠傳',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
+    'evidenceDate': undefined,
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -478,7 +478,7 @@ test('success SigoutourMapper toView A5033', () => {
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-台灣之星',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
+    'evidenceDate': undefined,
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -512,7 +512,7 @@ test('success SigoutourMapper toView A5034', () => {
   expect(result).toMatchObject({
     'evidenceType': '電信費帳單-亞太',
     'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
+    'evidenceDate': undefined,
     'buyerTaxId': '12345678',
     'sellerTaxId': '12345679',
     'taxType': 1,
@@ -975,115 +975,217 @@ test('success toSigoutour 中華電信', () => {
   }
   const result = SigoutourMapper.toSigoutour(sigoutourJson, editData)
   expect(result).toMatchObject({
-    'ticket': '0907175959174992', 'pageList': [{
-      'page': '0907175959174992_1', 'photoList': [{
-        'photo': '0907175959174992_1_1',
-        'type': 'A5030',
-        'x': 1,
-        'y': 1,
-        'w': 2422,
-        'h': 2807,
-        'result': [{
-          'x': 1077,
-          'y': 307,
-          'w': 319,
-          'h': 36,
-          'name': 'commonNumber',
-          'key': 'KEY_COMN',
-          'text': 'BB20050952',
-          'score': [1, 0.86, 1, 0.986, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.686, 1, 0.972]
-        }, {
-          'x': 614,
-          'y': 423,
-          'w': 176,
-          'h': 39,
-          'name': 'invoiceDate',
-          'key': 'KEY_INVD',
-          'text': '1090225',
-          'score': [0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98]
-        }, {
-          'x': 46,
-          'y': 1145,
-          'w': 474,
-          'h': 35,
-          'name': 'buyer',
-          'key': 'KEY_BUY',
-          'text': '16151904',
-          'score': [1, 1, 1, 1, 1, 1, 0.998, 1]
-        }, {
-          'x': 1062,
-          'y': 177,
-          'w': 334,
-          'h': 35,
-          'name': 'seller',
-          'key': 'KEY_SEL',
-          'text': '8169178',
-          'score': [1, 1, 0.977, 1, 1, 1, 1]
-        }, {
-          'x': 0,
-          'y': 0,
-          'w': 0,
-          'h': 0,
-          'name': 'taxType',
-          'key': 'KEY_TXT',
-          'text': '',
-          'score': [0]
-        }, {
-          'x': 124,
-          'y': 2498,
-          'w': 379,
-          'h': 31,
-          'name': 'salesAmount',
-          'key': 'KEY_SALA',
-          'text': 6906,
-          'score': [1, 1, 1, 0.999]
-        }, {
-          'x': 0,
-          'y': 0,
-          'w': 0,
-          'h': 0,
-          'name': 'zeroTaxSalesAmount',
-          'key': 'KEY_ZTSA',
-          'text': 0,
-          'score': [0]
-        }, {
-          'x': 0,
-          'y': 0,
-          'w': 0,
-          'h': 0,
-          'name': 'freeTaxSalesAmount',
-          'key': 'KEY_FTSA',
-          'text': 0,
-          'score': [0]
-        }, {
-          'x': 124,
-          'y': 2531,
-          'w': 809,
-          'h': 29,
-          'name': 'taxAmount',
-          'key': 'KEY_TAXA',
-          'text': 345,
-          'score': [0.98, 0.98, 0.98]
-        }, {
-          'x': 1158,
-          'y': 2497,
-          'w': 300,
-          'h': 33,
-          'name': 'otherFee',
-          'key': 'KEY_OTHF',
-          'text': 0,
-          'score': [1]
-        }, {
-          'x': 182,
-          'y': 426,
-          'w': 210,
-          'h': 44,
-          'name': 'payAmount',
-          'key': 'KEY_PAYA',
-          'text': 7475,
-          'score': [1, 1, 1, 1]
-        }, { 'x': 0, 'y': 0, 'w': 0, 'h': 0, 'name': 'remark', 'key': 'KEY_REM', 'text': '', 'score': [0] }]
-      }]
-    }]
-  })
+      "ticket": "0907175959174992",
+      "pageList": [
+        {
+          "page": "0907175959174992_1",
+          "photoList": [
+            {
+              "photo": "0907175959174992_1_1",
+              "type": "A5030",
+              "x": 1,
+              "y": 1,
+              "w": 2422,
+              "h": 2807,
+              "result": [
+                {
+                  "x": 1077,
+                  "y": 307,
+                  "w": 319,
+                  "h": 36,
+                  "name": "commonNumber",
+                  "key": "KEY_COMN",
+                  "text": "BB20050952",
+                  "score": [
+                    1,
+                    0.86,
+                    1,
+                    0.986,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    0.686,
+                    1,
+                    0.972
+                  ]
+                },
+                {
+                  "x": 614,
+                  "y": 423,
+                  "w": 176,
+                  "h": 39,
+                  "name": "invoiceDate",
+                  "key": "KEY_INVD",
+                  "text": "1090225",
+                  "score": [
+                    0.98,
+                    0.98,
+                    0.98,
+                    0.98,
+                    0.98,
+                    0.98,
+                    0.98
+                  ]
+                },
+                {
+                  "x": 46,
+                  "y": 1145,
+                  "w": 474,
+                  "h": 35,
+                  "name": "buyer",
+                  "key": "KEY_BUY",
+                  "text": "16151904",
+                  "score": [
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    0.998,
+                    1
+                  ]
+                },
+                {
+                  "x": 1062,
+                  "y": 177,
+                  "w": 334,
+                  "h": 35,
+                  "name": "seller",
+                  "key": "KEY_SEL",
+                  "text": "8169178",
+                  "score": [
+                    1,
+                    1,
+                    0.977,
+                    1,
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0,
+                  "name": "taxType",
+                  "key": "KEY_TXT",
+                  "text": "",
+                  "score": [
+                    0
+                  ]
+                },
+                {
+                  "x": 124,
+                  "y": 2498,
+                  "w": 379,
+                  "h": 31,
+                  "name": "salesAmount",
+                  "key": "KEY_SALA",
+                  "text": 6906,
+                  "score": [
+                    1,
+                    1,
+                    1,
+                    0.999
+                  ]
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0,
+                  "name": "zeroTaxSalesAmount",
+                  "key": "KEY_ZTSA",
+                  "text": 0,
+                  "score": [
+                    0
+                  ]
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0,
+                  "name": "freeTaxSalesAmount",
+                  "key": "KEY_FTSA",
+                  "text": 0,
+                  "score": [
+                    0
+                  ]
+                },
+                {
+                  "x": 124,
+                  "y": 2531,
+                  "w": 809,
+                  "h": 29,
+                  "name": "taxAmount",
+                  "key": "KEY_TAXA",
+                  "text": 345,
+                  "score": [
+                    0.98,
+                    0.98,
+                    0.98
+                  ]
+                },
+                {
+                  "x": 1158,
+                  "y": 2497,
+                  "w": 300,
+                  "h": 33,
+                  "name": "otherFee",
+                  "key": "KEY_OTHF",
+                  "text": 0,
+                  "score": [
+                    1
+                  ]
+                },
+                {
+                  "x": 182,
+                  "y": 426,
+                  "w": 210,
+                  "h": 44,
+                  "name": "payAmount",
+                  "key": "KEY_PAYA",
+                  "text": 7475,
+                  "score": [
+                    1,
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                {
+                  "x": 0,
+                  "y": 0,
+                  "w": 0,
+                  "h": 0,
+                  "name": "remark",
+                  "key": "KEY_REM",
+                  "text": "",
+                  "score": [
+                    0
+                  ]
+                },
+                {
+                  "key": "KEY_EVIDENCE_DATE",
+                  "text": "1090225"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  )
 })
