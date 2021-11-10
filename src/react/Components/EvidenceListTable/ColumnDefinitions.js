@@ -1,12 +1,16 @@
 import { Button, FormControl, MenuItem, Select } from '@material-ui/core'
 import React from 'react'
 import { GridColDef } from '@material-ui/data-grid'
+import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
+import mainStyles from '../../Pages/Main/mainStyles'
+
+const R = require('ramda')
 
 export const ConfirmedColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
-  { field: 'sn', headerName: '序號', width: 120, editable: false },
-  { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false },
-  { field: 'evidenceType', headerName: '憑證類型', width: 150, editable: false },
+  { field: 'sn', headerName: '序號', width: 110, editable: false },
+  { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false, renderCell: renderSn },
+  { field: 'gwEvidenceType', headerName: 'GW憑證類型', width: 200, editable: false },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, editable: false },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, editable: false },
   { field: 'declarationId', headerName: '報單/文件號碼', width: 200, editable: false },
@@ -25,10 +29,24 @@ export const ConfirmedColumnDefinitions: GridColDef[] = [
 
 export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
-  { field: 'sn', headerName: '序號', width: 120, editable: false },
-  { field: 'evidenceType', headerName: '憑證類型', width: 150, cellClassName: getCellClassName, editable: false },
+  { field: 'sn', headerName: '序號', width: 110, cellClassName: getCellClassName, editable: false },
+  {
+    field: 'gwEvidenceType',
+    headerName: 'GW憑證類型',
+    width: 200,
+    cellClassName: getCellClassName,
+    editable: false,
+    renderCell: renderEvidenceType
+  },
+  {
+    field: 'evidenceType',
+    headerName: '辨識憑證類型',
+    width: 200,
+    cellClassName: getCellClassName,
+    editable: false
+  },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, cellClassName: getCellClassName, editable: true },
-  { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, cellClassName: getCellClassName, editable: true },
+  { field: 'evidenceNumber', headerName: '憑證號碼', width: 200, cellClassName: getCellClassName, editable: true },
   { field: 'declarationId', headerName: '報單/文件號碼', width: 200, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceDate', headerName: '憑證日期', width: 150, cellClassName: getCellClassName, editable: true },
   {
@@ -59,6 +77,32 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: 'cellHighlight', hide: true }
 ]
 
+
+function renderEvidenceType(param) {
+  console.log('renderEvidenceType', param.value)
+  const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
+  return (
+    <>
+      <FormControl className={mainStyles().formControl}>
+        <Select
+          labelId='evidence-type-select-label'
+          id='evidence-type-select'
+          name='gwEvidenceType'
+          value={param.value}
+        >
+          {keyList.map(key => {
+            const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
+            return <MenuItem value={name}>{name}</MenuItem>
+          })
+          }
+        </Select>
+      </FormControl>
+    </>
+  )
+
+}
+
+
 function renderDeductionType(param) {
   const deductionType = param.row.deductionType === undefined || param.row.deductionType === '' ? 'PURCHASE_AND_FEE' : param.row.deductionType
   return (
@@ -69,7 +113,6 @@ function renderDeductionType(param) {
         name='deductionType'
         value={deductionType}
       >
-
         <MenuItem value={'1'}>1 進項可扣抵之進貨及費用</MenuItem>
         <MenuItem value={'2'}>2 進項可扣抵之固定資產</MenuItem>
         <MenuItem value={'3'}>3 進項不可扣抵之進貨及費用</MenuItem>
@@ -95,6 +138,20 @@ function renderTaxType(param) {
       </Select>
     </FormControl>
   )
+}
+
+
+function renderSn(cellValues) {
+  const value = cellValues.value
+  const style = {
+    color: 'red'
+  }
+  if (value === '' || value === undefined) {
+    return <div></div>
+  } else {
+    return <div style={style}>{value}</div>
+  }
+
 }
 
 function getCellClassName(cellValues) {

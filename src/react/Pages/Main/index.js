@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react'
 import { electronActions, gwActions, sightTourActions, useAppDispatch, useAppState } from '../../Context'
-import isElectron from 'is-electron'
-import { Alert, AlertTitle } from '@material-ui/lab'
+import { Alert } from '@material-ui/lab'
 import CloseIcon from '@material-ui/icons/Close'
 import {
-  AppBar, Badge,
-  Box, Collapse,
+  AppBar,
+  Badge,
+  Box,
+  Collapse,
   Container,
   CssBaseline,
   FormControl,
-  Grid, IconButton,
+  Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Paper,
@@ -30,11 +32,8 @@ import {
   identifySent
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-import { SIGOUTOUR_EVIDENCE_TYPE } from '../../Mapper/sigoutour_mapper'
 import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
-
-const R = require('ramda')
 
 
 function TabPanel(props) {
@@ -66,7 +65,7 @@ const Main = (props) => {
     'clientTaxId': '',
     'reportingPeriod': '',
     'evidenceType': '',
-    isDeclareBusinessTax: true
+    'isDeclareBusinessTax': 'true'
   })
   const classes = mainStyles()
   const [scanCount, setScanCount] = React.useState(0)
@@ -79,12 +78,13 @@ const Main = (props) => {
     const assign = await gwActions.getAssign()
     await electronActions.saveAssign(assign)
     await openScanner(dispatch)
-  }, [])
+  }, [value])
 
   //region Main Events
   const handleTabChange = (event, newValue) => {
     setValue(newValue)
   }
+
   const handleSelectionChange = (event) => {
     const { name, value } = event.target
     setDeclareProperties(prevState => {
@@ -97,6 +97,7 @@ const Main = (props) => {
       handleReset()
     }
   }
+
   const handleScannerError = (errorMsg) => {
     const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
     setScanDisable(false)
@@ -122,10 +123,9 @@ const Main = (props) => {
         'fileBlob': d.fileBlob,
         'accountingfirmTaxId': accountingfirmTaxId,
         'businessEntityTaxId': businessEntityTaxId,
-        'evidenceType': declareProperties.evidenceType
+        'evidenceType': d.fileName.split('_')[5].split('.')[0]
       }
     })
-    console.log(sendToIdentifyData)
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
     identifySent(dispatch, {
       'user': appState.auth.user.username,
@@ -156,17 +156,15 @@ const Main = (props) => {
   const handleViewImage = (data) => {
     //fullPath
     const windowProxy = window.open('', null, '')
-    // windowProxy.postMessage(JSON.stringify(data), '*')
     windowProxy.postMessage(JSON.stringify(data), '*')
   }
 
   const handleDeleteImage = (data) => {
-    //todo
-    console.log()
-    const timestamp = data.fileName.split('_')[5].split('.')[0]
+    console.log('handleDeleteImage',data)
+    const timestamp = data.fileName.split('_')[6].split('.')[0]
+    console.log(timestamp)
     const eventName = 'scanned'
     electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
-    console.log('handleDeleteImage data', data)
   }
 
   const handleScanImage = () => {
@@ -240,30 +238,6 @@ const Main = (props) => {
     )
   }
 
-  const renderEvidenceType = () => {
-    const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
-    return (
-      <>
-        <FormControl className={classes.formControl}>
-          <InputLabel id='evidence-type-select-label'>憑證種類</InputLabel>
-          <Select
-            labelId='evidence-type-select-label'
-            id='evidence-type-select'
-            name='evidenceType'
-            value={declareProperties.evidenceType}
-            onChange={handleSelectionChange}>
-            <MenuItem key={0} value={''}>請選擇憑證種類</MenuItem>
-            {keyList.map(key => {
-              return <MenuItem key={key}
-                               value={key}>{SIGOUTOUR_EVIDENCE_TYPE[key].name}</MenuItem>
-            })}
-          </Select>
-        </FormControl>
-      </>
-    )
-  }
-
-
   const handleReset = () => {
     setDeclareProperties(prevState => {
       return {
@@ -288,13 +262,15 @@ const Main = (props) => {
       <CssBaseline />
       <GwMenuTop />
       <main className={classes.content}>
-        <DialogComponent declareProperties={declareProperties} handleSelectionChange={handleSelectionChange}
-                         handleReset={handleReset} handleClose={handleClose} open={openDialog}
+        <DialogComponent declareProperties={declareProperties}
+                         handleSelectionChange={handleSelectionChange}
+                         handleReset={handleReset}
+                         handleClose={handleClose}
+                         open={openDialog}
                          onScan={handleScanImage} />
         <div className={classes.appBarSpacer} />
         <Container maxWidth='lg' className={classes.container}>
           {renderClientSelect()}
-          {renderEvidenceType()}
           <Collapse in={scanAlert}>
             <Alert
               severity='info'
@@ -352,14 +328,14 @@ const Main = (props) => {
                                           declareProperties={declareProperties}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}
-                                          OnDeleteEvdience={handleDeleteEvidence}></IdentifiedEvidenceList>
+                                          OnDeleteEvdience={handleDeleteEvidence} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
                                          user={appState.auth.user}
                                          onGwUploaded={handleGwUploaded}
                                          declareProperties={declareProperties}
-                                         OnDeleteEvdience={handleDeleteEvidence}></ConfirmedEvidenceList>
+                                         OnDeleteEvdience={handleDeleteEvidence} />
                 </TabPanel>
               </Paper>
             </Grid>

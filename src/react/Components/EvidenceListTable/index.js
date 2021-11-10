@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { DataGrid } from '@material-ui/data-grid'
-import { electronActions } from '../../Context'
 
 
 const getRowClassName = (params) => {
@@ -16,7 +15,7 @@ const EvidenceList = (props) => {
 
   const [dataRows, setDataRows] = useState(props.data)
   const [pageNumber, setPageNumber] = useState(0)
-  const [pageSize, setPageSize] = useState(5)
+  const [pageSize, setPageSize] = useState(10)
 
   const handleCellEditCommit = useCallback(
     ({ id, field, value }) => {
@@ -27,12 +26,17 @@ const EvidenceList = (props) => {
     }, [dataRows])
 
   const handleCellClick = async (param, event) => {
+    console.log('handleCellClick', param)
     if (event.target.name === 'taxType') {
       param.row['taxType'] = event.target.value
       props.handleEditRow(param.row, 'taxType')
     }
     if (event.target.name === 'deductionType') {
       param.row['deductionType'] = event.target.value
+      props.handleEditRow(param.row)
+    }
+    if (event.target.name === 'gwEvidenceType') {
+      param.row['gwEvidenceType'] = event.target.value
       props.handleEditRow(param.row)
     }
     if (event.target.innerText === '刪除') {

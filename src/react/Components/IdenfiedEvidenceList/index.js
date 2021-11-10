@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import { getAssign, getJsonRawData } from '../../Actions/electionActions'
-import SigoutourMapper, { reverseIndex, SIGOUTOUR_FIELD_TYPE } from '../../Mapper/sigoutour_mapper'
+import SigoutourMapper, {
+  SIGOUTOUR_EVIDENCE_TYPE_REVERSE,
+  SIGOUTOUR_FIELD_TYPE
+} from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
 import { electronActions, sightTourActions } from '../../Context'
 import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
+import ReverseIndex from '../../Util/ReverseIndex'
 
 
 const R = require('ramda')
@@ -15,7 +19,7 @@ const byTicketId = R.groupBy((fileObj) => {
 })
 
 export const handleSendConfirmedResultData = (field, editData, sigoutourJson) => {
-  const reverse = reverseIndex(SIGOUTOUR_FIELD_TYPE)
+  const reverse = ReverseIndex.reverseIndex(SIGOUTOUR_FIELD_TYPE)
   if (field === 'evidenceNumber' && editData['carrierNumber'] !== undefined) {
     field = 'carrierNumber'
   }
@@ -39,14 +43,16 @@ const IdentifiedEvidenceList = (props) => {
   const [assignMap, setAssignMap] = React.useState()
 
   const initDataRows = async (data, clientTaxId, assignMap) => {
+
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     //read assign
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const reportingPeriod = json.filePath.split('_')[2]
       const deductionType = json.filePath.split('_')[3]
-      const ticketId = json.filePath.split('_')[5]
+      const ticketId = json.filePath.split('_')[6]
+      const gwEvidenceType = json.filePath.split('_')[5]
       const clientTaxId = json.filePath.split('_')[1]
-      const parseResult = validSigoutourData(clientTaxId, SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, json.data), assignMap)
+      const parseResult = validSigoutourData(clientTaxId, SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, gwEvidenceType, json.data), assignMap)
       parseResult['sn'] = idx + 1
       parseResult['id'] = json.data['ticket']
       return parseResult
@@ -57,7 +63,6 @@ const IdentifiedEvidenceList = (props) => {
   useEffect(() => {
     const init = async () => {
       const result = await getAssign()
-      console.log('init()', result)
       setAssignMap(result)
       setLocalFiles(props.data)
       initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
@@ -73,10 +78,10 @@ const IdentifiedEvidenceList = (props) => {
       return obj.ticketId
     })
     const filterData = localFiles['03'].filter((obj) => {
-      const ticketId = obj.filename.split('.')[0].split('_')[5]
+      const ticketId = obj.filename.split('.')[0].split('_')[6]
       return selectionModel.includes(ticketId)
     }).filter(obj => {
-      const ticketId = obj.filename.split('.')[0].split('_')[5]
+      const ticketId = obj.filename.split('.')[0].split('_')[6]
       return !errorTicketIdList.includes(ticketId)
     })
     const filesByTicketId = byTicketId(filterData)
@@ -89,12 +94,16 @@ const IdentifiedEvidenceList = (props) => {
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
   const handleEditRow = async (editData, field = '') => {
+    console.log('handleEditRow()', editData)
+    console.log('handleEditRow() field', field)
     const jsonDataList = await getJsonRawData(localFiles['03'], props.declareProperties.clientTaxId)
     const json = jsonDataList.filter(obj => {
       return obj.data.ticket === editData.id
     })[0]
+    console.log('handleEditRow() json=', json)
     const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
-    const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, sigoutourJson)
+    console.log('handleEditRow() sigoutourJson=', sigoutourJson)
+    const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, SIGOUTOUR_EVIDENCE_TYPE_REVERSE[editData.gwEvidenceType], sigoutourJson)
     const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
     if (!validResult.includes(field)) {
       const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)

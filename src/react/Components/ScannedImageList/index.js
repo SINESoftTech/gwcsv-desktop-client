@@ -3,15 +3,7 @@ import Button from '@material-ui/core/Button'
 import isElectron from 'is-electron'
 import PropTypes from 'prop-types'
 import scannedImageListStyles from './scannedImageListStyles'
-import {
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-  Radio
-} from '@material-ui/core'
+import { Checkbox, FormControlLabel, IconButton, ImageList, ImageListItem, ImageListItemBar } from '@material-ui/core'
 import { Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon } from '@material-ui/icons'
 
 
@@ -50,9 +42,6 @@ const getImageFileBlob = async (fullPath) => {
 const isScanEnable = (taxIdSelected) => {
   return !!taxIdSelected
 }
-const isRequiredEnable = (data, evidenceType) => {
-  return (evidenceType !== '') && data.length > 0
-}
 
 const ScannedImageList = (props) => {
 
@@ -64,8 +53,17 @@ const ScannedImageList = (props) => {
     const initDataRows = async (data, username, clientTaxId) => {
       console.log('in useEffect clientTaxId', clientTaxId)
       console.log('in useEffect data', props.data)
-      const rowData = (props.data) ? await getRowData(data, username, clientTaxId) : []
+      let rowData = (props.data) ? await getRowData(data, username, clientTaxId) : []
       console.log('in useEffect', rowData)
+      rowData = rowData.sort((a, b) => {
+        const fileName1 = a.fileName.split('_')[6].split('.')[0]
+        const fileName2 = b.fileName.split('_')[6].split('.')[0]
+        if (fileName1 >= fileName2) {
+          return 0
+        } else {
+          return 1
+        }
+      }).reverse()
       setDataRows(rowData)
     }
     initDataRows(props.data, props.username, props.declareProperties.clientTaxId)
@@ -94,7 +92,6 @@ const ScannedImageList = (props) => {
       }))
     }
   }
-  console.log('selection', selectionDataRows.selection)
 
   return (
     <div style={{ height: 650, width: '100%' }}>
@@ -103,8 +100,7 @@ const ScannedImageList = (props) => {
       <Button variant='contained' onClick={(e) => {
         props.onSendToIdentifyClick(e, selectionDataRows.selection)
         setSelectionDataRow({ selection: [] })
-      }}
-              disabled={!isRequiredEnable(dataRows, props.declareProperties.evidenceType)}>送出辨識</Button>
+      }}>送出辨識</Button>
       <div className={classes.root}>
         <ImageList rowHeight={180} className={classes.imageList}>
           {dataRows.map((item) => (
@@ -133,7 +129,7 @@ const ScannedImageList = (props) => {
                 }
               />
               <ImageListItemBar
-                title={item.fileName.split('_')[5]}
+                title={item.fileName.split('_')[5] +'_'+ item.fileName.split('_')[6]}
                 actionIcon={
                   <div>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}

@@ -58,8 +58,6 @@ function createWindow() {
   // Create the browser window.
   // console.log(path.join(__dirname, 'preload.js'))
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
@@ -67,14 +65,14 @@ function createWindow() {
       contextIsolation: false
     }
   })
-
+  mainWindow.maximize()
   // and load the index.html of the app.
   var fileLocation = `file://${path.join(__dirname, '../build/index.html')}`
   var devServerUrl = 'http://localhost:3000'
   mainWindow.loadURL(isDev ? devServerUrl : fileLocation)
   // mainWindow.loadURL(fileLocation)
   // Open the DevTools.
-  if(isDev){
+  if (isDev) {
     mainWindow.webContents.openDevTools()
   }
   //
@@ -92,7 +90,7 @@ function createWindow() {
 
   mainWindow.webContents.on('did-create-window', (childWindow) => {
     // For example...
-    if(isDev){
+    if (isDev) {
       childWindow.webContents.openDevTools()
     }
     // 
@@ -210,12 +208,13 @@ ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
 
-ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, period, json) => {
+ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, period, gwEvidenceType, json) => {
+  console.log('updateSigoutourData', json)
   //json remove old and save
   const fileList03 = getAllFileLists()['03']
   const filterFileList = fileList03.filter(obj => {
     const fileName = obj.filename
-    const id = fileName.split('.')[0].split('_')[5]
+    const id = fileName.split('.')[0].split('_')[6]
     return id === ticketId
   })
 
@@ -225,6 +224,7 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
     const splitFileName = fileName.split('_')
     splitFileName[2] = period
     splitFileName[3] = deductionType
+    splitFileName[5] = gwEvidenceType
     const targetFileName = splitFileName.join('_')
     const targetFilePath = path.join(targetFolderPath, targetFileName)
     if (getFileExt(fileName) === 'json') {
@@ -242,7 +242,6 @@ ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, 
 
 
 ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
-
   let folderId = '03'
   if (eventName === 'evidenceSaved') {
     folderId = '04'
@@ -253,7 +252,10 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
   const fileList = getAllFileLists()[folderId]
   const filterFileList = fileList.filter(obj => {
     const fileName = obj.filename
-    const id = fileName.split('.')[0].split('_')[5]
+    if (folderId === '01') {
+      return fileName.split('.')[0].split('_')[6] === ticketId
+    }
+    const id = fileName.split('.')[0].split('_')[6]
     return id === ticketId
   })
   for (let i = 0; i < filterFileList.length; i++) {
@@ -264,9 +266,10 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
 })
 
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
+  console.log('scanImages', declareProperties)
   const sourceFileExt = fullPath.split('.')[1]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
-  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + Date.now() + '.' + sourceFileExt
+  const targetFilePath = targetFolderPath + '/' + username + '_' + declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + declareProperties.evidenceType + '_' + Date.now() + '.' + sourceFileExt
   fse.copySync(fullPath, targetFilePath)
   return getAllFileLists(fullPath)
 })
@@ -304,7 +307,7 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
       const fileExt = data['sourceFileName'].split('.')[1]
       const reportingPeriod = data['sourceFileName'].split('_')[2]
       const isDeclareBusinessTax = data['sourceFileName'].split('_')[4]
-      const targetFileName = `${username}_${data['businessEntityTaxId']}_${reportingPeriod}_1_${isDeclareBusinessTax}_${data['ticketId']}.${fileExt}`
+      const targetFileName = `${username}_${data['businessEntityTaxId']}_${reportingPeriod}_1_${isDeclareBusinessTax}_${data['type']}_${data['ticketId']}.${fileExt}`
       const targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
     }
@@ -398,7 +401,7 @@ ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
       if (data['image'] === undefined) {
         ticketId = data['json']['ticket']
       } else {
-        ticketId = data['imageFullPath'].split('_')[5].split('.')[0]
+        ticketId = data['imageFullPath'].split('_')[6].split('.')[0]
       }
       return ticketId
     })

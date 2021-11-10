@@ -1,4 +1,4 @@
-import { gwAxios, gwAxios as axios } from './axios'
+import { gwAxios as axios } from './axios'
 import actionTypes from '../Actions/actionTypes'
 
 export async function loginUser(dispatch, loginPayload) {
@@ -66,8 +66,9 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   console.log('uploadGUI', payload)
   try {
     const req = {
+      "inputOutputType": "INPUT",
       'businessEntityTaxId': payload.buyerTaxId,
-      'evidenceType': payload.evidenceType,
+      'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
@@ -85,7 +86,8 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
       'commentType': 'WHITE_SPACE',
       'summaryCount': 1,
       'groupName': null,
-      'remarkText': payload.remark
+      'remarkText': payload.remark,
+      "clearanceType": "BLANK",
     }
     const url = '/evidence/gui'
     let bodyFormData = new FormData()
@@ -121,7 +123,7 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
-      'evidenceType': payload.evidenceType,
+      'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
@@ -178,7 +180,7 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
-      'evidenceType': payload.evidenceType,
+      'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
@@ -232,7 +234,7 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
   const result = []
   for (let i = 0; i < payload.length; i++) {
     const data = payload[i]
-    const uploadResult = await uploadToGwStrategy[data['json']['evidenceType']](data['json'], data['image'], accountingFirmTaxId, token)
+    const uploadResult = await uploadToGwStrategy[data['json']['gwEvidenceType']](data['json'], data['image'], accountingFirmTaxId, token)
     if (uploadResult.status) {
       result.push({
         'status': true,
@@ -251,7 +253,6 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
       })
     }
   }
-  console.log('uploadToGw result', result)
   return result
 }
 

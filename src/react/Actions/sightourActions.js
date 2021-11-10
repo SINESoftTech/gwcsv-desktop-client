@@ -27,7 +27,7 @@ export async function sendToIdentify(identifyData) {
     try {
       const token = await getToken('gateweb1', 'qwe123')
       const formData = new FormData()
-      formData.append('file', data.fileBlob)
+      formData.append('file', new File([data.fileBlob], data.sourceFileName))
       formData.append('type', data.evidenceType)
       formData.append('agent', data.accountingfirmTaxId)
       formData.append('company', data.businessEntityTaxId)
@@ -37,6 +37,7 @@ export async function sendToIdentify(identifyData) {
         console.log('sendToIdentify', data)
         resultList.push({
           'result': true,
+          'type': data.evidenceType,
           'businessEntityTaxId': data.businessEntityTaxId,
           'ticketId': result.data['ticket'],
           'sourceFullPath': data.sourceFullPath,
@@ -45,6 +46,7 @@ export async function sendToIdentify(identifyData) {
       } else {
         resultList.push({
           'result': false,
+          'type': data.evidenceType,
           'businessEntityTaxId': data.businessEntityTaxId,
           'sourceFullPath': data.sourceFullPath,
           'sourceFileName': data.sourceFileName
@@ -61,7 +63,7 @@ export async function getIdentifyResult(fileObj) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
-    const ticketId = fileObj.filename.split('_')[5].split('.')[0]
+    const ticketId = fileObj.filename.split('_')[6].split('.')[0]
     const formData = new FormData()
     formData.append('token', token)
     formData.append('ticket', ticketId)
