@@ -2,157 +2,142 @@ import { A1001ToGwObj } from './A1001Mapper'
 
 test('success SigoutourMapper toDomainObj A1001', () => {
   const sigoutourJson = {
-    'ticket': '1115165557424798',
-    'pageList': [
-      {
-        'page': '1115165557424798_1',
-        'photoList': [
-          {
-            'photo': '1115165557424798_1_1',
-            'type': 'A1001',
-            'x': 1,
-            'y': 1,
-            'w': 2131,
-            'h': 1241,
-            'result': [
-              {
-                'x': 84,
-                'y': 25,
-                'w': 275,
-                'h': 38,
-                'name': 'invoiceNumber',
-                'key': 'KEY_INVN',
-                'text': 'GD0051082903',
-                'score': null
-              },
-              {
-                'x': 540,
-                'y': 237,
-                'w': 899,
-                'h': 36,
-                'name': 'invoiceDate',
-                'key': 'KEY_INVD',
-                'text': '10916',
-                'score': null
-              },
-              {
-                'x': 96,
-                'y': 250,
-                'w': 551,
-                'h': 38,
-                'name': 'buyer',
-                'key': 'KEY_BUY',
-                'text': '12345678',
-                'score': null
-              },
-              {
-                'x': 816,
-                'y': 859,
-                'w': 1055,
-                'h': 37,
-                'name': 'seller',
-                'key': 'KEY_SEL',
-                'text': '12345679',
-                'score': null
-              },
-              {
-                'x': 626,
-                'y': 975,
-                'w': 765,
-                'h': 39,
-                'name': 'taxType',
-                'key': 'KEY_TXT',
-                'text': '1',
-                'score': null
-              },
-              {
-                'x': 0,
-                'y': 0,
-                'w': 0,
-                'h': 0,
-                'name': 'salesAmount',
-                'key': 'KEY_SALA',
-                'text': '',
-                'score': [
-                  0
-                ]
-              },
-              {
-                'x': 0,
-                'y': 0,
-                'w': 0,
-                'h': 0,
-                'name': 'zeroTaxSalesAmount',
-                'key': 'KEY_ZTSA',
-                'text': '',
-                'score': [
-                  0
-                ]
-              },
-              {
-                'x': 0,
-                'y': 0,
-                'w': 0,
-                'h': 0,
-                'name': 'freeTaxSalesAmount',
-                'key': 'KEY_FTSA',
-                'text': '',
-                'score': [
-                  0
-                ]
-              },
-              {
-                'x': 0,
-                'y': 0,
-                'w': 0,
-                'h': 0,
-                'name': 'taxAmount',
-                'key': 'KEY_TAXA',
-                'text': '',
-                'score': [
-                  0
-                ]
-              },
-              {
-                'x': 0,
-                'y': 0,
-                'w': 0,
-                'h': 0,
-                'name': 'totalAmount',
-                'key': 'KEY_TOTA',
-                'text': '',
-                'score': [
-                  0
-                ]
-              },
-              {
-                'x': 0,
-                'y': 0,
-                'w': 0,
-                'h': 0,
-                'name': 'payAmount',
-                'key': 'KEY_PAYA',
-                'text': '',
-                'score': [
-                  0
-                ]
-              },
-              {
-                'x': 0,
-                'y': 0,
-                'w': 0,
-                'h': 0,
-                'name': 'remark',
-                'key': 'KEY_REM',
-                'text': '',
-                'score': [
-                  0
-                ]
-              }
-            ]
+    'result': 0,
+    'ticket': '201202_095956_254241',
+    'agent': 'T10001',
+    'company': '54704907',
+    'pageList': [{
+      'page': '201202_095956_254241_1',
+      'photoList': [{
+        'photo': '201202_095956_254241_1_1',
+        'type': 'A5001',
+        'x': 0,
+        'y': 478,
+        'w': 1239,
+        'h': 947,
+        'result':
+          [{
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'HK58985633',
+            'key': 'KEY_INVN',
+            'name': 'invoiceNumber',
+            'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '',
+            'key': 'KEY_INVD',
+            'name': 'invoiceDate',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '12345678',
+            'key': 'KEY_BUY',
+            'name': 'buyer',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '12345679',
+            'key': 'KEY_SEL',
+            'name': 'seller',
+            'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1',
+            'key': 'KEY_TXT',
+            'name': 'taxType',
+            'score': [0.99]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1000',
+            'key': 'KEY_SALA',
+            'name': 'salesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '50',
+            'key': 'KEY_TAXA',
+            'name': 'taxAmount',
+            'score': [0.99, 0.98]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1050',
+            'key': 'KEY_SALA',
+            'name': 'salesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '20',
+            'key': 'KEY_ZTSA',
+            'name': 'zeroTaxSalesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '30',
+            'key': 'KEY_FTSA',
+            'name': 'freeTaxSalesAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1050',
+            'key': 'KEY_TOTA',
+            'name': 'totalAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': '1050',
+            'key': 'KEY_PAYA',
+            'name': 'payAmount',
+            'score': [0.99, 0.98, 0.97, 0.97]
+          }, {
+            'x': 475,
+            'y': 158,
+            'w': 79,
+            'h': 21,
+            'text': 'remark',
+            'key': 'KEY_REM	',
+            'name': 'remark',
+            'score': [0.99, 0.98, 0.97, 0.97]
           }
-        ]
+          ]
       }
+      ]
+    }
     ]
   }
   const data = {
