@@ -407,49 +407,6 @@ test('success SigoutourMapper toView A2001', () => {
     'gwEvidenceType': '二聯式收銀發票'
   })
 })
-
-test('success SigoutourMapper toView A1001', () => {
-  const a1001SigoutourJson = jsonCases.A1001_HAPPY_CASE
-
-  const ticketId = '123'
-  const deductionType = '123'
-  const reportingPeriod = '11002'
-  const evidenceType = 'A1001'
-
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a1001SigoutourJson)
-  let expectObj = {
-    reportingPeriod: reportingPeriod,
-    deductionType: deductionType,
-    ticketId: ticketId,
-    evidenceType: evidenceType
-  }
-
-  shareEvidenceExpect(result)
-
-  /**
-   * specific case mapping
-   */
-  expect(result).toMatchObject({
-    'evidenceType': '三聯式統一發票',
-    'evidenceNumber': 'HK58985633',
-    'evidenceDate': '20210112',
-    'buyerTaxId': '12345678',
-    'sellerTaxId': '12345679',
-    'taxType': 1,
-    'taxableSalesValue': 1000,
-    'businessTaxValue': 50,
-    'totalPayAmount': 1050,
-    'totalAmount': 0,
-    'otherFee': 0,
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'reportingPeriod': '11002',
-    'deductionType': '123',
-    'ticketId': '123',
-    'gwEvidenceType': '三聯式統一發票'
-  })
-})
-
 /**
  * todo: 如果辨識結果中一個欄位都沒有出現，則evidenceType連原來給的也不會帶回來
  */

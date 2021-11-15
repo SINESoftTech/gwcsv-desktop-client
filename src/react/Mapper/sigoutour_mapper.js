@@ -1,5 +1,6 @@
 import { A5003ToGwObj } from './SigoutourReqMapper/A5003Mapper'
 import { A5002ToGwObj } from './SigoutourReqMapper/A5002Mapper'
+import { A1001ToGwObj } from './SigoutourReqMapper/A1001Mapper'
 
 const SIGOUTOUR_FIELD_TYPE = {
   'KEY_INVN': 'evidenceNumber',
@@ -207,14 +208,7 @@ const parseData = (jsonData) => {
 }
 
 //todo
-const A1001ToGwObj = (data) => {
-  return {}
-}
 const A5001ToGwObj = (data) => {
-  return {}
-}
-
-const A2001ToGwObj = (data) => {
   return {}
 }
 const A5010ToGwObj = (data) => {
