@@ -35,12 +35,11 @@ const A1001ToGwObj = (data) => {
     'result': type,
     'score': [-1]
   }
-
-  result['totalAmount'].result = isEmptyOrUndefined(result['totalAmount'].result) ? 0 : parseInt(result['totalAmount'].result)
   result['otherFee'] = {
     'result': 0,
     'score': [-1]
   }
+  result['totalAmount'].result = isEmptyOrUndefined(result['totalAmount'].result) ? 0 : parseInt(result['totalAmount'].result)
   result['businessTaxValue'].result = isEmptyOrUndefined(result['businessTaxValue'].result) ? 0 : parseInt(result['businessTaxValue'].result)
   result['taxableSalesValue'].result = isEmptyOrUndefined(result['taxableSalesValue'].result) ? 0 : parseInt(result['taxableSalesValue'].result)
   result['zeroTaxSalesValue'].result = isEmptyOrUndefined(result['zeroTaxSalesValue'].result) ? 0 : parseInt(result['zeroTaxSalesValue'].result)
