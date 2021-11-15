@@ -33,35 +33,6 @@ test('success SigoutourMapper toView 中華電信 5030', () => {
   })
 })
 
-test('success SigoutourMapper toView 5003', () => {
-  const ticketId = '123'
-  const deductionType = '123'
-  const reportingPeriod = '11002'
-  const sigoutourJson = jsonCases.A5003_MISSING_SALES_AMOUNT
-  const evidenceType = 'A5003'
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, sigoutourJson)
-  expect(result).toMatchObject({
-    evidenceType: '電子發票證明聯-格式二',
-    evidenceNumber: 'MQ04251629',
-    evidenceDate: '20210126',
-    buyerTaxId: '24549210',
-    sellerTaxId: '16151427',
-    taxType: 1,
-    taxableSalesValue: 8000,
-    zeroTaxSalesValue: 0,
-    dutyFreeSalesValue: 0,
-    businessTaxValue: 400,
-    totalAmount: 8400,
-    totalPayAmount: 8400,
-    remark: '統一資訊股份有限公司-數據服務費用',
-    otherFee: 0,
-    reportingPeriod: '11002',
-    deductionType: '123',
-    ticketId: '123',
-    errorMsg: undefined
-  })
-})
-
 test('success SigoutourMapper toView A5001', () => {
   const a5001SigoutourJson = jsonCases.A5001_HAPPY_CASE
 
