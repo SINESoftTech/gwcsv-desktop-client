@@ -34,6 +34,8 @@ import {
 import { getIdentifyResult } from '../../Actions/sightourActions'
 import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
+import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+// import { toView } from '../../Mapper/sigoutour_mapper'
 
 
 function TabPanel(props) {
@@ -109,7 +111,6 @@ const Main = (props) => {
       alert('無法與掃描機連線，請重新整理')
       return
     }
-
   }
 
   //region scanned image list events
@@ -137,10 +138,17 @@ const Main = (props) => {
     const identifyResultReceivedList = []
     for (let i = 0; i < data.length; i++) {
       const fileObj = data[i]
+
+      // filename: "string123_24549210_11002_1_true_A5002_1109163022881257.jpg"
+      // fullPath: "/Users/tony/.gwapp/02/string123_24549210_11002_1_true_A5002_1109163022881257.jpg"
       const identifyResult = await getIdentifyResult(fileObj)
+      console.log('handleGetIdentifyResult', identifyResult)
+      //todo parser
+      SigoutourMapper.toDomainObj(identifyResult)
+      // toView(ticketId, deductionType, reportingPeriod, gwEvidenceType, json.data)
       identifyResultReceivedList.push(identifyResult)
     }
-    identifyResultReceived(dispatch, identifyResultReceivedList)
+    // identifyResultReceived(dispatch, identifyResultReceivedList)
   }
 
 
@@ -160,7 +168,7 @@ const Main = (props) => {
   }
 
   const handleDeleteImage = (data) => {
-    console.log('handleDeleteImage',data)
+    console.log('handleDeleteImage', data)
     const timestamp = data.fileName.split('_')[6].split('.')[0]
     console.log(timestamp)
     const eventName = 'scanned'

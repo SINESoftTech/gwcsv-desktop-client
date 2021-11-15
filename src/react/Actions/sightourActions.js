@@ -34,7 +34,6 @@ export async function sendToIdentify(identifyData) {
       formData.append('token', token)
       const result = await signtTourAxios.post(apiPath, formData, config)
       if (result.data['result'] === 0) {
-        console.log('sendToIdentify', data)
         resultList.push({
           'result': true,
           'type': data.evidenceType,
@@ -63,6 +62,9 @@ export async function getIdentifyResult(fileObj) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
+    const reportingPeriod = fileObj.filename.split('_')[2]
+    const deductionType = fileObj.filename.split('_')[3]
+    const gwEvidenceType = fileObj.filename.split('_')[5]
     const ticketId = fileObj.filename.split('_')[6].split('.')[0]
     const formData = new FormData()
     formData.append('token', token)
@@ -70,6 +72,10 @@ export async function getIdentifyResult(fileObj) {
     const result = await signtTourAxios.post(apiPath, formData)
     if (result.data.result === undefined) {
       return {
+        'reportingPeriod': reportingPeriod,
+        'deductionType': deductionType,
+        'gwEvidenceType': gwEvidenceType,
+        'ticketId': ticketId,
         'sourceFullPath': fileObj.fullPath,
         'sourceFileName': fileObj.filename,
         'status': 'completed',
@@ -77,6 +83,10 @@ export async function getIdentifyResult(fileObj) {
       }
     }
     return {
+      'reportingPeriod': reportingPeriod,
+      'deductionType': deductionType,
+      'gwEvidenceType': gwEvidenceType,
+      'ticketId': ticketId,
       'sourceFullPath': fileObj.fullPath,
       'sourceFileName': fileObj.filename,
       'status': 'failed'

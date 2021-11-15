@@ -155,8 +155,6 @@ function getAllFileLists() {
 
 function openFile(directory) {
   var fileInfo = fse.readdirSync(directory)
-  // console.log('fileInfo', fileInfo)
-
   var fileResult = fileInfo.filter(filename => {
     return filename !== '.DS_Store'
   }).map(filename => {

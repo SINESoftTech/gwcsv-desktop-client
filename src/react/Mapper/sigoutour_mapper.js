@@ -187,7 +187,6 @@ const parseData = (jsonData) => {
     json['basicFee'] = json['basicFee'] === '' ? 0 : json['basicFee']
     json['taxableSalesValue'] = (parseFloat(json['waterFee']) + parseFloat(json['basicFee']))
   }
-
   json['totalAmount'] = isEmptyOrUndefined(json['totalAmount']) ? 0 : parseInt(json['totalAmount'])
   json['totalPayAmount'] = isEmptyOrUndefined(json['totalPayAmount']) ? 0 : parseInt(json['totalPayAmount'])
   json['otherFee'] = isEmptyOrUndefined(json['otherFee']) ? 0 : parseInt(json['otherFee'])
@@ -210,7 +209,142 @@ const parseData = (jsonData) => {
 }
 
 
+//todo
+const A1001ToGwObj = (data) => {
+  return {}
+}
+const A5001ToGwObj = (data) => {
+  return {}
+}
+const A5002ToGwObj = (data) => {
+  console.log('A5002', data)
+  let result = {}
+  const sigoutourJsonData = data.data['pageList'][0]['photoList'][0]['result']
+  sigoutourJsonData.forEach(d => {
+    result[SIGOUTOUR_FIELD_TYPE[d['key']]] = { 'result': d['text'], 'score': d['score'] }
+  })
+  result['reportingPeriod'] = { 'result': data['reportingPeriod'], 'score': [-1] }
+  result['deductionType'] = { 'result': data['deductionType'], 'score': [-1] }
+  result['ticketId'] = { 'result': data['ticketId'], 'score': [-1] }
+  result['errorMsg'] = { 'result': '', 'score': [-1] }
+  result['gwEvidenceType'] = { 'result': data['gwEvidenceType'], 'score': [-1] }
+  const type = data.data['pageList'][0]['photoList'][0]['type']
+  result['evidenceType'] = { 'result': type, 'score': [-1] }
+  // result['totalAmount'] = isEmptyOrUndefined(result['totalAmount']) ? 0 : parseInt(result['totalAmount'])
+  // result['totalPayAmount'] = isEmptyOrUndefined(result['totalPayAmount']) ? 0 : parseInt(result['totalPayAmount'])
+  // result['otherFee'] = isEmptyOrUndefined(result['otherFee']) ? 0 : parseInt(result['otherFee'])
+  // result['businessTaxValue'] = isEmptyOrUndefined(result['businessTaxValue']) ? 0 : parseInt(result['businessTaxValue'])
+  // result['taxableSalesValue'] = isEmptyOrUndefined(result['taxableSalesValue']) ? 0 : parseInt(result['taxableSalesValue'])
+  // result['zeroTaxSalesValue'] = isEmptyOrUndefined(result['zeroTaxSalesValue']) ? 0 : parseInt(result['zeroTaxSalesValue'])
+  // result['dutyFreeSalesValue'] = isEmptyOrUndefined(result['dutyFreeSalesValue']) ? 0 : parseInt(result['dutyFreeSalesValue'])
+  console.log('A5002 result', result)
+  return {}
+}
+
+const A2001ToGwObj = (data) => {
+  return {}
+}
+const A5003ToGwObj = (data) => {
+  return {}
+}
+const A5010ToGwObj = (data) => {
+  return {}
+}
+
+const A5020ToGwObj = (data) => {
+  return {}
+}
+
+const A5021ToGwObj = (data) => {
+  return {}
+}
+
+const A5030ToGwObj = (data) => {
+  return {}
+}
+
+const A5031ToGwObj = (data) => {
+  return {}
+}
+
+const A5032ToGwObj = (data) => {
+  return {}
+}
+const A5033ToGwObj = (data) => {
+  return {}
+}
+const A5034ToGwObj = (data) => {
+  return {}
+}
+
+const A8001ToGwObj = (data) => {
+  return {}
+}
+
+const parseToDomainObjStrategy = {
+  'A1001': function(data) {
+    return A1001ToGwObj(data)
+  },
+  'A2001': function(data) {
+    return A2001ToGwObj(data)
+  },
+  'A5001': function(data) {
+    return A5001ToGwObj(data)
+  },
+  'A5002': function(data) {
+    return A5002ToGwObj(data)
+  },
+  'A5003': function(data) {
+    return A5003ToGwObj(data)
+  },
+  'A5010': function(data) {
+    return A5010ToGwObj(data)
+  },
+  'A5020': function(data) {
+    return A5020ToGwObj(data)
+  },
+  'A5021': function(data) {
+    return A5021ToGwObj(data)
+  },
+  'A5030': function(data) {
+    return A5030ToGwObj(data)
+  },
+  'A5031': function(data) {
+    return A5031ToGwObj(data)
+  },
+  'A5032': function(data) {
+    return A5032ToGwObj(data)
+  },
+  'A5033': function(data) {
+    return A5033ToGwObj(data)
+  },
+  'A5034': function(data) {
+    return A5034ToGwObj(data)
+  },
+  'A8001': function(data) {
+    return A8001ToGwObj(data)
+  },
+  'A3001': function(data) {
+
+  },
+  'A3002': function(data) {
+
+  },
+  'A4001': function(data) {
+
+  }
+}
+
 class SigoutourMapperClass {
+
+  toDomainObj(jsonData) {
+    //todo success and failed
+    const geEvidenceType = jsonData.gwEvidenceType
+    const json = parseToDomainObjStrategy[geEvidenceType](jsonData)
+    // json['evidenceType'] = jsonData.data['pageList'][0]['photoList'][0]['type']
+
+    console.log(jsonData)
+  }
 
   toView(ticketId, deductionType, reportingPeriod, evidenceType, jsonData) {
     const json = parseData(jsonData)
@@ -277,6 +411,6 @@ class SigoutourMapperClass {
 }
 
 const SigoutourMapper = new SigoutourMapperClass()
-export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, SIGOUTOUR_EVIDENCE_TYPE_REVERSE,DEDUCTION_TYPE }
+export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, SIGOUTOUR_EVIDENCE_TYPE_REVERSE, DEDUCTION_TYPE }
 
 export default SigoutourMapper
