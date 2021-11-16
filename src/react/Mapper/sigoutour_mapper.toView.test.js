@@ -34,43 +34,6 @@ test('success SigoutourMapper toView 中華電信 5030', () => {
 })
 
 
-test('success SigoutourMapper toView A5021', () => {
-  const a5021SigoutourJson = jsonCases.A5021_HAPPY_CASE
-
-  const ticketId = 'a5021'
-  const deductionType = 'a5021'
-  const reportingPeriod = '11004'
-  const evidenceType = 'A5021'
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a5021SigoutourJson)
-  shareEvidenceExpect(result)
-  a5020TypeNumericExpect(result)
-
-  expect(result).toMatchObject({
-    'evidenceType': '水費帳單-台北自來水',
-    'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
-    'buyerTaxId': '12345678',
-    'sellerTaxId': '12345679',
-    'taxType': 1,
-    'taxableSalesValue': 1000,
-    'basicFee': '1000',
-    'waterFee': '50',
-    'rebate': '20',
-    'businessTaxValue': 50,
-    'otherFee': 15,
-    'totalAmount': 1050,
-    'totalPayAmount': 1050,
-    'remark': 'remark',
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'evidenceNumber': 'HK58985633',
-    'reportingPeriod': '11004',
-    'deductionType': 'a5021',
-    'ticketId': 'a5021',
-    'gwEvidenceType': '水費帳單-台北自來水'
-  })
-})
-
 test('success SigoutourMapper toView A5031', () => {
   const a5031SigoutourJson = jsonCases.A5031_HAPPY_CASE
 

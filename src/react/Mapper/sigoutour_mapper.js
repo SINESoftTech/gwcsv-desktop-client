@@ -1,10 +1,12 @@
-import { A5003ToGwObj } from './SigoutourReqMapper/A5003Mapper'
-import { A5002ToGwObj } from './SigoutourReqMapper/A5002Mapper'
-import { A1001ToGwObj } from './SigoutourReqMapper/A1001Mapper'
-import { A2001ToGwObj } from './SigoutourReqMapper/A2001Mapper'
-import { A5001ToGwObj } from './SigoutourReqMapper/A5001Mapper'
-import { A5010ToGwObj } from './SigoutourReqMapper/A5010Mapper'
-import { A5020ToGwObj } from './SigoutourReqMapper/A5020Mapper'
+import {A5003ToGwObj} from './SigoutourReqMapper/A5003Mapper'
+import {A5002ToGwObj} from './SigoutourReqMapper/A5002Mapper'
+import {A1001ToGwObj} from './SigoutourReqMapper/A1001Mapper'
+import {A2001ToGwObj} from './SigoutourReqMapper/A2001Mapper'
+import {A5001ToGwObj} from './SigoutourReqMapper/A5001Mapper'
+import {A5010ToGwObj} from './SigoutourReqMapper/A5010Mapper'
+import {A5020ToGwObj} from './SigoutourReqMapper/A5020Mapper'
+import {A5021ToGwObj} from "./SigoutourReqMapper/A5021Mapper";
+import {isEmptyOrUndefined} from "../Util/StringUtils";
 
 const SIGOUTOUR_FIELD_TYPE = {
   'KEY_INVN': 'evidenceNumber',
@@ -210,11 +212,6 @@ const parseData = (jsonData) => {
   return json
 }
 
-
-
-const A5021ToGwObj = (data) => {
-  return {}
-}
 
 const A5030ToGwObj = (data) => {
   return {}
