@@ -33,83 +33,8 @@ test('success SigoutourMapper toView 中華電信 5030', () => {
   })
 })
 
-test('success SigoutourMapper toView A5001', () => {
-  const a5001SigoutourJson = jsonCases.A5001_HAPPY_CASE
 
-  const ticketId = 'a5001'
-  const deductionType = 'a5001'
-  const reportingPeriod = '11008'
-  const evidenceType = 'A5001'
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a5001SigoutourJson)
-  let expectObj = {
-    reportingPeriod: reportingPeriod,
-    deductionType: deductionType,
-    ticketId: ticketId,
-    evidenceType: evidenceType
-  }
-  shareEvidenceExpect(result)
 
-  expect(result).toMatchObject({
-    'evidenceType': '三聯式收銀機發票',
-    'evidenceNumber': 'HK58985633',
-    'evidenceDate': '',
-    'buyerTaxId': '12345678',
-    'sellerTaxId': '12345679',
-    'taxType': 1,
-    'taxableSalesValue': 1050,
-    'businessTaxValue': 50,
-    'zeroTaxSalesValue': 20,
-    'dutyFreeSalesValue': 30,
-    'totalAmount': 1050,
-    'totalPayAmount': 1050,
-    'undefined': 'remark',
-    'otherFee': 0,
-    'reportingPeriod': '11008',
-    'deductionType': 'a5001',
-    'ticketId': 'a5001',
-    'gwEvidenceType': '三聯式收銀機發票'
-  })
-})
-
-test('success SigoutourMapper toView A5010', () => {
-  const a5010SigoutourJson = jsonCases.A5010_HAPPY_CASE
-
-  const ticketId = 'a5010'
-  const deductionType = 'a5010'
-  const reportingPeriod = '11008'
-  const evidenceType = 'A5010'
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a5010SigoutourJson)
-
-  let expectObj = {
-    reportingPeriod: reportingPeriod,
-    deductionType: deductionType,
-    ticketId: ticketId,
-    evidenceType: evidenceType
-  }
-  shareEvidenceExpect(result)
-
-  expect(result).toMatchObject({
-    'evidenceType': '電力帳單',
-    'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
-    'buyerTaxId': '12345678',
-    'sellerTaxId': '12345679',
-    'taxType': 1,
-    'taxableSalesValue': 1050,
-    'businessTaxValue': 50,
-    'totalAmount': 1050,
-    'totalPayAmount': 1050,
-    'undefined': 'remark',
-    'otherFee': 0,
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'evidenceNumber': 'HK58985633',
-    'reportingPeriod': '11008',
-    'deductionType': 'a5010',
-    'ticketId': 'a5010',
-    'gwEvidenceType': '電力帳單'
-  })
-})
 
 test('success SigoutourMapper toView A5020', () => {
   const a5020SigoutourJson = jsonCases.A5020_HAPPY_CASE

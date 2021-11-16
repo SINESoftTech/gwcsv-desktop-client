@@ -1,6 +1,10 @@
 import { A5003ToGwObj } from './SigoutourReqMapper/A5003Mapper'
 import { A5002ToGwObj } from './SigoutourReqMapper/A5002Mapper'
 import { A1001ToGwObj } from './SigoutourReqMapper/A1001Mapper'
+import { A2001ToGwObj } from './SigoutourReqMapper/A2001Mapper'
+import { A5001ToGwObj } from './SigoutourReqMapper/A5001Mapper'
+import { A5010ToGwObj } from './SigoutourReqMapper/A5010Mapper'
+import { A5020ToGwObj } from './SigoutourReqMapper/A5020Mapper'
 
 const SIGOUTOUR_FIELD_TYPE = {
   'KEY_INVN': 'evidenceNumber',
@@ -20,8 +24,7 @@ const SIGOUTOUR_FIELD_TYPE = {
   'KEY_TAXA': 'businessTaxValue',
   'KEY_TOTA': 'totalAmount',
   'KEY_PAYA': 'totalPayAmount',
-  'KEY_REM': 'remark',
-  'KEY_EVIDENCE_DATE': 'gwEvidenceDate'
+  'KEY_REM': 'remark'
 }
 
 const TAX_TYPE = {
@@ -207,17 +210,7 @@ const parseData = (jsonData) => {
   return json
 }
 
-//todo
-const A5001ToGwObj = (data) => {
-  return {}
-}
-const A5010ToGwObj = (data) => {
-  return {}
-}
 
-const A5020ToGwObj = (data) => {
-  return {}
-}
 
 const A5021ToGwObj = (data) => {
   return {}
