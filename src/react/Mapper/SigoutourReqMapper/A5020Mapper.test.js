@@ -4,7 +4,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
   const data = {
     'reportingPeriod': '11002',
     'deductionType': '1',
-    'gwEvidenceType': 'A5010',
+    'gwEvidenceType': 'A5020',
     'ticketId': '123',
     'sourceFullPath': '',
     'sourceFileName': '',
@@ -29,7 +29,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': 'HK58985633',
               'key': 'KEY_COMN',
               'name': 'commonNumber',
-              'score': [0.99, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0, 0.98, 1.0]
+              'score':null
             }, {
               'x': 475,
               'y': 158,
@@ -38,7 +38,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '20210112',
               'key': 'KEY_INVD',
               'name': 'invoiceDate',
-              'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98, 0.96, 0.94]
+              'score': null
             }, {
               'text': '20210112',
               'key': 'KEY_EVIDENCE_DATE'
@@ -50,7 +50,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '12345678',
               'key': 'KEY_BUY',
               'name': 'buyer',
-              'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -59,7 +59,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '12345679',
               'key': 'KEY_SEL',
               'name': 'seller',
-              'score': [0.99, 0.98, 0.97, 0.97, 0.95, 0.97, 1.0, 0.98]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -68,7 +68,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '1',
               'key': 'KEY_TXT',
               'name': 'taxType',
-              'score': [0.99]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -77,7 +77,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '1000',
               'key': 'KEY_BASF',
               'name': 'basicFee',
-              'score': [0.99, 0.98, 0.97, 0.97]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -86,7 +86,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '50',
               'key': 'KEY_WTF',
               'name': 'waterFee',
-              'score': [0.99, 0.98]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -95,7 +95,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '20',
               'key': 'KEY_REB',
               'name': 'rebate',
-              'score': [0.99, 0.98, 0.97, 0.97]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -104,7 +104,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '50',
               'key': 'KEY_TAXA',
               'name': 'taxAmount',
-              'score': [0.99, 0.98]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -113,7 +113,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '15',
               'key': 'KEY_OTHF',
               'name': 'otherFee',
-              'score': [0.99, 0.98, 0.97, 0.97]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -122,7 +122,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '1050',
               'key': 'KEY_TOTA',
               'name': 'totalAmount',
-              'score': [0.99, 0.98, 0.97, 0.97]
+              'score': null
             }, {
               'x': 475,
               'y': 158,
@@ -131,7 +131,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': '1050',
               'key': 'KEY_PAYA',
               'name': 'payAmount',
-              'score': [0.99, 0.98, 0.97, 0.97]
+              'score':null
             }, {
               'x': 475,
               'y': 158,
@@ -140,7 +140,7 @@ test('success SigoutourMapper toDomainObj 5020', () => {
               'text': 'remark',
               'key': 'KEY_REM',
               'name': 'remark',
-              'score': [0.99, 0.98, 0.97, 0.97]
+              'score': null
             }
             ]
         }
@@ -152,24 +152,24 @@ test('success SigoutourMapper toDomainObj 5020', () => {
   const result = A5020ToGwObj(data)
   console.log(result)
   expect(result).toMatchObject({
-    evidenceNumber: { result: 'BB20050951', score: null },
-    evidenceDate: { result: '20210126', score: null },
+    evidenceNumber: { result: 'HK58985633', score: null },
+    evidenceDate: { result: '', score: [-1] },
     buyerTaxId: { result: '12345678', score: null },
-    sellerTaxId: { result: '8169178', score: null },
+    sellerTaxId: { result: '12345679', score: null },
     taxType: { result: '1', score: null },
-    taxableSalesValue: { result: 6906, score: null },
-    zeroTaxSalesValue: { result: 0, score: null },
+    taxableSalesValue: { result: 1070, score: [-1] },
+    zeroTaxSalesValue: { result: 0, score: [-1] },
     dutyFreeSalesValue: { result: 0, score: [-1] },
     businessTaxValue: { result: 50, score: null },
-    totalAmount: { result: 7475, score: null },
-    totalPayAmount: { result: 7251, score: null },
-    remark: { result: '', score: null },
+    totalAmount: { result: 1050, score: null },
+    totalPayAmount: { result: 1050, score: null },
+    remark: { result: 'remark', score: null },
     reportingPeriod: { result: '11002', score: [-1] },
     deductionType: { result: '1', score: [-1] },
     ticketId: { result: '123', score: [-1] },
     errorMsg: { result: '', score: [-1] },
-    gwEvidenceType: { result: 'A5010', score: [-1] },
-    evidenceType: { result: 'A5010', score: [-1] },
+    gwEvidenceType: { result: 'A5020', score: [-1] },
+    evidenceType: { result: 'A5020', score: [-1] },
     otherFee: { result: 0, score: [-1] }
   })
 })
