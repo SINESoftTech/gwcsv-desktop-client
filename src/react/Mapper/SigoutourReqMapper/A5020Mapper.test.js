@@ -170,6 +170,6 @@ test('success SigoutourMapper toDomainObj 5020', () => {
     errorMsg: { result: '', score: [-1] },
     gwEvidenceType: { result: 'A5020', score: [-1] },
     evidenceType: { result: 'A5020', score: [-1] },
-    otherFee: { result: 0, score: [-1] }
+    otherFee: { result: 15, score: null }
   })
 })

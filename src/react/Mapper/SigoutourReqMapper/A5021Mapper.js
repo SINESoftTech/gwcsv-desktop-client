@@ -1,7 +1,7 @@
 import {SIGOUTOUR_FIELD_TYPE} from '../sigoutour_mapper'
 import {isEmptyOrUndefined} from "../../Util/StringUtils";
 
-const A5020ToGwObj = (data) => {
+const A5021ToGwObj = (data) => {
     let result = {}
     const sigoutourJsonData = data.data['pageList'][0]['photoList'][0]['result']
     sigoutourJsonData.forEach(d => {
@@ -36,13 +36,7 @@ const A5020ToGwObj = (data) => {
         'score': [-1]
     }
     result['otherFee'].result = isEmptyOrUndefined(result['otherFee'].result) ? 0 : parseFloat(result['otherFee'].result)
-    result['waterFee'].result = isEmptyOrUndefined(result['waterFee'].result) ? 0 : parseFloat(result['waterFee'].result)
-    result['basicFee'].result = isEmptyOrUndefined(result['basicFee'].result) ? 0 : parseFloat(result['basicFee'].result)
-    result['rebate'].result = isEmptyOrUndefined(result['rebate'].result) ? 0 : parseFloat(result['rebate'].result)
-    result['taxableSalesValue'] = {
-        'result': result['waterFee'].result + result['basicFee'].result + result['rebate'].result,
-        'score': [-1]
-    }
+    result['taxableSalesValue'].result = isEmptyOrUndefined(result['taxableSalesValue'].result) ? 0 : parseInt(result['taxableSalesValue'].result)
     result['totalAmount'].result = isEmptyOrUndefined(result['totalAmount'].result) ? 0 : parseInt(result['totalAmount'].result)
     result['businessTaxValue'].result = isEmptyOrUndefined(result['businessTaxValue'].result) ? 0 : parseInt(result['businessTaxValue'].result)
     result['taxableSalesValue'].result = isEmptyOrUndefined(result['taxableSalesValue'].result) ? 0 : parseInt(result['taxableSalesValue'].result)
@@ -60,9 +54,7 @@ const A5020ToGwObj = (data) => {
         'result': '',
         'score': [-1]
     }
-    delete result['waterFee']
-    delete result['basicFee']
     delete result['carrierNumber']
     return result
 }
-export {A5020ToGwObj}
+export {A5021ToGwObj}
