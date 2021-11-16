@@ -145,31 +145,31 @@ test('success SigoutourMapper toDomainObj 5001', () => {
   console.log(result)
   expect(result).toMatchObject({
     evidenceNumber: {
-      result: '', score: null
+      result: 'GE21880284', score: null
     },
     evidenceDate: {
-      result: '109', score: null
+      result: '2020/12/22', score: null
     },
     buyerTaxId: {
-      result: '', score: null
+      result: '16151904', score: null
     },
     sellerTaxId: {
-      result: '12345679', score: null
+      result: '55796002', score: null
     },
     taxType: { result: '1', score: null },
     taxableSalesValue: { result: 0, score: null },
     zeroTaxSalesValue: { result: 0, score: null },
-    dutyFreeSalesValue: { result: 0, score: null },
-    businessTaxValue: { result: 0, score: null },
-    totalAmount: { result: 0, score: null },
-    totalPayAmount: { result: 0, score: null },
+    dutyFreeSalesValue: { result: 0, score: [-1] },
+    businessTaxValue: { result: 40, score: null },
+    totalAmount: { result: 838, score: null },
+    totalPayAmount: { result: 838, score: null },
     remark: { result: '', score: null},
     reportingPeriod: { result: '11002', score: [-1] },
     deductionType: { result: '1', score: [-1] },
     ticketId: { result: '123', score: [-1] },
     errorMsg: { result: '', score: [-1] },
-    gwEvidenceType: { result: 'A1001', score: [-1] },
-    evidenceType: { result: 'A1001', score: [-1] },
+    gwEvidenceType: { result: 'A5001', score: [-1] },
+    evidenceType: { result: 'A5001', score: [-1] },
     otherFee: { result: 0, score: [-1] }
   })
 })
