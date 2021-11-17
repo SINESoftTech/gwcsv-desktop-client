@@ -275,16 +275,12 @@ class SigoutourMapperClass {
   }
 
   toView(jsonData, ticketId, sn) {
-    let result = []
-    console.log('toView', jsonData)
-    console.log(Object.keys(jsonData))
+    let result = {}
     Object.keys(jsonData).forEach(key => {
-      // result[key] = jsonData[key].result
-      result.push({ [key]: jsonData[key].result })
+      result[key] = jsonData[key].result
     })
-    result.push({ 'sn': sn })
-    result.push({ 'id': ticketId })
-    console.log('toView', result)
+    result['sn'] = sn
+    result['id'] = ticketId
     return result
   }
 
