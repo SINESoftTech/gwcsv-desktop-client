@@ -72,11 +72,9 @@ export async function getFileLists(dispatch) {
 }
 
 export async function scanImages(dispatch, filePath, username, declareProperties) {
-  console.log('scanImages() filePath', filePath)
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, declareProperties)
-      console.log('scanImages result', result)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
