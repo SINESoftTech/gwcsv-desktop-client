@@ -11,6 +11,8 @@ import { A5030ToGwObj } from './SigoutourReqMapper/A5030Mapper'
 import { A5031ToGwObj } from './SigoutourReqMapper/A5031Mapper'
 import { A5032ToGwObj } from './SigoutourReqMapper/A5032Mapper'
 import { A5033ToGwObj } from './SigoutourReqMapper/A5033Mapper'
+import { A5034ToGwObj } from './SigoutourReqMapper/A5034Mapper'
+import { A8001ToGwObj } from './SigoutourReqMapper/A8001Mapper'
 
 const SIGOUTOUR_FIELD_TYPE = {
   'KEY_INVN': 'evidenceNumber',
@@ -216,15 +218,6 @@ const parseData = (jsonData) => {
   return json
 }
 
-
-const A5034ToGwObj = (data) => {
-  return {}
-}
-
-const A8001ToGwObj = (data) => {
-  return {}
-}
-
 const parseToDomainObjStrategy = {
   'A1001': (data) => A1001ToGwObj(data),
   'A2001': (data) => A2001ToGwObj(data),
@@ -255,12 +248,30 @@ const parseToDomainObjStrategy = {
 class SigoutourMapperClass {
 
   toDomainObj(jsonData) {
-    //todo success and failed
     const geEvidenceType = jsonData.gwEvidenceType
-    const json = parseToDomainObjStrategy[geEvidenceType](jsonData)
-    // json['evidenceType'] = jsonData.data['pageList'][0]['photoList'][0]['type']
-
-    console.log(jsonData)
+    if (jsonData.status === 'completed') {
+      return parseToDomainObjStrategy[geEvidenceType](jsonData)
+    }
+    return {
+      declarationId: { result: '', score: [-1] },
+      evidenceDate: { result: '', score: [-1] },
+      buyerTaxId: { result: '', score: [-1] },
+      taxType: { result: '1', score: [-1] },
+      otherFee: { result: 0, score: [-1] },
+      taxableSalesValue: { result: 0, score: [-1] },
+      dutyFreeSalesValue: { result: 0, score: [-1] },
+      businessTaxValue: { result: 0, score: [-1] },
+      totalPayAmount: { result: 0, score: [-1] },
+      totalAmount: { result: 0, score: [-1] },
+      reportingPeriod: { result: jsonData['reportingPeriod'], score: [-1] },
+      deductionType: { result: jsonData['deductionType'], score: [-1] },
+      ticketId: { result: jsonData['ticketId'], score: [-1] },
+      errorMsg: { result: '', score: [-1] },
+      gwEvidenceType: { result: geEvidenceType, score: [-1] },
+      evidenceType: { result: '', score: [-1] },
+      zeroTaxSalesValue: { result: 0, score: [-1] },
+      evidenceNumber: { result: '', score: [-1] }
+    }
   }
 
   toView(ticketId, deductionType, reportingPeriod, evidenceType, jsonData) {
