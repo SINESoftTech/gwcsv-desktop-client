@@ -1,41 +1,6 @@
 import SigoutourMapper from './sigoutour_mapper'
 import {jsonCases,shareEvidenceExpect,totalAmountSummaryExpect,a5020TypeNumericExpect} from './sigoutour_mapper.share.test'
 
-
-
-test('success SigoutourMapper toView A5034', () => {
-  const a5034SigoutourJson = jsonCases.A5034_HAPPY_CASE
-  const ticketId = 'a5034'
-  const deductionType = 'a5034'
-  const reportingPeriod = '11006'
-  const evidenceType = 'A5034'
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a5034SigoutourJson)
-
-  shareEvidenceExpect(result)
-
-  expect(result).toMatchObject({
-    'evidenceType': '電信費帳單-亞太',
-    'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
-    'buyerTaxId': '12345678',
-    'sellerTaxId': '12345679',
-    'taxType': 1,
-    'taxableSalesValue': 1000,
-    'zeroTaxSalesValue': 20,
-    'businessTaxValue': 50,
-    'otherFee': 15,
-    'totalAmount': 1050,
-    'totalPayAmount': 1050,
-    'remark': 'remark',
-    'dutyFreeSalesValue': 0,
-    'evidenceNumber': 'HK58985633',
-    'reportingPeriod': '11006',
-    'deductionType': 'a5034',
-    'ticketId': 'a5034',
-    'gwEvidenceType': '電信費帳單-亞太'
-  })
-})
-
 test('success SigoutourMapper toView A8001', () => {
   const a8001igoutourJson = jsonCases.A8001_HAPPY_CASE
 
