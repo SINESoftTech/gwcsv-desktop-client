@@ -155,6 +155,11 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
     'id': '',
     'name': '其他',
     'value': ''
+  },
+  '':{
+    'id': '',
+    'name': '',
+    'value': ''
   }
 }
 
@@ -270,7 +275,8 @@ class SigoutourMapperClass {
       gwEvidenceType: { result: geEvidenceType, score: [-1] },
       evidenceType: { result: '', score: [-1] },
       zeroTaxSalesValue: { result: 0, score: [-1] },
-      evidenceNumber: { result: '', score: [-1] }
+      evidenceNumber: { result: '', score: [-1] },
+      sellerTaxId: { result: '', score: [-1] }
     }
   }
 
@@ -280,6 +286,7 @@ class SigoutourMapperClass {
       result[key] = jsonData[key].result
     })
     result['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['gwEvidenceType']].name
+    result['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['evidenceType']].name
     result['sn'] = sn
     result['id'] = ticketId
     return result

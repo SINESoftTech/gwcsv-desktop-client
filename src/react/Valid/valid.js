@@ -23,6 +23,7 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
   console.log('valid', clientTaxId, json)
   let validResult = validTaxMoney(json)
   const isCustom = json['gwEvidenceType'] === '海關代徵營業稅繳納證'
+  console.log('validSigoutourData',json)
   if (!isCustom && (json['sellerTaxId'].length !== 8 || !validTaxId(json['sellerTaxId']))) {
     validResult.push('sellerTaxId')
   }

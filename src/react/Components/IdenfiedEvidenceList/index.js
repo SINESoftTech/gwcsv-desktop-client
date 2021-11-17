@@ -43,13 +43,13 @@ const IdentifiedEvidenceList = (props) => {
   const [assignMap, setAssignMap] = React.useState()
 
   const initDataRows = async (data, clientTaxId, assignMap) => {
-
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     //read assign
     const parseJsonDataList = jsonDataList.map((json, idx) => {
       const clientTaxId = json.filePath.split('_')[1]
       const ticketId = json.filePath.split('_')[6]
       return validSigoutourData(clientTaxId, SigoutourMapper.toView(json.data, ticketId, idx + 1), assignMap)
+      // return SigoutourMapper.toView(json.data, ticketId, idx + 1)
     })
     setRowData(parseJsonDataList)
   }
@@ -84,9 +84,9 @@ const IdentifiedEvidenceList = (props) => {
     initDataRows(result['03'], props.declareProperties.clientTaxId)
   }
 
-
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
+  //todo refactor
   const handleEditRow = async (editData, field = '') => {
     console.log('handleEditRow()', editData)
     console.log('handleEditRow() field', field)
