@@ -22,7 +22,7 @@ const validTaxId = (taxId) => {
 const validSigoutourData = (clientTaxId, json, assignMap) => {
   console.log('valid', clientTaxId, json)
   let validResult = validTaxMoney(json)
-  const isCustom = json['gwEvidenceType'].result === '海關代徵營業稅繳納證'
+  const isCustom = json['gwEvidenceType'] === '海關代徵營業稅繳納證'
   if (!isCustom && (json['sellerTaxId'].length !== 8 || !validTaxId(json['sellerTaxId']))) {
     validResult.push('sellerTaxId')
   }
@@ -132,23 +132,23 @@ const validEvidenceType = {
 
 const validTaxType = {
   '1': (json) => {
-    const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'].result === 0 ? '' : 'zeroTaxSalesValue'
-    const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'].result === 0 ? '' : 'dutyFreeSalesValue'
-    const isTaxableSalesValueGte0 = json['taxableSalesValue'].result >= 0 ? '' : 'taxableSalesValue'
+    const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'] === 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueGte0 = json['taxableSalesValue'] >= 0 ? '' : 'taxableSalesValue'
     return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueEq0, isTaxableSalesValueGte0]
   },
   '3': (json) => {
-    const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'].result === 0 ? '' : 'zeroTaxSalesValue'
-    const isDutyFreeSalesValueGte0 = json['dutyFreeSalesValue'].result >= 0 ? '' : 'dutyFreeSalesValue'
-    const isTaxableSalesValueEq0 = json['taxableSalesValue'].result === 0 ? '' : 'taxableSalesValue'
-    const isBusinessTaxValueEq0 = json['businessTaxValue'].result === 0 ? '' : 'businessTaxValue'
+    const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueGte0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
+    const isBusinessTaxValueEq0 = json['businessTaxValue'] === 0 ? '' : 'businessTaxValue'
     return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueGte0, isTaxableSalesValueEq0, isBusinessTaxValueEq0]
   },
   '2': (json) => {
-    const isZeroTaxSalesValueGte0 = json['zeroTaxSalesValue'].result === 0 ? '' : 'zeroTaxSalesValue'
-    const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'].result >= 0 ? '' : 'dutyFreeSalesValue'
-    const isTaxableSalesValueEq0 = json['taxableSalesValue'].result === 0 ? '' : 'taxableSalesValue'
-    const isBusinessTaxValueEq0 = json['businessTaxValue'].result === 0 ? '' : 'businessTaxValue'
+    const isZeroTaxSalesValueGte0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
+    const isBusinessTaxValueEq0 = json['businessTaxValue'] === 0 ? '' : 'businessTaxValue'
     return [isZeroTaxSalesValueGte0, isDutyFreeSalesValueEq0, isTaxableSalesValueEq0, isBusinessTaxValueEq0]
   },
   '': (json) => {
@@ -208,14 +208,14 @@ const validTax = (json) => {
 }
 
 const validTaxMoney = (json) => {
-  let validResult = validTaxType[json['taxType'].result](json).concat(validTax(json))
-  const withoutTotalAmount = json['taxableSalesValue'].result + json['zeroTaxSalesValue'].result + json['dutyFreeSalesValue'].result
-  const totalAmount = withoutTotalAmount + json['businessTaxValue'].result
-  if (totalAmount !== json['totalAmount'].result || totalAmount === 0) {
+  let validResult = validTaxType[json['taxType']](json).concat(validTax(json))
+  const withoutTotalAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
+  const totalAmount = withoutTotalAmount + json['businessTaxValue']
+  if (totalAmount !== json['totalAmount'] || totalAmount === 0) {
     validResult.push('totalAmount', 'zeroTaxSalesValue', 'businessTaxValue', 'dutyFreeSalesValue', 'taxableSalesValue')
   }
-  const payAmount = totalAmount + json['otherFee'].result
-  if (payAmount !== json['totalPayAmount'].result || payAmount === 0) {
+  const payAmount = totalAmount + json['otherFee']
+  if (payAmount !== json['totalPayAmount'] || payAmount === 0) {
     validResult.push('totalAmount', 'otherFee', 'totalPayAmount')
   }
   return [...new Set(validResult)]
