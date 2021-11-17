@@ -306,6 +306,7 @@ class SigoutourMapperClass {
     return json
   }
 
+
   toSigoutour(sigoutourJson, data) {
     const jsonDataBody = sigoutourJson['pageList'][0]['photoList'][0]['result']
     const evidenceType = SIGOUTOUR_EVIDENCE_TYPE[sigoutourJson['pageList'][0]['photoList'][0]['type']].value

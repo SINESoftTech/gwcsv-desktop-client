@@ -86,25 +86,28 @@ const IdentifiedEvidenceList = (props) => {
 
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
-  //todo refactor
   const handleEditRow = async (editData, field = '') => {
-    console.log('handleEditRow()', editData)
-    console.log('handleEditRow() field', field)
+    //todo refactor read only one file and save
     const jsonDataList = await getJsonRawData(localFiles['03'], props.declareProperties.clientTaxId)
     const json = jsonDataList.filter(obj => {
-      return obj.data.ticket === editData.id
+      const ticketId = obj.filePath.split('_')[6]
+      return ticketId === editData.id
     })[0]
-    console.log('handleEditRow() json=', json)
-    const sigoutourJson = SigoutourMapper.toSigoutour(json.data, editData)
-    console.log('handleEditRow() sigoutourJson=', sigoutourJson)
-    const result = await electronActions.updateSigoutourData(editData.id, editData.deductionType, editData.reportingPeriod, SIGOUTOUR_EVIDENCE_TYPE_REVERSE[editData.gwEvidenceType], sigoutourJson)
-    const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
-    if (!validResult.includes(field)) {
-      const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
-      sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
-    }
-    setLocalFiles(result)
-    initDataRows(result['03'], props.declareProperties.clientTaxId, assignMap)
+    console.log('jsonDataList', jsonDataList)
+    json.data[field].result = editData[field]
+
+    //save
+    const result = await electronActions.updateData(json)
+
+    //todo sendTo feedback
+    // const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
+    // if (!validResult.includes(field)) {
+    //   const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
+    //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
+    // }
+
+    // setLocalFiles(result)
+    // initDataRows(result['03'], props.declareProperties.clientTaxId, assignMap)
   }
 
 

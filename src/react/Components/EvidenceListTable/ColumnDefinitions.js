@@ -79,7 +79,6 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
 
 
 function renderEvidenceType(param) {
-  console.log('renderEvidenceType', param.value)
   const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
   return (
     <>

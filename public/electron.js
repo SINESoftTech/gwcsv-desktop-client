@@ -200,43 +200,46 @@ ipcMain.handle('evidence:getFileLists', (event, ...args) => {
 })
 
 ipcMain.handle('evidence:getImageFileContentBase64', (event, fullPath) => {
-  // console.log(event)
-  // console.log(fullPath)
-  // return '1'
   return fse.readFileSync(fullPath, { encoding: 'base64' })
 })
 
-ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, period, gwEvidenceType, json) => {
-  console.log('updateSigoutourData', json)
-  //json remove old and save
+ipcMain.handle('evidence:updateData', (event, payload) => {
+  //todo
+  ///Users/tony/.gwapp/03/string123_24549210_11002_1_true_A5002_1109163022881257_sightour_result.json
   const fileList03 = getAllFileLists()['03']
-  const filterFileList = fileList03.filter(obj => {
-    const fileName = obj.filename
-    const id = fileName.split('.')[0].split('_')[6]
-    return id === ticketId
-  })
-
+  const ticketId = payload.filePath.split('_')[6]
   const targetFolderPath = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
-  filterFileList.map(file => {
-    const fileName = file.filename
-    const splitFileName = fileName.split('_')
-    splitFileName[2] = period
-    splitFileName[3] = deductionType
-    splitFileName[5] = gwEvidenceType
-    const targetFileName = splitFileName.join('_')
-    const targetFilePath = path.join(targetFolderPath, targetFileName)
-    if (getFileExt(fileName) === 'json') {
-      fse.removeSync(file.fullPath)
-      fse.writeJSONSync(targetFilePath, json)
-    } else {
-      if (targetFileName !== fileName) {
-        fse.copySync(file.fullPath, targetFilePath, { overwrite: true })
-        fse.removeSync(file.fullPath)
-      }
-    }
-  })
-  return getAllFileLists()
+  console.log('updateData', fileList03)
+  console.log('updateData', targetFolderPath)
 })
+// ipcMain.handle('evidence:updateSigoutourData', (event, ticketId, deductionType, period, gwEvidenceType, json) => {
+//   const fileList03 = getAllFileLists()['03']
+//   const filterFileList = fileList03.filter(obj => {
+//     const fileName = obj.filename
+//     const id = fileName.split('.')[0].split('_')[6]
+//     return id === ticketId
+//   })
+//   const targetFolderPath = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
+//   filterFileList.map(file => {
+//     const fileName = file.filename
+//     const splitFileName = fileName.split('_')
+//     splitFileName[2] = period
+//     splitFileName[3] = deductionType
+//     splitFileName[5] = gwEvidenceType
+//     const targetFileName = splitFileName.join('_')
+//     const targetFilePath = path.join(targetFolderPath, targetFileName)
+//     if (getFileExt(fileName) === 'json') {
+//       fse.removeSync(file.fullPath)
+//       fse.writeJSONSync(targetFilePath, json)
+//     } else {
+//       if (targetFileName !== fileName) {
+//         fse.copySync(file.fullPath, targetFilePath, { overwrite: true })
+//         fse.removeSync(file.fullPath)
+//       }
+//     }
+//   })
+//   return getAllFileLists()
+// })
 
 
 ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {

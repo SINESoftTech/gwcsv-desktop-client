@@ -18,13 +18,13 @@ export const saveAssign = async (payload) => {
 }
 
 
-export async function updateSigoutourData(ticketId, deductionType, period, gwEvidenceType, json) {
+export async function updateData(payload) {
   try {
     if (ipcRenderer) {
-      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId, deductionType, period,gwEvidenceType, json)
+      return await ipcRenderer.invoke('evidence:updateData', payload)
     }
   } catch (error) {
-    console.log('updateSigoutourData', error)
+    console.log('updateData', error)
   }
 }
 
@@ -50,7 +50,6 @@ export async function getJsonRawData(data, clientTaxId) {
       return d.fullPath
     })
     if (ipcRenderer) {
-      console.log("getJsonRawData",filterJsonDataFilePathList)
       return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
     }
   } catch (error) {
