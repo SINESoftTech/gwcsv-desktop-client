@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { electronActions, gwActions, sightTourActions, useAppDispatch, useAppState } from '../../Context'
-import { Alert } from '@material-ui/lab'
+import React, {useEffect} from 'react'
+import {electronActions, gwActions, sightTourActions, useAppDispatch, useAppState} from '../../Context'
+import {Alert} from '@material-ui/lab'
 import CloseIcon from '@material-ui/icons/Close'
 import {
   AppBar,
@@ -25,19 +25,11 @@ import mainStyles from './mainStyles'
 import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
-import {
-  gwUploaded,
-  identifyResultConfirmed,
-  identifyResultReceived,
-  identifySent
-} from '../../Actions/electionActions'
-import { getIdentifyResult } from '../../Actions/sightourActions'
-import { openScanner, scan } from '../../Actions/scanAction'
+import {gwUploaded, identifyResultConfirmed, identifyResultReceived, identifySent} from '../../Actions/electionActions'
+import {getIdentifyResult} from '../../Actions/sightourActions'
+import {openScanner} from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
-
-// import { toView } from '../../Mapper/sigoutour_mapper'
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -174,7 +166,8 @@ const Main = (props) => {
     if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
       setScanDisable(true)
       setScanAlert(true)
-      scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
+      handleMoveImage(1,"123")
+      // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
 

@@ -274,7 +274,19 @@ ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
 ipcMain.handle('evidence:scanImages', (event, fullPath, taxId, declareProperties) => {
     console.log('scanImages', declareProperties)
     const sourceFileExt = fullPath.split('.')[1]
-    const targetFolderPath = path.join(config.fileFolder, stageFolders.scanned.folder)
+    const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
+    db = changeDbContext(taxId)
+    //save data
+    const data = {
+        reportingPeriod: {result: declareProperties.reportingPeriod, score: [-1]},
+        deductionType: {result: declareProperties.isDeclareBusinessTax, score: [-1]},
+        isDeclareBusinessTax: {result: declareProperties.isDeclareBusinessTax, score: [-1]},
+        gwEvidenceType: {result: declareProperties.evidenceType, score: [-1]}
+    }
+    console.log(targetFolderPath)
+    db.get('01')
+        .push(data)
+        .write()
     //declareProperties.clientTaxId + '_' + declareProperties.reportingPeriod + '_' + '1' + '_' + declareProperties.isDeclareBusinessTax + '_' + declareProperties.evidenceType + '_' +
     const targetFilePath = targetFolderPath + '/' + taxId + '_' + Date.now() + '.' + sourceFileExt
     fse.copySync(fullPath, targetFilePath)
