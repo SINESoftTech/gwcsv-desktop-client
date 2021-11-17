@@ -134,7 +134,7 @@ test('success SigoutourMapper toDomainObj 5030', () => {
         zeroTaxSalesValue: {result: 0, score: null},
         dutyFreeSalesValue: {result: 1, score: null},
         businessTaxValue: {result: 345, score: null},
-        totalAmount: {result: 6907, score: [-1]},
+        totalAmount: {result: 7252, score: [-1]},
         totalPayAmount: {result: 7475, score: null},
         remark: {result: '', score: null},
         reportingPeriod: {result: '11002', score: [-1]},

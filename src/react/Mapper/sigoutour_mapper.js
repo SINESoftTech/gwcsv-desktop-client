@@ -1,14 +1,15 @@
-import {A5003ToGwObj} from './SigoutourReqMapper/A5003Mapper'
-import {A5002ToGwObj} from './SigoutourReqMapper/A5002Mapper'
-import {A1001ToGwObj} from './SigoutourReqMapper/A1001Mapper'
-import {A2001ToGwObj} from './SigoutourReqMapper/A2001Mapper'
-import {A5001ToGwObj} from './SigoutourReqMapper/A5001Mapper'
-import {A5010ToGwObj} from './SigoutourReqMapper/A5010Mapper'
-import {A5020ToGwObj} from './SigoutourReqMapper/A5020Mapper'
-import {A5021ToGwObj} from "./SigoutourReqMapper/A5021Mapper";
-import {isEmptyOrUndefined} from "../Util/StringUtils";
+import { A5003ToGwObj } from './SigoutourReqMapper/A5003Mapper'
+import { A5002ToGwObj } from './SigoutourReqMapper/A5002Mapper'
+import { A1001ToGwObj } from './SigoutourReqMapper/A1001Mapper'
+import { A2001ToGwObj } from './SigoutourReqMapper/A2001Mapper'
+import { A5001ToGwObj } from './SigoutourReqMapper/A5001Mapper'
+import { A5010ToGwObj } from './SigoutourReqMapper/A5010Mapper'
+import { A5020ToGwObj } from './SigoutourReqMapper/A5020Mapper'
+import { A5021ToGwObj } from './SigoutourReqMapper/A5021Mapper'
+import { isEmptyOrUndefined } from '../Util/StringUtils'
 import { A5030ToGwObj } from './SigoutourReqMapper/A5030Mapper'
 import { A5031ToGwObj } from './SigoutourReqMapper/A5031Mapper'
+import { A5032ToGwObj } from './SigoutourReqMapper/A5032Mapper'
 
 const SIGOUTOUR_FIELD_TYPE = {
   'KEY_INVN': 'evidenceNumber',
@@ -215,11 +216,6 @@ const parseData = (jsonData) => {
 }
 
 
-
-
-const A5032ToGwObj = (data) => {
-  return {}
-}
 const A5033ToGwObj = (data) => {
   return {}
 }
@@ -232,48 +228,21 @@ const A8001ToGwObj = (data) => {
 }
 
 const parseToDomainObjStrategy = {
-  'A1001': function(data) {
-    return A1001ToGwObj(data)
-  },
-  'A2001': function(data) {
-    return A2001ToGwObj(data)
-  },
-  'A5001': function(data) {
-    return A5001ToGwObj(data)
-  },
-  'A5002': function(data) {
-    return A5002ToGwObj(data)
-  },
-  'A5003': function(data) {
-    return A5003ToGwObj(data)
-  },
-  'A5010': function(data) {
-    return A5010ToGwObj(data)
-  },
-  'A5020': function(data) {
-    return A5020ToGwObj(data)
-  },
-  'A5021': function(data) {
-    return A5021ToGwObj(data)
-  },
-  'A5030': function(data) {
-    return A5030ToGwObj(data)
-  },
-  'A5031': function(data) {
-    return A5031ToGwObj(data)
-  },
-  'A5032': function(data) {
-    return A5032ToGwObj(data)
-  },
-  'A5033': function(data) {
-    return A5033ToGwObj(data)
-  },
-  'A5034': function(data) {
-    return A5034ToGwObj(data)
-  },
-  'A8001': function(data) {
-    return A8001ToGwObj(data)
-  },
+  'A1001': A1001ToGwObj(data),
+  'A2001': A2001ToGwObj(data),
+  'A5001': A5001ToGwObj(data),
+  'A5002': A5002ToGwObj(data),
+  'A5003': A5003ToGwObj(data),
+  'A5010': A5010ToGwObj(data),
+  'A5020': A5020ToGwObj(data),
+  'A5021': A5021ToGwObj(data),
+  'A5030': A5030ToGwObj(data),
+  'A5031': A5031ToGwObj(data),
+  'A5032': A5032ToGwObj(data),
+  'A5033': A5033ToGwObj(data),
+  'A5034': A5034ToGwObj(data),
+  'A8001': A8001ToGwObj(data),
+  //todo
   'A3001': function(data) {
 
   },
