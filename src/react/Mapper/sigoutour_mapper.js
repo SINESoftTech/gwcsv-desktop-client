@@ -10,6 +10,7 @@ import { isEmptyOrUndefined } from '../Util/StringUtils'
 import { A5030ToGwObj } from './SigoutourReqMapper/A5030Mapper'
 import { A5031ToGwObj } from './SigoutourReqMapper/A5031Mapper'
 import { A5032ToGwObj } from './SigoutourReqMapper/A5032Mapper'
+import { A5033ToGwObj } from './SigoutourReqMapper/A5033Mapper'
 
 const SIGOUTOUR_FIELD_TYPE = {
   'KEY_INVN': 'evidenceNumber',
@@ -216,9 +217,6 @@ const parseData = (jsonData) => {
 }
 
 
-const A5033ToGwObj = (data) => {
-  return {}
-}
 const A5034ToGwObj = (data) => {
   return {}
 }
@@ -228,20 +226,20 @@ const A8001ToGwObj = (data) => {
 }
 
 const parseToDomainObjStrategy = {
-  'A1001': A1001ToGwObj(data),
-  'A2001': A2001ToGwObj(data),
-  'A5001': A5001ToGwObj(data),
-  'A5002': A5002ToGwObj(data),
-  'A5003': A5003ToGwObj(data),
-  'A5010': A5010ToGwObj(data),
-  'A5020': A5020ToGwObj(data),
-  'A5021': A5021ToGwObj(data),
-  'A5030': A5030ToGwObj(data),
-  'A5031': A5031ToGwObj(data),
-  'A5032': A5032ToGwObj(data),
-  'A5033': A5033ToGwObj(data),
-  'A5034': A5034ToGwObj(data),
-  'A8001': A8001ToGwObj(data),
+  'A1001': (data) => A1001ToGwObj(data),
+  'A2001': (data) => A2001ToGwObj(data),
+  'A5001': (data) => A5001ToGwObj(data),
+  'A5002': (data) => A5002ToGwObj(data),
+  'A5003': (data) => A5003ToGwObj(data),
+  'A5010': (data) => A5010ToGwObj(data),
+  'A5020': (data) => A5020ToGwObj(data),
+  'A5021': (data) => A5021ToGwObj(data),
+  'A5030': (data) => A5030ToGwObj(data),
+  'A5031': (data) => A5031ToGwObj(data),
+  'A5032': (data) => A5032ToGwObj(data),
+  'A5033': (data) => A5033ToGwObj(data),
+  'A5034': (data) => A5034ToGwObj(data),
+  'A8001': (data) => A8001ToGwObj(data),
   //todo
   'A3001': function(data) {
 

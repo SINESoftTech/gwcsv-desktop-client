@@ -2,46 +2,6 @@ import SigoutourMapper from './sigoutour_mapper'
 import {jsonCases,shareEvidenceExpect,totalAmountSummaryExpect,a5020TypeNumericExpect} from './sigoutour_mapper.share.test'
 
 
-test('success SigoutourMapper toView A5033', () => {
-  const a5033SigoutourJson = jsonCases.A5033_HAPPY_CASE
-  const ticketId = 'a5033'
-  const deductionType = 'a5033'
-  const reportingPeriod = '11010'
-  const evidenceType = 'A5033'
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a5033SigoutourJson)
-
-  let expectObj = {
-    reportingPeriod: reportingPeriod,
-    deductionType: deductionType,
-    ticketId: ticketId,
-    evidenceType: evidenceType
-  }
-  shareEvidenceExpect(result)
-  totalAmountSummaryExpect(result, 1070)
-
-  expect(result).toMatchObject({
-    'evidenceType': '電信費帳單-台灣之星',
-    'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
-    'buyerTaxId': '12345678',
-    'sellerTaxId': '12345679',
-    'taxType': 1,
-    'taxableSalesValue': 1000,
-    'zeroTaxSalesValue': 20,
-    'businessTaxValue': 50,
-    'otherFee': 15,
-    'totalPayAmount': 1050,
-    'remark': 'remark',
-    'totalAmount': 1070,
-    'dutyFreeSalesValue': 0,
-    'evidenceNumber': 'HK58985633',
-    'reportingPeriod': '11010',
-    'deductionType': 'a5033',
-    'ticketId': 'a5033',
-    'gwEvidenceType': '電信費帳單-台灣之星'
-  })
-
-})
 
 test('success SigoutourMapper toView A5034', () => {
   const a5034SigoutourJson = jsonCases.A5034_HAPPY_CASE
