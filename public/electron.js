@@ -312,16 +312,15 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
   }
   return getAllFileLists()
 })
-
+//todo refactor save method
 ipcMain.handle('evidence:identifyResultReceived', (event, identifyResult) => {
   for (let i = 0; i < identifyResult.length; i++) {
     const data = identifyResult[i]
-    if (data['status'] === 'completed') {
-      const targetFolder = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
-      const fileNameWithoutExt = data.sourceFileName.split('.')[0]
-      fse.moveSync(data.sourceFullPath, path.join(targetFolder, data.sourceFileName))
-      fse.writeJSONSync(path.join(targetFolder, fileNameWithoutExt + '_sightour_result.json'), data.data)
-    }
+    console.log(data)
+    const targetFolder = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
+    const fileNameWithoutExt = data.sourceFileName.split('.')[0]
+    fse.moveSync(data.sourceFullPath, path.join(targetFolder, data.sourceFileName))
+    fse.writeJSONSync(path.join(targetFolder, fileNameWithoutExt + '_sightour_result.json'), data.data)
   }
   return getAllFileLists()
 })

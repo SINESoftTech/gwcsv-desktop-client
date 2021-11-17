@@ -35,6 +35,7 @@ import { getIdentifyResult } from '../../Actions/sightourActions'
 import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+
 // import { toView } from '../../Mapper/sigoutour_mapper'
 
 
@@ -138,17 +139,11 @@ const Main = (props) => {
     const identifyResultReceivedList = []
     for (let i = 0; i < data.length; i++) {
       const fileObj = data[i]
-
-      // filename: "string123_24549210_11002_1_true_A5002_1109163022881257.jpg"
-      // fullPath: "/Users/tony/.gwapp/02/string123_24549210_11002_1_true_A5002_1109163022881257.jpg"
       const identifyResult = await getIdentifyResult(fileObj)
-      console.log('handleGetIdentifyResult', identifyResult)
-      //todo parser
-      SigoutourMapper.toDomainObj(identifyResult)
-      // toView(ticketId, deductionType, reportingPeriod, gwEvidenceType, json.data)
+      identifyResult.data = SigoutourMapper.toDomainObj(identifyResult)
       identifyResultReceivedList.push(identifyResult)
     }
-    // identifyResultReceived(dispatch, identifyResultReceivedList)
+    identifyResultReceived(dispatch, identifyResultReceivedList)
   }
 
 

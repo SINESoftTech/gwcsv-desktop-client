@@ -26,7 +26,6 @@ const EvidenceList = (props) => {
     }, [dataRows])
 
   const handleCellClick = async (param, event) => {
-    console.log('handleCellClick', param)
     if (event.target.name === 'taxType') {
       param.row['taxType'] = event.target.value
       props.handleEditRow(param.row, 'taxType')

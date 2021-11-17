@@ -274,18 +274,18 @@ class SigoutourMapperClass {
     }
   }
 
-  toView(ticketId, deductionType, reportingPeriod, evidenceType, jsonData) {
-    const json = parseData(jsonData)
-    json['sellerTaxId'] = isEmptyOrUndefined(json['sellerTaxId']) ? '' : json['sellerTaxId']
-    json['buyerTaxId'] = isEmptyOrUndefined(json['buyerTaxId']) ? '' : json['buyerTaxId']
-    json['taxType'] = isEmptyOrUndefined(json['taxType']) ? '' : json['taxType'].number
-    json['evidenceType'] = isEmptyOrUndefined(json['evidenceType']) ? '' : json['evidenceType'].name
-    json['reportingPeriod'] = reportingPeriod
-    json['deductionType'] = deductionType
-    json['ticketId'] = ticketId
-    json['errorMsg'] = jsonData['errorMsg']
-    json['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[evidenceType].name
-    return json
+  toView(jsonData, ticketId, sn) {
+    let result = []
+    console.log('toView', jsonData)
+    console.log(Object.keys(jsonData))
+    Object.keys(jsonData).forEach(key => {
+      // result[key] = jsonData[key].result
+      result.push({ key: jsonData[key].result })
+    })
+    result.push({ 'sn': sn })
+    result.push({ 'id': ticketId })
+    console.log('toView', result)
+    return result
   }
 
   toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, jsonData) {

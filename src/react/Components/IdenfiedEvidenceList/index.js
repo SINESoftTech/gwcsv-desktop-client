@@ -47,16 +47,17 @@ const IdentifiedEvidenceList = (props) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     //read assign
     const parseJsonDataList = jsonDataList.map((json, idx) => {
+      console.log('parseJsonDataList', json)
       const clientTaxId = json.filePath.split('_')[1]
-      const reportingPeriod = json.filePath.split('_')[2]
-      const deductionType = json.filePath.split('_')[3]
-      const gwEvidenceType = json.filePath.split('_')[5]
       const ticketId = json.filePath.split('_')[6]
-      const parseResult = validSigoutourData(clientTaxId, SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, gwEvidenceType, json.data), assignMap)
-      parseResult['sn'] = idx + 1
-      parseResult['id'] = json.data['ticket']
+      //todo
+
+      const parseResult = SigoutourMapper.toView(json.data, ticketId, idx + 1)
+
+      // validSigoutourData(clientTaxId, json.data, assignMap)
       return parseResult
     })
+    console.log(parseJsonDataList)
     setRowData(parseJsonDataList)
   }
 
