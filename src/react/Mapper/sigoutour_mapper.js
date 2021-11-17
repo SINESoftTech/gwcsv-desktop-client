@@ -280,7 +280,7 @@ class SigoutourMapperClass {
     console.log(Object.keys(jsonData))
     Object.keys(jsonData).forEach(key => {
       // result[key] = jsonData[key].result
-      result.push({ key: jsonData[key].result })
+      result.push({ [key]: jsonData[key].result })
     })
     result.push({ 'sn': sn })
     result.push({ 'id': ticketId })

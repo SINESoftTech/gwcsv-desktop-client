@@ -47,11 +47,9 @@ const IdentifiedEvidenceList = (props) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     //read assign
     const parseJsonDataList = jsonDataList.map((json, idx) => {
-      console.log('parseJsonDataList', json)
       const clientTaxId = json.filePath.split('_')[1]
       const ticketId = json.filePath.split('_')[6]
       //todo
-
       const parseResult = SigoutourMapper.toView(json.data, ticketId, idx + 1)
 
       // validSigoutourData(clientTaxId, json.data, assignMap)
