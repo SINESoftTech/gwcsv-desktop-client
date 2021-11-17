@@ -49,7 +49,6 @@ const IdentifiedEvidenceList = (props) => {
       const clientTaxId = json.filePath.split('_')[1]
       const ticketId = json.filePath.split('_')[6]
       return validSigoutourData(clientTaxId, SigoutourMapper.toView(json.data, ticketId, idx + 1), assignMap)
-      // return SigoutourMapper.toView(json.data, ticketId, idx + 1)
     })
     setRowData(parseJsonDataList)
   }
@@ -65,6 +64,7 @@ const IdentifiedEvidenceList = (props) => {
   }, [props.data, props.declareProperties.clientTaxId])
 
 
+  //TODO REFACTOR
   const handleResultAllConfirmed = async () => {
     const errorTicketIdList = rowData.filter(obj => {
       return obj.cellHighlight.length > 0

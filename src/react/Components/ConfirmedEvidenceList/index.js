@@ -27,14 +27,9 @@ const ConfirmedEvidenceList = (props) => {
   const initDataRows = async (data, clientTaxId) => {
     const jsonDataList = await getJsonRawData(data, clientTaxId)
     const parseJsonDataList = jsonDataList.map((json, idx) => {
-      const reportingPeriod = json.filePath.split('_')[2]
-      const deductionType = json.filePath.split('_')[3]
+      const clientTaxId = json.filePath.split('_')[1]
       const ticketId = json.filePath.split('_')[6]
-      const gwEvidenceType = json.filePath.split('_')[5]
-      const parseResult = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, gwEvidenceType, json.data)
-      parseResult['sn'] = idx + 1
-      parseResult['id'] = json.data['ticket']
-      return parseResult
+      return clientTaxId, SigoutourMapper.toView(json.data, ticketId, idx + 1)
     })
     setRowData(parseJsonDataList)
   }
