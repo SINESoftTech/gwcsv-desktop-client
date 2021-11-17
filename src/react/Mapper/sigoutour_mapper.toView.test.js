@@ -34,40 +34,6 @@ test('success SigoutourMapper toView 中華電信 5030', () => {
 })
 
 
-test('success SigoutourMapper toView A5031', () => {
-  const a5031SigoutourJson = jsonCases.A5031_HAPPY_CASE
-
-  const ticketId = 'a5031'
-  const deductionType = 'a5031'
-  const reportingPeriod = '11010'
-  const evidenceType = 'A5031'
-  const result = SigoutourMapper.toView(ticketId, deductionType, reportingPeriod, evidenceType, a5031SigoutourJson)
-  shareEvidenceExpect(result)
-  totalAmountSummaryExpect(result, 1100)
-
-  expect(result).toMatchObject({
-    'evidenceType': '電信費帳單-台灣大哥大',
-    'carrierNumber': 'HK58985633',
-    'evidenceDate': '20210112',
-    'buyerTaxId': '12345678',
-    'sellerTaxId': '12345679',
-    'taxType': 1,
-    'taxableSalesValue': 1000,
-    'zeroTaxSalesValue': 20,
-    'dutyFreeSalesValue': 30,
-    'businessTaxValue': 50,
-    'otherFee': 15,
-    'totalAmount': 1100,
-    'totalPayAmount': 1050,
-    'remark': 'remark',
-    'evidenceNumber': 'HK58985633',
-    'reportingPeriod': '11010',
-    'deductionType': 'a5031',
-    'ticketId': 'a5031',
-    'gwEvidenceType': '電信費帳單-台灣大哥大'
-  })
-
-})
 
 test('success SigoutourMapper toView A5032', () => {
   const a5032SigoutourJson = jsonCases.A5032_HAPPY_CASE

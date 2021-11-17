@@ -1,10 +1,10 @@
-import { A5031ToGwObj } from './A5031Mapper'
+import { A5032ToGwObj } from './A5032Mapper'
 
-test('success SigoutourMapper toDomainObj 5031', () => {
+test('success SigoutourMapper toDomainObj 5032', () => {
   const data = {
     'reportingPeriod': '11002',
     'deductionType': '1',
-    'gwEvidenceType': 'A5031',
+    'gwEvidenceType': 'A5032',
     'ticketId': '123',
     'sourceFullPath': '',
     'sourceFileName': '',
@@ -18,7 +18,7 @@ test('success SigoutourMapper toDomainObj 5031', () => {
         'page': '201202_095956_254241_1',
         'photoList': [{
           'photo': '201202_095956_254241_1_1',
-          'type': 'A5031',
+          'type': 'A5032',
           'x': 0,
           'y': 478,
           'w': 1239,
@@ -92,15 +92,6 @@ test('success SigoutourMapper toDomainObj 5031', () => {
               'y': 158,
               'w': 79,
               'h': 21,
-              'text': '30',
-              'key': 'KEY_FTSA',
-              'name': 'freeTaxSalesAmount',
-              'score': null
-            }, {
-              'x': 475,
-              'y': 158,
-              'w': 79,
-              'h': 21,
               'text': '50',
               'key': 'KEY_TAXA',
               'name': 'taxAmount',
@@ -113,15 +104,6 @@ test('success SigoutourMapper toDomainObj 5031', () => {
               'text': '15',
               'key': 'KEY_OTHF',
               'name': 'otherFee',
-              'score': null
-            }, {
-              'x': 475,
-              'y': 158,
-              'w': 79,
-              'h': 21,
-              'text': '1050',
-              'key': 'KEY_TOTA',
-              'name': 'totalAmount',
               'score': null
             }, {
               'x': 475,
@@ -149,7 +131,7 @@ test('success SigoutourMapper toDomainObj 5031', () => {
       ]
     }
   }
-  const result = A5031ToGwObj(data)
+  const result = A5032ToGwObj(data)
   console.log(result)
   expect(result).toMatchObject({
     evidenceNumber: { result: 'HK58985633', score: null },
@@ -159,17 +141,17 @@ test('success SigoutourMapper toDomainObj 5031', () => {
     taxType: { result: '1', score: null },
     taxableSalesValue: { result: 1000, score: null },
     zeroTaxSalesValue: { result: 20, score: null },
-    dutyFreeSalesValue: { result: 30, score: null },
+    dutyFreeSalesValue: { result: 0, score: [-1] },
     businessTaxValue: { result: 50, score: null },
-    totalAmount: { result: 1050, score: null },
+    totalAmount: { result: 1070, score: [-1] },
     totalPayAmount: { result: 1050, score: null },
     remark: { result: 'remark', score: null },
     reportingPeriod: { result: '11002', score: [-1] },
     deductionType: { result: '1', score: [-1] },
     ticketId: { result: '123', score: [-1] },
     errorMsg: { result: '', score: [-1] },
-    gwEvidenceType: { result: 'A5031', score: [-1] },
-    evidenceType: { result: 'A5031', score: [-1] },
+    gwEvidenceType: { result: 'A5032', score: [-1] },
+    evidenceType: { result: 'A5032', score: [-1] },
     otherFee: { result: 15, score: null }
   })
 })
