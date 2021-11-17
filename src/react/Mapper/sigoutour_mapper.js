@@ -279,6 +279,7 @@ class SigoutourMapperClass {
     Object.keys(jsonData).forEach(key => {
       result[key] = jsonData[key].result
     })
+    result['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['gwEvidenceType']].name
     result['sn'] = sn
     result['id'] = ticketId
     return result
