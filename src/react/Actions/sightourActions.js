@@ -69,6 +69,7 @@ export async function getIdentifyResult(payload) {
     if (result.data.result === undefined) {
       const status = result.data.pageList[0]['photoList'][0].result.length === 0 ? 'failed' : 'completed'
       return {
+        'fullPath':payload.fullPath,
         'reportingPeriod': payload.reportingPeriod,
         'deductionType': payload.deductionType,
         'gwEvidenceType': payload.gwEvidenceType,
@@ -78,6 +79,7 @@ export async function getIdentifyResult(payload) {
       }
     }
     return {
+      'fullPath':payload.fullPath,
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'gwEvidenceType': payload.gwEvidenceType,

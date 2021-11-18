@@ -147,6 +147,7 @@ const Main = () => {
             const ticketId = keyList[i]
             const json = data[keyList[i]]
             const identifyResult = await getIdentifyResult({
+                'fullPath':json.fullPath,
                 'reportingPeriod': json.reportingPeriod,
                 'deductionType': json.deductionType,
                 'gwEvidenceType': json.gwEvidenceType,
@@ -155,7 +156,7 @@ const Main = () => {
             const domainObj = SigoutourMapper.toDomainObj(identifyResult)
             identifyResultReceivedList.push(domainObj)
         }
-        identifyResultReceived(dispatch,declareProperties.clientTaxId, identifyResultReceivedList)
+        // identifyResultReceived(dispatch,declareProperties.clientTaxId, identifyResultReceivedList)
     }
 
 

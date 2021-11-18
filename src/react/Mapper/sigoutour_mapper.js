@@ -259,6 +259,7 @@ class SigoutourMapperClass {
       return parseToDomainObjStrategy[gwEvidenceType](jsonData)
     }
     return {
+      fullPath: { result: jsonData['fullPath'].result, score: [-1] },
       declarationId: { result: '', score: [-1] },
       evidenceDate: { result: '', score: [-1] },
       buyerTaxId: { result: '', score: [-1] },
@@ -269,9 +270,9 @@ class SigoutourMapperClass {
       businessTaxValue: { result: 0, score: [-1] },
       totalPayAmount: { result: 0, score: [-1] },
       totalAmount: { result: 0, score: [-1] },
-      reportingPeriod: { result: jsonData['reportingPeriod'], score: [-1] },
-      deductionType: { result: jsonData['deductionType'], score: [-1] },
-      ticketId: { result: jsonData['ticketId'], score: [-1] },
+      reportingPeriod: { result: jsonData['reportingPeriod'].result, score: [-1] },
+      deductionType: { result: jsonData['deductionType'].result, score: [-1] },
+      ticketId: { result: jsonData['ticketId'].result, score: [-1] },
       errorMsg: { result: '', score: [-1] },
       gwEvidenceType: { result: gwEvidenceType, score: [-1] },
       evidenceType: { result: '', score: [-1] },
