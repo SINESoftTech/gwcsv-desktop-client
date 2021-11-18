@@ -347,6 +347,7 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
             fse.moveSync(data.sourceFullPath, targetFullName)
             const id = data['sourceFileName'].split('_')[1]
             const data01List = db.get('01').value()
+            data01List[id].fullPath.result = targetFullName
             const data02 = {
                 [data['ticketId']]: data01List[id]
             }
