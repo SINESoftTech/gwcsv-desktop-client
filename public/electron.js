@@ -301,7 +301,7 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
       deductionType: { result: declareProperties.isDeclareBusinessTax, score: [-1] },
       isDeclareBusinessTax: { result: declareProperties.isDeclareBusinessTax, score: [-1] },
       gwEvidenceType: { result: declareProperties.evidenceType, score: [-1] },
-      fullPath: { result: targetFolderPath, score: [-1] }
+      fullPath: { result: targetFilePath, score: [-1] }
     }
   }
   db = changeDbContext(username.taxId)
