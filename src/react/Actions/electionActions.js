@@ -57,12 +57,10 @@ export async function getJsonRawData(data, clientTaxId) {
   }
 }
 
-export async function getFileLists(dispatch) {
+export async function getChooseBusinessEntityData(dispatch,taxId) {
   try {
-    console.log('in action getFileLists')
     if (ipcRenderer) {
-      console.log('in action getFileLists')
-      const result = await ipcRenderer.invoke('evidence:getFileLists')
+      const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData',taxId)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }

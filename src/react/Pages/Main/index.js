@@ -1,10 +1,9 @@
-import React, {useEffect} from 'react'
-import {electronActions, gwActions, sightTourActions, useAppDispatch, useAppState} from '../../Context'
-import {Alert} from '@material-ui/lab'
+import React, { useEffect } from 'react'
+import { electronActions, gwActions, sightTourActions, useAppDispatch, useAppState } from '../../Context'
+import { Alert } from '@material-ui/lab'
 import CloseIcon from '@material-ui/icons/Close'
 import {
-  AppBar,
-  Badge,
+  AppBar, Badge,
   Box,
   Collapse,
   Container,
@@ -25,9 +24,14 @@ import mainStyles from './mainStyles'
 import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
-import {gwUploaded, identifyResultConfirmed, identifyResultReceived, identifySent} from '../../Actions/electionActions'
-import {getIdentifyResult} from '../../Actions/sightourActions'
-import {openScanner} from '../../Actions/scanAction'
+import {
+  gwUploaded,
+  identifyResultConfirmed,
+  identifyResultReceived,
+  identifySent
+} from '../../Actions/electionActions'
+import { getIdentifyResult } from '../../Actions/sightourActions'
+import { openScanner } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 
@@ -51,7 +55,7 @@ function TabPanel(props) {
   )
 }
 
-const Main = (props) => {
+const Main = () => {
 
   const dispatch = useAppDispatch()
   const appState = useAppState()
@@ -68,19 +72,24 @@ const Main = (props) => {
   const [scanAlert, setScanAlert] = React.useState(false)
 
   useEffect(async () => {
-    await electronActions.getFileLists(dispatch)
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
+
+    if (declareProperties.clientTaxId !== '') {
+      await electronActions.getChooseBusinessEntityData(dispatch, value)
+    }
+//todo move to login
     const assign = await gwActions.getAssign()
     await electronActions.saveAssign(assign)
     await openScanner(dispatch)
   }, [value])
+
 
   //region Main Events
   const handleTabChange = (event, newValue) => {
     setValue(newValue)
   }
 
-  const handleSelectionChange = (event) => {
+  const handleSelectionChange = async (event) => {
     const { name, value } = event.target
     setDeclareProperties(prevState => {
       return {
@@ -89,6 +98,7 @@ const Main = (props) => {
       }
     })
     if (name === 'clientTaxId') {
+      await electronActions.getChooseBusinessEntityData(dispatch, value)
       handleReset()
     }
   }
@@ -157,7 +167,6 @@ const Main = (props) => {
   const handleDeleteImage = (data) => {
     console.log('handleDeleteImage', data)
     const timestamp = data.fileName.split('_')[6].split('.')[0]
-    console.log(timestamp)
     const eventName = 'scanned'
     electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
   }
@@ -166,7 +175,8 @@ const Main = (props) => {
     if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
       setScanDisable(true)
       setScanAlert(true)
-      handleMoveImage(1,"/Users/tony/123.jpg")
+      //fixme
+      handleMoveImage(1, '/Users/tony/123.jpg')
       // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
@@ -252,7 +262,6 @@ const Main = (props) => {
     setScanCount(0)
     setOpenDialog(true)
   }
-
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -295,14 +304,20 @@ const Main = (props) => {
                   <Tabs value={value} onChange={handleTabChange} aria-label='simple tabs example'>
                     <Tab key={0} label='已掃描圖檔' {...a11yProps(0)} />
                     <Tab label={<Badge
-                      badgeContent={appState.appData.fileLists['02'] === undefined ? 0 : appState.appData.fileLists['02']
-                        .filter(obj => {
-                          const clientTaxId = obj.filename.split('_')[1]
-                          return clientTaxId === declareProperties.clientTaxId
-                        }).length}
+                      badgeContent={appState.appData.fileLists['02'] === undefined ? 0 : appState.appData.fileLists['02'].length}
                       color='secondary' {...a11yProps(1)}>
                       已辨識憑證
                     </Badge>} />
+                    {/*<Tab label=*/}
+                    {/*       {<Badge*/}
+                    {/*   badgeContent={appState.appData.fileLists['02'] === undefined ? 0 : appState.appData.fileLists['02']*/}
+                    {/*     .filter(obj => {*/}
+                    {/*      const clientTaxId = obj.filename.split('_')[1]*/}
+                    {/*      return clientTaxId === declareProperties.clientTaxId*/}
+                    {/*    }).length}*/}
+                    {/*  color='secondary' {...a11yProps(1)}>*/}
+                    {/*  已辨識憑證*/}
+                    // {/*</Badge>} />*/}
                     <Tab key={2} label='待上傳雲端' {...a11yProps(2)} />
                   </Tabs>
                 </AppBar>

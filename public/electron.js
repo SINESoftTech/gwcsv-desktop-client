@@ -191,6 +191,10 @@ let db = null
 
 //
 function changeDbContext(businessEntityTaxId) {
+  console.log('changeDbContext', businessEntityTaxId)
+  if (businessEntityTaxId !== '') {
+
+  }
   const filePath = config.fileFolder + '/' + persistenceFolder.db + '/' + businessEntityTaxId + '.json'
   const adapter = new FileSync(filePath)
   const db = low(adapter)
@@ -209,8 +213,14 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
   return getFileContent(fullPath)
 })
 
+//todo remove
 ipcMain.handle('evidence:getFileLists', (event, ...args) => {
   return getAllFileLists()
+})
+
+ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
+  db = changeDbContext(taxId)
+  return db.read().value()
 })
 
 //todo
