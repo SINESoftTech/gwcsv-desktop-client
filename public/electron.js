@@ -266,7 +266,7 @@ ipcMain.handle('evidence:deleteData', (event, step, id) => {
   })
   return db.read().value()
 })
-//todo
+//todo rm
 ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
   let folderId = '03'
   if (eventName === 'evidenceSaved') {
@@ -359,6 +359,9 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
         .assign(data02)
         .write()
       delete data01List[id]
+      db.get('01')
+        .assign(data01List)
+        .write()
     }
   }
   return db.read().value()

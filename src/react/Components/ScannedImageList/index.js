@@ -16,6 +16,7 @@ const getRowData = async (jsonData) => {
   const keys = Object.keys(jsonData)
   for (let idx = 0; idx < keys.length; idx++) {
     let item = jsonData[keys[idx]]
+    console.log(item)
     const imageFileBlob = await getImageFileBlob(item.fullPath.result)
     const fileName = item.gwEvidenceType.result + '_' + keys[idx]
     const rowItem = {
@@ -61,7 +62,7 @@ const ScannedImageList = (props) => {
           return 1
         }
       }).reverse()
-      console.log("AA",rowData)
+      console.log('AA', rowData)
       setDataRows(rowData)
     }
     initDataRows(props.data)
