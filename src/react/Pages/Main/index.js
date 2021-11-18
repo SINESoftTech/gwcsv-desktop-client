@@ -150,10 +150,12 @@ const Main = () => {
 
 
   const handleSaveImage = (data) => {
+    console.log('handleSaveImage', data)
     const url = window.URL.createObjectURL(data.fileBlob)
     const link = document.createElement('a')
     link.href = url
-    link.setAttribute('download', data.fileName)
+    const fileNameExt = data.fullPath.split(data.fileName.split('_')[1])[1]
+    link.setAttribute('download', data.fileName + fileNameExt)
     document.body.appendChild(link)
     link.click()
   }
