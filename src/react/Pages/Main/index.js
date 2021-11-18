@@ -157,7 +157,6 @@ const Main = () => {
       })
       const domainObj = SigoutourMapper.toDomainObj(identifyResult)
       identifyResultReceivedList.push(domainObj)
-      // console.log('handleGetIdentifyResult', identifyResult)
     }
     console.log(identifyResultReceivedList)
     identifyResultReceived(dispatch, identifyResultReceivedList)
@@ -189,7 +188,7 @@ const Main = () => {
       setScanDisable(true)
       setScanAlert(true)
       //fixme
-      handleMoveImage(1, '/Users/tony/123.jpg')
+      handleMoveImage(1, 'C:\\Users\\Tony\\.gwapp\\05\\123.jpg')
       // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
