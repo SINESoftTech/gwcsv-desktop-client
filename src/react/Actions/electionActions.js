@@ -105,10 +105,10 @@ export async function identifySent(dispatch, payload) {
     }
 }
 
-export async function identifyResultReceived(dispatch, payload) {
+export async function identifyResultReceived(dispatch, businessEntityTaxId, payload) {
     try {
         if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:identifyResultReceived', payload)
+            const result = await ipcRenderer.invoke('evidence:identifyResultReceived', businessEntityTaxId, payload)
             dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
         }
     } catch (error) {

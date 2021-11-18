@@ -74,8 +74,6 @@ const Main = () => {
 
     useEffect(async () => {
         await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
-        //delete
-        console.log('useEffect 2')
         if (declareProperties.clientTaxId !== '') {
             await electronActions.getChooseBusinessEntityData(dispatch, declareProperties.clientTaxId)
         }
@@ -100,7 +98,6 @@ const Main = () => {
         })
         console.log('handleSelectionChange', name, value)
         if (name === 'clientTaxId') {
-            // await electronActions.getChooseBusinessEntityData(dispatch, value)
             handleReset()
         }
     }
@@ -142,8 +139,8 @@ const Main = () => {
         })
     }
 
+
     const handleGetIdentifyResult = async (event, data) => {
-        console.log('handleGetIdentifyResult', data)
         const keyList = Object.keys(data)
         const identifyResultReceivedList = []
         for (let i = 0; i < keyList.length; i++) {
@@ -158,8 +155,7 @@ const Main = () => {
             const domainObj = SigoutourMapper.toDomainObj(identifyResult)
             identifyResultReceivedList.push(domainObj)
         }
-        console.log(identifyResultReceivedList)
-        identifyResultReceived(dispatch, identifyResultReceivedList)
+        identifyResultReceived(dispatch,declareProperties.clientTaxId, identifyResultReceivedList)
     }
 
 

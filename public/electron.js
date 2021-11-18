@@ -361,9 +361,8 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
     }
     return db.read().value()
 })
-ipcMain.handle('evidence:identifyResultReceived', (event, identifyResult) => {
-    console.log(identifyResult)
-    // const db = getDbContext(username.taxId)
+ipcMain.handle('evidence:identifyResultReceived', (event, businessEntityTaxId, identifyResult) => {
+    const db = getDbContext(businessEntityTaxId)
     for (let i = 0; i < identifyResult.length; i++) {
         const data = identifyResult[i]
         const data02List = db.get('02').value()
