@@ -202,10 +202,9 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
 })
 
 
-// ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
-//     db = changeDbContext(taxId)
-//     return db.read().value()
-// })
+ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
+    return getDbContext(taxId).read().value()
+})
 
 //todo
 ipcMain.handle('evidence:updateData', (event, payload) => {
@@ -335,7 +334,6 @@ ipcMain.handle('evidence:getJsonFileData', (event, fullPathList) => {
 })
 
 ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
-    console.log('evidence:identifySent', sentIdentifyResult)
     const username = sentIdentifyResult['user']
     const identifyResult = sentIdentifyResult['result']
     const businessEntityTaxId = identifyResult[0].businessEntityTaxId

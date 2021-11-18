@@ -56,6 +56,7 @@ const IdentifiedEvidenceList = (props) => {
     const init = async () => {
       const result = await getAssign()
       setAssignMap(result)
+      console.log("A useEffect",props.data)
       // setLocalFiles(props.data)
       console.log('useEffect',props.data)
       // initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
