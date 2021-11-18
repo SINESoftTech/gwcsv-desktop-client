@@ -166,7 +166,7 @@ const Main = (props) => {
     if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
       setScanDisable(true)
       setScanAlert(true)
-      handleMoveImage(1,"123")
+      handleMoveImage(1,"/Users/tony/123.jpg")
       // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
@@ -179,7 +179,7 @@ const Main = (props) => {
     setScanCount(prevState => {
       return prevState + 1
     })
-    await electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
+    await electronActions.scanImages(dispatch, filePath, appState.auth.user, declareProperties)
   }
 
   const handleResultAllConfirmed = async (filesByTicketId) => {

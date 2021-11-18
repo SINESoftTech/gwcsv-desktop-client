@@ -2,12 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import { getAssign, getJsonRawData } from '../../Actions/electionActions'
-import SigoutourMapper, {
-  SIGOUTOUR_EVIDENCE_TYPE_REVERSE,
-  SIGOUTOUR_FIELD_TYPE
-} from '../../Mapper/sigoutour_mapper'
+import SigoutourMapper, { SIGOUTOUR_FIELD_TYPE } from '../../Mapper/sigoutour_mapper'
 import { validSigoutourData } from '../../Valid/valid'
-import { electronActions, sightTourActions } from '../../Context'
+import { electronActions } from '../../Context'
 import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
 import ReverseIndex from '../../Util/ReverseIndex'
 
