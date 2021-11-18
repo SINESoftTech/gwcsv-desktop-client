@@ -119,18 +119,21 @@ const Main = () => {
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
+    console.log(data)
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = declareProperties.clientTaxId
-    const sendToIdentifyData = data.map(d => {
-      return {
-        'sourceFullPath': d.fullPath,
-        'sourceFileName': d.fileName,
-        'fileBlob': d.fileBlob,
-        'accountingfirmTaxId': accountingfirmTaxId,
-        'businessEntityTaxId': businessEntityTaxId,
-        'evidenceType': d.fileName.split('_')[5].split('.')[0]
-      }
-    })
+    const sendToIdentifyData = data
+      .map(d => {
+        return {
+          'sourceFullPath': d.fullPath,
+          'sourceFileName': d.fileName,
+          'fileBlob': d.fileBlob,
+          'accountingfirmTaxId': accountingfirmTaxId,
+          'businessEntityTaxId': businessEntityTaxId,
+          'evidenceType': d.fileName.split('_')[0]
+        }
+      })
+    console.log('handleSendImageToIdentify', sendToIdentifyData)
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
     identifySent(dispatch, {
       'user': appState.auth.user.username,
@@ -151,7 +154,6 @@ const Main = () => {
 
 
   const handleSaveImage = (data) => {
-    console.log('handleSaveImage', data)
     const url = window.URL.createObjectURL(data.fileBlob)
     const link = document.createElement('a')
     link.href = url
@@ -162,18 +164,13 @@ const Main = () => {
   }
 
   const handleViewImage = (data) => {
-    //fullPath
-    console.log('handleViewImage', data)
     const windowProxy = window.open('', null, '')
     windowProxy.postMessage(JSON.stringify(data), '*')
   }
 
   const handleDeleteImage = (data) => {
-    console.log('handleDeleteImage', data)
     const id = data.fileName.split('_')[1]
-    console.log('handleDeleteImage', id)
-    //eventName and id
-    electronActions.deleteData(dispatch, '01',id)
+    electronActions.deleteData(dispatch, '01', id)
   }
 
   const handleScanImage = () => {

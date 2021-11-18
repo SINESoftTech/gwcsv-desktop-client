@@ -251,7 +251,6 @@ ipcMain.handle('evidence:updateData', (event, payload) => {
 //   return getAllFileLists()
 // })
 ipcMain.handle('evidence:deleteData', (event, step, id) => {
-  //
   const data = db.get(step)
     .value()
   delete data[id]
@@ -341,20 +340,28 @@ ipcMain.handle('evidence:getJsonFileData', (event, fullPathList) => {
 })
 
 ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
+  console.log('evidence:identifySent', sentIdentifyResult)
   const username = sentIdentifyResult['user']
   const identifyResult = sentIdentifyResult['result']
   for (let i = 0; i < identifyResult.length; i++) {
     const data = identifyResult[i]
     if (data['result']) {
-      const fileExt = data['sourceFileName'].split('.')[1]
-      const reportingPeriod = data['sourceFileName'].split('_')[2]
-      const isDeclareBusinessTax = data['sourceFileName'].split('_')[4]
-      const targetFileName = `${username}_${data['businessEntityTaxId']}_${reportingPeriod}_1_${isDeclareBusinessTax}_${data['type']}_${data['ticketId']}.${fileExt}`
-      const targetFullName = path.join(config.fileFolder, stageFolders.identifySent.folder, targetFileName)
+      const fileExt = data['sourceFullPath'].split('_')[2].split('.')[1]
+      const targetFileName = username + '_' + data['businessEntityTaxId'] + '_' + data['ticketId'] + '.' + fileExt
+      const targetFullName = path.join(config.fileFolder, persistenceFolder.image, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
+      const id = data['sourceFileName'].split('_')[1]
+      const data01List = db.get('01').value()
+      const data02 = {
+        [data['ticketId']]: data01List[id]
+      }
+      db.get('02')
+        .assign(data02)
+        .write()
+      delete data01List[id]
     }
   }
-  return getAllFileLists()
+  return db.read().value()
 })
 ipcMain.handle('evidence:identifyResultReceived', (event, identifyResult) => {
   for (let i = 0; i < identifyResult.length; i++) {
