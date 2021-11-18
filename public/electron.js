@@ -181,19 +181,14 @@ function getFileContent(fullPath) {
     }
 }
 
-let db = null
 
-//
-function changeDbContext(businessEntityTaxId) {
-    if (businessEntityTaxId === '' || businessEntityTaxId.length !== 8) {
-    } else {
-        const filePath = config.fileFolder + '/' + persistenceFolder.db + '/' + businessEntityTaxId + '.json'
-        const adapter = new FileSync(filePath)
-        const db = low(adapter)
-        db.defaults({'01': {}, '02': {}, '03': {}, '04': {}, '05': {}})
-            .write()
-        return db
-    }
+function getDbContext(businessEntityTaxId) {
+    const filePath = config.fileFolder + '/' + persistenceFolder.db + '/' + businessEntityTaxId + '.json'
+    const adapter = new FileSync(filePath)
+    const db = low(adapter)
+    db.defaults({'01': {}, '02': {}, '03': {}, '04': {}, '05': {}})
+        .write()
+    return db
 }
 
 //todo remove but not now
@@ -207,10 +202,10 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
 })
 
 
-ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
-    db = changeDbContext(taxId)
-    return db.read().value()
-})
+// ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
+//     db = changeDbContext(taxId)
+//     return db.read().value()
+// })
 
 //todo
 ipcMain.handle('evidence:updateData', (event, payload) => {
@@ -250,7 +245,8 @@ ipcMain.handle('evidence:updateData', (event, payload) => {
 //   })
 //   return getAllFileLists()
 // })
-ipcMain.handle('evidence:deleteData', (event, step, id) => {
+ipcMain.handle('evidence:deleteData', (event, businessEntityTaxId, step, id) => {
+    const db = getDbContext(businessEntityTaxId)
     const data = db.get(step)
         .value()
     delete data[id]
@@ -307,7 +303,7 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
             fullPath: {result: targetFilePath, score: [-1]}
         }
     }
-    db = changeDbContext(username.taxId)
+    const db = getDbContext(username.taxId)
     db.get('01')
         .assign(data)
         .write()
@@ -342,6 +338,8 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
     console.log('evidence:identifySent', sentIdentifyResult)
     const username = sentIdentifyResult['user']
     const identifyResult = sentIdentifyResult['result']
+    const businessEntityTaxId = identifyResult[0].businessEntityTaxId
+    const db = getDbContext(businessEntityTaxId)
     for (let i = 0; i < identifyResult.length; i++) {
         const data = identifyResult[i]
         if (data['result']) {
@@ -366,6 +364,8 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
     return db.read().value()
 })
 ipcMain.handle('evidence:identifyResultReceived', (event, identifyResult) => {
+    console.log(identifyResult)
+    // const db = getDbContext(username.taxId)
     for (let i = 0; i < identifyResult.length; i++) {
         const data = identifyResult[i]
         const data02List = db.get('02').value()

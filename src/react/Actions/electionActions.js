@@ -6,7 +6,6 @@ const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
 export const saveAssign = async (payload) => {
-  console.log('saveAssign', payload)
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:saveAssign', payload)
@@ -28,10 +27,10 @@ export async function updateData(payload) {
   }
 }
 
-export async function deleteData(dispatch, step, id) {
+export async function deleteData(dispatch,businessEntityTaxId, step, id) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:deleteData', step, id)
+      const result = await ipcRenderer.invoke('evidence:deleteData',businessEntityTaxId, step, id)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
@@ -68,17 +67,17 @@ export async function getJsonRawData(data, clientTaxId) {
   }
 }
 
-export async function getChooseBusinessEntityData(dispatch, taxId) {
-  try {
-    if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData', taxId)
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
-      return result
-    }
-  } catch (error) {
-    dispatch({ type: actionTypes.GET_FILE_LIST_ERROR, payload: error })
-  }
-}
+// export async function getChooseBusinessEntityData(dispatch, taxId) {
+//   try {
+//     if (ipcRenderer) {
+//       const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData', taxId)
+//       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+//       return result
+//     }
+//   } catch (error) {
+//     dispatch({ type: actionTypes.GET_FILE_LIST_ERROR, payload: error })
+//   }
+// }
 
 export async function scanImages(dispatch, filePath, username, declareProperties) {
   try {
@@ -91,7 +90,7 @@ export async function scanImages(dispatch, filePath, username, declareProperties
   }
 }
 
-export async function fileScanned(dispatch, payload) {
+export async function fileScanned(dispatch) {
   dispatch({ type: 'LOGOUT' })
 }
 

@@ -75,9 +75,10 @@ const Main = () => {
   useEffect(async () => {
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
     // console.log('useEffect main', declareProperties)
-    if (declareProperties.clientTaxId !== '') {
-      await electronActions.getChooseBusinessEntityData(dispatch, value)
-    }
+    //delete
+    // if (declareProperties.clientTaxId !== '') {
+    //   await electronActions.getChooseBusinessEntityData(dispatch, value)
+    // }
 //todo move to login
     const assign = await gwActions.getAssign()
     await electronActions.saveAssign(assign)
@@ -179,8 +180,9 @@ const Main = () => {
   }
 
   const handleDeleteImage = (data) => {
+    console.log('handleDelete',data)
     const id = data.fileName.split('_')[1]
-    electronActions.deleteData(dispatch, '01', id)
+    electronActions.deleteData(dispatch,data.businessEntityTaxId, '01', id)
   }
 
   const handleScanImage = () => {
