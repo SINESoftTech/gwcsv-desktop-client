@@ -58,37 +58,30 @@ export async function sendToIdentify(identifyData) {
   return resultList
 }
 
-export async function getIdentifyResult(fileObj) {
+export async function getIdentifyResult(payload) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
-    const reportingPeriod = fileObj.filename.split('_')[2]
-    const deductionType = fileObj.filename.split('_')[3]
-    const gwEvidenceType = fileObj.filename.split('_')[5]
-    const ticketId = fileObj.filename.split('_')[6].split('.')[0]
     const formData = new FormData()
     formData.append('token', token)
-    formData.append('ticket', ticketId)
+    formData.append('ticket', payload.ticketId)
     const result = await signtTourAxios.post(apiPath, formData)
     if (result.data.result === undefined) {
+      const status = result.data.pageList[0]['photoList'][0].result.length === 0 ? 'failed' : 'completed'
       return {
-        'reportingPeriod': reportingPeriod,
-        'deductionType': deductionType,
-        'gwEvidenceType': gwEvidenceType,
-        'ticketId': ticketId,
-        'sourceFullPath': fileObj.fullPath,
-        'sourceFileName': fileObj.filename,
-        'status': 'completed',
+        'reportingPeriod': payload.reportingPeriod,
+        'deductionType': payload.deductionType,
+        'gwEvidenceType': payload.gwEvidenceType,
+        'ticketId': payload.ticketId,
+        'status': status,
         'data': result.data
       }
     }
     return {
-      'reportingPeriod': reportingPeriod,
-      'deductionType': deductionType,
-      'gwEvidenceType': gwEvidenceType,
-      'ticketId': ticketId,
-      'sourceFullPath': fileObj.fullPath,
-      'sourceFileName': fileObj.filename,
+      'reportingPeriod': payload.reportingPeriod,
+      'deductionType': payload.deductionType,
+      'gwEvidenceType': payload.gwEvidenceType,
+      'ticketId': payload.ticketId,
       'status': 'failed'
     }
   } catch (error) {

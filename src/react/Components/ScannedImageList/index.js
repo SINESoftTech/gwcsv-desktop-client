@@ -45,14 +45,11 @@ const isScanEnable = (taxIdSelected) => {
 
 const ScannedImageList = (props) => {
 
-  console.log('ScannedImageList props', props)
-
   const [dataRows, setDataRows] = useState([])
   const [selectionDataRows, setSelectionDataRow] = useState({ selection: [] })
   useEffect(() => {
     const initDataRows = async (data) => {
       let rowData = (props.data) ? await getRowData(data) : []
-      console.log('initDataRows', rowData)
       rowData = rowData.sort((a, b) => {
         const fileName1 = a.fileName.split('_')[1].split('.')[0]
         const fileName2 = b.fileName.split('_')[1].split('.')[0]
@@ -62,7 +59,6 @@ const ScannedImageList = (props) => {
           return 1
         }
       }).reverse()
-      console.log('AA', rowData)
       setDataRows(rowData)
     }
     initDataRows(props.data)

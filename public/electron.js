@@ -185,15 +185,15 @@ let db = null
 //
 function changeDbContext(businessEntityTaxId) {
   console.log('changeDbContext', businessEntityTaxId)
-  if (businessEntityTaxId !== '') {
-
+  if (businessEntityTaxId === '' || businessEntityTaxId.length !== 8) {
+  } else {
+    const filePath = config.fileFolder + '/' + persistenceFolder.db + '/' + businessEntityTaxId + '.json'
+    const adapter = new FileSync(filePath)
+    const db = low(adapter)
+    db.defaults({ '01': {}, '02': {}, '03': {}, '04': {}, '05': {} })
+      .write()
+    return db
   }
-  const filePath = config.fileFolder + '/' + persistenceFolder.db + '/' + businessEntityTaxId + '.json'
-  const adapter = new FileSync(filePath)
-  const db = low(adapter)
-  db.defaults({ '01': {}, '02': {}, '03': {}, '04': {}, '05': {} })
-    .write()
-  return db
 }
 
 //todo remove but not now
@@ -308,7 +308,6 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
       fullPath: { result: targetFilePath, score: [-1] }
     }
   }
-  db = changeDbContext(username.taxId)
   db.get('01')
     .assign(data)
     .write()
@@ -367,15 +366,22 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
   return db.read().value()
 })
 ipcMain.handle('evidence:identifyResultReceived', (event, identifyResult) => {
+  console.log(identifyResult)
   for (let i = 0; i < identifyResult.length; i++) {
     const data = identifyResult[i]
-    console.log(data)
-    const targetFolder = path.join(config.fileFolder, stageFolders.identifyResultReceived.folder)
-    const fileNameWithoutExt = data.sourceFileName.split('.')[0]
-    fse.moveSync(data.sourceFullPath, path.join(targetFolder, data.sourceFileName))
-    fse.writeJSONSync(path.join(targetFolder, fileNameWithoutExt + '_sightour_result.json'), data.data)
+    const data02List = db.get('02').value()
+    const data03 = {
+      [data['ticketId'].result]: data
+    }
+    db.get('03')
+      .assign(data03)
+      .write()
+    delete data02List[data['ticketId'].result]
+    db.get('02')
+      .assign(data02List)
+      .write()
   }
-  return getAllFileLists()
+  return db.read().value()
 })
 
 

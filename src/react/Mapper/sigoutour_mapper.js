@@ -156,7 +156,7 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
     'name': '其他',
     'value': ''
   },
-  '':{
+  '': {
     'id': '',
     'name': '',
     'value': ''
@@ -253,9 +253,10 @@ const parseToDomainObjStrategy = {
 class SigoutourMapperClass {
 
   toDomainObj(jsonData) {
-    const geEvidenceType = jsonData.gwEvidenceType
+    console.log('toDomainObj', jsonData)
+    const gwEvidenceType = jsonData.gwEvidenceType.result
     if (jsonData.status === 'completed') {
-      return parseToDomainObjStrategy[geEvidenceType](jsonData)
+      return parseToDomainObjStrategy[gwEvidenceType](jsonData)
     }
     return {
       declarationId: { result: '', score: [-1] },
@@ -272,7 +273,7 @@ class SigoutourMapperClass {
       deductionType: { result: jsonData['deductionType'], score: [-1] },
       ticketId: { result: jsonData['ticketId'], score: [-1] },
       errorMsg: { result: '', score: [-1] },
-      gwEvidenceType: { result: geEvidenceType, score: [-1] },
+      gwEvidenceType: { result: gwEvidenceType, score: [-1] },
       evidenceType: { result: '', score: [-1] },
       zeroTaxSalesValue: { result: 0, score: [-1] },
       evidenceNumber: { result: '', score: [-1] },

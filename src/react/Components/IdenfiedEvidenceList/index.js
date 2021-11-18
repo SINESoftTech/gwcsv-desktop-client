@@ -34,6 +34,8 @@ export const handleSendConfirmedResultData = (field, editData, sigoutourJson) =>
 
 const IdentifiedEvidenceList = (props) => {
 
+  console.log("identifiedEvidenceList",props)
+
   const [rowData, setRowData] = useState([])
   const [localFiles, setLocalFiles] = useState(props.data)
   const [selectionModel, setSelectionModel] = React.useState([])
@@ -54,9 +56,11 @@ const IdentifiedEvidenceList = (props) => {
     const init = async () => {
       const result = await getAssign()
       setAssignMap(result)
-      setLocalFiles(props.data)
-      initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
+      // setLocalFiles(props.data)
+      console.log('useEffect',props.data)
+      // initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
     }
+
     init()
   }, [props.data, props.declareProperties.clientTaxId])
 

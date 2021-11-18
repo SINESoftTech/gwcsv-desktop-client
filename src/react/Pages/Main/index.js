@@ -74,7 +74,7 @@ const Main = () => {
 
   useEffect(async () => {
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
-
+    // console.log('useEffect main', declareProperties)
     if (declareProperties.clientTaxId !== '') {
       await electronActions.getChooseBusinessEntityData(dispatch, value)
     }
@@ -98,8 +98,9 @@ const Main = () => {
         [name]: value
       }
     })
+    console.log('handleSelectionChange', name, value)
     if (name === 'clientTaxId') {
-      await electronActions.getChooseBusinessEntityData(dispatch, value)
+      // await electronActions.getChooseBusinessEntityData(dispatch, value)
       handleReset()
     }
   }
@@ -142,13 +143,23 @@ const Main = () => {
   }
 
   const handleGetIdentifyResult = async (event, data) => {
+    console.log('handleGetIdentifyResult', data)
+    const keyList = Object.keys(data)
     const identifyResultReceivedList = []
-    for (let i = 0; i < data.length; i++) {
-      const fileObj = data[i]
-      const identifyResult = await getIdentifyResult(fileObj)
-      identifyResult.data = SigoutourMapper.toDomainObj(identifyResult)
-      identifyResultReceivedList.push(identifyResult)
+    for (let i = 0; i < keyList.length; i++) {
+      const ticketId = keyList[i]
+      const json = data[keyList[i]]
+      const identifyResult = await getIdentifyResult({
+        'reportingPeriod': json.reportingPeriod,
+        'deductionType': json.deductionType,
+        'gwEvidenceType': json.gwEvidenceType,
+        'ticketId': ticketId
+      })
+      const domainObj = SigoutourMapper.toDomainObj(identifyResult)
+      identifyResultReceivedList.push(domainObj)
+      // console.log('handleGetIdentifyResult', identifyResult)
     }
+    console.log(identifyResultReceivedList)
     identifyResultReceived(dispatch, identifyResultReceivedList)
   }
 
