@@ -181,10 +181,6 @@ function getFileContent(fullPath) {
   if (R.endsWith('.jpeg', fullPath)) {
     return fse.readFileSync(fullPath)
   }
-  //todo remove
-  if (R.endsWith('.json', fullPath)) {
-    return fse.readJSONSync(fullPath)
-  }
 }
 
 let db = null
@@ -213,10 +209,6 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
   return getFileContent(fullPath)
 })
 
-//todo remove
-ipcMain.handle('evidence:getFileLists', (event, ...args) => {
-  return getAllFileLists()
-})
 
 ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
   db = changeDbContext(taxId)

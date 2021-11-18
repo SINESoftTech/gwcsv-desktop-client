@@ -11,22 +11,21 @@ const electron = isElectron() ? window.electron : null
 const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-const getRowData = async (fileObjects, username, clientTaxId) => {
+const getRowData = async (jsonData) => {
   let rowData = []
-  for (let idx = 0; idx < fileObjects.length; idx++) {
-    let item = fileObjects[idx]
-    if (clientTaxId && item.filename.indexOf(username) > -1 && item.filename.indexOf(clientTaxId) > -1) {
-      let imageFileBlob = await getImageFileBlob(item.fullPath)
-      let rowItem = {
-        id: idx + 1,
-        fileName: item.filename,
-        fileBlob: imageFileBlob,
-        imageUrl: URL.createObjectURL(imageFileBlob),
-        fullPath: item.fullPath
-      }
-      rowData.push(rowItem)
-      //FIXME
+  const keys = Object.keys(jsonData)
+  for (let idx = 0; idx < keys.length; idx++) {
+    let item = jsonData[keys[idx]]
+    const imageFileBlob = await getImageFileBlob(item.fullPath.result)
+    const fileName = item.gwEvidenceType.result + '_' + keys[idx]
+    const rowItem = {
+      id: idx + 1,
+      fileName: fileName,
+      fileBlob: imageFileBlob,
+      imageUrl: URL.createObjectURL(imageFileBlob),
+      fullPath: item.fullPath.result
     }
+    rowData.push(rowItem)
   }
   return rowData
 }
@@ -50,23 +49,22 @@ const ScannedImageList = (props) => {
   const [dataRows, setDataRows] = useState([])
   const [selectionDataRows, setSelectionDataRow] = useState({ selection: [] })
   useEffect(() => {
-    const initDataRows = async (data, username, clientTaxId) => {
-      console.log('in useEffect clientTaxId', clientTaxId)
-      console.log('in useEffect data', props.data)
-      let rowData = (props.data) ? await getRowData(data, username, clientTaxId) : []
-      console.log('in useEffect', rowData)
+    const initDataRows = async (data) => {
+      let rowData = (props.data) ? await getRowData(data) : []
+      console.log('initDataRows', rowData)
       rowData = rowData.sort((a, b) => {
-        const fileName1 = a.fileName.split('_')[6].split('.')[0]
-        const fileName2 = b.fileName.split('_')[6].split('.')[0]
+        const fileName1 = a.fileName.split('_')[1].split('.')[0]
+        const fileName2 = b.fileName.split('_')[1].split('.')[0]
         if (fileName1 >= fileName2) {
           return 0
         } else {
           return 1
         }
       }).reverse()
+      console.log("AA",rowData)
       setDataRows(rowData)
     }
-    initDataRows(props.data, props.username, props.declareProperties.clientTaxId)
+    initDataRows(props.data)
   }, [props.data, props.declareProperties])
 
   const classes = scannedImageListStyles()
@@ -129,7 +127,7 @@ const ScannedImageList = (props) => {
                 }
               />
               <ImageListItemBar
-                title={item.fileName.split('_')[5] +'_'+ item.fileName.split('_')[6]}
+                title={item.fileName}
                 actionIcon={
                   <div>
                     <IconButton aria-label={`info about ${item.fileName}`} className={classes.icon}
