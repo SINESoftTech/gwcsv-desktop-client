@@ -28,6 +28,17 @@ export async function updateData(payload) {
   }
 }
 
+export async function deleteData(dispatch, step, id) {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:deleteData', step, id)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+    }
+  } catch (error) {
+    console.log('deleteData', error)
+  }
+}
+
 export async function deleteSigoutourData(dispatch, eventName, ticketId) {
   try {
     if (ipcRenderer) {
@@ -57,10 +68,10 @@ export async function getJsonRawData(data, clientTaxId) {
   }
 }
 
-export async function getChooseBusinessEntityData(dispatch,taxId) {
+export async function getChooseBusinessEntityData(dispatch, taxId) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData',taxId)
+      const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData', taxId)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }

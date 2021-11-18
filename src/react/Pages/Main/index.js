@@ -25,6 +25,7 @@ import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
 import {
+  deleteData,
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
@@ -162,15 +163,17 @@ const Main = () => {
 
   const handleViewImage = (data) => {
     //fullPath
+    console.log('handleViewImage', data)
     const windowProxy = window.open('', null, '')
     windowProxy.postMessage(JSON.stringify(data), '*')
   }
 
   const handleDeleteImage = (data) => {
     console.log('handleDeleteImage', data)
-    const timestamp = data.fileName.split('_')[6].split('.')[0]
-    const eventName = 'scanned'
-    electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
+    const id = data.fileName.split('_')[1]
+    console.log('handleDeleteImage', id)
+    //eventName and id
+    electronActions.deleteData(dispatch, '01',id)
   }
 
   const handleScanImage = () => {
@@ -310,16 +313,6 @@ const Main = () => {
                       color='secondary' {...a11yProps(1)}>
                       已辨識憑證
                     </Badge>} />
-                    {/*<Tab label=*/}
-                    {/*       {<Badge*/}
-                    {/*   badgeContent={appState.appData.fileLists['02'] === undefined ? 0 : appState.appData.fileLists['02']*/}
-                    {/*     .filter(obj => {*/}
-                    {/*      const clientTaxId = obj.filename.split('_')[1]*/}
-                    {/*      return clientTaxId === declareProperties.clientTaxId*/}
-                    {/*    }).length}*/}
-                    {/*  color='secondary' {...a11yProps(1)}>*/}
-                    {/*  已辨識憑證*/}
-                    // {/*</Badge>} />*/}
                     <Tab key={2} label='待上傳雲端' {...a11yProps(2)} />
                   </Tabs>
                 </AppBar>

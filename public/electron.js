@@ -142,9 +142,6 @@ const stageFolders = {
   'evidenceUploaded': { step: '05', folder: '05' }
 }
 
-function getAllDataLists() {
-
-}
 
 //todo refactor
 function getAllFileLists() {
@@ -160,8 +157,8 @@ function getAllFileLists() {
 }
 
 function openFile(directory) {
-  var fileInfo = fse.readdirSync(directory)
-  var fileResult = fileInfo.filter(filename => {
+  let fileInfo = fse.readdirSync(directory)
+  let fileResult = fileInfo.filter(filename => {
     return filename !== '.DS_Store'
   }).map(filename => {
     let fileObj = {
@@ -253,7 +250,23 @@ ipcMain.handle('evidence:updateData', (event, payload) => {
 //   })
 //   return getAllFileLists()
 // })
-
+ipcMain.handle('evidence:deleteData', (event, step, id) => {
+  //
+  const data = db.get(step)
+    .value()
+  delete data[id]
+  db.get(step)
+    .assign(data)
+    .write()
+  const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
+  const imageFileList = openFile(targetFolderPath)
+  imageFileList.filter(obj => {
+    return obj.filename.split('_')[2].split('.')[0] === id
+  }).forEach(obj => {
+    fse.removeSync(obj.fullPath)
+  })
+  return db.read().value()
+})
 //todo
 ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
   let folderId = '03'
