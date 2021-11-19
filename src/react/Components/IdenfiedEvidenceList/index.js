@@ -55,7 +55,7 @@ const IdentifiedEvidenceList = (props) => {
       setRowData(parseJsonDataList)
     }
     init()
-  }, [localFiles,props.data, props.declareProperties.clientTaxId])
+  }, [props.data, props.declareProperties.clientTaxId])
 
 
   //TODO REFACTOR
@@ -95,7 +95,7 @@ const IdentifiedEvidenceList = (props) => {
     //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
     // }
 
-    setLocalFiles(result)
+    // setLocalFiles(result)
     // initDataRows(result['03'], props.declareProperties.clientTaxId, assignMap)
   }
 

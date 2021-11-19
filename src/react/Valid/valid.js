@@ -108,23 +108,23 @@ const validEvidenceType = {
 
 const validTaxType = {
   '1': (json) => {
-    const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
-    const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'] === 0 ? '' : 'dutyFreeSalesValue'
-    const isTaxableSalesValueGte0 = json['taxableSalesValue'] >= 0 ? '' : 'taxableSalesValue'
+    const isZeroTaxSalesValueEq0 = parseInt(json['zeroTaxSalesValue']) === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueEq0 = parseInt(json['dutyFreeSalesValue']) === 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueGte0 = parseInt(json['taxableSalesValue']) >= 0 ? '' : 'taxableSalesValue'
     return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueEq0, isTaxableSalesValueGte0]
   },
   '3': (json) => {
-    const isZeroTaxSalesValueEq0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
-    const isDutyFreeSalesValueGte0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
-    const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
-    const isBusinessTaxValueEq0 = json['businessTaxValue'] === 0 ? '' : 'businessTaxValue'
+    const isZeroTaxSalesValueEq0 = parseInt(json['zeroTaxSalesValue']) === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueGte0 = parseInt(json['dutyFreeSalesValue']) >= 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueEq0 = parseInt(json['taxableSalesValue']) === 0 ? '' : 'taxableSalesValue'
+    const isBusinessTaxValueEq0 = parseInt(json['businessTaxValue']) === 0 ? '' : 'businessTaxValue'
     return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueGte0, isTaxableSalesValueEq0, isBusinessTaxValueEq0]
   },
   '2': (json) => {
-    const isZeroTaxSalesValueGte0 = json['zeroTaxSalesValue'] === 0 ? '' : 'zeroTaxSalesValue'
-    const isDutyFreeSalesValueEq0 = json['dutyFreeSalesValue'] >= 0 ? '' : 'dutyFreeSalesValue'
-    const isTaxableSalesValueEq0 = json['taxableSalesValue'] === 0 ? '' : 'taxableSalesValue'
-    const isBusinessTaxValueEq0 = json['businessTaxValue'] === 0 ? '' : 'businessTaxValue'
+    const isZeroTaxSalesValueGte0 = parseInt(json['zeroTaxSalesValue']) === 0 ? '' : 'zeroTaxSalesValue'
+    const isDutyFreeSalesValueEq0 = parseInt(json['dutyFreeSalesValue']) >= 0 ? '' : 'dutyFreeSalesValue'
+    const isTaxableSalesValueEq0 = parseInt(json['taxableSalesValue']) === 0 ? '' : 'taxableSalesValue'
+    const isBusinessTaxValueEq0 = parseInt(json['businessTaxValue']) === 0 ? '' : 'businessTaxValue'
     return [isZeroTaxSalesValueGte0, isDutyFreeSalesValueEq0, isTaxableSalesValueEq0, isBusinessTaxValueEq0]
   },
   '': (json) => {
@@ -136,11 +136,11 @@ const validTaxType = {
 }
 
 const validB2B = (json) => {
-  const taxableSalesValue = json['taxableSalesValue']
-  const businessTaxValue = json['businessTaxValue']
-  const withoutTaxAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
+  const taxableSalesValue = parseInt(json['taxableSalesValue'])
+  const businessTaxValue = parseInt(json['businessTaxValue'])
+  const withoutTaxAmount = parseInt(json['taxableSalesValue']) + parseInt(json['zeroTaxSalesValue']) + parseInt(json['dutyFreeSalesValue'])
   const businessCalcTaxValueResult = Math.round(taxableSalesValue * 0.05)
-  const calcResultValue = businessCalcTaxValueResult + withoutTaxAmount - json['totalAmount']
+  const calcResultValue = businessCalcTaxValueResult + withoutTaxAmount - parseInt(json['totalAmount'])
   if (calcResultValue <= 1 && calcResultValue >= 0) {
     return []
   }
@@ -151,18 +151,18 @@ const validB2B = (json) => {
 }
 
 const validB2C = (json) => {
-  const taxableSalesValue = json['taxableSalesValue']
-  const businessTaxValue = json['businessTaxValue']
-  const withoutTaxAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
+  const taxableSalesValue = parseInt(json['taxableSalesValue'])
+  const businessTaxValue = parseInt(json['businessTaxValue'])
+  const withoutTaxAmount = parseInt(json['taxableSalesValue']) + parseInt(json['zeroTaxSalesValue']) + parseInt(json['dutyFreeSalesValue'])
   const calcBusinessTaxValueResult = Math.round(Math.round(json['totalAmount'] / 1.05) * 0.05)
   const isEqualBusinessTaxValue = calcBusinessTaxValueResult === businessTaxValue
   const calcTotalAmount = calcBusinessTaxValueResult + withoutTaxAmount
-  const isEqualTotalAmount = calcTotalAmount === json['totalAmount']
+  const isEqualTotalAmount = calcTotalAmount === parseInt(json['totalAmount'])
   if (isEqualBusinessTaxValue && isEqualTotalAmount) {
     return []
   }
-  const calcTaxableSaleValue = Math.round(json['totalAmount'] / 1.05)
-  const calcBusinessTaxValue = json['totalAmount'] - calcTaxableSaleValue
+  const calcTaxableSaleValue = Math.round(parseInt(json['totalAmount']) / 1.05)
+  const calcBusinessTaxValue = parseInt(json['totalAmount']) - calcTaxableSaleValue
   const isEqualBusinessTaxValueCase2 = calcBusinessTaxValue === businessTaxValue
   const isEqualTaxableSaleValue = calcTaxableSaleValue === taxableSalesValue
   if (isEqualTaxableSaleValue && isEqualBusinessTaxValueCase2) {
@@ -172,9 +172,6 @@ const validB2C = (json) => {
 }
 
 const validTax = (json) => {
-  if (json['taxType'] !== 1) {
-    return []
-  }
   switch (json['gwEvidenceType']) {
     case 'A2001':
       return validB2C(json)
@@ -184,16 +181,19 @@ const validTax = (json) => {
 }
 
 const validTaxMoney = (json) => {
+  console.log('validTaxMoney', json)
   let validResult = validTaxType[json['taxType']](json).concat(validTax(json))
-  const withoutTotalAmount = json['taxableSalesValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
-  const totalAmount = withoutTotalAmount + json['businessTaxValue']
-  if (totalAmount !== json['totalAmount'] || totalAmount === 0) {
+
+  const withoutTotalAmount = parseInt(json['taxableSalesValue']) + parseInt(json['zeroTaxSalesValue']) + parseInt(json['dutyFreeSalesValue'])
+  const totalAmount = withoutTotalAmount + parseInt(json['businessTaxValue'])
+  if (totalAmount !== parseInt(json['totalAmount']) || totalAmount === 0) {
     validResult.push('totalAmount', 'zeroTaxSalesValue', 'businessTaxValue', 'dutyFreeSalesValue', 'taxableSalesValue')
   }
-  const payAmount = totalAmount + json['otherFee']
-  if (payAmount !== json['totalPayAmount'] || payAmount === 0) {
+  const payAmount = totalAmount + parseInt(json['otherFee'])
+  if (payAmount !== parseInt(json['totalPayAmount']) || payAmount === 0) {
     validResult.push('totalAmount', 'otherFee', 'totalPayAmount')
   }
+  console.log('validTaxMoney', validResult)
   return [...new Set(validResult)]
 }
 
