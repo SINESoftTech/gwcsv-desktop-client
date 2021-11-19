@@ -86,20 +86,17 @@ const IdentifiedEvidenceList = (props) => {
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
   const handleEditRow = async (editData, field = '') => {
-    //todo refactor read only one file and save
     console.log('handleEditRow', editData)
     console.log('handleEditRow', field)
     const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
     jsonData[field].result = editData[field]
     const result = await electronActions.updateData(props.declareProperties.clientTaxId, jsonData)
-
     //todo sendTo feedback
     // const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
     // if (!validResult.includes(field)) {
     //   const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
     //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
     // }
-    console.log('handleEditRow', result)
     const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, assignMap)
     setLocalFiles(result)
     setRowData(validResult)
@@ -107,7 +104,8 @@ const IdentifiedEvidenceList = (props) => {
 
 
   const handleDelete = async (ticket) => {
-    await props.OnDeleteEvdience('identifyResultReceived', ticket)
+    //businessEntityTaxId, step, ticketId
+    await props.OnDeleteEvdience(props.declareProperties.clientTaxId, '03', ticket)
   }
 
   return (
