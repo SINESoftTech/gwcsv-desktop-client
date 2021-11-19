@@ -43,8 +43,6 @@ const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => {
 
 const IdentifiedEvidenceList = (props) => {
 
-  console.log('identifiedEvidenceList', props)
-
   const [rowData, setRowData] = useState([])
   const [localFiles, setLocalFiles] = useState(props.data)
   const [selectionModel, setSelectionModel] = React.useState([])
@@ -56,7 +54,9 @@ const IdentifiedEvidenceList = (props) => {
       const assignMap = await getAssign()
       setAssignMap(assignMap)
       setLocalFiles(props.data)
-      setRowData(validEvidence(props.data['03'], props.declareProperties.clientTaxId, assignMap))
+      if (Object.keys(props.data).length > 0) {
+        setRowData(validEvidence(props.data['03'], props.declareProperties.clientTaxId, assignMap))
+      }
     }
 
     init()
@@ -90,13 +90,13 @@ const IdentifiedEvidenceList = (props) => {
     console.log('handleEditRow', field)
     const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
     jsonData[field].result = editData[field]
+    const data = validData(props.declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData['ticketId'].result, 1), assignMap)['cellHighlight']
+    if(!data.includes(field)){
+      //todo send feedback
+      //   const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
+      //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
+    }
     const result = await electronActions.updateData(props.declareProperties.clientTaxId, jsonData)
-    //todo sendTo feedback
-    // const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
-    // if (!validResult.includes(field)) {
-    //   const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
-    //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
-    // }
     const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, assignMap)
     setLocalFiles(result)
     setRowData(validResult)
@@ -104,7 +104,6 @@ const IdentifiedEvidenceList = (props) => {
 
 
   const handleDelete = async (ticket) => {
-    //businessEntityTaxId, step, ticketId
     await props.OnDeleteEvdience(props.declareProperties.clientTaxId, '03', ticket)
   }
 
