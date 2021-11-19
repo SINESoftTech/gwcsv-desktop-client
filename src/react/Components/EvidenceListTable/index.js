@@ -9,11 +9,17 @@ const getRowClassName = (params) => {
 }
 
 const EvidenceList = (props) => {
-  useEffect(() => {
-    setDataRows(props.data)
-  }, [props.data])
+
 
   const [dataRows, setDataRows] = useState(props.data)
+
+  useEffect(() => {
+    // console.log('evidenceList', props.data)
+    setDataRows(props.data)
+    // console.log('set evidenceList', props.data)
+  }, [props.data])
+
+
   const [pageNumber, setPageNumber] = useState(0)
   const [pageSize, setPageSize] = useState(10)
 
@@ -36,7 +42,7 @@ const EvidenceList = (props) => {
     }
     if (event.target.name === 'gwEvidenceType') {
       param.row['gwEvidenceType'] = event.target.value
-      props.handleEditRow(param.row)
+      props.handleEditRow(param.row, 'gwEvidenceType')
     }
     if (event.target.innerText === '刪除') {
       const ticketId = param.row.id
@@ -44,13 +50,10 @@ const EvidenceList = (props) => {
     }
   }
 
-  const handlePageChange = (e) => {
-    setPageNumber(e)
-  }
+  const handlePageChange = (e) => setPageNumber(e)
 
-  const handlePageSizeChange = (e) => {
-    setPageSize(e)
-  }
+  const handlePageSizeChange = (e) => setPageSize(e)
+
   return (
     <div style={{ height: 650, width: '100%' }}>
       <DataGrid rows={dataRows}

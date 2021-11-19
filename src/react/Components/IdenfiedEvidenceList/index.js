@@ -48,12 +48,14 @@ const IdentifiedEvidenceList = (props) => {
       setLocalFiles(props.data)
       const parseJsonDataList = Object.keys(props.data['03']).map((ticketId, idx) => {
         const obj = props.data['03'][ticketId]
+
+        // return SigoutourMapper.toView(obj, ticketId, idx + 1)
         return validSigoutourData(props.declareProperties.clientTaxId, SigoutourMapper.toView(obj, ticketId, idx + 1), assignMap)
       })
       setRowData(parseJsonDataList)
     }
     init()
-  }, [props.data, props.declareProperties.clientTaxId])
+  }, [localFiles,props.data, props.declareProperties.clientTaxId])
 
 
   //TODO REFACTOR
@@ -84,7 +86,6 @@ const IdentifiedEvidenceList = (props) => {
     console.log('handleEditRow', field)
     const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
     jsonData[field].result = editData[field]
-    console.log(jsonData)
     const result = await electronActions.updateData(props.declareProperties.clientTaxId,jsonData)
 
     //todo sendTo feedback
@@ -94,7 +95,7 @@ const IdentifiedEvidenceList = (props) => {
     //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
     // }
 
-    // setLocalFiles(result)
+    setLocalFiles(result)
     // initDataRows(result['03'], props.declareProperties.clientTaxId, assignMap)
   }
 

@@ -206,12 +206,9 @@ ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
   return getDbContext(taxId).read().value()
 })
 
-//todo
 ipcMain.handle('evidence:updateData', (event, businessEntityTaxId, payload) => {
-  console.log('updateData', payload)
   const ticketId = payload['ticketId'].result
   const db = getDbContext(businessEntityTaxId)
-
   db.get('03')
     .assign({ [ticketId]: payload })
     .write()

@@ -22,8 +22,8 @@ const validTaxId = (taxId) => {
 const validSigoutourData = (clientTaxId, json, assignMap) => {
   console.log('valid', clientTaxId, json)
   let validResult = validTaxMoney(json)
-  const isCustom = json['gwEvidenceType'] === '海關代徵營業稅繳納證'
-  console.log('validSigoutourData',json)
+  const isCustom = json['gwEvidenceType'] === 'A8001'
+
   if (!isCustom && (json['sellerTaxId'].length !== 8 || !validTaxId(json['sellerTaxId']))) {
     validResult.push('sellerTaxId')
   }
@@ -40,6 +40,7 @@ const validSigoutourData = (clientTaxId, json, assignMap) => {
       return value !== ''
     })
   json['cellHighlight'] = json['cellHighlight'].length > 0 ? json['cellHighlight'].concat('sn') : json['cellHighlight']
+  console.log('valid result', json)
   return json
 }
 
@@ -72,46 +73,20 @@ const validBill = (json) => {
 }
 
 const validEvidenceType = {
-  '三聯式統一發票': (json, assignMap) => {
-    return validGUI(21, json, assignMap)
-  },
-  '二聯式收銀發票': (json, assignMap) => {
-    return validGUI(22, json, assignMap)
-  },
-  '三聯式收銀機發票': (json, assignMap) => {
-    return validGUI(25, json, assignMap)
-  },
-  '電子發票證明聯-格式一': (json, assignMap) => {
-    return validGUI(25, json, assignMap)
-  },
-  '電子發票證明聯-格式二': (json, assignMap) => {
-    return validGUI(25, json, assignMap)
-  },
-  '電力帳單': (json, assignMap) => {
-    return validBill(json)
-  },
-  '水費帳單-台灣自來水': (json, assignMap) => {
-    return validBill(json)
-  },
-  '水費帳單-台北自來水': (json, assignMap) => {
-    return validBill(json)
-  },
-  '電信費帳單-中華電信': (json, assignMap) => {
-    return validBill(json)
-  },
-  '電信費帳單-台灣大哥大': (json, assignMap) => {
-    return validBill(json)
-  },
-  '電信費帳單-台灣之星': (json, assignMap) => {
-    return validBill(json)
-  },
-  '電信費帳單-遠傳': (json, assignMap) => {
-    return validBill(json)
-  },
-  '電信費帳單-亞太': (json, assignMap) => {
-    return validBill(json)
-  },
-  '海關代徵營業稅繳納證': (json, assignMap) => {
+  'A1001': (json, assignMap) => validGUI(21, json, assignMap),
+  'A2001': (json, assignMap) => validGUI(22, json, assignMap),
+  'A5001': (json, assignMap) => validGUI(25, json, assignMap),
+  'A5002': (json, assignMap) => validGUI(25, json, assignMap),
+  'A5003': (json, assignMap) => validGUI(25, json, assignMap),
+  'A5010': (json, assignMap) => validBill(json),
+  'A5020': (json, assignMap) => validBill(json),
+  'A5021': (json, assignMap) => validBill(json),
+  'A5030': (json, assignMap) => validBill(json),
+  'A5031': (json, assignMap) => validBill(json),
+  'A5033': (json, assignMap) => validBill(json),
+  'A5032': (json, assignMap) => validBill(json),
+  'A5034': (json, assignMap) => validBill(json),
+  'A8001': (json, assignMap) => {
     const evidenceNumber = json['evidenceNumber']
     const isLenEqual14 = evidenceNumber !== undefined && evidenceNumber.length === 14
     const firstAlpha = evidenceNumber.substring(0, 1)
@@ -201,7 +176,7 @@ const validTax = (json) => {
     return []
   }
   switch (json['gwEvidenceType']) {
-    case '二聯式收銀發票':
+    case 'A2001':
       return validB2C(json)
     default:
       return validB2B(json)

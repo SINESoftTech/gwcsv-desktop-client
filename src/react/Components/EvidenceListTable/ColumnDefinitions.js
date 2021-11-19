@@ -6,11 +6,16 @@ import mainStyles from '../../Pages/Main/mainStyles'
 
 const R = require('ramda')
 
+
 export const ConfirmedColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
   { field: 'sn', headerName: '序號', width: 110, editable: false },
   { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false, renderCell: renderSn },
-  { field: 'gwEvidenceType', headerName: 'GW憑證類型', width: 200, editable: false },
+  {
+    field: 'gwEvidenceType', headerName: 'GW憑證類型', width: 200, editable: false, renderCell: cellValues => {
+      return SIGOUTOUR_EVIDENCE_TYPE[cellValues.value].name
+    }
+  },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, editable: false },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, editable: false },
   { field: 'declarationId', headerName: '報單/文件號碼', width: 200, editable: false },
@@ -43,7 +48,13 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
     headerName: '辨識憑證類型',
     width: 200,
     cellClassName: getCellClassName,
-    editable: false
+    editable: false,
+    renderCell: cellValues => {
+      if (cellValues !== undefined || cellValues !== '') {
+        return SIGOUTOUR_EVIDENCE_TYPE[cellValues.value].name
+      }
+      return ''
+    }
   },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 200, cellClassName: getCellClassName, editable: true },
@@ -91,7 +102,7 @@ function renderEvidenceType(param) {
         >
           {keyList.map(key => {
             const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
-            return <MenuItem value={name}>{name}</MenuItem>
+            return <MenuItem value={key}>{name}</MenuItem>
           })
           }
         </Select>
