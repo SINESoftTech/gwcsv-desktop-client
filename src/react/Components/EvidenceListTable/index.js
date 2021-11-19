@@ -10,13 +10,12 @@ const getRowClassName = (params) => {
 
 const EvidenceList = (props) => {
 
+  console.log('EvidenceList', props.data)
 
   const [dataRows, setDataRows] = useState(props.data)
 
   useEffect(() => {
-    // console.log('evidenceList', props.data)
     setDataRows(props.data)
-    // console.log('set evidenceList', props.data)
   }, [props.data])
 
 
@@ -38,7 +37,7 @@ const EvidenceList = (props) => {
     }
     if (event.target.name === 'deductionType') {
       param.row['deductionType'] = event.target.value
-      props.handleEditRow(param.row)
+      props.handleEditRow(param.row, 'deductionType')
     }
     if (event.target.name === 'gwEvidenceType') {
       param.row['gwEvidenceType'] = event.target.value

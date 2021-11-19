@@ -58,7 +58,6 @@ const IdentifiedEvidenceList = (props) => {
         setRowData(validEvidence(props.data['03'], props.declareProperties.clientTaxId, assignMap))
       }
     }
-
     init()
   }, [props.data, props.declareProperties.clientTaxId])
 

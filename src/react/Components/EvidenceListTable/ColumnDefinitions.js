@@ -66,7 +66,7 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
     width: 150,
     cellClassName: getCellClassName,
     editable: true,
-    // renderCell: renderDeductionType
+    renderCell: renderDeductionType
   },
   { field: 'buyerTaxId', headerName: '買方統編', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'sellerTaxId', headerName: '賣方統編', width: 150, cellClassName: getCellClassName, editable: true },

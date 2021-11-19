@@ -267,7 +267,7 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
   const data = {
     [id]: {
       reportingPeriod: { result: declareProperties.reportingPeriod, score: [-1] },
-      deductionType: { result: declareProperties.isDeclareBusinessTax, score: [-1] },
+      deductionType: { result: declareProperties.deductionType, score: [-1] },
       isDeclareBusinessTax: { result: declareProperties.isDeclareBusinessTax, score: [-1] },
       gwEvidenceType: { result: declareProperties.evidenceType, score: [-1] },
       fullPath: { result: targetFilePath, score: [-1] }

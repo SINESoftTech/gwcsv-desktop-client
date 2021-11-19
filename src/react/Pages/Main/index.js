@@ -189,6 +189,7 @@ const Main = () => {
       setScanDisable(true)
       setScanAlert(true)
       //fixme
+
       handleMoveImage(1, '/Users/tony/123.jpg')
       // handleMoveImage(1, 'C:\\Users\\Tony\\.gwapp\\05\\123.jpg')
       // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
