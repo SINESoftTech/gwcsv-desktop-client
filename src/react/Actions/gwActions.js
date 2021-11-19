@@ -66,7 +66,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   console.log('uploadGUI', payload)
   try {
     const req = {
-      "inputOutputType": "INPUT",
+      'inputOutputType': 'INPUT',
       'businessEntityTaxId': payload.buyerTaxId,
       'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
@@ -87,7 +87,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
       'summaryCount': 1,
       'groupName': null,
       'remarkText': payload.remark,
-      "clearanceType": "BLANK",
+      'clearanceType': 'BLANK'
     }
     const url = '/evidence/gui'
     let bodyFormData = new FormData()
@@ -200,7 +200,7 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
       'groupName': payload.groupName,
       'remarkText': payload.remarkText
     }
-    const url ='/evidence/customs'
+    const url = '/evidence/customs'
     let bodyFormData = new FormData()
     bodyFormData.append('input', JSON.stringify(req))
     bodyFormData.append('file', imageBlob)
@@ -233,6 +233,7 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
 export async function uploadToGw(payload, accountingFirmTaxId, token) {
   const result = []
   for (let i = 0; i < payload.length; i++) {
+    // payload, imageBlob, accountingFirmTaxId, token
     const data = payload[i]
     const uploadResult = await uploadToGwStrategy[data['json']['gwEvidenceType']](data['json'], data['image'], accountingFirmTaxId, token)
     if (uploadResult.status) {
@@ -240,16 +241,12 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
         'status': true,
         'json': data['json'],
         'errorMsg': '',
-        'imageFullPath': data['imageFullPath'],
-        'jsonFullPath': data['jsonFullPath']
       })
     } else {
       data['json']['errorMsg'] = uploadResult.errorMsg
       result.push({
         'status': false,
         'json': data['json'],
-        'imageFullPath': data['imageFullPath'],
-        'jsonFullPath': data['jsonFullPath']
       })
     }
   }

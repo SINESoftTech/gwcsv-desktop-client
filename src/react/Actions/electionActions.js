@@ -120,10 +120,10 @@ export async function identifyResultConfirmed(dispatch, businessEntityTaxId, pay
   }
 }
 
-export async function gwUploaded(dispatch, payload) {
+export async function gwUploaded(dispatch, businessEntityTaxId, payload) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:uploaded', payload)
+      const result = await ipcRenderer.invoke('evidence:uploaded', businessEntityTaxId, payload)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }
@@ -132,21 +132,22 @@ export async function gwUploaded(dispatch, payload) {
   }
 }
 
-export async function getRawDataWithImage(payload) {
-  try {
-    if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:getRawDataWithImage', payload)
-      return result
-    }
-  } catch (error) {
-    // throw new Error(error)
-  }
-}
 
 export async function getAssign() {
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:getAssign')
+      return result
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function getImageData(fullPath) {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getImageFileContent', fullPath)
       return result
     }
   } catch (error) {

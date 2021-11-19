@@ -288,60 +288,22 @@ class SigoutourMapperClass {
     Object.keys(jsonData).forEach(key => {
       result[key] = jsonData[key].result
     })
-    // result['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['gwEvidenceType']].name
-    // result['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['evidenceType']].name
+
     result['sn'] = sn
     result['id'] = ticketId
     return result
   }
 
-  toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, jsonData) {
-    const json = parseData(jsonData)
-    json['id'] = ticketId
-    json['evidenceType'] = json['evidenceType'].value
-    json['taxType'] = json['taxType'].value
-    const evidenceDate = json['evidenceDate']
-    json['reportingPeriod'] = reportingPeriod
-    json['deductionType'] = DEDUCTION_TYPE[deductionType]
-    json['isDeclareBusinessTax'] = isDeclareBusinessTax
-    json['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[gwEvidenceType].value
-    json['evidenceDate'] = new Date(evidenceDate.substring(0, 4) + '-' + evidenceDate.substring(4, 6) + '-' + evidenceDate.substring(6, 8)).getTime()
-    return json
-  }
-
-
-  toSigoutour(sigoutourJson, data) {
-    const jsonDataBody = sigoutourJson['pageList'][0]['photoList'][0]['result']
-    const evidenceType = SIGOUTOUR_EVIDENCE_TYPE[sigoutourJson['pageList'][0]['photoList'][0]['type']].value
-    const isBillType = evidenceType === 'TELECOM_BILL' || evidenceType === 'WATER_BILL' || evidenceType === 'ELECTRIC_BILL'
-    jsonDataBody.forEach(obj => {
-      if (isBillType && obj['key'] === 'KEY_COMN') {
-        obj['text'] = data['evidenceNumber']
-      } else if (sigoutourJson['pageList'][0]['photoList'][0]['type'] === 'A5020' && SIGOUTOUR_FIELD_TYPE[obj['key']] === 'waterFee') {
-        obj['text'] = 0
-      } else if (sigoutourJson['pageList'][0]['photoList'][0]['type'] === 'A5020' && SIGOUTOUR_FIELD_TYPE[obj['key']] === 'basicFee') {
-        obj['text'] = data['taxableSalesValue']
-      } else {
-        const key = SIGOUTOUR_FIELD_TYPE[obj['key']]
-        obj['text'] = data[key]
-      }
+  toGw(jsonData) {
+    let result = {}
+    Object.keys(jsonData).forEach(key => {
+      result[key] = jsonData[key].result
     })
-    if (isBillType) {
-      const keys = jsonDataBody.map(obj => {
-        return obj['key']
-      })
-      if (keys.includes('KEY_EVIDENCE_DATE')) {
-        jsonDataBody.forEach(obj => {
-          if (obj['key'] === 'KEY_EVIDENCE_DATE') {
-            obj['text'] = data['evidenceDate']
-          }
-        })
-      } else {
-        jsonDataBody.push({ 'key': 'KEY_EVIDENCE_DATE', 'text': data['evidenceDate'] })
-
-      }
-    }
-    return sigoutourJson
+    result['evidenceDate'] = new Date(result['evidenceDate'].substring(0, 4) + '-' + result['evidenceDate'].substring(4, 6) + '-' + result['evidenceDate'].substring(6, 8)).getTime()
+    result['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['gwEvidenceType']].value
+    result['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['evidenceType']].value
+    result['deductionType'] = DEDUCTION_TYPE[result['deductionType']]
+    return result
   }
 
 }

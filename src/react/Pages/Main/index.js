@@ -189,9 +189,6 @@ const Main = () => {
       setScanDisable(true)
       setScanAlert(true)
       //fixme
-
-      // handleMoveImage(1, '/Users/tony/123.jpg')
-      // handleMoveImage(1, 'C:\\Users\\Tony\\.gwapp\\05\\123.jpg')
       scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
@@ -216,9 +213,9 @@ const Main = () => {
     }
   }
 
-  const handleGwUploaded = async (data) => {
+  const handleGwUploaded = async (businessEntityTaxId, data) => {
     try {
-      const result = await gwUploaded(dispatch, data)
+      const result = await gwUploaded(dispatch, businessEntityTaxId, data)
       return result
     } catch (e) {
       throw new Error(e)

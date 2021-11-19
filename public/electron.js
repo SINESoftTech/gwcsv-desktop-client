@@ -131,29 +131,8 @@ app.on('activate', function() {
 })
 const persistenceFolder = {
   'image': 'image',
-  'db': 'db'
-}
-//todo remove
-const stageFolders = {
-  'scanned': { step: '01', folder: '01' },
-  'identifySent': { step: '02', folder: '02' },
-  'identifyResultReceived': { step: '03', folder: '03' },
-  'evidenceSaved': { step: '04', folder: '04' },
-  'evidenceUploaded': { step: '05', folder: '05' }
-}
-
-
-//todo refactor
-function getAllFileLists() {
-  var fileLists = {}
-  Object.keys(stageFolders).filter(stageKey => {
-    return stageFolders[stageKey].step !== '05'
-  }).forEach(key => {
-    const stageFolderItem = stageFolders[key]
-    fileLists[stageFolderItem.step] = openFile(path.join(config.fileFolder, stageFolderItem.folder))
-  })
-  console.log(fileLists)
-  return fileLists
+  'db': 'db',
+  'backup': 'backup'
 }
 
 function openFile(directory) {
@@ -244,7 +223,7 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
   const data = {
     [id]: {
       reportingPeriod: { result: declareProperties.reportingPeriod, score: [-1] },
-      deductionType: { result: "1", score: [-1] },
+      deductionType: { result: '1', score: [-1] },
       isDeclareBusinessTax: { result: declareProperties.isDeclareBusinessTax, score: [-1] },
       gwEvidenceType: { result: declareProperties.evidenceType, score: [-1] },
       fullPath: { result: targetFilePath, score: [-1] }
@@ -256,7 +235,6 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
     .write()
   return db.read().value()
 })
-
 
 ipcMain.handle('evidence:identifyResultConfirmed', (event, businessEntityTaxId, payload) => {
   const db = getDbContext(businessEntityTaxId)
@@ -332,52 +310,37 @@ ipcMain.handle('evidence:identifyResultReceived', (event, businessEntityTaxId, i
 })
 
 
-ipcMain.handle('evidence:evidenceSaved', (event, imageFileObj, sightourFileObj, savedResult) => {
-  let targetFolder = path.join(config.fileFolder, stageFolders.evidenceSaved.folder)
-  let imageFileObjObj = JSON.parse(imageFileObj)
-  let sightourResultFileObjObj = JSON.parse(sightourFileObj)
-  let resultObj = savedResult ? JSON.parse(savedResult) : null
-  const filenameWithoutExt = imageFileObjObj.filename.split('.').slice(0, -1).join('.')
-  const imageFileExt = imageFileObjObj.filename.split('.').slice(-1)[0]
-
-  if (resultObj) {
-    // console.log('result exists')
-    fse.writeJSONSync(path.join(targetFolder, filenameWithoutExt + '_saved_result.txt'), resultObj)
-  } else {
-    // console.log('copyFile')
-    fse.copySync(sightourResultFileObjObj.fullPath, path.join(targetFolder, filenameWithoutExt + '_saved_result.txt'))
-  }
-  fse.moveSync(imageFileObjObj.fullPath, path.join(targetFolder, imageFileObjObj.filename))
-  fse.moveSync(sightourResultFileObjObj.fullPath, path.join(targetFolder, sightourResultFileObjObj.filename))
-  return getAllFileLists()
-})
-
-ipcMain.handle('evidence:uploaded', (event, payload) => {
+ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
   console.log('evidence:uploaded payload', payload)
+  const db = getDbContext(businessEntityTaxId)
   payload.map(data => {
-    let imagePath = ''
-    let jsonPath = ''
-    const isWin = process.platform === 'win32'
-    if (isWin) {
-      imagePath = data['imageFullPath'].split('04\\')[1]
-      jsonPath = data['jsonFullPath'].split('04\\')[1]
-    } else {
-      imagePath = data['imageFullPath'].split('04/')[1]
-      jsonPath = data['jsonFullPath'].split('04/')[1]
-    }
+    const ticketId = data.json['ticketId']
     if (data.status) {
-      const targetFolder = path.join(config.fileFolder, stageFolders.evidenceUploaded.folder)
-      const targetImagePath = targetFolder + '/' + imagePath
-      const targetJsonPath = targetFolder + '/' + jsonPath
-      fse.moveSync(data['imageFullPath'], targetImagePath)
-      fse.moveSync(data['jsonFullPath'], targetJsonPath)
+      //move image
+      const targetFolder = path.join(config.fileFolder, persistenceFolder.backup.folder)
+      const targetImagePath = path.join(targetFolder, ticketId + getFileExt(data.json.fullPath))
+      fse.moveSync(data.json.fullPath, targetImagePath)
+      const db04 = db.get('04').value()
+      const data05 = {
+        [ticketId]: db04[data.json[ticketId]]
+      }
+      db.get('05')
+        .assign(data05)
+        .write()
+      delete db04[ticketId]
+      db.get('04')
+        .assign(db04)
+        .write()
+      //save data to 05
     } else {
-      const json = fse.readJSONSync(data['jsonFullPath'])
-      json['errorMsg'] = data['json']['errorMsg']
-      fse.writeJSONSync(data['jsonFullPath'], json)
+      const db04 = db.get('04').value()
+      db04[data.json['ticketId']]['errorMsg'] = data.json['errorMsg']
+      db.get('04')
+        .assign(db04)
+        .write()
     }
   })
-  return getAllFileLists()
+  return db.read().value()
 })
 const getFileExt = (fileName) => {
   if (fileName.endsWith('jpg')) {
@@ -389,31 +352,6 @@ const getFileExt = (fileName) => {
   return 'json'
 }
 
-ipcMain.handle('evidence:getRawDataWithImage', (event, fullPathList) => {
-  console.log('getRawDataWithImage', fullPathList)
-  return fullPathList.map(d => {
-    const key = R.keys(d)[0]
-    const r = d[key].map(fileObj => {
-      const fileExt = getFileExt(fileObj.filename.split('.')[1])
-      const value = getFileContent(fileObj.fullPath)
-      let json = {}
-      json[fileExt] = value
-      const filePathKey = fileExt + 'FullPath'
-      json[filePathKey] = fileObj.fullPath
-      return json
-    })
-    const byTicketId = R.groupBy(function(data) {
-      let ticketId = ''
-      if (data['image'] === undefined) {
-        ticketId = data['json']['ticket']
-      } else {
-        ticketId = data['imageFullPath'].split('_')[6].split('.')[0]
-      }
-      return ticketId
-    })
-    return byTicketId(r)
-  })
-})
 
 ipcMain.handle('evidence:getAssign', (event) => {
   const targetFilePath = config.fileFolder + '/' + 'assign.json'
