@@ -74,8 +74,7 @@ const ConfirmedEvidenceList = (props) => {
   }
 
   const handleDelete = async (ticket) => {
-    console.log('handleDelete', ticket)
-    await props.OnDeleteEvdience('evidenceSaved', ticket)
+    await props.OnDeleteEvdience(props.declareProperties.clientTaxId, '04', ticket)
   }
 
   return (
