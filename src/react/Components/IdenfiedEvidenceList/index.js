@@ -79,8 +79,6 @@ const IdentifiedEvidenceList = (props) => {
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
   const handleEditRow = async (editData, field = '') => {
-    console.log('handleEditRow', editData)
-    console.log('handleEditRow', field)
     const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
     jsonData[field].result = editData[field]
     const data = validData(props.declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData['ticketId'].result, 1), assignMap)['cellHighlight']
@@ -95,6 +93,12 @@ const IdentifiedEvidenceList = (props) => {
     setRowData(validResult)
   }
 
+  const handleOpenImage = async (fullPath) => {
+    console.log(fullPath)
+    props.onViewImage({
+      fullPath: fullPath
+    })
+  }
 
   const handleDelete = async (ticket) => {
     await props.OnDeleteEvdience(props.declareProperties.clientTaxId, '03', ticket)
@@ -105,7 +109,9 @@ const IdentifiedEvidenceList = (props) => {
       <Button variant='contained' onClick={e => props.onGetIdentifyResult(e, localFiles['02'])}>取得辨識結果</Button>
       <Button variant='contained' onClick={handleResultAllConfirmed}>確認辨識結果</Button>
       <EvidenceList data={rowData} checkboxSelection={true} handleSelection={handleSelection}
-                    handleEditRow={handleEditRow} columns={IdenfiedEvidenceColumnDefinitions}
+                    handleEditRow={handleEditRow}
+                    handleOpenImage={handleOpenImage}
+                    columns={IdenfiedEvidenceColumnDefinitions}
                     handleDelete={handleDelete} />
     </div>
   )

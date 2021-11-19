@@ -41,6 +41,10 @@ const EvidenceList = (props) => {
       param.row['gwEvidenceType'] = event.target.value
       props.handleEditRow(param.row, 'gwEvidenceType')
     }
+    if (event.target.innerText === '打開') {
+      console.log("AA",param.row)
+      props.handleOpenImage(param.row.fullPath)
+    }
     if (event.target.innerText === '刪除') {
       const ticketId = param.row.id
       props.handleDelete(ticketId)

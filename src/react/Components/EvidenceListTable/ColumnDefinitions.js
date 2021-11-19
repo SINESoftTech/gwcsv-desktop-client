@@ -34,6 +34,18 @@ export const ConfirmedColumnDefinitions: GridColDef[] = [
 
 export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
+  {
+    field: '',
+    headerName: '圖檔',
+    width: 110,
+    cellClassName: getCellClassName,
+    editable: false,
+    renderCell: cellValues => {
+      console.log(cellValues)
+      return <Button variant='contained' color='primary'>打開</Button>
+      // return <Button variant='contained' onClick={handleUpload}>上傳</Button>
+    }
+  },
   { field: 'sn', headerName: '序號', width: 110, cellClassName: getCellClassName, editable: false },
   {
     field: 'gwEvidenceType',
@@ -49,6 +61,7 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
     width: 200,
     cellClassName: getCellClassName,
     editable: false,
+    // renderEditCell
     renderCell: cellValues => {
       if (cellValues.row.evidenceType !== undefined || cellValues.row.evidenceType !== '') {
         return SIGOUTOUR_EVIDENCE_TYPE[cellValues.value].name

@@ -3,7 +3,8 @@ import { electronActions, gwActions, sightTourActions, useAppDispatch, useAppSta
 import { Alert } from '@material-ui/lab'
 import CloseIcon from '@material-ui/icons/Close'
 import {
-  AppBar, Badge,
+  AppBar,
+  Badge,
   Box,
   Collapse,
   Container,
@@ -25,14 +26,13 @@ import ScannedImageList from '../../Components/ScannedImageList'
 import ConfirmedEvidenceList from '../../Components/ConfirmedEvidenceList'
 import IdentifiedEvidenceList from '../../Components/IdenfiedEvidenceList'
 import {
-  deleteData,
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
   identifySent
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-import { openScanner, scan } from '../../Actions/scanAction'
+import { openScanner } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 
@@ -133,10 +133,12 @@ const Main = () => {
       })
     console.log('handleSendImageToIdentify', sendToIdentifyData)
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
-    identifySent(dispatch, {
-      'user': appState.auth.user.username,
-      'result': sentIdentifyResult
-    })
+    if(sentIdentifyResult.length>0){
+      identifySent(dispatch, {
+        'user': appState.auth.user.username,
+        'result': sentIdentifyResult
+      })
+    }
   }
 
 
@@ -189,7 +191,9 @@ const Main = () => {
       setScanDisable(true)
       setScanAlert(true)
       //fixme
-      scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
+      handleMoveImage(1, '/Users/tony/123.jpg')
+      handleCloseDisable()
+      // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
 
@@ -338,6 +342,7 @@ const Main = () => {
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
                                           declareProperties={declareProperties}
+                                          onViewImage={handleViewImage}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}
                                           OnDeleteEvdience={handleDeleteEvidence} />
