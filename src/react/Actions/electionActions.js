@@ -6,158 +6,150 @@ const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
 export const saveAssign = async (payload) => {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:saveAssign', payload)
-            return result
-        }
-    } catch (error) {
-        console.log(error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:saveAssign', payload)
+      return result
     }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 
-export async function updateData(payload) {
-    try {
-        if (ipcRenderer) {
-            return await ipcRenderer.invoke('evidence:updateData', payload)
-        }
-    } catch (error) {
-        console.log('updateData', error)
+export async function updateData(businessEntityTaxId, payload) {
+  try {
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:updateData', businessEntityTaxId, payload)
     }
+  } catch (error) {
+    console.log('updateData', error)
+  }
 }
 
 export async function deleteData(dispatch, businessEntityTaxId, step, id) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:deleteData', businessEntityTaxId, step, id)
-            dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
-        }
-    } catch (error) {
-        console.log('deleteData', error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:deleteData', businessEntityTaxId, step, id)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
+  } catch (error) {
+    console.log('deleteData', error)
+  }
 }
 
 export async function deleteSigoutourData(dispatch, eventName, ticketId) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:deleteSigoutourData', eventName, ticketId)
-            dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
-        }
-    } catch (error) {
-        console.log('deleteSigoutourData', error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:deleteSigoutourData', eventName, ticketId)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
+  } catch (error) {
+    console.log('deleteSigoutourData', error)
+  }
 }
 
-export async function getJsonRawData(data, clientTaxId) {
-    try {
-        const filterJsonDataFilePathList = data.filter(d => {
-            return d.filename.endsWith('.json')
-        }).filter(d => {
-            const fileNameClientId = d.filename.split('_')[1]
-            return fileNameClientId === clientTaxId
-        }).map(d => {
-            return d.fullPath
-        })
-        if (ipcRenderer) {
-            return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
-        }
-    } catch (error) {
-        console.log('getJsonRawData', error)
+export async function getJsonRawData(ticketId, clientTaxId) {
+  try {
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:getJsonFileData', ticketId, clientTaxId)
     }
+  } catch (error) {
+    console.log('getJsonRawData', error)
+  }
 }
 
 export async function getChooseBusinessEntityData(dispatch, taxId) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData', taxId)
-            dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
-            return result
-        }
-    } catch (error) {
-        dispatch({type: actionTypes.GET_FILE_LIST_ERROR, payload: error})
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData', taxId)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      return result
     }
+  } catch (error) {
+    dispatch({ type: actionTypes.GET_FILE_LIST_ERROR, payload: error })
+  }
 }
 
 export async function scanImages(dispatch, filePath, username, declareProperties) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, declareProperties)
-            dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
-        }
-    } catch (error) {
-        console.log(error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, declareProperties)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export async function fileScanned(dispatch) {
-    dispatch({type: 'LOGOUT'})
+  dispatch({ type: 'LOGOUT' })
 }
 
 export async function identifySent(dispatch, payload) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:identifySent', payload)
-            dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
-        }
-    } catch (error) {
-        console.log(error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:identifySent', payload)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export async function identifyResultReceived(dispatch, businessEntityTaxId, payload) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:identifyResultReceived', businessEntityTaxId, payload)
-            dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
-        }
-    } catch (error) {
-        console.log(error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:identifyResultReceived', businessEntityTaxId, payload)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export async function identifyResultConfirmed(dispatch, payload) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
-            dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
-            return result
-        }
-    } catch (error) {
-        console.log(error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      return result
     }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export async function gwUploaded(dispatch, payload) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:uploaded', payload)
-            dispatch({type: actionTypes.FILE_LIST_RECEIVED, payload: result})
-            return result
-        }
-    } catch (error) {
-        throw new Error(error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:uploaded', payload)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      return result
     }
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 export async function getRawDataWithImage(payload) {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:getRawDataWithImage', payload)
-            return result
-        }
-    } catch (error) {
-        // throw new Error(error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getRawDataWithImage', payload)
+      return result
     }
+  } catch (error) {
+    // throw new Error(error)
+  }
 }
 
 export async function getAssign() {
-    try {
-        if (ipcRenderer) {
-            const result = await ipcRenderer.invoke('evidence:getAssign')
-            return result
-        }
-    } catch (error) {
-        console.log(error)
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getAssign')
+      return result
     }
+  } catch (error) {
+    console.log(error)
+  }
 }

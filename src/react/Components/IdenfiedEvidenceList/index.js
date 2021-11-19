@@ -41,23 +41,17 @@ const IdentifiedEvidenceList = (props) => {
   const [selectionModel, setSelectionModel] = React.useState([])
   const [assignMap, setAssignMap] = React.useState()
 
-  const initDataRows = async (data, clientTaxId, assignMap) => {
-    console.log('initDataRows', data, clientTaxId)
-    const parseJsonDataList = Object.keys(data).map((ticketId, idx) => {
-      const obj = data[ticketId]
-      return validSigoutourData(clientTaxId, SigoutourMapper.toView(obj, ticketId, idx + 1), assignMap)
-    })
-    setRowData(parseJsonDataList)
-  }
-
   useEffect(() => {
     const init = async () => {
-      const result = await getAssign()
-      setAssignMap(result)
+      const assignMap = await getAssign()
+      setAssignMap(assignMap)
       setLocalFiles(props.data)
-      initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
+      const parseJsonDataList = Object.keys(props.data['03']).map((ticketId, idx) => {
+        const obj = props.data['03'][ticketId]
+        return validSigoutourData(props.declareProperties.clientTaxId, SigoutourMapper.toView(obj, ticketId, idx + 1), assignMap)
+      })
+      setRowData(parseJsonDataList)
     }
-
     init()
   }, [props.data, props.declareProperties.clientTaxId])
 
@@ -86,16 +80,12 @@ const IdentifiedEvidenceList = (props) => {
 
   const handleEditRow = async (editData, field = '') => {
     //todo refactor read only one file and save
-    const jsonDataList = await getJsonRawData(localFiles['03'], props.declareProperties.clientTaxId)
-    const json = jsonDataList.filter(obj => {
-      const ticketId = obj.filePath.split('_')[6]
-      return ticketId === editData.id
-    })[0]
-    console.log('jsonDataList', jsonDataList)
-    json.data[field].result = editData[field]
-
-    //save
-    const result = await electronActions.updateData(json)
+    console.log('handleEditRow', editData)
+    console.log('handleEditRow', field)
+    const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
+    jsonData[field].result = editData[field]
+    console.log(jsonData)
+    const result = await electronActions.updateData(props.declareProperties.clientTaxId,jsonData)
 
     //todo sendTo feedback
     // const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
