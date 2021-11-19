@@ -19,7 +19,7 @@ const validTaxId = (taxId) => {
   return sum % 10 === 0 || (taxId[6] === '7' && (sum + 1) % 10 === 0)
 }
 
-const validSigoutourData = (clientTaxId, json, assignMap) => {
+const validData = (clientTaxId, json, assignMap) => {
   console.log('valid', clientTaxId, json)
   let validResult = validTaxMoney(json)
   const isCustom = json['gwEvidenceType'] === 'A8001'
@@ -198,4 +198,4 @@ const validTaxMoney = (json) => {
 }
 
 
-export { validSigoutourData, validTaxId }
+export { validData, validTaxId }

@@ -6,7 +6,7 @@ import { getJsonRawData, getRawDataWithImage } from '../../Actions/electionActio
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { ConfirmedColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
-import { validSigoutourData } from '../../Valid/valid'
+import { validData } from '../../Valid/valid'
 
 
 const electron = isElectron() ? window.electron : null

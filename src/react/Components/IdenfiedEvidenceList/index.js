@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import { getAssign, getJsonRawData } from '../../Actions/electionActions'
 import SigoutourMapper, { SIGOUTOUR_FIELD_TYPE } from '../../Mapper/sigoutour_mapper'
-import { validSigoutourData } from '../../Valid/valid'
+import { validData } from '../../Valid/valid'
 import { electronActions } from '../../Context'
 import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
 import ReverseIndex from '../../Util/ReverseIndex'
@@ -32,6 +32,15 @@ export const handleSendConfirmedResultData = (field, editData, sigoutourJson) =>
 }
 
 
+const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => {
+  return Object.keys(evidenceObj)
+    .map((ticketId, idx) => {
+      const obj = evidenceObj[ticketId]
+      return validData(businessEntityTaxId, SigoutourMapper.toView(obj, ticketId, idx + 1), assignMap)
+    })
+}
+
+
 const IdentifiedEvidenceList = (props) => {
 
   console.log('identifiedEvidenceList', props)
@@ -41,19 +50,15 @@ const IdentifiedEvidenceList = (props) => {
   const [selectionModel, setSelectionModel] = React.useState([])
   const [assignMap, setAssignMap] = React.useState()
 
+
   useEffect(() => {
     const init = async () => {
       const assignMap = await getAssign()
       setAssignMap(assignMap)
       setLocalFiles(props.data)
-      const parseJsonDataList = Object.keys(props.data['03']).map((ticketId, idx) => {
-        const obj = props.data['03'][ticketId]
-
-        // return SigoutourMapper.toView(obj, ticketId, idx + 1)
-        return validSigoutourData(props.declareProperties.clientTaxId, SigoutourMapper.toView(obj, ticketId, idx + 1), assignMap)
-      })
-      setRowData(parseJsonDataList)
+      setRowData(validEvidence(props.data['03'], props.declareProperties.clientTaxId, assignMap))
     }
+
     init()
   }, [props.data, props.declareProperties.clientTaxId])
 
@@ -86,7 +91,7 @@ const IdentifiedEvidenceList = (props) => {
     console.log('handleEditRow', field)
     const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
     jsonData[field].result = editData[field]
-    const result = await electronActions.updateData(props.declareProperties.clientTaxId,jsonData)
+    const result = await electronActions.updateData(props.declareProperties.clientTaxId, jsonData)
 
     //todo sendTo feedback
     // const validResult = validSigoutourData(props.declareProperties.clientTaxId, editData, assignMap)['cellHighlight']
@@ -94,9 +99,10 @@ const IdentifiedEvidenceList = (props) => {
     //   const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
     //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
     // }
-
-    // setLocalFiles(result)
-    // initDataRows(result['03'], props.declareProperties.clientTaxId, assignMap)
+    console.log('handleEditRow', result)
+    const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, assignMap)
+    setLocalFiles(result)
+    setRowData(validResult)
   }
 
 

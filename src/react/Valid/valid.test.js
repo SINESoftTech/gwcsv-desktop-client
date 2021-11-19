@@ -1,4 +1,4 @@
-import { validSigoutourData, validTaxId } from './valid'
+import { validData, validTaxId } from './valid'
 
 const assignMap = {
   '21': {
@@ -736,7 +736,7 @@ test('valid buyerTaxId error', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
   console.log(validResult)
   expect(validResult.cellHighlight).toMatchObject(['buyerTaxId', 'sn'])
 })
@@ -766,7 +766,7 @@ test('valid sellerTaxId error', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
   expect(validResult.cellHighlight).toMatchObject(['sellerTaxId', 'sn'])
 })
 
@@ -795,7 +795,7 @@ test('valid taxType empty', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
   expect(validResult.cellHighlight).toContain('taxType')
   expect(validResult.cellHighlight).toContain('taxableSalesValue')
   expect(validResult.cellHighlight).toContain('zeroTaxSalesValue')
@@ -828,7 +828,7 @@ test('valid taxType 2 error', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
 
   expect(validResult.cellHighlight).toContain('taxableSalesValue')
   expect(validResult.cellHighlight).toContain('businessTaxValue')
@@ -859,7 +859,7 @@ test('valid taxType 3 error', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
 
   expect(validResult.cellHighlight).toContain('taxableSalesValue')
   expect(validResult.cellHighlight).toContain('businessTaxValue')
@@ -890,7 +890,7 @@ test('valid evidenceType 5030', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
 
   expect(validResult.cellHighlight).toContain('evidenceNumber')
 })
