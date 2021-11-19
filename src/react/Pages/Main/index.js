@@ -32,7 +32,7 @@ import {
   identifySent
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-import { openScanner } from '../../Actions/scanAction'
+import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 
@@ -193,9 +193,7 @@ const Main = () => {
       setScanDisable(true)
       setScanAlert(true)
       //fixme
-      handleMoveImage(1, '/Users/tony/123.jpg')
-      handleCloseDisable()
-      // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
+      scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
 
