@@ -281,17 +281,22 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
 })
 
 
-ipcMain.handle('evidence:identifyResultConfirmed', (event, payload) => {
-  console.log('identifyResultConfirmed', payload)
-  Object.keys(payload).forEach(period => {
-    const data = payload[period]
-    for (let i = 0; i < data.length; i++) {
-      const sourceImageFullPath = data[i].fullPath
-      const targetImageFullName = path.join(config.fileFolder, stageFolders.evidenceSaved.folder, data[i].filename)
-      fse.moveSync(sourceImageFullPath, targetImageFullName)
+ipcMain.handle('evidence:identifyResultConfirmed', (event, businessEntityTaxId, payload) => {
+  const db = getDbContext(businessEntityTaxId)
+  for (let i = 0; i < payload.length; i++) {
+    const data03List = db.get('03').value()
+    const data={
+      [payload[i]]: data03List[payload[i]]
     }
-  })
-  return getAllFileLists()
+    db.get('04')
+      .assign(data)
+      .write()
+    delete data03List[payload[i]]
+    db.get('03')
+      .assign(data03List)
+      .write()
+  }
+  return db.read().value()
 })
 
 ipcMain.handle('evidence:getJsonFileData', (event, ticketId, businessEntityTaxId) => {

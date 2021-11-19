@@ -11,10 +11,6 @@ import ReverseIndex from '../../Util/ReverseIndex'
 
 const R = require('ramda')
 
-const byTicketId = R.groupBy((fileObj) => {
-  return fileObj.filename.split('_')[2].split('.')[0]
-})
-
 export const handleSendConfirmedResultData = (field, editData, sigoutourJson) => {
   const reverse = ReverseIndex.reverseIndex(SIGOUTOUR_FIELD_TYPE)
   if (field === 'evidenceNumber' && editData['carrierNumber'] !== undefined) {
@@ -64,22 +60,25 @@ const IdentifiedEvidenceList = (props) => {
 
   //TODO REFACTOR
   const handleResultAllConfirmed = async () => {
+    console.log(rowData)
     const errorTicketIdList = rowData.filter(obj => {
       return obj.cellHighlight.length > 0
     }).map(obj => {
       return obj.ticketId
     })
-    const filterData = localFiles['03'].filter((obj) => {
-      const ticketId = obj.filename.split('.')[0].split('_')[6]
-      return selectionModel.includes(ticketId)
-    }).filter(obj => {
-      const ticketId = obj.filename.split('.')[0].split('_')[6]
-      return !errorTicketIdList.includes(ticketId)
-    })
-    const filesByTicketId = byTicketId(filterData)
-    const result = await props.onResultAllConfirmed(filesByTicketId)
+    console.log('handleResultAllConfirmed', errorTicketIdList)
+    const filterTicketIdList = Object.keys(localFiles['03'])
+      .filter((key) => {
+        const ticketId = localFiles['03'][key]['ticketId'].result
+        return selectionModel.includes(ticketId)
+      }).filter(key => {
+        const ticketId = localFiles['03'][key]['ticketId'].result
+        return !errorTicketIdList.includes(ticketId)
+      })
+    const result = await props.onResultAllConfirmed(props.declareProperties.clientTaxId, filterTicketIdList)
     setLocalFiles(result)
-    initDataRows(result['03'], props.declareProperties.clientTaxId)
+    const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, assignMap)
+    setRowData(validResult)
   }
 
   const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
@@ -90,7 +89,7 @@ const IdentifiedEvidenceList = (props) => {
     const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
     jsonData[field].result = editData[field]
     const data = validData(props.declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData['ticketId'].result, 1), assignMap)['cellHighlight']
-    if(!data.includes(field)){
+    if (!data.includes(field)) {
       //todo send feedback
       //   const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
       //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)

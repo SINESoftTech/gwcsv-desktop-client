@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import isElectron from 'is-electron'
-import { getJsonRawData, getRawDataWithImage } from '../../Actions/electionActions'
+import { getRawDataWithImage } from '../../Actions/electionActions'
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { ConfirmedColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
-import { validData } from '../../Valid/valid'
 
 
 const electron = isElectron() ? window.electron : null
@@ -24,18 +23,12 @@ const ConfirmedEvidenceList = (props) => {
 
   const [rowData, setRowData] = useState([])
 
-  const initDataRows = async (data, clientTaxId) => {
-    const jsonDataList = await getJsonRawData(data, clientTaxId)
-    const parseJsonDataList = jsonDataList.map((json, idx) => {
-      const clientTaxId = json.filePath.split('_')[1]
-      const ticketId = json.filePath.split('_')[6]
-      return clientTaxId, SigoutourMapper.toView(json.data, ticketId, idx + 1)
-    })
-    setRowData(parseJsonDataList)
-  }
-
   useEffect(() => {
-    initDataRows(props.data['04'], props.declareProperties.clientTaxId)
+    setRowData(Object.keys(props.data['04'])
+      .map((ticketId, idx) => {
+        const obj = props.data['04'][ticketId]
+        return SigoutourMapper.toView(obj, ticketId, idx + 1)
+      }))
   }, [props.data, props.declareProperties.clientTaxId])
 
   const handleUpload = async () => {

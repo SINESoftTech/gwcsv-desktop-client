@@ -207,9 +207,9 @@ const Main = () => {
     await electronActions.scanImages(dispatch, filePath, appState.auth.user, declareProperties)
   }
 
-  const handleResultAllConfirmed = async (filesByTicketId) => {
+  const handleResultAllConfirmed = async (businessEntityTaxId, filesByTicketId) => {
     try {
-      const result = await identifyResultConfirmed(dispatch, filesByTicketId)
+      const result = await identifyResultConfirmed(dispatch, businessEntityTaxId, filesByTicketId)
       return result
     } catch (e) {
       throw new Error(e)
