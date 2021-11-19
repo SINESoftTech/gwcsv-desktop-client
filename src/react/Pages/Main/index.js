@@ -133,7 +133,7 @@ const Main = () => {
       })
     console.log('handleSendImageToIdentify', sendToIdentifyData)
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
-    if(sentIdentifyResult.length>0){
+    if (sentIdentifyResult.length > 0) {
       identifySent(dispatch, {
         'user': appState.auth.user.username,
         'result': sentIdentifyResult
@@ -155,8 +155,10 @@ const Main = () => {
         'gwEvidenceType': json.gwEvidenceType.result,
         'ticketId': ticketId
       })
-      const domainObj = SigoutourMapper.toDomainObj(identifyResult)
-      identifyResultReceivedList.push(domainObj)
+      if (identifyResult.status !== 'process') {
+        const domainObj = SigoutourMapper.toDomainObj(identifyResult)
+        identifyResultReceivedList.push(domainObj)
+      }
     }
     identifyResultReceived(dispatch, declareProperties.clientTaxId, identifyResultReceivedList)
   }

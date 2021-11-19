@@ -67,10 +67,11 @@ export async function getIdentifyResult(payload) {
     formData.append('token', token)
     formData.append('ticket', payload.ticketId)
     const result = await signtTourAxios.post(apiPath, formData)
+    console.log('getIdentifyResult', result)
     if (result.data.result === undefined) {
       const status = result.data.pageList[0]['photoList'][0].result.length === 0 ? 'failed' : 'completed'
       return {
-        'fullPath':payload.fullPath,
+        'fullPath': payload.fullPath,
         'reportingPeriod': payload.reportingPeriod,
         'deductionType': payload.deductionType,
         'gwEvidenceType': payload.gwEvidenceType,
@@ -79,8 +80,18 @@ export async function getIdentifyResult(payload) {
         'data': result.data
       }
     }
+    if (result.data.result === -200014) {
+      return {
+        'fullPath': payload.fullPath,
+        'reportingPeriod': payload.reportingPeriod,
+        'deductionType': payload.deductionType,
+        'gwEvidenceType': payload.gwEvidenceType,
+        'ticketId': payload.ticketId,
+        'status': 'process'
+      }
+    }
     return {
-      'fullPath':payload.fullPath,
+      'fullPath': payload.fullPath,
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'gwEvidenceType': payload.gwEvidenceType,
