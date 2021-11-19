@@ -232,32 +232,9 @@ ipcMain.handle('evidence:deleteData', (event, businessEntityTaxId, step, id) => 
   })
   return db.read().value()
 })
-//todo rm
-ipcMain.handle('evidence:deleteSigoutourData', (event, eventName, ticketId) => {
-  let folderId = '03'
-  if (eventName === 'evidenceSaved') {
-    folderId = '04'
-  }
-  if (eventName === 'scanned') {
-    folderId = '01'
-  }
-  const fileList = getAllFileLists()[folderId]
-  const filterFileList = fileList.filter(obj => {
-    const fileName = obj.filename
-    if (folderId === '01') {
-      return fileName.split('.')[0].split('_')[6] === ticketId
-    }
-    const id = fileName.split('.')[0].split('_')[6]
-    return id === ticketId
-  })
-  for (let i = 0; i < filterFileList.length; i++) {
-    const data = filterFileList[i]
-    fse.removeSync(data.fullPath)
-  }
-  return getAllFileLists()
-})
 
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
+  console.log('scanImages', declareProperties)
   const sourceFileExt = getFileExt(fullPath)
   const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
   const id = Date.now()
@@ -267,7 +244,7 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
   const data = {
     [id]: {
       reportingPeriod: { result: declareProperties.reportingPeriod, score: [-1] },
-      deductionType: { result: declareProperties.deductionType, score: [-1] },
+      deductionType: { result: "1", score: [-1] },
       isDeclareBusinessTax: { result: declareProperties.isDeclareBusinessTax, score: [-1] },
       gwEvidenceType: { result: declareProperties.evidenceType, score: [-1] },
       fullPath: { result: targetFilePath, score: [-1] }
@@ -285,7 +262,7 @@ ipcMain.handle('evidence:identifyResultConfirmed', (event, businessEntityTaxId, 
   const db = getDbContext(businessEntityTaxId)
   for (let i = 0; i < payload.length; i++) {
     const data03List = db.get('03').value()
-    const data={
+    const data = {
       [payload[i]]: data03List[payload[i]]
     }
     db.get('04')

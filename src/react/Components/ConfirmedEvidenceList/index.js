@@ -32,45 +32,45 @@ const ConfirmedEvidenceList = (props) => {
   }, [props.data, props.declareProperties.clientTaxId])
 
   const handleUpload = async () => {
-    const filesByTicketId = byTicketId(props.data['04'])
-    let filterResult = []
-    for (let key in filesByTicketId) {
-      const filterData = filesByTicketId[key]
-        .filter(d => {
-          const taxId = d.filename.split('_')[1]
-          return taxId === props.declareProperties.clientTaxId
-        })
-      if (filterData.length) {
-        let json = {}
-        json[key] = filesByTicketId[key]
-        filterResult.push(json)
-      }
-    }
-    const getRawDataResult = await getRawDataWithImage(filterResult)
-    const parseRawDataResult = getRawDataResult.flatMap(data => {
-      const keys = R.keys(data)
-      let result = []
-      for (let i = 0; i < keys.length; i++) {
-        let json = {}
-        for (let j = 0; j < data[keys[i]].length; j++) {
-          json = Object.assign(json, data[keys[i]][j])
-        }
-        const reportingPeriod = json['imageFullPath'].split('_')[2]
-        const deductionType = json['imageFullPath'].split('_')[3]
-        const isDeclareBusinessTax = json['imageFullPath'].split('_')[4]
-        const gwEvidenceType = json['imageFullPath'].split('_')[5]
-        const ticketId = json['imageFullPath'].split('_')[6].split('.')[0]
-        result.push({
-          'image': new File([json['image']], Date.now() + '.jpg'),
-          'imageFullPath': json['imageFullPath'],
-          'jsonFullPath': json['jsonFullPath'],
-          'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, json['json'])
-        })
-      }
-      return result
-    })
-    const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
-    props.onGwUploaded(uploadResult)
+    // const filesByTicketId = byTicketId(props.data['04'])
+    // let filterResult = []
+    // for (let key in filesByTicketId) {
+    //   const filterData = filesByTicketId[key]
+    //     .filter(d => {
+    //       const taxId = d.filename.split('_')[1]
+    //       return taxId === props.declareProperties.clientTaxId
+    //     })
+    //   if (filterData.length) {
+    //     let json = {}
+    //     json[key] = filesByTicketId[key]
+    //     filterResult.push(json)
+    //   }
+    // }
+    // const getRawDataResult = await getRawDataWithImage(filterResult)
+    // const parseRawDataResult = getRawDataResult.flatMap(data => {
+    //   const keys = R.keys(data)
+    //   let result = []
+    //   for (let i = 0; i < keys.length; i++) {
+    //     let json = {}
+    //     for (let j = 0; j < data[keys[i]].length; j++) {
+    //       json = Object.assign(json, data[keys[i]][j])
+    //     }
+    //     const reportingPeriod = json['imageFullPath'].split('_')[2]
+    //     const deductionType = json['imageFullPath'].split('_')[3]
+    //     const isDeclareBusinessTax = json['imageFullPath'].split('_')[4]
+    //     const gwEvidenceType = json['imageFullPath'].split('_')[5]
+    //     const ticketId = json['imageFullPath'].split('_')[6].split('.')[0]
+    //     result.push({
+    //       'image': new File([json['image']], Date.now() + '.jpg'),
+    //       'imageFullPath': json['imageFullPath'],
+    //       'jsonFullPath': json['jsonFullPath'],
+    //       'json': SigoutourMapper.toGw(ticketId, reportingPeriod, deductionType, isDeclareBusinessTax, gwEvidenceType, json['json'])
+    //     })
+    //   }
+    //   return result
+    // })
+    // const uploadResult = await uploadToGw(parseRawDataResult, props.user.taxId, props.user.token)
+    // props.onGwUploaded(uploadResult)
   }
 
   const handleDelete = async (ticket) => {

@@ -9,8 +9,6 @@ import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDe
 import ReverseIndex from '../../Util/ReverseIndex'
 
 
-const R = require('ramda')
-
 export const handleSendConfirmedResultData = (field, editData, sigoutourJson) => {
   const reverse = ReverseIndex.reverseIndex(SIGOUTOUR_FIELD_TYPE)
   if (field === 'evidenceNumber' && editData['carrierNumber'] !== undefined) {
@@ -32,7 +30,8 @@ const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => {
   return Object.keys(evidenceObj)
     .map((ticketId, idx) => {
       const obj = evidenceObj[ticketId]
-      return validData(businessEntityTaxId, SigoutourMapper.toView(obj, ticketId, idx + 1), assignMap)
+      const data = validData(businessEntityTaxId, SigoutourMapper.toView(obj, ticketId, idx + 1), assignMap)
+      return data
     })
 }
 
@@ -57,16 +56,12 @@ const IdentifiedEvidenceList = (props) => {
     init()
   }, [props.data, props.declareProperties.clientTaxId])
 
-
-  //TODO REFACTOR
   const handleResultAllConfirmed = async () => {
-    console.log(rowData)
     const errorTicketIdList = rowData.filter(obj => {
       return obj.cellHighlight.length > 0
     }).map(obj => {
       return obj.ticketId
     })
-    console.log('handleResultAllConfirmed', errorTicketIdList)
     const filterTicketIdList = Object.keys(localFiles['03'])
       .filter((key) => {
         const ticketId = localFiles['03'][key]['ticketId'].result

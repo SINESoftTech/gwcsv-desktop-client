@@ -12,7 +12,7 @@ const EvidenceList = (props) => {
 
   console.log('EvidenceList', props.data)
 
-  const [dataRows, setDataRows] = useState(props.data)
+  const [dataRows, setDataRows] = useState([])
 
   useEffect(() => {
     setDataRows(props.data)

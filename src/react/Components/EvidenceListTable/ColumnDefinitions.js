@@ -50,7 +50,7 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
     cellClassName: getCellClassName,
     editable: false,
     renderCell: cellValues => {
-      if (cellValues !== undefined || cellValues !== '') {
+      if (cellValues.row.evidenceType !== undefined || cellValues.row.evidenceType !== '') {
         return SIGOUTOUR_EVIDENCE_TYPE[cellValues.value].name
       }
       return ''
@@ -114,7 +114,8 @@ function renderEvidenceType(param) {
 
 
 function renderDeductionType(param) {
-  const deductionType = param.row.deductionType === undefined || param.row.deductionType === '' ? 'PURCHASE_AND_FEE' : param.row.deductionType
+  console.log('renderDeductionType', param.row.deductionType)
+  const deductionType = param.row.deductionType === undefined || param.row.deductionType === '' ? '1' : param.row.deductionType
   return (
     <FormControl>
       <Select
