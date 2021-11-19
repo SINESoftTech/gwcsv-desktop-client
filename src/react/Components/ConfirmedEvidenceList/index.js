@@ -32,6 +32,7 @@ const ConfirmedEvidenceList = (props) => {
   }, [props.data, props.declareProperties.clientTaxId])
 
   const handleUpload = async () => {
+    console.log('handleUpload',props.data['04'])
     // const filesByTicketId = byTicketId(props.data['04'])
     // let filterResult = []
     // for (let key in filesByTicketId) {
