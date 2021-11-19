@@ -288,9 +288,9 @@ class SigoutourMapperClass {
     Object.keys(jsonData).forEach(key => {
       result[key] = jsonData[key].result
     })
-
     result['sn'] = sn
     result['id'] = ticketId
+    result['errorMsg'] = jsonData['errorMsg']
     return result
   }
 

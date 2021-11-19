@@ -47,8 +47,6 @@ const ConfirmedEvidenceList = (props) => {
         }
       )
     }
-    console.log(uploadData)
-    console.log(props.user)
     const uploadResult = await uploadToGw(uploadData, props.user.taxId, props.user.token)
     props.onGwUploaded(props.declareProperties.clientTaxId, uploadResult)
   }
