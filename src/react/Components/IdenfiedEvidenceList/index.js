@@ -34,7 +34,7 @@ export const handleSendConfirmedResultData = (field, editData, sigoutourJson) =>
 
 const IdentifiedEvidenceList = (props) => {
 
-  console.log("identifiedEvidenceList",props)
+  console.log('identifiedEvidenceList', props)
 
   const [rowData, setRowData] = useState([])
   const [localFiles, setLocalFiles] = useState(props.data)
@@ -42,12 +42,10 @@ const IdentifiedEvidenceList = (props) => {
   const [assignMap, setAssignMap] = React.useState()
 
   const initDataRows = async (data, clientTaxId, assignMap) => {
-    const jsonDataList = await getJsonRawData(data, clientTaxId)
-    //read assign
-    const parseJsonDataList = jsonDataList.map((json, idx) => {
-      const clientTaxId = json.filePath.split('_')[1]
-      const ticketId = json.filePath.split('_')[6]
-      return validSigoutourData(clientTaxId, SigoutourMapper.toView(json.data, ticketId, idx + 1), assignMap)
+    console.log('initDataRows', data, clientTaxId)
+    const parseJsonDataList = Object.keys(data).map((ticketId, idx) => {
+      const obj = data[ticketId]
+      return validSigoutourData(clientTaxId, SigoutourMapper.toView(obj, ticketId, idx + 1), assignMap)
     })
     setRowData(parseJsonDataList)
   }
@@ -57,7 +55,7 @@ const IdentifiedEvidenceList = (props) => {
       const result = await getAssign()
       setAssignMap(result)
       setLocalFiles(props.data)
-      // initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
+      initDataRows(props.data['03'], props.declareProperties.clientTaxId, result)
     }
 
     init()

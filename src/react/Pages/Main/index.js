@@ -147,16 +147,16 @@ const Main = () => {
             const ticketId = keyList[i]
             const json = data[keyList[i]]
             const identifyResult = await getIdentifyResult({
-                'fullPath':json.fullPath,
-                'reportingPeriod': json.reportingPeriod,
-                'deductionType': json.deductionType,
-                'gwEvidenceType': json.gwEvidenceType,
+                'fullPath':json.fullPath.result,
+                'reportingPeriod': json.reportingPeriod.result,
+                'deductionType': json.deductionType.result,
+                'gwEvidenceType': json.gwEvidenceType.result,
                 'ticketId': ticketId
             })
             const domainObj = SigoutourMapper.toDomainObj(identifyResult)
             identifyResultReceivedList.push(domainObj)
         }
-        // identifyResultReceived(dispatch,declareProperties.clientTaxId, identifyResultReceivedList)
+        identifyResultReceived(dispatch,declareProperties.clientTaxId, identifyResultReceivedList)
     }
 
 
@@ -186,7 +186,8 @@ const Main = () => {
             setScanDisable(true)
             setScanAlert(true)
             //fixme
-            handleMoveImage(1, 'C:\\Users\\Tony\\.gwapp\\05\\123.jpg')
+            handleMoveImage(1, '/Users/tony/123.jpg')
+            // handleMoveImage(1, 'C:\\Users\\Tony\\.gwapp\\05\\123.jpg')
             // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
         }
     }
