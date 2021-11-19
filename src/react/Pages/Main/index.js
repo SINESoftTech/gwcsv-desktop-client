@@ -32,7 +32,7 @@ import {
   identifySent
 } from '../../Actions/electionActions'
 import { getIdentifyResult } from '../../Actions/sightourActions'
-import { openScanner } from '../../Actions/scanAction'
+import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 
