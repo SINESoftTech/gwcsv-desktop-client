@@ -14,11 +14,6 @@ const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
 const R = require('ramda')
 
-
-const byTicketId = R.groupBy((fileObj) => {
-  return fileObj.filename.split('_')[2].split('.')[0]
-})
-
 const ConfirmedEvidenceList = (props) => {
 
   const [rowData, setRowData] = useState([])
