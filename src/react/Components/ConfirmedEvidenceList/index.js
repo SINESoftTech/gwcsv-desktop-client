@@ -27,11 +27,10 @@ const ConfirmedEvidenceList = (props) => {
     let uploadData = []
     for (let i = 0; i < keyList.length; i++) {
       const data = props.data['04'][keyList[i]]
-      // const image = await getImageData(data['fullPath'].result)
+      const image = await getImageData(data['fullPath'].result)
       uploadData.push(
         {
-          // 'image': new File([image], Date.now() + '.jpg'),
-          'image': null,
+          'image': new File([image], Date.now() + '.jpg'),
           'json': SigoutourMapper.toGw(data)
         }
       )

@@ -10,6 +10,7 @@ const A5032ToGwObj = (data) => {
       'score': d['score']
     }
   })
+  result['fullPath'] = { result: data['fullPath'], score: [-1] }
   result['reportingPeriod'] = {
     'result': data['reportingPeriod'],
     'score': [-1]

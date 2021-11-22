@@ -145,6 +145,7 @@ const Main = () => {
 
 
   const handleGetIdentifyResult = async (event, data) => {
+    console.log("handleGetIdentifyResult",data)
     const keyList = Object.keys(data)
     const identifyResultReceivedList = []
     for (let i = 0; i < keyList.length; i++) {
@@ -157,8 +158,10 @@ const Main = () => {
         'gwEvidenceType': json.gwEvidenceType.result,
         'ticketId': ticketId
       })
+      console.log("handleGetIdentifyResult identifyResult",identifyResult)
       if (identifyResult.status !== 'process') {
         const domainObj = SigoutourMapper.toDomainObj(identifyResult)
+        // console.log("handleGetIdentifyResult domainObj",domainObj)
         identifyResultReceivedList.push(domainObj)
       }
     }
