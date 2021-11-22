@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
-import isElectron from 'is-electron'
 import { getImageData } from '../../Actions/electionActions'
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
