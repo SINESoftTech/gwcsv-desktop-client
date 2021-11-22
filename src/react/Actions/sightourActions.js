@@ -66,7 +66,6 @@ export async function getIdentifyResult(payload) {
     formData.append('token', token)
     formData.append('ticket', payload.ticketId)
     const result = await signtTourAxios.post(apiPath, formData)
-    console.log('getIdentifyResult', result)
     if (result.data.result === undefined) {
       const status = result.data.pageList[0]['photoList'][0].result.length === 0 ? 'failed' : 'completed'
       return {

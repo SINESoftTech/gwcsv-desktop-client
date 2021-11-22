@@ -11,6 +11,7 @@ const A5034ToGwObj = (data) => {
     }
   })
   result['isDeclareBusinessTax'] = { result: data['isDeclareBusinessTax'], score: [-1] }
+  result['photoId'] = { result: data.data['pageList'][0]['photoList'][0]['photo'], score: [-1] }
   result['fullPath'] = { result: data['fullPath'], score: [-1] }
   result['reportingPeriod'] = {
     'result': data['reportingPeriod'],

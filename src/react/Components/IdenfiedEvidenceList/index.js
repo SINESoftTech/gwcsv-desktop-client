@@ -2,28 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import { getAssign, getJsonRawData } from '../../Actions/electionActions'
-import SigoutourMapper, { SIGOUTOUR_FIELD_TYPE } from '../../Mapper/sigoutour_mapper'
+import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { validData } from '../../Valid/valid'
-import { electronActions } from '../../Context'
+import { electronActions, sightTourActions } from '../../Context'
 import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
-import ReverseIndex from '../../Util/ReverseIndex'
-
-
-export const handleSendConfirmedResultData = (field, editData, sigoutourJson) => {
-  const reverse = ReverseIndex.reverseIndex(SIGOUTOUR_FIELD_TYPE)
-  if (field === 'evidenceNumber' && editData['carrierNumber'] !== undefined) {
-    field = 'carrierNumber'
-  }
-  const data = {
-    'id': reverse[field],
-    'text': editData[field]
-  }
-  const photoId = sigoutourJson['pageList'][0]['photoList'][0]['photo']
-  return {
-    data: data,
-    photoId: photoId
-  }
-}
 
 
 const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => {
@@ -82,10 +64,9 @@ const IdentifiedEvidenceList = (props) => {
     const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
     jsonData[field].result = editData[field]
     const data = validData(props.declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData['ticketId'].result, 1), assignMap)['cellHighlight']
+
     if (!data.includes(field)) {
-      //todo send feedback
-      //   const sendSigoutourFeedBackData = handleSendConfirmedResultData(field, editData, json.data)
-      //   sightTourActions.sendConfirmedResult(sendSigoutourFeedBackData)
+      sightTourActions.sendConfirmedResult(SigoutourMapper.toSighoutFeedBack(field, editData[field], editData['photoId']))
     }
     const result = await electronActions.updateData(props.declareProperties.clientTaxId, jsonData)
     const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, assignMap)
@@ -94,7 +75,6 @@ const IdentifiedEvidenceList = (props) => {
   }
 
   const handleOpenImage = async (fullPath) => {
-    console.log('handleOpenImage',fullPath)
     props.onViewImage({
       fullPath: fullPath
     })

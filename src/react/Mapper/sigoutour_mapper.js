@@ -12,6 +12,7 @@ import { A5032ToGwObj } from './SigoutourReqMapper/A5032Mapper'
 import { A5033ToGwObj } from './SigoutourReqMapper/A5033Mapper'
 import { A5034ToGwObj } from './SigoutourReqMapper/A5034Mapper'
 import { A8001ToGwObj } from './SigoutourReqMapper/A8001Mapper'
+import ReverseIndex from '../Util/ReverseIndex'
 
 const SIGOUTOUR_FIELD_TYPE = {
   'KEY_INVN': 'evidenceNumber',
@@ -192,13 +193,12 @@ const parseToDomainObjStrategy = {
 class SigoutourMapperClass {
 
   toDomainObj(jsonData) {
-    console.log('toDomainObj', jsonData)
-
     const gwEvidenceType = jsonData.gwEvidenceType
     if (jsonData.status === 'completed') {
       return parseToDomainObjStrategy[gwEvidenceType](jsonData)
     }
     return {
+      photoId: { result: 0, score: [-1] },
       isDeclareBusinessTax: { result: jsonData['isDeclareBusinessTax'], score: [-1] },
       fullPath: { result: jsonData['fullPath'], score: [-1] },
       declarationId: { result: '', score: [-1] },
@@ -245,6 +245,18 @@ class SigoutourMapperClass {
     result['deductionType'] = DEDUCTION_TYPE[result['deductionType']]
     result['taxType'] = TAX_TYPE[result['taxType']].value
     return result
+  }
+
+  toSighoutFeedBack(key, value, photoId) {
+    const reverse = ReverseIndex.reverseIndex(SIGOUTOUR_FIELD_TYPE)
+    const data = {
+      'id': reverse[key],
+      'text': value
+    }
+    return {
+      data: data,
+      photoId: photoId
+    }
   }
 
 }
