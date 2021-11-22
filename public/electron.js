@@ -335,7 +335,7 @@ ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
       //save data to 05
     } else {
       const db04 = db.get('04').value()
-      db04[data.json['ticketId']]['errorMsg'] = data.json['errorMsg']
+      db04[data.json['ticketId']]['errorMsg'].result = data.json['errorMsg']
       db.get('04')
         .assign(db04)
         .write()
