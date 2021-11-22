@@ -2,17 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
 import isElectron from 'is-electron'
-import { getImageData, getRawDataWithImage } from '../../Actions/electionActions'
+import { getImageData } from '../../Actions/electionActions'
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { ConfirmedColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
 
-
-const electron = isElectron() ? window.electron : null
-const remote = isElectron() ? window.remote : null
-const ipcRenderer = isElectron() ? electron.ipcRenderer : null
-
-const R = require('ramda')
 
 const ConfirmedEvidenceList = (props) => {
 
@@ -33,7 +27,6 @@ const ConfirmedEvidenceList = (props) => {
     let uploadData = []
     for (let i = 0; i < keyList.length; i++) {
       const data = props.data['04'][keyList[i]]
-      console.log(data)
       const image = await getImageData(data['fullPath'].result)
       uploadData.push(
         {

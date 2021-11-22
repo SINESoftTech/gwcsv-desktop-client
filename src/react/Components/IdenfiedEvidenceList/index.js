@@ -94,7 +94,7 @@ const IdentifiedEvidenceList = (props) => {
   }
 
   const handleOpenImage = async (fullPath) => {
-    console.log(fullPath)
+    console.log('handleOpenImage',fullPath)
     props.onViewImage({
       fullPath: fullPath
     })

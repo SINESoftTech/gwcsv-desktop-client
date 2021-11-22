@@ -229,7 +229,7 @@ class SigoutourMapperClass {
     })
     result['sn'] = sn
     result['id'] = ticketId
-    result['errorMsg'] = jsonData['errorMsg']
+    result['errorMsg'] = jsonData['errorMsg'].result
     return result
   }
 

@@ -127,7 +127,6 @@ function renderEvidenceType(param) {
 
 
 function renderDeductionType(param) {
-  console.log('renderDeductionType', param.row.deductionType)
   const deductionType = param.row.deductionType === undefined || param.row.deductionType === '' ? '1' : param.row.deductionType
   return (
     <FormControl>
