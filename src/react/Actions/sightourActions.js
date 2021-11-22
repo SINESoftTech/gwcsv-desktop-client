@@ -27,7 +27,6 @@ export async function sendToIdentify(identifyData) {
     try {
       const token = await getToken('gateweb1', 'qwe123')
       const formData = new FormData()
-      console.log(data.fileBlob)
       formData.append('file', new File([data.fileBlob], data.sourceFileName))
       formData.append('type', data.evidenceType)
       formData.append('agent', data.accountingfirmTaxId)

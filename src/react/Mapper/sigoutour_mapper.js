@@ -6,7 +6,6 @@ import { A5001ToGwObj } from './SigoutourReqMapper/A5001Mapper'
 import { A5010ToGwObj } from './SigoutourReqMapper/A5010Mapper'
 import { A5020ToGwObj } from './SigoutourReqMapper/A5020Mapper'
 import { A5021ToGwObj } from './SigoutourReqMapper/A5021Mapper'
-import { isEmptyOrUndefined } from '../Util/StringUtils'
 import { A5030ToGwObj } from './SigoutourReqMapper/A5030Mapper'
 import { A5031ToGwObj } from './SigoutourReqMapper/A5031Mapper'
 import { A5032ToGwObj } from './SigoutourReqMapper/A5032Mapper'
@@ -163,66 +162,6 @@ const SIGOUTOUR_EVIDENCE_TYPE = {
   }
 }
 
-const SIGOUTOUR_EVIDENCE_TYPE_REVERSE = {
-  '三聯式統一發票': 'A1001',
-  '二聯式收銀發票': 'A2001',
-  '三聯式收銀機發票': 'A5001',
-  '電子發票證明聯-格式一': 'A5002',
-  '電子發票證明聯-格式二': 'A5003',
-  '電力帳單': 'A5010',
-  '水費帳單-台灣自來水': 'A5020',
-  '水費帳單-台北自來水': 'A5021',
-  '電信費帳單-中華電信': 'A5030',
-  '電信費帳單-台灣大哥大': 'A5031',
-  '電信費帳單-遠傳': 'A5032',
-  '電信費帳單-台灣之星': 'A5033',
-  '電信費帳單-亞太': 'A5034',
-  '海關代徵營業稅繳納證': 'A8001',
-  '勞保': 'A3001',
-  '勞退': 'A3002',
-  '健保': 'A4001'
-}
-
-
-const parseData = (jsonData) => {
-  let json = {}
-  const jsonDataBody = jsonData['pageList'][0]['photoList'][0]['result']
-  if (jsonDataBody.length <= 0) {
-    return json
-  }
-  const type = jsonData['pageList'][0]['photoList'][0]['type']
-  json['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[type]
-  jsonDataBody.forEach(data => {
-    const key = SIGOUTOUR_FIELD_TYPE[data['key']]
-    json[key] = data['text']
-  })
-  json['taxType'] = isEmptyOrUndefined(TAX_TYPE[json.taxType]) ? '' : TAX_TYPE[json.taxType]
-  if (type === 'A5020') {
-    json['waterFee'] = json['waterFee'] === '' ? 0 : json['waterFee']
-    json['basicFee'] = json['basicFee'] === '' ? 0 : json['basicFee']
-    json['taxableSalesValue'] = (parseFloat(json['waterFee']) + parseFloat(json['basicFee']))
-  }
-  json['totalAmount'] = isEmptyOrUndefined(json['totalAmount']) ? 0 : parseInt(json['totalAmount'])
-  json['totalPayAmount'] = isEmptyOrUndefined(json['totalPayAmount']) ? 0 : parseInt(json['totalPayAmount'])
-  json['otherFee'] = isEmptyOrUndefined(json['otherFee']) ? 0 : parseInt(json['otherFee'])
-  json['businessTaxValue'] = isEmptyOrUndefined(json['businessTaxValue']) ? 0 : parseInt(json['businessTaxValue'])
-  json['taxableSalesValue'] = isEmptyOrUndefined(json['taxableSalesValue']) ? 0 : parseInt(json['taxableSalesValue'])
-  json['zeroTaxSalesValue'] = isEmptyOrUndefined(json['zeroTaxSalesValue']) ? 0 : parseInt(json['zeroTaxSalesValue'])
-  json['dutyFreeSalesValue'] = isEmptyOrUndefined(json['dutyFreeSalesValue']) ? 0 : parseInt(json['dutyFreeSalesValue'])
-  if (type === 'A5030' || type === 'A5033' || type === 'A5031' || type === 'A5032') {
-    json['totalAmount'] = json['taxableSalesValue'] + json['businessTaxValue'] + json['zeroTaxSalesValue'] + json['dutyFreeSalesValue']
-  }
-  if (type === 'A5010' || type === 'A5020' || type === 'A5021' || type === 'A5030' || type === 'A5031' || type === 'A5032' || type === 'A5033' || type === 'A5034') {
-    json['evidenceDate'] = json['gwEvidenceDate']
-  }
-  if (json['evidenceNumber'] === undefined) {
-    json['evidenceNumber'] = json['carrierNumber']
-  }
-  json['buyerTaxId'] = json['buyerTaxId'] === undefined ? '' : json['buyerTaxId']
-  json['sellerTaxId'] = json['sellerTaxId'] === undefined ? '' : json['sellerTaxId']
-  return json
-}
-
 const parseToDomainObjStrategy = {
   'A1001': (data) => A1001ToGwObj(data),
   'A2001': (data) => A2001ToGwObj(data),
@@ -309,6 +248,6 @@ class SigoutourMapperClass {
 }
 
 const SigoutourMapper = new SigoutourMapperClass()
-export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, SIGOUTOUR_EVIDENCE_TYPE_REVERSE, DEDUCTION_TYPE }
+export { SIGOUTOUR_EVIDENCE_TYPE, SIGOUTOUR_FIELD_TYPE, DEDUCTION_TYPE }
 
 export default SigoutourMapper

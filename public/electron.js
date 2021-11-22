@@ -262,6 +262,7 @@ ipcMain.handle('evidence:getJsonFileData', (event, ticketId, businessEntityTaxId
 })
 
 ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
+  //
   const username = sentIdentifyResult['user']
   const identifyResult = sentIdentifyResult['result']
   const businessEntityTaxId = identifyResult[0].businessEntityTaxId
@@ -273,7 +274,7 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
       const targetFileName = username + '_' + data['businessEntityTaxId'] + '_' + data['ticketId'] + '.' + fileExt
       const targetFullName = path.join(config.fileFolder, persistenceFolder.image, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
-      const id = data['sourceFileName'].split('_')[1]
+      const id = data['sourceFileName'].split('_')[1].split('.')[0]
       const data01List = db.get('01').value()
       data01List[id].fullPath.result = targetFullName
       const data02 = {

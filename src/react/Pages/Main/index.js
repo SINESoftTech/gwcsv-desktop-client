@@ -35,6 +35,7 @@ import { getIdentifyResult } from '../../Actions/sightourActions'
 import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+import { getFileContent, getFileExt } from '../../Util/FileUtils'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -117,14 +118,15 @@ const Main = () => {
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
-    console.log(data)
+    console.log('handleSendImageToIdentify', data)
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = declareProperties.clientTaxId
     const sendToIdentifyData = data
       .map(d => {
+        const fileExt = getFileExt(d.fullPath)
         return {
           'sourceFullPath': d.fullPath,
-          'sourceFileName': d.fileName,
+          'sourceFileName': d.fileName + '.' + fileExt,
           'fileBlob': d.fileBlob,
           'accountingfirmTaxId': accountingfirmTaxId,
           'businessEntityTaxId': businessEntityTaxId,
@@ -192,8 +194,9 @@ const Main = () => {
     if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
       setScanDisable(true)
       setScanAlert(true)
-      //fixme
-      scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
+      //fixme rm
+      handleMoveImage(1, '/Users/tony/string123_24549210_11012_1_true_A5002_1108105521339982.jpg')
+      // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
 
