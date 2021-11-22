@@ -67,7 +67,7 @@ function createWindow() {
     // and load the index.html of the app.
     var fileLocation = `file://${path.join(__dirname, '../build/index.html')}`
     var devServerUrl = 'http://localhost:3000'
-    mainWindow.loadURL(!isDev ? devServerUrl : fileLocation)
+    mainWindow.loadURL(isDev ? devServerUrl : fileLocation)
     // Open the DevTools.
     if (isDev) {
         mainWindow.webContents.openDevTools()
