@@ -54,7 +54,6 @@ function loadConfig() {
 
 function createWindow() {
   // Create the browser window.
-  // console.log(path.join(__dirname, 'preload.js'))
   mainWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
@@ -318,8 +317,8 @@ ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
     const ticketId = data.json['ticketId']
     if (data.status) {
       //move image
-      const targetFolder = path.join(config.fileFolder, persistenceFolder.backup.folder)
-      const targetImagePath = path.join(targetFolder, ticketId + getFileExt(data.json.fullPath))
+      const targetFolder = path.join(config.fileFolder, persistenceFolder.backup)
+      const targetImagePath = path.join(targetFolder, ticketId + '.' + getFileExt(data.json.fullPath))
       fse.moveSync(data.json.fullPath, targetImagePath)
       const db04 = db.get('04').value()
       const data05 = {
@@ -334,6 +333,7 @@ ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
         .write()
       //save data to 05
     } else {
+      console.log('BB')
       const db04 = db.get('04').value()
       db04[data.json['ticketId']]['errorMsg'].result = data.json['errorMsg']
       db.get('04')
