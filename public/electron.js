@@ -50,6 +50,12 @@ function loadConfig() {
     config = fse.readJSONSync(configPath)
 }
 
+function loadPage(isDev) {
+    const fileLocation = `file://${path.join(__dirname, '../build/index.html')}`
+    const devServerUrl = 'http://localhost:3000'
+    return isDev ? devServerUrl : fileLocation
+}
+
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
@@ -61,13 +67,11 @@ function createWindow() {
             autoHideMenuBar: true,
         }
     })
-    mainWindow.setAutoHideMenuBar(true)
-    mainWindow.setMenu(null)
+    // mainWindow.setAutoHideMenuBar(true)
+    // mainWindow.setMenu(null)
     mainWindow.maximize()
     // and load the index.html of the app.
-    var fileLocation = `file://${path.join(__dirname, '../build/index.html')}`
-    var devServerUrl = 'http://localhost:3000'
-    mainWindow.loadURL(isDev ? devServerUrl : fileLocation)
+    mainWindow.loadURL(loadPage(isDev))
     // Open the DevTools.
     if (isDev) {
         mainWindow.webContents.openDevTools()
@@ -127,15 +131,11 @@ app.on('activate', function () {
 
 app.on('browser-window-focus', function () {
     globalShortcut.register("CommandOrControl+R", () => {
-        console.log("CommandOrControl+R is pressed: Shortcut Disabled");
+        mainWindow.loadURL(loadPage(isDev))
     });
     globalShortcut.register("F5", () => {
-        console.log("F5 is pressed: Shortcut Disabled");
+        mainWindow.loadURL(loadPage(isDev))
     });
-});
-app.on('browser-window-blur', function () {
-    globalShortcut.unregister('CommandOrControl+R');
-    globalShortcut.unregister('F5');
 });
 
 const persistenceFolder = {
