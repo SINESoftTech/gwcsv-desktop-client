@@ -120,6 +120,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
 }
 
 async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
+  console.log('uploadBill payload', payload)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
@@ -139,7 +140,7 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
       'totalAmount': payload.totalAmount,
       'totalPayAmount': payload.totalPayAmount,
       'evidenceTimestamp': payload.evidenceDate,
-      'evidenceId': payload.carrierNumber,
+      'evidenceId': payload.evidenceNumber,
       'commentType': 'WHITE_SPACE',
       'summaryCount': 1,
       'groupName': null,
@@ -195,7 +196,7 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
       'totalAmount': payload.totalAmount,
       'totalPayAmount': payload.totalPayAmount,
       'evidenceTimestamp': payload.evidenceDate,
-      'evidenceId': payload.carrierNumber,
+      'evidenceId': payload.evidenceNumber,
       'declarationId': payload.declarationId,
       'groupName': payload.groupName,
       'remarkText': payload.remarkText
@@ -240,13 +241,13 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
       result.push({
         'status': true,
         'json': data['json'],
-        'errorMsg': '',
+        'errorMsg': ''
       })
     } else {
       data['json']['errorMsg'] = uploadResult.errorMsg
       result.push({
         'status': false,
-        'json': data['json'],
+        'json': data['json']
       })
     }
   }

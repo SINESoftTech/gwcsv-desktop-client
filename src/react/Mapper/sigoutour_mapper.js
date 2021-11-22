@@ -199,6 +199,7 @@ class SigoutourMapperClass {
       return parseToDomainObjStrategy[gwEvidenceType](jsonData)
     }
     return {
+      isDeclareBusinessTax: { result: jsonData['isDeclareBusinessTax'], score: [-1] },
       fullPath: { result: jsonData['fullPath'], score: [-1] },
       declarationId: { result: '', score: [-1] },
       evidenceDate: { result: '', score: [-1] },

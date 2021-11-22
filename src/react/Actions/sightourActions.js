@@ -75,6 +75,7 @@ export async function getIdentifyResult(payload) {
         'deductionType': payload.deductionType,
         'gwEvidenceType': payload.gwEvidenceType,
         'ticketId': payload.ticketId,
+        'isDeclareBusinessTax': payload.isDeclareBusinessTax,
         'status': status,
         'data': result.data
       }
@@ -86,6 +87,7 @@ export async function getIdentifyResult(payload) {
         'deductionType': payload.deductionType,
         'gwEvidenceType': payload.gwEvidenceType,
         'ticketId': payload.ticketId,
+        'isDeclareBusinessTax': payload.isDeclareBusinessTax,
         'status': 'process'
       }
     }
@@ -94,6 +96,7 @@ export async function getIdentifyResult(payload) {
       'reportingPeriod': payload.reportingPeriod,
       'deductionType': payload.deductionType,
       'gwEvidenceType': payload.gwEvidenceType,
+      'isDeclareBusinessTax': payload.isDeclareBusinessTax,
       'ticketId': payload.ticketId,
       'status': 'failed'
     }

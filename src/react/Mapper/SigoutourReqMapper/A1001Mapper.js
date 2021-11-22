@@ -11,6 +11,7 @@ const A1001ToGwObj = (data) => {
     }
   })
   result['fullPath'] = { result: data['fullPath'], score: [-1] }
+  result['isDeclareBusinessTax'] = { result: data['isDeclareBusinessTax'], score: [-1] }
   result['reportingPeriod'] = {
     'result': data['reportingPeriod'],
     'score': [-1]

@@ -10,6 +10,7 @@ const A2001ToGwObj = (data) => {
       'score': d['score']
     }
   })
+  result['isDeclareBusinessTax'] = { result: data['isDeclareBusinessTax'], score: [-1] }
   result['fullPath'] = { result: data['fullPath'], score: [-1] }
   result['reportingPeriod'] = {
     'result': data['reportingPeriod'],
