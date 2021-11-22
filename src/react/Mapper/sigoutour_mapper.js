@@ -243,6 +243,7 @@ class SigoutourMapperClass {
     result['gwEvidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['gwEvidenceType']].value
     result['evidenceType'] = SIGOUTOUR_EVIDENCE_TYPE[result['evidenceType']].value
     result['deductionType'] = DEDUCTION_TYPE[result['deductionType']]
+    result['taxType'] = TAX_TYPE[result['taxType']].value
     return result
   }
 
