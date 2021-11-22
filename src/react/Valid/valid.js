@@ -30,6 +30,8 @@ const validData = (clientTaxId, json, assignMap) => {
   if (json['buyerTaxId'].length !== 8 || !validTaxId(json['buyerTaxId']) || json['buyerTaxId'] !== clientTaxId) {
     validResult.push('buyerTaxId')
   }
+  console.log(json['gwEvidenceType'])
+  // console.log(validEvidenceType[json['gwEvidenceType']](json, assignMap))
   validResult = validResult
     .concat(validEvidenceType[json['gwEvidenceType']](json, assignMap))
     .concat(validEvidenceDate(json))

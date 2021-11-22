@@ -166,7 +166,6 @@ test('success SigoutourMapper toDomainObj A1001', () => {
     'data': sigoutourJson
   }
   const result = A1001ToGwObj(data)
-  console.log(result)
   expect(result).toMatchObject({
     evidenceNumber: {
       result: 'GD0051082903', score: null

@@ -713,8 +713,8 @@ const assignMap = {
 
 test('valid buyerTaxId error', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '16151904',
@@ -743,8 +743,8 @@ test('valid buyerTaxId error', () => {
 
 test('valid sellerTaxId error', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -772,8 +772,8 @@ test('valid sellerTaxId error', () => {
 
 test('valid taxType empty', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -805,8 +805,8 @@ test('valid taxType empty', () => {
 
 test('valid taxType 2 error', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -836,8 +836,8 @@ test('valid taxType 2 error', () => {
 
 test('valid taxType 3 error', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -867,8 +867,8 @@ test('valid taxType 3 error', () => {
 
 test('valid evidenceType 5030', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB21050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
