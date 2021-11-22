@@ -311,7 +311,7 @@ ipcMain.handle('evidence:identifyResultReceived', (event, businessEntityTaxId, i
 
 
 ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
-  console.log('evidence:uploaded payload', payload)
+
   const db = getDbContext(businessEntityTaxId)
   payload.map(data => {
     const ticketId = data.json['ticketId']
