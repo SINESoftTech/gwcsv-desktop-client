@@ -120,7 +120,6 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
 }
 
 async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
-  console.log('uploadBill payload', payload)
   try {
     const req = {
       'businessEntityTaxId': payload.buyerTaxId,
