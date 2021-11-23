@@ -2,7 +2,6 @@ import isElectron from 'is-electron'
 import actionTypes from './actionTypes'
 
 const electron = isElectron() ? window.electron : null
-const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
 export const saveAssign = async (payload) => {
