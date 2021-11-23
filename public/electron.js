@@ -222,11 +222,10 @@ ipcMain.handle('evidence:deleteData', (event, businessEntityTaxId, step, id) => 
 })
 
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
-    console.log('scanImages', declareProperties)
     const sourceFileExt = getFileExt(fullPath)
     const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
     const id = Date.now()
-    const targetFilePath = path.join(targetFolderPath, username.username + '_' + username.taxId + '_' + id + '.' + sourceFileExt)
+    const targetFilePath = path.join(targetFolderPath, username.username + '_' + declareProperties.clientTaxId + '_' + id + '.' + sourceFileExt)
     console.log(targetFilePath)
     fse.copySync(fullPath, targetFilePath)
     const data = {
@@ -238,7 +237,7 @@ ipcMain.handle('evidence:scanImages', (event, fullPath, username, declarePropert
             fullPath: {result: targetFilePath, score: [-1]}
         }
     }
-    const db = getDbContext(username.taxId)
+    const db = getDbContext(declareProperties.clientTaxId)
     db.get('01')
         .assign(data)
         .write()
