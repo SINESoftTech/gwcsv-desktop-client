@@ -60,6 +60,7 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     webPreferences: {
+      nativeWindowOpen: false,
       nodeIntegration: true,
       enableRemoteModule: true,
       preload: path.join(__dirname, 'preload.js'),

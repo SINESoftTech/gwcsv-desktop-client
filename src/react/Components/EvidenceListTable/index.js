@@ -42,7 +42,6 @@ const EvidenceList = (props) => {
       props.handleEditRow(param.row, 'gwEvidenceType')
     }
     if (event.target.innerText === '打開') {
-      console.log("AA",param)
       props.handleOpenImage(param.row.fullPath)
     }
     if (event.target.innerText === '刪除') {
