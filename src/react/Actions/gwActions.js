@@ -85,8 +85,6 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
       'guiId': payload.evidenceNumber,
       'commentType': 'WHITE_SPACE',
       'summaryCount': 1,
-      'groupName': null,
-      'remarkText': payload.remark,
       'clearanceType': 'BLANK'
     }
     const url = '/evidence/gui'
@@ -141,9 +139,7 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
       'evidenceTimestamp': payload.evidenceDate,
       'evidenceId': payload.evidenceNumber,
       'commentType': 'WHITE_SPACE',
-      'summaryCount': 1,
-      'groupName': null,
-      'remarkText': payload.remark
+      'summaryCount': 1
     }
     const url = '/evidence/bill'
     let bodyFormData = new FormData()
@@ -196,9 +192,7 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
       'totalPayAmount': payload.totalPayAmount,
       'evidenceTimestamp': payload.evidenceDate,
       'evidenceId': payload.evidenceNumber,
-      'declarationId': payload.declarationId,
-      'groupName': payload.groupName,
-      'remarkText': payload.remarkText
+      'declarationId': payload.declarationId
     }
     const url = '/evidence/customs'
     let bodyFormData = new FormData()
