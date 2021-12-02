@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
-import { getAssign, getJsonRawData } from '../../Actions/electionActions'
+import { getJsonRawData } from '../../Actions/electionActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { validData } from '../../Valid/valid'
 import { electronActions, sightTourActions } from '../../Context'
@@ -23,16 +23,16 @@ const IdentifiedEvidenceList = (props) => {
   const [rowData, setRowData] = useState([])
   const [localFiles, setLocalFiles] = useState(props.data)
   const [selectionModel, setSelectionModel] = React.useState([])
-  const [assignMap, setAssignMap] = React.useState()
+  // const [assignMap, setAssignMap] = React.useState()
 
 
   useEffect(() => {
     const init = async () => {
-      const assignMap = await getAssign()
-      setAssignMap(assignMap)
+      // const assignMap = await getAssign()
+      // setAssignMap(assignMap)
       setLocalFiles(props.data)
       if (Object.keys(props.data).length > 0) {
-        setRowData(validEvidence(props.data['03'], props.declareProperties.clientTaxId, assignMap))
+        setRowData(validEvidence(props.data['03'], props.declareProperties.clientTaxId, props.assignMap))
       }
     }
     init()
@@ -54,7 +54,7 @@ const IdentifiedEvidenceList = (props) => {
       })
     const result = await props.onResultAllConfirmed(props.declareProperties.clientTaxId, filterTicketIdList)
     setLocalFiles(result)
-    const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, assignMap)
+    const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, props.assignMap)
     setRowData(validResult)
   }
 
@@ -63,13 +63,13 @@ const IdentifiedEvidenceList = (props) => {
   const handleEditRow = async (editData, field = '') => {
     const jsonData = await getJsonRawData(editData['ticketId'], props.declareProperties.clientTaxId)
     jsonData[field].result = editData[field]
-    const data = validData(props.declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData['ticketId'].result, 1), assignMap)['cellHighlight']
+    const data = validData(props.declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData['ticketId'].result, 1), props.assignMap)['cellHighlight']
 
     if (!data.includes(field)) {
       sightTourActions.sendConfirmedResult(SigoutourMapper.toSighoutFeedBack(field, editData[field], editData['photoId']))
     }
     const result = await electronActions.updateData(props.declareProperties.clientTaxId, jsonData)
-    const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, assignMap)
+    const validResult = validEvidence(result['03'], props.declareProperties.clientTaxId, props.assignMap)
     setLocalFiles(result)
     setRowData(validResult)
   }

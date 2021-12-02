@@ -72,14 +72,16 @@ const Main = () => {
   const [scanCount, setScanCount] = React.useState(0)
   const [scanDisable, setScanDisable] = React.useState(false)
   const [scanAlert, setScanAlert] = React.useState(false)
+  const [assignMap, setAssignMap] = React.useState()
+
 
   useEffect(async () => {
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
     if (declareProperties.clientTaxId !== '') {
       await electronActions.getChooseBusinessEntityData(dispatch, declareProperties.clientTaxId)
     }
-    //fixme
     const assign = await electronActions.getAssign()
+    setAssignMap(assign)
     await openScanner(dispatch)
   }, [value, declareProperties.clientTaxId])
 
@@ -352,7 +354,8 @@ const Main = () => {
                                           onViewImage={handleViewImage}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}
-                                          OnDeleteEvdience={handleDeleteEvidence} />
+                                          OnDeleteEvdience={handleDeleteEvidence}
+                                          assignMap={assignMap} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}
