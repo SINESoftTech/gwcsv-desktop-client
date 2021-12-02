@@ -4,10 +4,10 @@ import actionTypes from './actionTypes'
 const electron = isElectron() ? window.electron : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-export const saveAssign = async (payload) => {
+export const saveAssign = async (payload, yearAssignVersion) => {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:saveAssign', payload)
+      const result = await ipcRenderer.invoke('evidence:saveAssign', payload, yearAssignVersion)
       return result
     }
   } catch (error) {
@@ -15,6 +15,15 @@ export const saveAssign = async (payload) => {
   }
 }
 
+export async function getYearAssignVersion() {
+  try {
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:getYearAssignVersion')
+    }
+  } catch (error) {
+    console.log('updateData', error)
+  }
+}
 
 export async function updateData(businessEntityTaxId, payload) {
   try {
@@ -130,7 +139,6 @@ export async function gwUploaded(dispatch, businessEntityTaxId, payload) {
     throw new Error(error)
   }
 }
-
 
 export async function getAssign() {
   try {

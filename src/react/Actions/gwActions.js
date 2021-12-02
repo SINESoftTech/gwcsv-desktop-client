@@ -247,12 +247,41 @@ export async function uploadToGw(payload, accountingFirmTaxId, token) {
   return result
 }
 
-export const getAssign = async () => {
+//{
+//   "version": "56bbb47702cc861db0d4e02dd1a5151dc31276caa1a4868e04138659ba82300c"
+// }
+const getYearAssignVersion = async () => {
   try {
-    let response = await axios.get('/assign/year')
-    return response.data
+    const response = await axios.get('/assign/year/version')
+    return {
+      'status': 'success',
+      'version': response.data['version']
+    }
+  } catch (e) {
+    return {
+      'status': 'failed'
+    }
+  }
+}
+
+export const getAssign = async (yearAssignVersion) => {
+  try {
+    const versionRes = await getYearAssignVersion()
+    if (versionRes.status === 'success' && versionRes.version !== yearAssignVersion) {
+      const response = await axios.get('/assign/year')
+      return {
+        'status': 'success',
+        'version': versionRes.version,
+        'data': response.data
+      }
+    }
+    return {
+      'status': 'noChange'
+    }
   } catch (error) {
-    console.log(error)
+    return {
+      'status': 'failed'
+    }
   }
 }
 

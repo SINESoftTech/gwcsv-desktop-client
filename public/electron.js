@@ -16,7 +16,8 @@ const { globalShortcut } = electron
 let mainWindow
 let config = {
   rootFolder: path.join(userHomedir, '/.gwapp'),
-  fileFolder: path.join(userHomedir, '/.gwapp')
+  fileFolder: path.join(userHomedir, '/.gwapp'),
+  yearAssignVersion: ''
 }
 
 function initApp() {
@@ -177,10 +178,13 @@ function getDbContext(businessEntityTaxId) {
   return db
 }
 
-//todo remove but not now
-ipcMain.handle('evidence:saveAssign', (event, payload) => {
+ipcMain.handle('evidence:saveAssign', (event, payload, version) => {
   const targetFilePath = config.fileFolder + '/' + 'assign.json'
   fse.writeJSONSync(targetFilePath, payload, { encoding: 'utf8', flag: 'w' })
+  //todo
+  config.yearAssignVersion = version
+  const configPath = path.join(config.rootFolder, 'appSetting.conf')
+  fse.writeFileSync(configPath, JSON.stringify(config))
 })
 
 ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
@@ -360,8 +364,13 @@ const getFileExt = (fileName) => {
   return 'json'
 }
 
+ipcMain.handle('evidence:getYearAssignVersion', (event) => {
+  return config.yearAssignVersion
+})
 
 ipcMain.handle('evidence:getAssign', (event) => {
+  //todo
   const targetFilePath = config.fileFolder + '/' + 'assign.json'
   return fse.readJSONSync(targetFilePath)
 })
+

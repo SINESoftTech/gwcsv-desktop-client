@@ -35,7 +35,7 @@ import { getIdentifyResult } from '../../Actions/sightourActions'
 import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
-import { getFileContent, getFileExt } from '../../Util/FileUtils'
+import { getFileExt } from '../../Util/FileUtils'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -78,8 +78,8 @@ const Main = () => {
     if (declareProperties.clientTaxId !== '') {
       await electronActions.getChooseBusinessEntityData(dispatch, declareProperties.clientTaxId)
     }
-    const assign = await gwActions.getAssign()
-    await electronActions.saveAssign(assign)
+    //fixme
+    const assign = await electronActions.getAssign()
     await openScanner(dispatch)
   }, [value, declareProperties.clientTaxId])
 
