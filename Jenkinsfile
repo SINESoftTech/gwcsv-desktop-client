@@ -14,6 +14,7 @@ pipeline {
              }
         }
         steps {
+            echo "test"
             // sh 'npm install'
             // sh 'npm run ci'
         }
