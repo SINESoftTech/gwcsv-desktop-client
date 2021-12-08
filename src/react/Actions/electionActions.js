@@ -2,14 +2,12 @@ import isElectron from 'is-electron'
 import actionTypes from './actionTypes'
 
 const electron = isElectron() ? window.electron : null
-const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
-export const saveAssign = async (payload) => {
-  console.log('saveAssign', payload)
+export const saveAssign = async (payload, yearAssignVersion) => {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:saveAssign', payload)
+      const result = await ipcRenderer.invoke('evidence:saveAssign', payload, yearAssignVersion)
       return result
     }
   } catch (error) {
@@ -17,14 +15,34 @@ export const saveAssign = async (payload) => {
   }
 }
 
-
-export async function updateSigoutourData(ticketId, deductionType, period, gwEvidenceType, json) {
+export async function getYearAssignVersion() {
   try {
     if (ipcRenderer) {
-      return await ipcRenderer.invoke('evidence:updateSigoutourData', ticketId, deductionType, period,gwEvidenceType, json)
+      return await ipcRenderer.invoke('evidence:getYearAssignVersion')
     }
   } catch (error) {
-    console.log('updateSigoutourData', error)
+    console.log('updateData', error)
+  }
+}
+
+export async function updateData(businessEntityTaxId, payload) {
+  try {
+    if (ipcRenderer) {
+      return await ipcRenderer.invoke('evidence:updateData', businessEntityTaxId, payload)
+    }
+  } catch (error) {
+    console.log('updateData', error)
+  }
+}
+
+export async function deleteData(dispatch, businessEntityTaxId, step, id) {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:deleteData', businessEntityTaxId, step, id)
+      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+    }
+  } catch (error) {
+    console.log('deleteData', error)
   }
 }
 
@@ -39,31 +57,20 @@ export async function deleteSigoutourData(dispatch, eventName, ticketId) {
   }
 }
 
-export async function getJsonRawData(data, clientTaxId) {
+export async function getJsonRawData(ticketId, clientTaxId) {
   try {
-    const filterJsonDataFilePathList = data.filter(d => {
-      return d.filename.endsWith('.json')
-    }).filter(d => {
-      const fileNameClientId = d.filename.split('_')[1]
-      return fileNameClientId === clientTaxId
-    }).map(d => {
-      return d.fullPath
-    })
     if (ipcRenderer) {
-      console.log("getJsonRawData",filterJsonDataFilePathList)
-      return await ipcRenderer.invoke('evidence:getJsonFileData', filterJsonDataFilePathList)
+      return await ipcRenderer.invoke('evidence:getJsonFileData', ticketId, clientTaxId)
     }
   } catch (error) {
     console.log('getJsonRawData', error)
   }
 }
 
-export async function getFileLists(dispatch) {
+export async function getChooseBusinessEntityData(dispatch, taxId) {
   try {
-    console.log('in action getFileLists')
     if (ipcRenderer) {
-      console.log('in action getFileLists')
-      const result = await ipcRenderer.invoke('evidence:getFileLists')
+      const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData', taxId)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }
@@ -73,11 +80,9 @@ export async function getFileLists(dispatch) {
 }
 
 export async function scanImages(dispatch, filePath, username, declareProperties) {
-  console.log('scanImages() filePath', filePath)
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, declareProperties)
-      console.log('scanImages result', result)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
@@ -85,7 +90,7 @@ export async function scanImages(dispatch, filePath, username, declareProperties
   }
 }
 
-export async function fileScanned(dispatch, payload) {
+export async function fileScanned(dispatch) {
   dispatch({ type: 'LOGOUT' })
 }
 
@@ -100,10 +105,10 @@ export async function identifySent(dispatch, payload) {
   }
 }
 
-export async function identifyResultReceived(dispatch, payload) {
+export async function identifyResultReceived(dispatch, businessEntityTaxId, payload) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:identifyResultReceived', payload)
+      const result = await ipcRenderer.invoke('evidence:identifyResultReceived', businessEntityTaxId, payload)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
@@ -111,10 +116,10 @@ export async function identifyResultReceived(dispatch, payload) {
   }
 }
 
-export async function identifyResultConfirmed(dispatch, payload) {
+export async function identifyResultConfirmed(dispatch, businessEntityTaxId, payload) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', payload)
+      const result = await ipcRenderer.invoke('evidence:identifyResultConfirmed', businessEntityTaxId, payload)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }
@@ -123,10 +128,10 @@ export async function identifyResultConfirmed(dispatch, payload) {
   }
 }
 
-export async function gwUploaded(dispatch, payload) {
+export async function gwUploaded(dispatch, businessEntityTaxId, payload) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:uploaded', payload)
+      const result = await ipcRenderer.invoke('evidence:uploaded', businessEntityTaxId, payload)
       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
       return result
     }
@@ -135,21 +140,21 @@ export async function gwUploaded(dispatch, payload) {
   }
 }
 
-export async function getRawDataWithImage(payload) {
-  try {
-    if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:getRawDataWithImage', payload)
-      return result
-    }
-  } catch (error) {
-    // throw new Error(error)
-  }
-}
-
 export async function getAssign() {
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:getAssign')
+      return result
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function getImageData(fullPath) {
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke('evidence:getImageFileContent', fullPath)
       return result
     }
   } catch (error) {

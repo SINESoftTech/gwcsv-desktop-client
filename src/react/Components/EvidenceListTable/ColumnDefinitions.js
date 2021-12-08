@@ -6,11 +6,16 @@ import mainStyles from '../../Pages/Main/mainStyles'
 
 const R = require('ramda')
 
+
 export const ConfirmedColumnDefinitions: GridColDef[] = [
   { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
   { field: 'sn', headerName: '序號', width: 110, editable: false },
   { field: 'errorMsg', headerName: '上傳錯誤訊息', width: 150, editable: false, renderCell: renderSn },
-  { field: 'gwEvidenceType', headerName: 'GW憑證類型', width: 200, editable: false },
+  {
+    field: 'gwEvidenceType', headerName: 'GW憑證類型', width: 200, editable: false, renderCell: cellValues => {
+      return SIGOUTOUR_EVIDENCE_TYPE[cellValues.value].name
+    }
+  },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, editable: false },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 150, editable: false },
   { field: 'declarationId', headerName: '報單/文件號碼', width: 200, editable: false },
@@ -28,7 +33,17 @@ export const ConfirmedColumnDefinitions: GridColDef[] = [
 ]
 
 export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
-  { field: '', headerName: '', width: 80, renderCell: renderDeleteBtnCell },
+  { field: 'delete', headerName: '刪除', width: 110, renderCell: renderDeleteBtnCell },
+  {
+    field: '',
+    headerName: '圖檔',
+    width: 110,
+    cellClassName: getCellClassName,
+    editable: false,
+    renderCell: cellValues => {
+      return <Button variant='contained' color='primary'>打開</Button>
+    }
+  },
   { field: 'sn', headerName: '序號', width: 110, cellClassName: getCellClassName, editable: false },
   {
     field: 'gwEvidenceType',
@@ -43,7 +58,14 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
     headerName: '辨識憑證類型',
     width: 200,
     cellClassName: getCellClassName,
-    editable: false
+    editable: false,
+    // renderEditCell
+    renderCell: cellValues => {
+      if (cellValues.row.evidenceType !== undefined || cellValues.row.evidenceType !== '') {
+        return SIGOUTOUR_EVIDENCE_TYPE[cellValues.value].name
+      }
+      return ''
+    }
   },
   { field: 'reportingPeriod', headerName: '申報期別', width: 150, cellClassName: getCellClassName, editable: true },
   { field: 'evidenceNumber', headerName: '憑證號碼', width: 200, cellClassName: getCellClassName, editable: true },
@@ -79,7 +101,6 @@ export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
 
 
 function renderEvidenceType(param) {
-  console.log('renderEvidenceType', param.value)
   const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE)
   return (
     <>
@@ -92,7 +113,7 @@ function renderEvidenceType(param) {
         >
           {keyList.map(key => {
             const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
-            return <MenuItem value={name}>{name}</MenuItem>
+            return <MenuItem value={key}>{name}</MenuItem>
           })
           }
         </Select>
@@ -104,7 +125,7 @@ function renderEvidenceType(param) {
 
 
 function renderDeductionType(param) {
-  const deductionType = param.row.deductionType === undefined || param.row.deductionType === '' ? 'PURCHASE_AND_FEE' : param.row.deductionType
+  const deductionType = param.row.deductionType === undefined || param.row.deductionType === '' ? '1' : param.row.deductionType
   return (
     <FormControl>
       <Select

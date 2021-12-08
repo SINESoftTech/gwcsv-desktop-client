@@ -34,7 +34,6 @@ export async function sendToIdentify(identifyData) {
       formData.append('token', token)
       const result = await signtTourAxios.post(apiPath, formData, config)
       if (result.data['result'] === 0) {
-        console.log('sendToIdentify', data)
         resultList.push({
           'result': true,
           'type': data.evidenceType,
@@ -59,26 +58,45 @@ export async function sendToIdentify(identifyData) {
   return resultList
 }
 
-export async function getIdentifyResult(fileObj) {
+export async function getIdentifyResult(payload) {
   try {
     const apiPath = '/check.php'
     const token = await getToken('gateweb1', 'qwe123')
-    const ticketId = fileObj.filename.split('_')[6].split('.')[0]
     const formData = new FormData()
     formData.append('token', token)
-    formData.append('ticket', ticketId)
+    formData.append('ticket', payload.ticketId)
     const result = await signtTourAxios.post(apiPath, formData)
     if (result.data.result === undefined) {
+      const status = result.data.pageList[0]['photoList'][0].result.length === 0 ? 'failed' : 'completed'
       return {
-        'sourceFullPath': fileObj.fullPath,
-        'sourceFileName': fileObj.filename,
-        'status': 'completed',
+        'fullPath': payload.fullPath,
+        'reportingPeriod': payload.reportingPeriod,
+        'deductionType': payload.deductionType,
+        'gwEvidenceType': payload.gwEvidenceType,
+        'ticketId': payload.ticketId,
+        'isDeclareBusinessTax': payload.isDeclareBusinessTax,
+        'status': status,
         'data': result.data
       }
     }
+    if (result.data.result === -200014) {
+      return {
+        'fullPath': payload.fullPath,
+        'reportingPeriod': payload.reportingPeriod,
+        'deductionType': payload.deductionType,
+        'gwEvidenceType': payload.gwEvidenceType,
+        'ticketId': payload.ticketId,
+        'isDeclareBusinessTax': payload.isDeclareBusinessTax,
+        'status': 'process'
+      }
+    }
     return {
-      'sourceFullPath': fileObj.fullPath,
-      'sourceFileName': fileObj.filename,
+      'fullPath': payload.fullPath,
+      'reportingPeriod': payload.reportingPeriod,
+      'deductionType': payload.deductionType,
+      'gwEvidenceType': payload.gwEvidenceType,
+      'isDeclareBusinessTax': payload.isDeclareBusinessTax,
+      'ticketId': payload.ticketId,
       'status': 'failed'
     }
   } catch (error) {
