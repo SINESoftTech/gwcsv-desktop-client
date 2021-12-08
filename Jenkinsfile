@@ -26,7 +26,7 @@ pipeline {
                 branch 'uat'
             }
         }
-        agent any
+        
         // agent{
         //     dockerfile {
         //         reuseNode true
