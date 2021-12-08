@@ -14,9 +14,9 @@ pipeline {
              }
         }
         steps {
-            echo "test"
-            // sh 'npm install'
-            // sh 'npm run ci'
+            // echo "test"
+            sh 'npm install'
+            sh 'npm run ci'
         }
     }
     stage('Build'){
@@ -33,7 +33,7 @@ pipeline {
         }
         steps {
           script{
-            // sh 'npm install && npm run electron-build'
+            sh 'npm install && npm run electron-build'
             echo "build_${env.BUILD_NUMBER}"
             def now = new Date().format("yyyyMMdd", TimeZone.getTimeZone('UTC'))
             zip zipFile: "gscsv_desktop_test_${now}_${env.BUILD_NUMBER}.zip", archive: false , dir: 'src' 
