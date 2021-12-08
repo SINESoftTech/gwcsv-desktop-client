@@ -38,6 +38,6 @@ RUN sh -c 'echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic
 RUN apt-get update
 RUN apt-get install -y mono-complete
 
-RUN PROJECT_DIR=/root/project
-RUN mkdir /project
-WORKDIR $PROJECT_DIR
+# RUN PROJECT_DIR=/root/project
+# RUN mkdir /project
+# WORKDIR $PROJECT_DIR
