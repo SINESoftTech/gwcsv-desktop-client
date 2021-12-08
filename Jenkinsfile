@@ -50,6 +50,7 @@ pipeline {
         }
         steps {
           script{
+            GIT_COMMIT = sh (script: "git log -n 1 --pretty=format:'%h' --abbrev=7", returnStdout: true)
             def now = new Date().format("yyyyMMdd", TimeZone.getTimeZone('UTC'))
             def fileName="gscsv_desktop_test_${now}_${env.BUILD_NUMBER}.zip"
             sh 'mkdir -p test-git'
@@ -63,7 +64,7 @@ pipeline {
                     }
                     sh "git remote set-url origin https://se112:${encodedPass}@gitlab.com/gwcsv/gscsv-desktop-client-release-file.git"
                     sh "git add ${fileName}"
-                    sh "git commit -m ${env.BUILD_NUMBER}"
+                    sh "git commit -m ${GIT_COMMIT}"
                     sh "git push --set-upstream origin main"
                 }
             }
