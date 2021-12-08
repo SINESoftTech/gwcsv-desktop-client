@@ -53,7 +53,7 @@ pipeline {
             def now = new Date().format("yyyyMMdd", TimeZone.getTimeZone('UTC'))
             def fileName="gscsv_desktop_test_${now}_${env.BUILD_NUMBER}.zip"
             sh 'mkdir -p test-git'
-            sh "cd test-git && cp ../${fileName} ./"
+            sh "cp ./${fileName} ./test-git "
             dir("test-git") {
                 git branch: 'main', credentialsId: 'gitlab', url: 'https://gitlab.com/gwcsv/gscsv-desktop-client-release-file.git'
               
@@ -63,7 +63,7 @@ pipeline {
                     }
                     sh "git remote set-url origin https://se112:${encodedPass}@gitlab.com/gwcsv/gscsv-desktop-client-release-file.git"
                     sh "git add ${fileName}"
-                    sh "git commit -m ${fileName}"
+                    sh "git commit -m ${env.BUILD_NUMBER}"
                     sh "git push --set-upstream origin main"
                 }
             }
