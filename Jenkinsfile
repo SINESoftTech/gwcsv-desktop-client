@@ -26,11 +26,11 @@ pipeline {
                 branch 'uat'
             }
         }
-        agent{
-            dockerfile {
-                reuseNode true
-            }
-        }
+        // agent{
+        //     dockerfile {
+        //         reuseNode true
+        //     }
+        // }
         steps {
           script{
             // sh 'npm install && npm run electron-build'
