@@ -27,11 +27,11 @@ pipeline {
             }
         }
     
-        agent{
-            dockerfile {
-                reuseNode true
-            }
-        }
+        // agent{
+        //     dockerfile {
+        //         reuseNode true
+        //     }
+        // }
         steps {
           script{
             // sh 'npm install && npm run electron-build'
@@ -48,7 +48,6 @@ pipeline {
                 branch 'uat'
             }
         }
-        agent any
         steps {
           script{
             def now = new Date().format("yyyyMMdd", TimeZone.getTimeZone('UTC'))
