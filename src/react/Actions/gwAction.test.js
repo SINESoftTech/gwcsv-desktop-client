@@ -272,10 +272,7 @@ test('uploadToGw:uploadStrategy:CUSTOMS', async () => {
       'totalAmount': 0,
       'totalPayAmount': 0,
       'evidenceTimestamp': 'date',
-      'evidenceId': 'carrierNumber',
-      'declarationId': 'declarationId',
-      'groupName': 'groupName',
-      'remarkText': 'remarkText'
+      'declarationId': 'declarationId'
     }
     expect(input).toEqual(JSON.stringify(expectedObj))
   })
@@ -361,8 +358,6 @@ function commonEvidenceExpected(input, source) {
   expect(input).toHaveProperty('businessTaxValue', source.businessTaxValue)
   expect(input).toHaveProperty('totalAmount', source.totalAmount)
   expect(input).toHaveProperty('evidenceTimestamp', source.evidenceDate)
-  expect(input).toHaveProperty('remarkText', source.remark)
-  expect(input).toHaveProperty('evidenceId', source.carrierNumber)
 }
 
 
