@@ -74,13 +74,13 @@ pipeline {
  post { 
     success {
         script{
-            def  message = "success, branch: ${BRANCH_NAME} build: ${env.BUILD_NUMBER} url: https://gitlab.com/gwcsv/gscsv-desktop-client-release-file \n ${BUILD_URL}"
+            def  message = "gwcsv-desktop-client success, branch: ${BRANCH_NAME} build: ${env.BUILD_NUMBER} url: https://gitlab.com/gwcsv/gscsv-desktop-client-release-file \n ${BUILD_URL}"
             googlechatnotification message: message, notifyAborted: true, notifyFailure: true, notifySuccess: true, url: 'https://chat.googleapis.com/v1/spaces/AAAAUJnUGOQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=STEU-aMWg3oVs1xTd6OVvjwK2j-iCxhQAQuc3e6MkSc%3D'
         }
       }
     failure {
         script{
-            def message = "failed, branch: ${BRANCH_NAME} build: ${env.BUILD_NUMBER} \n ${BUILD_URL}"
+            def message = "gwcsv-desktop-client failed, branch: ${BRANCH_NAME} build: ${env.BUILD_NUMBER} \n ${BUILD_URL}"
             googlechatnotification message: message, notifyAborted: true, notifyFailure: true, notifySuccess: true, url: 'https://chat.googleapis.com/v1/spaces/AAAAUJnUGOQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=STEU-aMWg3oVs1xTd6OVvjwK2j-iCxhQAQuc3e6MkSc%3D'
         }
     }
