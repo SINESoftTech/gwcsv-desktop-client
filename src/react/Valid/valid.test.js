@@ -1,4 +1,4 @@
-import { validSigoutourData, validTaxId } from './valid'
+import { validData, validTaxId } from './valid'
 
 const assignMap = {
   '21': {
@@ -713,8 +713,8 @@ const assignMap = {
 
 test('valid buyerTaxId error', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '16151904',
@@ -736,15 +736,15 @@ test('valid buyerTaxId error', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
   console.log(validResult)
   expect(validResult.cellHighlight).toMatchObject(['buyerTaxId', 'sn'])
 })
 
 test('valid sellerTaxId error', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -766,14 +766,14 @@ test('valid sellerTaxId error', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
   expect(validResult.cellHighlight).toMatchObject(['sellerTaxId', 'sn'])
 })
 
 test('valid taxType empty', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -795,7 +795,7 @@ test('valid taxType empty', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
   expect(validResult.cellHighlight).toContain('taxType')
   expect(validResult.cellHighlight).toContain('taxableSalesValue')
   expect(validResult.cellHighlight).toContain('zeroTaxSalesValue')
@@ -805,8 +805,8 @@ test('valid taxType empty', () => {
 
 test('valid taxType 2 error', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -828,7 +828,7 @@ test('valid taxType 2 error', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
 
   expect(validResult.cellHighlight).toContain('taxableSalesValue')
   expect(validResult.cellHighlight).toContain('businessTaxValue')
@@ -836,8 +836,8 @@ test('valid taxType 2 error', () => {
 
 test('valid taxType 3 error', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB20050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -859,7 +859,7 @@ test('valid taxType 3 error', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
 
   expect(validResult.cellHighlight).toContain('taxableSalesValue')
   expect(validResult.cellHighlight).toContain('businessTaxValue')
@@ -867,8 +867,8 @@ test('valid taxType 3 error', () => {
 
 test('valid evidenceType 5030', () => {
   const data = {
-    'gwEvidenceType': '電信費帳單-中華電信',
-    'evidenceType': '電信費帳單-中華電信',
+    'gwEvidenceType': 'A5020',
+    'evidenceType': 'A5020',
     'carrierNumber': 'BB21050951',
     'evidenceDate': '20210101',
     'buyerTaxId': '24549210',
@@ -890,7 +890,7 @@ test('valid evidenceType 5030', () => {
     'sn': 1,
     'id': '0907175959174992'
   }
-  const validResult = validSigoutourData('24549210', data, assignMap)
+  const validResult = validData('24549210', data, assignMap)
 
   expect(validResult.cellHighlight).toContain('evidenceNumber')
 })

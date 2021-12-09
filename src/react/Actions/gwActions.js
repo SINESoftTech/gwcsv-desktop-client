@@ -66,7 +66,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
   console.log('uploadGUI', payload)
   try {
     const req = {
-      "inputOutputType": "INPUT",
+      'inputOutputType': 'INPUT',
       'businessEntityTaxId': payload.buyerTaxId,
       'evidenceType': payload.gwEvidenceType,
       'reportingPeriod': payload.reportingPeriod,
@@ -85,9 +85,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
       'guiId': payload.evidenceNumber,
       'commentType': 'WHITE_SPACE',
       'summaryCount': 1,
-      'groupName': null,
-      'remarkText': payload.remark,
-      "clearanceType": "BLANK",
+      'clearanceType': 'BLANK'
     }
     const url = '/evidence/gui'
     let bodyFormData = new FormData()
@@ -139,11 +137,9 @@ async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
       'totalAmount': payload.totalAmount,
       'totalPayAmount': payload.totalPayAmount,
       'evidenceTimestamp': payload.evidenceDate,
-      'evidenceId': payload.carrierNumber,
+      'evidenceId': payload.evidenceNumber,
       'commentType': 'WHITE_SPACE',
-      'summaryCount': 1,
-      'groupName': null,
-      'remarkText': payload.remark
+      'summaryCount': 1
     }
     const url = '/evidence/bill'
     let bodyFormData = new FormData()
@@ -195,12 +191,10 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
       'totalAmount': payload.totalAmount,
       'totalPayAmount': payload.totalPayAmount,
       'evidenceTimestamp': payload.evidenceDate,
-      'evidenceId': payload.carrierNumber,
-      'declarationId': payload.declarationId,
-      'groupName': payload.groupName,
-      'remarkText': payload.remarkText
+      'evidenceId': payload.evidenceNumber,
+      'declarationId': payload.declarationId
     }
-    const url ='/evidence/customs'
+    const url = '/evidence/customs'
     let bodyFormData = new FormData()
     bodyFormData.append('input', JSON.stringify(req))
     bodyFormData.append('file', imageBlob)
@@ -233,35 +227,61 @@ async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
 export async function uploadToGw(payload, accountingFirmTaxId, token) {
   const result = []
   for (let i = 0; i < payload.length; i++) {
+    // payload, imageBlob, accountingFirmTaxId, token
     const data = payload[i]
     const uploadResult = await uploadToGwStrategy[data['json']['gwEvidenceType']](data['json'], data['image'], accountingFirmTaxId, token)
     if (uploadResult.status) {
       result.push({
         'status': true,
         'json': data['json'],
-        'errorMsg': '',
-        'imageFullPath': data['imageFullPath'],
-        'jsonFullPath': data['jsonFullPath']
+        'errorMsg': ''
       })
     } else {
       data['json']['errorMsg'] = uploadResult.errorMsg
       result.push({
         'status': false,
-        'json': data['json'],
-        'imageFullPath': data['imageFullPath'],
-        'jsonFullPath': data['jsonFullPath']
+        'json': data['json']
       })
     }
   }
   return result
 }
 
-export const getAssign = async () => {
+//{
+//   "version": "56bbb47702cc861db0d4e02dd1a5151dc31276caa1a4868e04138659ba82300c"
+// }
+const getYearAssignVersion = async () => {
   try {
-    let response = await axios.get('/assign/year')
-    return response.data
+    const response = await axios.get('/assign/year/version')
+    return {
+      'status': 'success',
+      'version': response.data['version']
+    }
+  } catch (e) {
+    return {
+      'status': 'failed'
+    }
+  }
+}
+
+export const getAssign = async (yearAssignVersion) => {
+  try {
+    const versionRes = await getYearAssignVersion()
+    if (versionRes.status === 'success' && versionRes.version !== yearAssignVersion) {
+      const response = await axios.get('/assign/year')
+      return {
+        'status': 'success',
+        'version': versionRes.version,
+        'data': response.data
+      }
+    }
+    return {
+      'status': 'noChange'
+    }
   } catch (error) {
-    console.log(error)
+    return {
+      'status': 'failed'
+    }
   }
 }
 

@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios from 'axios'
+
 const SIGHT_TOUR_ROOT_URL = 'http://aiocr.sightour.com/gateweb/api'
-const GW_ROOT_URL = 'http://35.236.168.181'
+const GW_ROOT_URL = 'http://104.155.204.250:8080'
 const gwAxios = axios.create({
   baseURL: GW_ROOT_URL,
-  headers: {'Content-Type': 'application/json'}
+  headers: { 'Content-Type': 'application/json' }
 })
 
 
@@ -11,4 +12,4 @@ const signtTourAxios = axios.create({
   baseURL: SIGHT_TOUR_ROOT_URL
 })
 
-export {gwAxios, signtTourAxios}
+export { gwAxios, signtTourAxios }

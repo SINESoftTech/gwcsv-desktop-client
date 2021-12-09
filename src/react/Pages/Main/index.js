@@ -34,7 +34,8 @@ import {
 import { getIdentifyResult } from '../../Actions/sightourActions'
 import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
-
+import SigoutourMapper from '../../Mapper/sigoutour_mapper'
+import { getFileExt } from '../../Util/FileUtils'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -56,7 +57,7 @@ function TabPanel(props) {
   )
 }
 
-const Main = (props) => {
+const Main = () => {
 
   const dispatch = useAppDispatch()
   const appState = useAppState()
@@ -71,21 +72,26 @@ const Main = (props) => {
   const [scanCount, setScanCount] = React.useState(0)
   const [scanDisable, setScanDisable] = React.useState(false)
   const [scanAlert, setScanAlert] = React.useState(false)
+  const [assignMap, setAssignMap] = React.useState()
+
 
   useEffect(async () => {
-    await electronActions.getFileLists(dispatch)
     await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token)
-    const assign = await gwActions.getAssign()
-    await electronActions.saveAssign(assign)
+    if (declareProperties.clientTaxId !== '') {
+      await electronActions.getChooseBusinessEntityData(dispatch, declareProperties.clientTaxId)
+    }
+    const assign = await electronActions.getAssign()
+    setAssignMap(assign)
     await openScanner(dispatch)
-  }, [value])
+  }, [value, declareProperties.clientTaxId])
+
 
   //region Main Events
   const handleTabChange = (event, newValue) => {
     setValue(newValue)
   }
 
-  const handleSelectionChange = (event) => {
+  const handleSelectionChange = async (event) => {
     const { name, value } = event.target
     setDeclareProperties(prevState => {
       return {
@@ -93,6 +99,7 @@ const Main = (props) => {
         [name]: value
       }
     })
+    console.log('handleSelectionChange', name, value)
     if (name === 'clientTaxId') {
       handleReset()
     }
@@ -109,38 +116,59 @@ const Main = (props) => {
       alert('無法與掃描機連線，請重新整理')
       return
     }
-
   }
 
   //region scanned image list events
   const handleSendImageToIdentify = async (event, data) => {
+    console.log('handleSendImageToIdentify', data)
     const accountingfirmTaxId = appState.auth.user.taxId
     const businessEntityTaxId = declareProperties.clientTaxId
-    const sendToIdentifyData = data.map(d => {
-      return {
-        'sourceFullPath': d.fullPath,
-        'sourceFileName': d.fileName,
-        'fileBlob': d.fileBlob,
-        'accountingfirmTaxId': accountingfirmTaxId,
-        'businessEntityTaxId': businessEntityTaxId,
-        'evidenceType': d.fileName.split('_')[5].split('.')[0]
-      }
-    })
+    const sendToIdentifyData = data
+      .map(d => {
+        const fileExt = getFileExt(d.fullPath)
+        return {
+          'sourceFullPath': d.fullPath,
+          'sourceFileName': d.fileName + '.' + fileExt,
+          'fileBlob': d.fileBlob,
+          'accountingfirmTaxId': accountingfirmTaxId,
+          'businessEntityTaxId': businessEntityTaxId,
+          'evidenceType': d.fileName.split('_')[0]
+        }
+      })
+    console.log('handleSendImageToIdentify', sendToIdentifyData)
     const sentIdentifyResult = await sightTourActions.sendToIdentify(sendToIdentifyData)
-    identifySent(dispatch, {
-      'user': appState.auth.user.username,
-      'result': sentIdentifyResult
-    })
+    if (sentIdentifyResult.length > 0) {
+      identifySent(dispatch, {
+        'user': appState.auth.user.username,
+        'result': sentIdentifyResult
+      })
+    }
   }
 
+
   const handleGetIdentifyResult = async (event, data) => {
+    console.log('handleGetIdentifyResult', data)
+    const keyList = Object.keys(data)
     const identifyResultReceivedList = []
-    for (let i = 0; i < data.length; i++) {
-      const fileObj = data[i]
-      const identifyResult = await getIdentifyResult(fileObj)
-      identifyResultReceivedList.push(identifyResult)
+    for (let i = 0; i < keyList.length; i++) {
+      const ticketId = keyList[i]
+      const json = data[keyList[i]]
+      const identifyResult = await getIdentifyResult({
+        'fullPath': json.fullPath.result,
+        'reportingPeriod': json.reportingPeriod.result,
+        'deductionType': json.deductionType.result,
+        'isDeclareBusinessTax': json.isDeclareBusinessTax.result,
+        'gwEvidenceType': json.gwEvidenceType.result,
+        'ticketId': ticketId
+      })
+      console.log('handleGetIdentifyResult identifyResult', identifyResult)
+      if (identifyResult.status !== 'process') {
+        const domainObj = SigoutourMapper.toDomainObj(identifyResult)
+        // console.log("handleGetIdentifyResult domainObj",domainObj)
+        identifyResultReceivedList.push(domainObj)
+      }
     }
-    identifyResultReceived(dispatch, identifyResultReceivedList)
+    identifyResultReceived(dispatch, declareProperties.clientTaxId, identifyResultReceivedList)
   }
 
 
@@ -148,29 +176,32 @@ const Main = (props) => {
     const url = window.URL.createObjectURL(data.fileBlob)
     const link = document.createElement('a')
     link.href = url
-    link.setAttribute('download', data.fileName)
+    const fileNameExt = data.fullPath.split(data.fileName.split('_')[1])[1]
+    link.setAttribute('download', data.fileName + fileNameExt)
     document.body.appendChild(link)
     link.click()
   }
 
   const handleViewImage = (data) => {
-    //fullPath
     const windowProxy = window.open('', null, '')
     windowProxy.postMessage(JSON.stringify(data), '*')
   }
 
   const handleDeleteImage = (data) => {
-    console.log('handleDeleteImage',data)
-    const timestamp = data.fileName.split('_')[6].split('.')[0]
-    console.log(timestamp)
-    const eventName = 'scanned'
-    electronActions.deleteSigoutourData(dispatch, eventName, timestamp)
+    const id = data.fileName.split('_')[1]
+    handleDeleteEvidence(data.businessEntityTaxId, '01', id)
+  }
+
+  const handleDeleteEvidence = (businessEntityTaxId, step, ticketId) => {
+    electronActions.deleteData(dispatch, businessEntityTaxId, step, ticketId)
   }
 
   const handleScanImage = () => {
     if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
       setScanDisable(true)
       setScanAlert(true)
+      //fixme rm
+      // handleMoveImage(1, '/Users/tony/123.jpg')
       scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable)
     }
   }
@@ -183,21 +214,21 @@ const Main = (props) => {
     setScanCount(prevState => {
       return prevState + 1
     })
-    await electronActions.scanImages(dispatch, filePath, appState.auth.user.username, declareProperties)
+    await electronActions.scanImages(dispatch, filePath, appState.auth.user, declareProperties)
   }
 
-  const handleResultAllConfirmed = async (filesByTicketId) => {
+  const handleResultAllConfirmed = async (businessEntityTaxId, filesByTicketId) => {
     try {
-      const result = await identifyResultConfirmed(dispatch, filesByTicketId)
+      const result = await identifyResultConfirmed(dispatch, businessEntityTaxId, filesByTicketId)
       return result
     } catch (e) {
       throw new Error(e)
     }
   }
 
-  const handleGwUploaded = async (data) => {
+  const handleGwUploaded = async (businessEntityTaxId, data) => {
     try {
-      const result = await gwUploaded(dispatch, data)
+      const result = await gwUploaded(dispatch, businessEntityTaxId, data)
       return result
     } catch (e) {
       throw new Error(e)
@@ -211,9 +242,6 @@ const Main = (props) => {
     }
   }
 
-  const handleDeleteEvidence = (eventName, ticketId) => {
-    electronActions.deleteSigoutourData(dispatch, eventName, ticketId)
-  }
 
   const renderClientSelect = () => {
     return (
@@ -257,6 +285,7 @@ const Main = (props) => {
     setOpenDialog(true)
   }
 
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -299,11 +328,7 @@ const Main = (props) => {
                   <Tabs value={value} onChange={handleTabChange} aria-label='simple tabs example'>
                     <Tab key={0} label='已掃描圖檔' {...a11yProps(0)} />
                     <Tab label={<Badge
-                      badgeContent={appState.appData.fileLists['02'] === undefined ? 0 : appState.appData.fileLists['02']
-                        .filter(obj => {
-                          const clientTaxId = obj.filename.split('_')[1]
-                          return clientTaxId === declareProperties.clientTaxId
-                        }).length}
+                      badgeContent={appState.appData.fileLists['02'] === undefined ? 0 : Object.keys(appState.appData.fileLists['02']).length}
                       color='secondary' {...a11yProps(1)}>
                       已辨識憑證
                     </Badge>} />
@@ -326,9 +351,11 @@ const Main = (props) => {
                 <TabPanel value={value} index={1}>
                   <IdentifiedEvidenceList data={appState.appData.fileLists}
                                           declareProperties={declareProperties}
+                                          onViewImage={handleViewImage}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}
-                                          OnDeleteEvdience={handleDeleteEvidence} />
+                                          OnDeleteEvdience={handleDeleteEvidence}
+                                          assignMap={assignMap} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <ConfirmedEvidenceList data={appState.appData.fileLists}

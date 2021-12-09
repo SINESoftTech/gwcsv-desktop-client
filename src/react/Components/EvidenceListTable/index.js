@@ -9,11 +9,14 @@ const getRowClassName = (params) => {
 }
 
 const EvidenceList = (props) => {
+
+  const [dataRows, setDataRows] = useState([])
+
   useEffect(() => {
     setDataRows(props.data)
   }, [props.data])
 
-  const [dataRows, setDataRows] = useState(props.data)
+
   const [pageNumber, setPageNumber] = useState(0)
   const [pageSize, setPageSize] = useState(10)
 
@@ -26,18 +29,20 @@ const EvidenceList = (props) => {
     }, [dataRows])
 
   const handleCellClick = async (param, event) => {
-    console.log('handleCellClick', param)
     if (event.target.name === 'taxType') {
       param.row['taxType'] = event.target.value
       props.handleEditRow(param.row, 'taxType')
     }
     if (event.target.name === 'deductionType') {
       param.row['deductionType'] = event.target.value
-      props.handleEditRow(param.row)
+      props.handleEditRow(param.row, 'deductionType')
     }
     if (event.target.name === 'gwEvidenceType') {
       param.row['gwEvidenceType'] = event.target.value
-      props.handleEditRow(param.row)
+      props.handleEditRow(param.row, 'gwEvidenceType')
+    }
+    if (event.target.innerText === '打開') {
+      props.handleOpenImage(param.row.fullPath)
     }
     if (event.target.innerText === '刪除') {
       const ticketId = param.row.id
@@ -45,13 +50,10 @@ const EvidenceList = (props) => {
     }
   }
 
-  const handlePageChange = (e) => {
-    setPageNumber(e)
-  }
+  const handlePageChange = (e) => setPageNumber(e)
 
-  const handlePageSizeChange = (e) => {
-    setPageSize(e)
-  }
+  const handlePageSizeChange = (e) => setPageSize(e)
+
   return (
     <div style={{ height: 650, width: '100%' }}>
       <DataGrid rows={dataRows}

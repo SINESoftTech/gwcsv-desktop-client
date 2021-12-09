@@ -33,7 +33,6 @@ contextBridge.exposeInMainWorld(
       return imageJson
     },
     getImage: async (fullPath) => {
-      console.log('getImage', fullPath)
       return await getImageFromIPC(fullPath)
     }
   }
