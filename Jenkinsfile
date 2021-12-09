@@ -36,7 +36,7 @@ pipeline {
             sh 'npm install && npm run electron-build'
             echo "build_${env.BUILD_NUMBER}"
             def now = new Date().format("yyyyMMdd", TimeZone.getTimeZone('UTC'))
-            zip zipFile: "gscsv_desktop_test_${now}_${env.BUILD_NUMBER}.zip", archive: false , dir: 'release-builds' 
+            zip zipFile: "${env.BRANCH_NAME}_${now}_${env.BUILD_NUMBER}_gscsv_desktop_test.zip", archive: false , dir: 'release-builds'
           }
         }
     }
@@ -51,7 +51,7 @@ pipeline {
           script{
             GIT_COMMIT = sh (script: "git log -n 1 --pretty=format:'%h' --abbrev=7", returnStdout: true)
             def now = new Date().format("yyyyMMdd", TimeZone.getTimeZone('UTC'))
-            def fileName="gscsv_desktop_test_${now}_${env.BUILD_NUMBER}.zip"
+            def fileName="${env.BRANCH_NAME}_${now}_${env.BUILD_NUMBER}_gscsv_desktop_test.zip"
             sh 'mkdir -p test-git'
             sh "cp ./${fileName} ./test-git "
             dir("test-git") {
