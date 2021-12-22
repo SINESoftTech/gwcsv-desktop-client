@@ -267,7 +267,7 @@ const getYearAssignVersion = async () => {
 export const getAssign = async (yearAssignVersion) => {
   try {
     const versionRes = await getYearAssignVersion()
-    if (versionRes.status === 'success' && versionRes.version !== yearAssignVersion) {
+    if (versionRes.status === 'failed' || (versionRes.status === 'success' && versionRes.version !== yearAssignVersion)) {
       const response = await axios.get('/assign/year')
       return {
         'status': 'success',
