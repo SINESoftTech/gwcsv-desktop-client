@@ -67,7 +67,8 @@ const validGUI = (typeValue, json, assignMap) => {
   const yyyymm = getPeriod(json['evidenceDate'])
   const trackId = json['evidenceNumber'].substring(0, 2)
   const isTrackIdIncludeAssign = assignMap[typeValue][yyyymm] === undefined ? false : assignMap[typeValue][yyyymm].includes(trackId)
-  return json['evidenceNumber'] !== undefined && json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign ? [''] : ['evidenceNumber']
+  const isNumber = !isNaN(json['evidenceNumber'].substring(2))
+  return json['evidenceNumber'] !== undefined && json['evidenceNumber'].length === 10 && isTrackIdIncludeAssign && isNumber ? [''] : ['evidenceNumber']
 }
 
 const validBill = (json) => {
