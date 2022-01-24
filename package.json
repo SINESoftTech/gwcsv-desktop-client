@@ -35,7 +35,7 @@
     "test": "react-scripts test --env=jsdom",
     "ci": "CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "react-start": "react-scripts start",
+    "react-start": "react-scripts  --openssl-legacy-provider start",
     "electron-start": " electron .",
     "react-build": "react-scripts build",
     "electron-build": "react-scripts build && electron-packager ./ test --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*"
@@ -59,7 +59,7 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^6.2.0",
+    "concurrently": "^6.5.1",
     "electron-packager": "^15.3.0",
     "eslint": "^7.32.0",
     "eslint-plugin-suitescript": "^1.2.1",
