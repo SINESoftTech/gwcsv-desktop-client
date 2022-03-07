@@ -45,6 +45,7 @@ pipeline {
             anyOf{
                 branch 'main'
                 branch 'uat'
+                branch 'demo'
             }
         }
         steps {
