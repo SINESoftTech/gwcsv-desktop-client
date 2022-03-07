@@ -37,7 +37,7 @@
     "eject": "react-scripts eject",
     "react-start": "react-scripts  --openssl-legacy-provider start",
     "electron-start": " electron .",
-    "react-build": "react-scripts build",
+    "react-build": "react-scripts --openssl-legacy-provider build",
     "electron-build": "react-scripts build && electron-packager ./ test --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*"
   },
   "eslintConfig": {
