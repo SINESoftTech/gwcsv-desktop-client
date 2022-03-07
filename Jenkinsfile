@@ -61,6 +61,8 @@ pipeline {
                     script {
                        env.encodedPass=URLEncoder.encode(PASSWORD, "UTF-8")
                     }
+                    sh "git config --global user.email se11@gateweb.com.tw"
+                    sh "git config --global user.name jenkins" 
                     sh "git remote set-url origin https://se112:${encodedPass}@gitlab.com/gwcsv/gscsv-desktop-client-release-file.git"
                     sh "git add ${fileName}"
                     sh "git commit -m ${GIT_COMMIT}"
