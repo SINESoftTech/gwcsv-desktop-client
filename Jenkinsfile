@@ -24,6 +24,7 @@ pipeline {
             anyOf{
                 branch 'main'
                 branch 'uat'
+                branch 'demo'
             }
         }
         agent{
