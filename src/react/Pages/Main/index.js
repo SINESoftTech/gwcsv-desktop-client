@@ -36,6 +36,8 @@ import { openScanner, scan } from '../../Actions/scanAction'
 import DialogComponent from '../../Dialog'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { getFileExt } from '../../Util/FileUtils'
+import PropTypes from "prop-types";
+// import EvidenceList from "../../Components/EvidenceListTable";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -56,6 +58,11 @@ function TabPanel(props) {
     </div>
   )
 }
+TabPanel.propTypes = {
+  children: PropTypes.any,
+  value: PropTypes.any,
+  index: PropTypes.any,
+};
 
 const Main = () => {
 
@@ -354,7 +361,7 @@ const Main = () => {
                                           onViewImage={handleViewImage}
                                           onGetIdentifyResult={handleGetIdentifyResult}
                                           onResultAllConfirmed={handleResultAllConfirmed}
-                                          OnDeleteEvdience={handleDeleteEvidence}
+                                          OnDeleteEvidence={handleDeleteEvidence}
                                           assignMap={assignMap} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
@@ -362,7 +369,7 @@ const Main = () => {
                                          user={appState.auth.user}
                                          onGwUploaded={handleGwUploaded}
                                          declareProperties={declareProperties}
-                                         OnDeleteEvdience={handleDeleteEvidence} />
+                                         OnDeleteEvidence={handleDeleteEvidence} />
                 </TabPanel>
               </Paper>
             </Grid>

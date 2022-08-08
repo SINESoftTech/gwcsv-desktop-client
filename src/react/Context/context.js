@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import { MainReducer, initialMainState, AuthReducer, authInitialState } from '../Reducers'
+import PropTypes from "prop-types";
 
 const AppStateContext = React.createContext();
 const AppDispatchContext = React.createContext();
@@ -39,3 +40,7 @@ export const AppContextProvider = ({ children }) => {
     </AppStateContext.Provider>
   );
 };
+
+AppContextProvider.propTypes = {
+  children: PropTypes.any
+}

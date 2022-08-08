@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Button from '@material-ui/core/Button'
 import EvidenceList from '../EvidenceListTable'
-import { getJsonRawData } from '../../Actions/electionActions'
+import {getJsonRawData} from '../../Actions/electionActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
-import { validData } from '../../Valid/valid'
-import { electronActions, sightTourActions } from '../../Context'
-import { IdenfiedEvidenceColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
+import {validData} from '../../Valid/valid'
+import {electronActions, sightTourActions} from '../../Context'
+import {IdentifiedEvidenceColumnDefinitions} from '../EvidenceListTable/ColumnDefinitions'
+import PropTypes from "prop-types";
 
 
 const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => {
@@ -81,7 +82,7 @@ const IdentifiedEvidenceList = (props) => {
   }
 
   const handleDelete = async (ticket) => {
-    await props.OnDeleteEvdience(props.declareProperties.clientTaxId, '03', ticket)
+    await props.OnDeleteEvidence(props.declareProperties.clientTaxId, '03', ticket)
   }
 
   return (
@@ -91,10 +92,19 @@ const IdentifiedEvidenceList = (props) => {
       <EvidenceList data={rowData} checkboxSelection={true} handleSelection={handleSelection}
                     handleEditRow={handleEditRow}
                     handleOpenImage={handleOpenImage}
-                    columns={IdenfiedEvidenceColumnDefinitions}
-                    handleDelete={handleDelete} />
+                    columns={IdentifiedEvidenceColumnDefinitions}
+                    handleDelete={handleDelete}/>
     </div>
   )
 }
+IdentifiedEvidenceList.propTypes = {
+  data: PropTypes.any,
+  declareProperties: PropTypes.any,
+  OnDeleteEvidence: PropTypes.func,
+  onViewImage: PropTypes.func,
+  onGetIdentifyResult: PropTypes.func,
+  assignMap: PropTypes.any,
+  onResultAllConfirmed: PropTypes.func
+};
 
 export default IdentifiedEvidenceList

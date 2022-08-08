@@ -1,4 +1,3 @@
-const R = require('ramda')
 
 export const getFileExt = (fileName) => {
   if (fileName.endsWith('jpg')) {

@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { gwActions, useAppState, useAppDispatch, electronActions } from '../../Context'
+import PropTypes from "prop-types";
 
 function Copyright() {
   return (
@@ -153,6 +154,10 @@ const Login = (props) => {
       </Box>
     </Container>
   )
+}
+
+Login.propTypes = {
+  history: PropTypes.any
 }
 
 export default Login

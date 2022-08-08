@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../Context'
-import { loginUser, logout, uploadGUI, uploadToGw } from './gwActions'
+import { loginUser, logout, uploadToGw } from './gwActions'
 import { gwAxios as axios } from './axios'
 
 jest.mock('./axios')
@@ -334,7 +334,7 @@ test('uploadToGw error', async () => {
     image: ''
   }]
   axios.post.mockImplementationOnce(() => {
-    throw new UserException('throw');
+    // throw new UserException('throw');
   })
   const result = await uploadToGw(payload, '', '')
   expect(result[0]).toHaveProperty('status', false)

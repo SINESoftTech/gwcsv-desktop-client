@@ -2,11 +2,11 @@ import { gwAxios as axios } from './axios'
 import actionTypes from '../Actions/actionTypes'
 
 export async function loginUser(dispatch, loginPayload) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(loginPayload)
-  }
+  // const requestOptions = {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(loginPayload)
+  // }
 
   try {
     dispatch({ type: 'REQUEST_LOGIN' })
@@ -98,7 +98,7 @@ async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
         'Authorization': token
       }
     }
-    const result = await axios.post(url, bodyFormData, config)
+    await axios.post(url, bodyFormData, config)
     return {
       'status': true,
       'errorMsg': ''

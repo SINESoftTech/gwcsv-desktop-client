@@ -10,6 +10,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
 import mainStyles from '../Pages/Main/mainStyles'
 import { toPeriodList } from '../Util/Time'
 import { SIGOUTOUR_EVIDENCE_TYPE } from '../Mapper/sigoutour_mapper'
+import PropTypes from "prop-types";
 
 const R = require('ramda')
 
@@ -142,4 +143,16 @@ const DialogComponent = (props) => {
   )
 
 }
+
+DialogComponent.propTypes = {
+  declareProperties: PropTypes.any,
+  open: PropTypes.any,
+  handleSelectionChange: PropTypes.func,
+  handleClose: PropTypes.func,
+  handleReset: PropTypes.func,
+  onScan: PropTypes.func
+
+
+}
+
 export default DialogComponent

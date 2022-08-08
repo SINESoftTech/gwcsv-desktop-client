@@ -20,6 +20,7 @@
     "lowdb": "^1.0.0",
     "material-ui-image": "^3.3.2",
     "moment": "^2.29.1",
+    "prop-types": "^15.8.1",
     "ramda": "^0.27.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -40,12 +41,6 @@
     "react-build": "react-scripts --openssl-legacy-provider build",
     "electron-build": "react-scripts build && electron-packager ./ test --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -62,7 +57,7 @@
     "concurrently": "^6.5.1",
     "electron-packager": "^15.3.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-suitescript": "^1.2.1",
+    "eslint-plugin-react": "^7.30.1",
     "prettier": "^2.3.2",
     "recharts": "^2.0.10",
     "wait-on": "^6.0.0"

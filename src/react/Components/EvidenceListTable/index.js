@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { DataGrid } from '@material-ui/data-grid'
+import PropTypes from "prop-types";
+// import IdentifiedEvidenceList from "../IdenfiedEvidenceList";
 
 
 const getRowClassName = (params) => {
@@ -73,4 +75,13 @@ const EvidenceList = (props) => {
   )
 }
 
+EvidenceList.propTypes = {
+  data: PropTypes.any,
+  columns: PropTypes.any,
+  checkboxSelection: PropTypes.any,
+  handleSelection: PropTypes.func,
+  handleDelete: PropTypes.func,
+  handleEditRow: PropTypes.func,
+  handleOpenImage: PropTypes.func
+};
 export default EvidenceList

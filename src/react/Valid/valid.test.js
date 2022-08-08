@@ -895,7 +895,7 @@ test('valid evidenceType 5030', () => {
   expect(validResult.cellHighlight).toContain('evidenceNumber')
 })
 
-test('valid taxId ', () => {
+test('valid taxId', () => {
   const taxIdArr = [
     '24549210',
     '11349370'

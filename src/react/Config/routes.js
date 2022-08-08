@@ -1,8 +1,8 @@
-import React from 'react'
+// import React from 'react'
 import Login from '../Pages/Login'
 import PageNotFound from '../Pages/PageNotFound'
 import Main from '../Pages/Main'
-import MainPage from '../Pages/Main/MainPage'
+// import MainPage from '../Pages/Main/MainPage'
 
 const routes =[
   {

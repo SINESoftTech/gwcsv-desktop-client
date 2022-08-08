@@ -32,7 +32,7 @@ export const ConfirmedColumnDefinitions: GridColDef[] = [
   { field: 'totalPayAmount', headerName: '付款總金額', width: 150, editable: false }
 ]
 
-export const IdenfiedEvidenceColumnDefinitions: GridColDef[] = [
+export const IdentifiedEvidenceColumnDefinitions: GridColDef[] = [
   { field: 'delete', headerName: '刪除', width: 110, renderCell: renderDeleteBtnCell },
   {
     field: '',
@@ -113,7 +113,7 @@ function renderEvidenceType(param) {
         >
           {keyList.map(key => {
             const name = SIGOUTOUR_EVIDENCE_TYPE[key].name
-            return <MenuItem value={key}>{name}</MenuItem>
+            return (<MenuItem key={key} value={key}>{name}</MenuItem>)
           })
           }
         </Select>
@@ -181,11 +181,11 @@ function getCellClassName(cellValues) {
   }
 }
 
-function renderImageCell() {
-  return (
-    <div>Image Icon here</div>
-  )
-}
+// function renderImageCell() {
+//   return (
+//     <div>Image Icon here</div>
+//   )
+// }
 
 function renderDeleteBtnCell(param) {
   return <Button variant='contained' color='primary'>刪除</Button>

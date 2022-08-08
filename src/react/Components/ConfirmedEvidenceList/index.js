@@ -5,6 +5,7 @@ import { getImageData } from '../../Actions/electionActions'
 import { uploadToGw } from '../../Actions/gwActions'
 import SigoutourMapper from '../../Mapper/sigoutour_mapper'
 import { ConfirmedColumnDefinitions } from '../EvidenceListTable/ColumnDefinitions'
+import PropTypes from "prop-types";
 
 
 const ConfirmedEvidenceList = (props) => {
@@ -39,7 +40,7 @@ const ConfirmedEvidenceList = (props) => {
   }
 
   const handleDelete = async (ticket) => {
-    await props.OnDeleteEvdience(props.declareProperties.clientTaxId, '04', ticket)
+    await props.OnDeleteEvidence(props.declareProperties.clientTaxId, '04', ticket)
   }
 
   return (
@@ -52,5 +53,11 @@ const ConfirmedEvidenceList = (props) => {
     </div>
   )
 }
-
+ConfirmedEvidenceList.propTypes = {
+  data: PropTypes.any,
+  declareProperties: PropTypes.any,
+  user: PropTypes.any,
+  onGwUploaded: PropTypes.func,
+  OnDeleteEvidence: PropTypes.func
+}
 export default ConfirmedEvidenceList

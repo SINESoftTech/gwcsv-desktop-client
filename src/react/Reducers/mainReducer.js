@@ -1,4 +1,3 @@
-import React from 'react'
 import actionTypes from '../Actions/actionTypes'
 
 export const initialMainState = {

@@ -8,7 +8,7 @@ import { Delete as DeleteIcon, Save as SaveIcon, ZoomIn as ZoomInIcon } from '@m
 
 
 const electron = isElectron() ? window.electron : null
-const remote = isElectron() ? window.remote : null
+// const remote = isElectron() ? window.remote : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
 
 const getRowData = async (jsonData, businessEntityTaxId) => {
@@ -70,7 +70,7 @@ const ScannedImageList = (props) => {
 
   //TODO
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { value } = event.target
     const selectData = dataRows.filter(obj => {
       return obj.fullPath === value
     })[0]
@@ -160,7 +160,10 @@ ScannedImageList.propTypes = {
   onImageOriginalViewClick: PropTypes.func,
   username: PropTypes.string,
   data: PropTypes.array,
-  clientTaxId: PropTypes.string
+  clientTaxId: PropTypes.string,
+  declareProperties: PropTypes.any,
+  onOpenDialog: PropTypes.func,
+  scanDisable: PropTypes.any
 }
 
 export default ScannedImageList

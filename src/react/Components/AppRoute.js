@@ -1,6 +1,7 @@
 import React from 'react';
 import {Redirect, Route} from 'react-router-dom';
 import {useAppState} from '../Context';
+import PropTypes from "prop-types";
 
 const AppRoutes = ({component: Component, path, isPrivate, ...rest}) => {
   const {auth} = useAppState();
@@ -18,5 +19,11 @@ const AppRoutes = ({component: Component, path, isPrivate, ...rest}) => {
     />
   );
 };
+
+AppRoutes.propTypes = {
+  component: PropTypes.any,
+  path: PropTypes.any,
+  isPrivate: PropTypes.any
+}
 
 export default AppRoutes;
