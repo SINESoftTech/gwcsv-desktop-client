@@ -1,78 +1,78 @@
-import { validData, validTaxId } from './valid'
+import { validData, validTaxId } from './valid';
 
 const assignMap = {
-  '21': {
-    '11002': [
-      'JC'
+  21: {
+    11002: [
+      'JC',
     ],
-    '11004': [
-      'KX'
+    11004: [
+      'KX',
     ],
-    '11006': [
-      'MS'
+    11006: [
+      'MS',
     ],
-    '11008': [
-      'PM'
+    11008: [
+      'PM',
     ],
-    '11010': [
-      'RG'
+    11010: [
+      'RG',
     ],
-    '11012': [
-      'TB'
-    ]
+    11012: [
+      'TB',
+    ],
   },
-  '22': {
-    '11002': [
+  22: {
+    11002: [
       'JE',
       'JF',
       'JG',
       'JH',
       'JJ',
-      'JK'
+      'JK',
     ],
-    '11004': [
+    11004: [
       'KZ',
       'LA',
       'LB',
       'LC',
       'LD',
-      'LE'
+      'LE',
     ],
-    '11006': [
+    11006: [
       'MU',
       'MV',
       'MW',
       'MX',
       'MY',
-      'MZ'
+      'MZ',
     ],
-    '11008': [
+    11008: [
       'PP',
       'PQ',
       'PR',
       'PS',
       'PT',
-      'PU'
+      'PU',
     ],
-    '11010': [
+    11010: [
       'RJ',
       'RK',
       'RL',
       'RM',
       'RN',
-      'RP'
+      'RP',
     ],
-    '11012': [
+    11012: [
       'TD',
       'TE',
       'TF',
       'TG',
       'TH',
-      'TJ'
-    ]
+      'TJ',
+    ],
   },
-  '25': {
-    '11002': [
+  25: {
+    11002: [
       'JD',
       'JL',
       'JM',
@@ -109,9 +109,9 @@ const assignMap = {
       'KU',
       'KV',
       'UX',
-      'VD'
+      'VD',
     ],
-    '11004': [
+    11004: [
       'KY',
       'LF',
       'LG',
@@ -148,9 +148,9 @@ const assignMap = {
       'MP',
       'MQ',
       'UY',
-      'VE'
+      'VE',
     ],
-    '11006': [
+    11006: [
       'MT',
       'NA',
       'NB',
@@ -187,9 +187,9 @@ const assignMap = {
       'PJ',
       'PK',
       'UZ',
-      'VF'
+      'VF',
     ],
-    '11008': [
+    11008: [
       'PN',
       'PV',
       'PW',
@@ -226,9 +226,9 @@ const assignMap = {
       'RD',
       'RE',
       'VA',
-      'VG'
+      'VG',
     ],
-    '11010': [
+    11010: [
       'RH',
       'RQ',
       'RR',
@@ -265,9 +265,9 @@ const assignMap = {
       'SY',
       'SZ',
       'VB',
-      'VH'
+      'VH',
     ],
-    '11012': [
+    11012: [
       'TC',
       'TK',
       'TL',
@@ -304,151 +304,151 @@ const assignMap = {
       'UT',
       'UU',
       'VC',
-      'VJ'
-    ]
+      'VJ',
+    ],
   },
-  '26': {
-    '11002': [
-      'JC'
+  26: {
+    11002: [
+      'JC',
     ],
-    '11004': [
-      'KX'
+    11004: [
+      'KX',
     ],
-    '11006': [
-      'MS'
+    11006: [
+      'MS',
     ],
-    '11008': [
-      'PM'
+    11008: [
+      'PM',
     ],
-    '11010': [
-      'RG'
+    11010: [
+      'RG',
     ],
-    '11012': [
-      'TB'
-    ]
+    11012: [
+      'TB',
+    ],
   },
-  '27': {
-    '11002': [
+  27: {
+    11002: [
       'JE',
       'JF',
       'JG',
       'JH',
       'JJ',
-      'JK'
+      'JK',
     ],
-    '11004': [
+    11004: [
       'KZ',
       'LA',
       'LB',
       'LC',
       'LD',
-      'LE'
+      'LE',
     ],
-    '11006': [
+    11006: [
       'MU',
       'MV',
       'MW',
       'MX',
       'MY',
-      'MZ'
+      'MZ',
     ],
-    '11008': [
+    11008: [
       'PP',
       'PQ',
       'PR',
       'PS',
       'PT',
-      'PU'
+      'PU',
     ],
-    '11010': [
+    11010: [
       'RJ',
       'RK',
       'RL',
       'RM',
       'RN',
-      'RP'
+      'RP',
     ],
-    '11012': [
+    11012: [
       'TD',
       'TE',
       'TF',
       'TG',
       'TH',
-      'TJ'
-    ]
+      'TJ',
+    ],
   },
-  '31': {
-    '11002': [
-      'JC'
+  31: {
+    11002: [
+      'JC',
     ],
-    '11004': [
-      'KX'
+    11004: [
+      'KX',
     ],
-    '11006': [
-      'MS'
+    11006: [
+      'MS',
     ],
-    '11008': [
-      'PM'
+    11008: [
+      'PM',
     ],
-    '11010': [
-      'RG'
+    11010: [
+      'RG',
     ],
-    '11012': [
-      'TB'
-    ]
+    11012: [
+      'TB',
+    ],
   },
-  '32': {
-    '11002': [
+  32: {
+    11002: [
       'JE',
       'JF',
       'JG',
       'JH',
       'JJ',
-      'JK'
+      'JK',
     ],
-    '11004': [
+    11004: [
       'KZ',
       'LA',
       'LB',
       'LC',
       'LD',
-      'LE'
+      'LE',
     ],
-    '11006': [
+    11006: [
       'MU',
       'MV',
       'MW',
       'MX',
       'MY',
-      'MZ'
+      'MZ',
     ],
-    '11008': [
+    11008: [
       'PP',
       'PQ',
       'PR',
       'PS',
       'PT',
-      'PU'
+      'PU',
     ],
-    '11010': [
+    11010: [
       'RJ',
       'RK',
       'RL',
       'RM',
       'RN',
-      'RP'
+      'RP',
     ],
-    '11012': [
+    11012: [
       'TD',
       'TE',
       'TF',
       'TG',
       'TH',
-      'TJ'
-    ]
+      'TJ',
+    ],
   },
-  '35': {
-    '11002': [
+  35: {
+    11002: [
       'JD',
       'JL',
       'JM',
@@ -485,9 +485,9 @@ const assignMap = {
       'KU',
       'KV',
       'UX',
-      'VD'
+      'VD',
     ],
-    '11004': [
+    11004: [
       'KY',
       'LF',
       'LG',
@@ -524,9 +524,9 @@ const assignMap = {
       'MP',
       'MQ',
       'UY',
-      'VE'
+      'VE',
     ],
-    '11006': [
+    11006: [
       'MT',
       'NA',
       'NB',
@@ -563,9 +563,9 @@ const assignMap = {
       'PJ',
       'PK',
       'UZ',
-      'VF'
+      'VF',
     ],
-    '11008': [
+    11008: [
       'PN',
       'PV',
       'PW',
@@ -602,9 +602,9 @@ const assignMap = {
       'RD',
       'RE',
       'VA',
-      'VG'
+      'VG',
     ],
-    '11010': [
+    11010: [
       'RH',
       'RQ',
       'RR',
@@ -641,9 +641,9 @@ const assignMap = {
       'SY',
       'SZ',
       'VB',
-      'VH'
+      'VH',
     ],
-    '11012': [
+    11012: [
       'TC',
       'TK',
       'TL',
@@ -680,239 +680,239 @@ const assignMap = {
       'UT',
       'UU',
       'VC',
-      'VJ'
-    ]
+      'VJ',
+    ],
   },
-  '37': {
-    '11002': [
+  37: {
+    11002: [
       'JE',
-      'KW'
+      'KW',
     ],
-    '11004': [
+    11004: [
       'KZ',
-      'MR'
+      'MR',
     ],
-    '11006': [
+    11006: [
       'MU',
-      'PL'
+      'PL',
     ],
-    '11008': [
+    11008: [
       'PP',
-      'RF'
+      'RF',
     ],
-    '11010': [
+    11010: [
       'RJ',
-      'TA'
+      'TA',
     ],
-    '11012': [
+    11012: [
       'TD',
-      'UV'
-    ]
-  }
-}
+      'UV',
+    ],
+  },
+};
 
 test('valid buyerTaxId error', () => {
   const data = {
-    'gwEvidenceType': 'A5020',
-    'evidenceType': 'A5020',
-    'carrierNumber': 'BB20050951',
-    'evidenceDate': '20210101',
-    'buyerTaxId': '16151904',
-    'sellerTaxId': '24549210',
-    'taxType': '1',
-    'taxableSalesValue': 6906,
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'businessTaxValue': 345,
-    'otherFee': 0,
-    'totalPayAmount': 7251,
-    'remark': '',
-    'totalAmount': 7251,
-    'evidenceNumber': 'BB20050951',
-    'reportingPeriod': '11002',
-    'deductionType': '1',
-    'ticketId': '0907175959174992',
-    'cellHighlight': [],
-    'sn': 1,
-    'id': '0907175959174992'
-  }
-  const validResult = validData('24549210', data, assignMap)
-  console.log(validResult)
-  expect(validResult.cellHighlight).toMatchObject(['buyerTaxId', 'sn'])
-})
+    gwEvidenceType: 'A5020',
+    evidenceType: 'A5020',
+    carrierNumber: 'BB20050951',
+    evidenceDate: '20210101',
+    buyerTaxId: '16151904',
+    sellerTaxId: '24549210',
+    taxType: '1',
+    taxableSalesValue: 6906,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 345,
+    otherFee: 0,
+    totalPayAmount: 7251,
+    remark: '',
+    totalAmount: 7251,
+    evidenceNumber: 'BB20050951',
+    reportingPeriod: '11002',
+    deductionType: '1',
+    ticketId: '0907175959174992',
+    cellHighlight: [],
+    sn: 1,
+    id: '0907175959174992',
+  };
+  const validResult = validData('24549210', data, assignMap);
+  console.log(validResult);
+  expect(validResult.cellHighlight).toMatchObject(['buyerTaxId', 'sn']);
+});
 
 test('valid sellerTaxId error', () => {
   const data = {
-    'gwEvidenceType': 'A5020',
-    'evidenceType': 'A5020',
-    'carrierNumber': 'BB20050951',
-    'evidenceDate': '20210101',
-    'buyerTaxId': '24549210',
-    'sellerTaxId': '2454921',
-    'taxType': '1',
-    'taxableSalesValue': 6906,
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'businessTaxValue': 345,
-    'otherFee': 0,
-    'totalPayAmount': 7251,
-    'remark': '',
-    'totalAmount': 7251,
-    'evidenceNumber': 'BB20050951',
-    'reportingPeriod': '11002',
-    'deductionType': '1',
-    'ticketId': '0907175959174992',
-    'cellHighlight': [],
-    'sn': 1,
-    'id': '0907175959174992'
-  }
-  const validResult = validData('24549210', data, assignMap)
-  expect(validResult.cellHighlight).toMatchObject(['sellerTaxId', 'sn'])
-})
+    gwEvidenceType: 'A5020',
+    evidenceType: 'A5020',
+    carrierNumber: 'BB20050951',
+    evidenceDate: '20210101',
+    buyerTaxId: '24549210',
+    sellerTaxId: '2454921',
+    taxType: '1',
+    taxableSalesValue: 6906,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 345,
+    otherFee: 0,
+    totalPayAmount: 7251,
+    remark: '',
+    totalAmount: 7251,
+    evidenceNumber: 'BB20050951',
+    reportingPeriod: '11002',
+    deductionType: '1',
+    ticketId: '0907175959174992',
+    cellHighlight: [],
+    sn: 1,
+    id: '0907175959174992',
+  };
+  const validResult = validData('24549210', data, assignMap);
+  expect(validResult.cellHighlight).toMatchObject(['sellerTaxId', 'sn']);
+});
 
 test('valid taxType empty', () => {
   const data = {
-    'gwEvidenceType': 'A5020',
-    'evidenceType': 'A5020',
-    'carrierNumber': 'BB20050951',
-    'evidenceDate': '20210101',
-    'buyerTaxId': '24549210',
-    'sellerTaxId': '24549210',
-    'taxType': '',
-    'taxableSalesValue': 6906,
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'businessTaxValue': 345,
-    'otherFee': 0,
-    'totalPayAmount': 7251,
-    'remark': '',
-    'totalAmount': 7251,
-    'evidenceNumber': 'BB20050951',
-    'reportingPeriod': '11002',
-    'deductionType': '1',
-    'ticketId': '0907175959174992',
-    'cellHighlight': [],
-    'sn': 1,
-    'id': '0907175959174992'
-  }
-  const validResult = validData('24549210', data, assignMap)
-  expect(validResult.cellHighlight).toContain('taxType')
-  expect(validResult.cellHighlight).toContain('taxableSalesValue')
-  expect(validResult.cellHighlight).toContain('zeroTaxSalesValue')
-  expect(validResult.cellHighlight).toContain('dutyFreeSalesValue')
-  expect(validResult.cellHighlight).toContain('businessTaxValue')
-})
+    gwEvidenceType: 'A5020',
+    evidenceType: 'A5020',
+    carrierNumber: 'BB20050951',
+    evidenceDate: '20210101',
+    buyerTaxId: '24549210',
+    sellerTaxId: '24549210',
+    taxType: '',
+    taxableSalesValue: 6906,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 345,
+    otherFee: 0,
+    totalPayAmount: 7251,
+    remark: '',
+    totalAmount: 7251,
+    evidenceNumber: 'BB20050951',
+    reportingPeriod: '11002',
+    deductionType: '1',
+    ticketId: '0907175959174992',
+    cellHighlight: [],
+    sn: 1,
+    id: '0907175959174992',
+  };
+  const validResult = validData('24549210', data, assignMap);
+  expect(validResult.cellHighlight).toContain('taxType');
+  expect(validResult.cellHighlight).toContain('taxableSalesValue');
+  expect(validResult.cellHighlight).toContain('zeroTaxSalesValue');
+  expect(validResult.cellHighlight).toContain('dutyFreeSalesValue');
+  expect(validResult.cellHighlight).toContain('businessTaxValue');
+});
 
 test('valid taxType 2 error', () => {
   const data = {
-    'gwEvidenceType': 'A5020',
-    'evidenceType': 'A5020',
-    'carrierNumber': 'BB20050951',
-    'evidenceDate': '20210101',
-    'buyerTaxId': '24549210',
-    'sellerTaxId': '24549210',
-    'taxType': '2',
-    'taxableSalesValue': 6906,
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'businessTaxValue': 345,
-    'otherFee': 0,
-    'totalPayAmount': 7251,
-    'remark': '',
-    'totalAmount': 7251,
-    'evidenceNumber': 'BB20050951',
-    'reportingPeriod': '11002',
-    'deductionType': '1',
-    'ticketId': '0907175959174992',
-    'cellHighlight': [],
-    'sn': 1,
-    'id': '0907175959174992'
-  }
-  const validResult = validData('24549210', data, assignMap)
+    gwEvidenceType: 'A5020',
+    evidenceType: 'A5020',
+    carrierNumber: 'BB20050951',
+    evidenceDate: '20210101',
+    buyerTaxId: '24549210',
+    sellerTaxId: '24549210',
+    taxType: '2',
+    taxableSalesValue: 6906,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 345,
+    otherFee: 0,
+    totalPayAmount: 7251,
+    remark: '',
+    totalAmount: 7251,
+    evidenceNumber: 'BB20050951',
+    reportingPeriod: '11002',
+    deductionType: '1',
+    ticketId: '0907175959174992',
+    cellHighlight: [],
+    sn: 1,
+    id: '0907175959174992',
+  };
+  const validResult = validData('24549210', data, assignMap);
 
-  expect(validResult.cellHighlight).toContain('taxableSalesValue')
-  expect(validResult.cellHighlight).toContain('businessTaxValue')
-})
+  expect(validResult.cellHighlight).toContain('taxableSalesValue');
+  expect(validResult.cellHighlight).toContain('businessTaxValue');
+});
 
 test('valid taxType 3 error', () => {
   const data = {
-    'gwEvidenceType': 'A5020',
-    'evidenceType': 'A5020',
-    'carrierNumber': 'BB20050951',
-    'evidenceDate': '20210101',
-    'buyerTaxId': '24549210',
-    'sellerTaxId': '24549210',
-    'taxType': '3',
-    'taxableSalesValue': 6906,
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'businessTaxValue': 345,
-    'otherFee': 0,
-    'totalPayAmount': 7251,
-    'remark': '',
-    'totalAmount': 7251,
-    'evidenceNumber': 'BB20050951',
-    'reportingPeriod': '11002',
-    'deductionType': '1',
-    'ticketId': '0907175959174992',
-    'cellHighlight': [],
-    'sn': 1,
-    'id': '0907175959174992'
-  }
-  const validResult = validData('24549210', data, assignMap)
+    gwEvidenceType: 'A5020',
+    evidenceType: 'A5020',
+    carrierNumber: 'BB20050951',
+    evidenceDate: '20210101',
+    buyerTaxId: '24549210',
+    sellerTaxId: '24549210',
+    taxType: '3',
+    taxableSalesValue: 6906,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 345,
+    otherFee: 0,
+    totalPayAmount: 7251,
+    remark: '',
+    totalAmount: 7251,
+    evidenceNumber: 'BB20050951',
+    reportingPeriod: '11002',
+    deductionType: '1',
+    ticketId: '0907175959174992',
+    cellHighlight: [],
+    sn: 1,
+    id: '0907175959174992',
+  };
+  const validResult = validData('24549210', data, assignMap);
 
-  expect(validResult.cellHighlight).toContain('taxableSalesValue')
-  expect(validResult.cellHighlight).toContain('businessTaxValue')
-})
+  expect(validResult.cellHighlight).toContain('taxableSalesValue');
+  expect(validResult.cellHighlight).toContain('businessTaxValue');
+});
 
 test('valid evidenceType 5030', () => {
   const data = {
-    'gwEvidenceType': 'A5020',
-    'evidenceType': 'A5020',
-    'carrierNumber': 'BB21050951',
-    'evidenceDate': '20210101',
-    'buyerTaxId': '24549210',
-    'sellerTaxId': '24549210',
-    'taxType': '1',
-    'taxableSalesValue': 6906,
-    'zeroTaxSalesValue': 0,
-    'dutyFreeSalesValue': 0,
-    'businessTaxValue': 345,
-    'otherFee': 0,
-    'totalPayAmount': 7251,
-    'remark': '',
-    'totalAmount': 7251,
-    'evidenceNumber': 'BA20050951',
-    'reportingPeriod': '11002',
-    'deductionType': '1',
-    'ticketId': '0907175959174992',
-    'cellHighlight': [],
-    'sn': 1,
-    'id': '0907175959174992'
-  }
-  const validResult = validData('24549210', data, assignMap)
+    gwEvidenceType: 'A5020',
+    evidenceType: 'A5020',
+    carrierNumber: 'BB21050951',
+    evidenceDate: '20210101',
+    buyerTaxId: '24549210',
+    sellerTaxId: '24549210',
+    taxType: '1',
+    taxableSalesValue: 6906,
+    zeroTaxSalesValue: 0,
+    dutyFreeSalesValue: 0,
+    businessTaxValue: 345,
+    otherFee: 0,
+    totalPayAmount: 7251,
+    remark: '',
+    totalAmount: 7251,
+    evidenceNumber: 'BA20050951',
+    reportingPeriod: '11002',
+    deductionType: '1',
+    ticketId: '0907175959174992',
+    cellHighlight: [],
+    sn: 1,
+    id: '0907175959174992',
+  };
+  const validResult = validData('24549210', data, assignMap);
 
-  expect(validResult.cellHighlight).toContain('evidenceNumber')
-})
+  expect(validResult.cellHighlight).toContain('evidenceNumber');
+});
 
 test('valid taxId', () => {
   const taxIdArr = [
     '24549210',
-    '11349370'
-  ]
+    '11349370',
+  ];
 
-  taxIdArr.forEach(taxId => {
-    expect(validTaxId(taxId)).toBeTruthy()
-  })
-})
+  taxIdArr.forEach((taxId) => {
+    expect(validTaxId(taxId)).toBeTruthy();
+  });
+});
 
 test('invalid taxId', () => {
   const taxIdArr = [
     '24549211',
-    '11349377'
-  ]
+    '11349377',
+  ];
 
-  taxIdArr.forEach(taxId => {
-    expect(validTaxId(taxId)).toBe(false)
-  })
-})
+  taxIdArr.forEach((taxId) => {
+    expect(validTaxId(taxId)).toBe(false);
+  });
+});

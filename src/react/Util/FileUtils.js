@@ -1,11 +1,9 @@
-
 export const getFileExt = (fileName) => {
   if (fileName.endsWith('jpg')) {
-    return 'jpg'
+    return 'jpg';
   }
   if (fileName.endsWith('png')) {
-    return 'png'
+    return 'png';
   }
-  return 'jpg'
-}
-
+  return 'jpg';
+};

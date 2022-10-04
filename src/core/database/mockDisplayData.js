@@ -10,7 +10,7 @@ export const rows = [
     taxType: '應稅',
     totalAmt: '21,100',
     summary: '光泉食品咖啡',
-    cellHighlight: ['buyerTaxId']
+    cellHighlight: ['buyerTaxId'],
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '482',
-    summary: '統一超商:衛生紙'
+    summary: '統一超商:衛生紙',
   },
   {
     id: 3,
@@ -35,7 +35,7 @@ export const rows = [
     taxType: '',
     totalAmt: '',
     rowStatus: 'error',
-    summary: '格式不符'
+    summary: '格式不符',
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 5,
@@ -59,7 +59,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 6,
@@ -71,7 +71,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 7,
@@ -83,7 +83,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 8,
@@ -95,7 +95,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 9,
@@ -107,7 +107,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 10,
@@ -119,7 +119,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 11,
@@ -131,7 +131,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 12,
@@ -143,7 +143,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 13,
@@ -155,7 +155,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 14,
@@ -167,7 +167,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 15,
@@ -179,7 +179,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 16,
@@ -191,7 +191,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 17,
@@ -203,7 +203,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 18,
@@ -215,7 +215,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 19,
@@ -227,7 +227,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 20,
@@ -239,7 +239,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 21,
@@ -251,7 +251,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 22,
@@ -263,7 +263,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 23,
@@ -275,7 +275,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 24,
@@ -287,7 +287,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 25,
@@ -299,7 +299,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 26,
@@ -311,7 +311,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 27,
@@ -323,7 +323,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 28,
@@ -335,7 +335,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 29,
@@ -347,7 +347,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
   {
     id: 30,
@@ -359,7 +359,7 @@ export const rows = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '2,520',
-    summary: '關網資訊:電子發票'
+    summary: '關網資訊:電子發票',
   },
 ];
 
@@ -375,7 +375,7 @@ export const rows2 = [
     taxType: '應稅',
     totalAmt: '21,100',
     summary: '光泉食品咖啡',
-    cellHighlight: ['buyerTaxId']
+    cellHighlight: ['buyerTaxId'],
   },
   {
     id: 2,
@@ -387,8 +387,6 @@ export const rows2 = [
     buyerTaxId: '98765432',
     taxType: '應稅',
     totalAmt: '482',
-    summary: '統一超商:衛生紙'
+    summary: '統一超商:衛生紙',
   },
 ];
-
-

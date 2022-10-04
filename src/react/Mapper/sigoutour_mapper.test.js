@@ -1,20 +1,18 @@
-import SigoutourMapper from './sigoutour_mapper'
-
+import SigoutourMapper from './sigoutour_mapper';
 
 test('success SigoutourMapper toView', () => {
-
   const data = {
     evidenceNumber: {
-      result: 'GD0051082903', score: null
+      result: 'GD0051082903', score: null,
     },
     evidenceDate: {
-      result: '10916', score: null
+      result: '10916', score: null,
     },
     buyerTaxId: {
-      result: '12345678', score: null
+      result: '12345678', score: null,
     },
     sellerTaxId: {
-      result: '12345679', score: null
+      result: '12345679', score: null,
     },
     taxType: { result: '1', score: null },
     taxableSalesValue: { result: 0, score: [0] },
@@ -30,12 +28,12 @@ test('success SigoutourMapper toView', () => {
     errorMsg: { result: '', score: [-1] },
     gwEvidenceType: { result: 'A1001', score: [-1] },
     evidenceType: { result: 'A1001', score: [-1] },
-    otherFee: { result: 0, score: [-1] }
-  }
+    otherFee: { result: 0, score: [-1] },
+  };
 
-  const result = SigoutourMapper.toView(data, 123, 1)
+  const result = SigoutourMapper.toView(data, 123, 1);
 
-  expect(result).toMatchObject( {
+  expect(result).toMatchObject({
     evidenceNumber: 'GD0051082903',
     evidenceDate: '10916',
     buyerTaxId: '12345678',
@@ -56,7 +54,6 @@ test('success SigoutourMapper toView', () => {
     evidenceType: 'A1001',
     otherFee: 0,
     sn: 1,
-    id: 123
-  })
-
-})
+    id: 123,
+  });
+});

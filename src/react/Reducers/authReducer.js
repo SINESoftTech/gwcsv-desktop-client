@@ -1,12 +1,12 @@
-let user = localStorage.getItem('currentUser')
+const user = localStorage.getItem('currentUser')
   ? JSON.parse(localStorage.getItem('currentUser'))
-  : {taxId: '', username:'', token:''};
+  : { taxId: '', username: '', token: '' };
 
 export const authInitialState = {
   user: '' || user,
   loading: false,
   errorMessage: null,
-}
+};
 
 export const AuthReducer = (initialState, action) => {
   switch (action.type) {
@@ -36,9 +36,7 @@ export const AuthReducer = (initialState, action) => {
       };
 
     default:
-      console.log('mainReducer initial state', initialState)
-      return initialState
+      console.log('mainReducer initial state', initialState);
+      return initialState;
   }
 };
-
-

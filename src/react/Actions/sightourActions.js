@@ -1,19 +1,18 @@
-import { signtTourAxios } from './axios'
+// import { signtTourAxios } from './axios'
 
-// deprecated
 const getToken = async (id, psw) => {
   // try {
-  //   const apiPath = '/requestToken.php'
-  //   const formData = new FormData()
-  //   formData.append('id', id)
-  //   formData.append('psw', psw)
-  //   const result = await signtTourAxios.post(apiPath, formData)
-  //   return result.data['token']
+  //   const apiPath = '/requestToken.php';
+  //   const formData = new FormData();
+  //   formData.append('id', id);
+  //   formData.append('psw', psw);
+  //   const result = await signtTourAxios.post(apiPath, formData);
+  //   return result.data.token;
   // } catch (error) {
-  //   throw new Error(error)
+  //   throw new Error(error);
   // }
-}
-// deprecated
+};
+
 export async function sendToIdentify(identifyData) {
   // const apiPath = '/upload.php'
   // const config = {
@@ -55,9 +54,9 @@ export async function sendToIdentify(identifyData) {
   //     throw new Error(error)
   //   }
   // }
-  return []
+  // return resultList
 }
-// deprecated
+
 export async function getIdentifyResult(payload) {
   // try {
   //   const apiPath = '/check.php'
@@ -67,7 +66,8 @@ export async function getIdentifyResult(payload) {
   //   formData.append('ticket', payload.ticketId)
   //   const result = await signtTourAxios.post(apiPath, formData)
   //   if (result.data.result === undefined) {
-  //     const status = result.data.pageList[0]['photoList'][0].result.length === 0 ? 'failed' : 'completed'
+  //     const status = result.data.pageList[0]['photoList'][0].result.length === 0 ?
+  //                    'failed' : 'completed'
   //     return {
   //       'fullPath': payload.fullPath,
   //       'reportingPeriod': payload.reportingPeriod,

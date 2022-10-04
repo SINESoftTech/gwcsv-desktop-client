@@ -1,14 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './react/index.css';
-import reportWebVitals from './reportWebVitals';
-import RouterDesktop from "./react/Components/RouterDesktop";
+import { BrowserRouter, Switch } from 'react-router-dom';
+import routes from './react/Config/routes';
+import { AppContextProvider } from './react/Context';
+import AppRoute from './react/Components/AppRoute';
+// import reportWebVitals from './reportWebVitals';
+// import RouterDesktop from './react/Components/RouterDesktop';
 
 ReactDOM.render(
   <React.StrictMode>
-    <RouterDesktop />
+    <AppContextProvider>
+      <BrowserRouter>
+        <Switch>
+          {routes.map((route) => (
+            <AppRoute
+              key={route.key}
+              path={route.path}
+              component={route.component}
+              isPrivate={route.isPrivate}
+              exect
+            />
+          ))}
+        </Switch>
+      </BrowserRouter>
+    </AppContextProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function
