@@ -1,20 +1,20 @@
-import actionTypes from '../Actions/actionTypes'
+import actionTypes from '../Actions/actionTypes';
 
 export const initialMainState = {
   fileLists: {},
   clientLists: [],
-  scannerName: ''
-}
+  scannerName: '',
+};
 
 export const MainReducer = (state = initialMainState, action) => {
   switch (action.type) {
     case actionTypes.FILE_LIST_RECEIVED:
-      return { ...state, fileLists: action.payload }
+      return { ...state, fileLists: action.payload };
     case actionTypes.GET_CLIENT_LIST_SUCCESS:
-      return { ...state, clientLists: action.payload }
+      return { ...state, clientLists: action.payload };
     case actionTypes.GET_SCAN_DEVICE:
-      return { ...state, scannerName: action.payload }
+      return { ...state, scannerName: action.payload };
     default:
-      return state
+      return state;
   }
-}
+};

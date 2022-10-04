@@ -1,16 +1,10 @@
 import React from 'react';
-import mainStyles from "./mainStyles";
 import {
-  CssBaseline,
-  Box,
-  Typography,
-  Container,
-  Grid,
-  Paper,
-  Link
-} from '@material-ui/core';
-import EvidenceList from "../../Components/EvidenceListTable";
-import GwMenuTop from "./GwMenuTop";
+  CssBaseline, Box, Typography, Container, Grid, Paper, Link,
+} from '@mui/material';
+import mainStyles from './core/styles/mainStyles';
+import DesktopNavbar from './core/layout/DesktopNavbar';
+import EvidenceListTable from './core/ui/EvidenceListTable';
 
 function Copyright() {
   return (
@@ -18,36 +12,35 @@ function Copyright() {
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
-      </Link>{' '}
+      </Link>
+      {' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
 }
 
-
 export default function MainPage() {
-
-  const classes = mainStyles()
+  const classes = mainStyles();
   return (
-    <div className={classes.root}>
-      <CssBaseline/>
-      <GwMenuTop/>
+    <>
+      <CssBaseline />
+      <DesktopNavbar />
       <main className={classes.content}>
-        <div className={classes.appBarSpacer}/>
+        <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <EvidenceList/>
+                <EvidenceListTable />
               </Paper>
             </Grid>
           </Grid>
           <Box pt={4}>
-            <Copyright/>
+            <Copyright />
           </Box>
         </Container>
       </main>
-    </div>
+    </>
   );
 }

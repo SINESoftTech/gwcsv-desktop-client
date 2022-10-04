@@ -1,10 +1,9 @@
-import { toPeriodList, getPeriod } from './Time'
-
+import { toPeriodList, getPeriod } from './Time';
 
 test('ts to Period', () => {
-  const utcTime = 1631081797628
+  const utcTime = 1631081797628;
 
-  const result = toPeriodList(utcTime)
+  const result = toPeriodList(utcTime);
 
   expect(result).toMatchObject([
     '10901', '10902', '10903', '10904',
@@ -15,14 +14,14 @@ test('ts to Period', () => {
     '11009', '11010', '11011', '11012',
     '11101', '11102', '11103', '11104',
     '11105', '11106', '11107', '11108',
-    '11109', '11110', '11111', '11112'
-  ])
-})
+    '11109', '11110', '11111', '11112',
+  ]);
+});
 
 test('success yyyymmdd to period', () => {
-  const yyyymmdd = '20210101'
+  const yyyymmdd = '20210101';
 
-  const result = getPeriod(yyyymmdd)
+  const result = getPeriod(yyyymmdd);
 
-  expect(result).toEqual(11002)
-})
+  expect(result).toEqual(11002);
+});
