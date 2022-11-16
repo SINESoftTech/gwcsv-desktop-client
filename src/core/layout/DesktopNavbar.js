@@ -3,7 +3,7 @@ import {
   AppBar, Box, IconButton, Tooltip, Typography,
 } from '@mui/material';
 import { Logout } from '@mui/icons-material';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { gwActions, useAppDispatch, useAppState } from '../../react/Context';
 
@@ -17,13 +17,13 @@ align-items: center;
 `;
 
 function DesktopNavbar() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const appState = useAppState();
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     gwActions.logout(dispatch);
-    history.push('/login');
+    navigate('/login');
   };
   const renderUserMenu = () => {
     if (appState.auth) {

@@ -1,4 +1,4 @@
-import { A8001ToGwObj } from './A8001Mapper';
+import { A8001ToGwObj } from '../react/Mapper/SigoutourReqMapper/A8001Mapper';
 
 test('success SigoutourMapper toDomainObj A8001', () => {
   const data = {

@@ -84,3 +84,9 @@ docker run -it -v <folder path>:/project "<tag name>":latest
 npm install && npm run electron-build
 ```
 
+## Note
+Use Node v16.17.0 (lts/gallium)
+```
+nvm use lts/gallium
+```
+

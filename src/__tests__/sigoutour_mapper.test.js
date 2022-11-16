@@ -1,4 +1,4 @@
-import SigoutourMapper from './sigoutour_mapper';
+import SigoutourMapper from '../react/Mapper/sigoutour_mapper';
 
 test('success SigoutourMapper toView', () => {
   const data = {

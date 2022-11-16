@@ -182,6 +182,8 @@ ipcMain.handle('evidence:saveAssign', (event, payload, version) => {
   const targetFilePath = config.fileFolder + '/' + 'assign.json'
   fse.writeJSONSync(targetFilePath, payload, { encoding: 'utf8', flag: 'w' })
   //todo
+  console.log('ipcMain handle payload', payload)
+  console.log('ipcMain handle version', version)
   config.yearAssignVersion = version
   const configPath = path.join(config.rootFolder, 'appSetting.conf')
   fse.writeFileSync(configPath, JSON.stringify(config))
