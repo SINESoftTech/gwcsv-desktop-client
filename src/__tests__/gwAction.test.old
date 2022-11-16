@@ -1,6 +1,6 @@
-import { useAppDispatch } from '../Context';
-import { loginUser, logout, uploadToGw } from './gwActions';
-import { gwAxios as axios } from './axios';
+import { useAppDispatch } from '../react/Context';
+import { loginUser, logout, uploadToGw } from '../react/Actions/gwActions';
+import { gwAxios as axios } from '../react/Actions/axios';
 
 jest.mock('./axios');
 

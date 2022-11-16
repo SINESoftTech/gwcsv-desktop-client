@@ -1,10 +1,10 @@
-import { A5032ToGwObj } from './A5032Mapper';
+import { A5033ToGwObj } from '../react/Mapper/SigoutourReqMapper/A5033Mapper';
 
-test('success SigoutourMapper toDomainObj 5032', () => {
+test('success SigoutourMapper toDomainObj 5033', () => {
   const data = {
     reportingPeriod: '11002',
     deductionType: '1',
-    gwEvidenceType: 'A5032',
+    gwEvidenceType: 'A5033',
     ticketId: '123',
     sourceFullPath: '',
     sourceFileName: '',
@@ -18,7 +18,7 @@ test('success SigoutourMapper toDomainObj 5032', () => {
         page: '201202_095956_254241_1',
         photoList: [{
           photo: '201202_095956_254241_1_1',
-          type: 'A5032',
+          type: 'A5033',
           x: 0,
           y: 478,
           w: 1239,
@@ -131,7 +131,7 @@ test('success SigoutourMapper toDomainObj 5032', () => {
       ],
     },
   };
-  const result = A5032ToGwObj(data);
+  const result = A5033ToGwObj(data);
   console.log(result);
   expect(result).toMatchObject({
     evidenceNumber: { result: 'HK58985633', score: null },
@@ -150,8 +150,8 @@ test('success SigoutourMapper toDomainObj 5032', () => {
     deductionType: { result: '1', score: [-1] },
     ticketId: { result: '123', score: [-1] },
     errorMsg: { result: '', score: [-1] },
-    gwEvidenceType: { result: 'A5032', score: [-1] },
-    evidenceType: { result: 'A5032', score: [-1] },
+    gwEvidenceType: { result: 'A5033', score: [-1] },
+    evidenceType: { result: 'A5033', score: [-1] },
     otherFee: { result: 15, score: null },
   });
 });

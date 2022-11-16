@@ -1,4 +1,4 @@
-import { validData, validTaxId } from './valid';
+import { validData, validTaxId } from '../react/Valid/valid';
 
 const assignMap = {
   21: {

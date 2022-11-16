@@ -1,5 +1,5 @@
 import ramda from 'ramda';
-import ReverseIndex from './ReverseIndex';
+import ReverseIndex from '../react/Util/ReverseIndex';
 
 test('success reverseIndex', () => {
   const json = {

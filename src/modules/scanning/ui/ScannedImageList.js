@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Box, Button, Checkbox, FormControl, IconButton,
   ImageList, ImageListItem, ImageListItemBar, Stack, Typography,
@@ -6,7 +6,7 @@ import {
 import {
   Delete, InsertPhoto, Save, Send, ZoomIn,
 } from '@mui/icons-material';
-import { blue } from '@mui/material/colors';
+import {blue} from '@mui/material/colors';
 import isElectron from 'is-electron';
 import PropTypes from 'prop-types';
 
@@ -43,7 +43,14 @@ const getImageFileBlob = async (fullPath) => {
   return '';
 };
 
-const isScanEnable = (taxIdSelected) => !!taxIdSelected;
+const isTaxIdSelected = (taxIdSelected) => !!taxIdSelected;
+const isScanEnabled = (params) => {
+  return !isTaxIdSelected(params.taxId) || params.disabled
+}
+
+const isImportEnabled = (params) => {
+  return !isTaxIdSelected(params.taxId) || params.disabled
+}
 
 function ScannedImageList(props) {
   const {
@@ -51,7 +58,7 @@ function ScannedImageList(props) {
     onImageOriginalViewClick, onSaveImageClick, onDeleteImageClick,
   } = props;
   const [dataRows, setDataRows] = useState([]);
-  const [selectionDataRows, setSelectionDataRow] = useState({ selection: [] });
+  const [selectionDataRows, setSelectionDataRow] = useState({selection: []});
 
   useEffect(() => {
     const initDataRows = async (data, businessEntityTaxId) => {
@@ -71,7 +78,7 @@ function ScannedImageList(props) {
 
   // TODO
   const handleChange = (event) => {
-    const { value } = event.target;
+    const {value} = event.target;
     const selectData = dataRows.filter((obj) => obj.fullPath === value)[0];
     const isExist = selectionDataRows.selection.filter((obj) => selectData.fullPath === obj.fullPath).length > 0;
     if (!isExist) {
@@ -90,20 +97,29 @@ function ScannedImageList(props) {
       <Stack direction="row" spacing={2} mb={2}>
         <Button
           variant="contained"
-          startIcon={<InsertPhoto />}
+          startIcon={<InsertPhoto/>}
+          disableElevation="true"
+          onClick={props.onImportImageClick}
+          disabled={isScanEnabled({taxId: props.declareProperties.clientTaxId, disabled: props.importDisable})}
+        >
+          匯入圖檔
+        </Button>
+        <Button
+          variant="contained"
+          startIcon={<InsertPhoto/>}
           disableElevation="true"
           onClick={props.onOpenDialog}
-          disabled={!isScanEnable(props.declareProperties.clientTaxId) || props.scanDisable}
+          disabled={isImportEnabled({taxId: props.declareProperties.clientTaxId, diasbled: props.scanDisable})}
         >
           掃描文件
         </Button>
         <Button
           variant="contained"
-          startIcon={<Send />}
+          startIcon={<Send/>}
           disableElevation="true"
           onClick={(e) => {
             props.onSendToIdentifyClick(e, selectionDataRows.selection);
-            setSelectionDataRow({ selection: [] });
+            setSelectionDataRow({selection: []});
           }}
         >
           送出辨識
@@ -111,8 +127,8 @@ function ScannedImageList(props) {
       </Stack>
       <ImageList cols={3} gap={12}>
         {dataRows.map((item) => (
-          <ImageListItem key={item.fileName} sx={{ borderRadius: '8px', border: '1px solid #ccc', overflow: 'hidden' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <ImageListItem key={item.fileName} sx={{borderRadius: '8px', border: '1px solid #ccc', overflow: 'hidden'}}>
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
               <FormControl>
                 <Checkbox
                   id={item.id}
@@ -124,12 +140,12 @@ function ScannedImageList(props) {
               </FormControl>
               <Typography>{item.fileName}</Typography>
             </Box>
-            <Box sx={{ width: '100%', height: '300px', overflow: 'hidden' }}>
+            <Box sx={{width: '100%', height: '300px', overflow: 'hidden'}}>
               <img
                 src={item.imageUrl}
                 alt={item.fileName}
                 loading="lazy"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                style={{width: '100%', height: '100%', objectFit: 'cover'}}
               />
             </Box>
             <ImageListItemBar
@@ -139,19 +155,19 @@ function ScannedImageList(props) {
                     aria-label={`info about ${item.fileName}`}
                     onClick={(e) => onImageOriginalViewClick(item)}
                   >
-                    <ZoomIn sx={{ color: blue[200] }} />
+                    <ZoomIn sx={{color: blue[200]}}/>
                   </IconButton>
                   <IconButton
                     aria-label={`info about ${item.fileName}`}
                     onClick={(e) => onSaveImageClick(item)}
                   >
-                    <Save sx={{ color: blue[200] }} />
+                    <Save sx={{color: blue[200]}}/>
                   </IconButton>
                   <IconButton
                     aria-label={`info about ${item.fileName}`}
                     onClick={(e) => onDeleteImageClick(item)}
                   >
-                    <Delete sx={{ color: blue[200] }} />
+                    <Delete sx={{color: blue[200]}}/>
                   </IconButton>
                 </div>
               )}
@@ -169,12 +185,14 @@ ScannedImageList.propTypes = {
   onDeleteImageClick: PropTypes.func,
   onSaveImageClick: PropTypes.func,
   onImageOriginalViewClick: PropTypes.func,
+  onImportImageClick: PropTypes.func,
   username: PropTypes.string,
   data: PropTypes.array,
   clientTaxId: PropTypes.string,
   declareProperties: PropTypes.any,
   onOpenDialog: PropTypes.func,
   scanDisable: PropTypes.any,
+  importDisable: PropTypes.any
 };
 
 export default ScannedImageList;

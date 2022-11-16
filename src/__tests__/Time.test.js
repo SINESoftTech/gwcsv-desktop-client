@@ -1,4 +1,4 @@
-import { toPeriodList, getPeriod } from './Time';
+import { toPeriodList, getPeriod } from '../react/Util/Time';
 
 test('ts to Period', () => {
   const utcTime = 1631081797628;

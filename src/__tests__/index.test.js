@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import DialogComponent from './index';
+import DialogComponent from '../core/ui/Dialog';
 
 test('reporting period dialog UI', async () => {
   const declareProperties = {

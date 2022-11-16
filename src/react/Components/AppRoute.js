@@ -1,29 +1,38 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { useAppState } from '../Context';
+import {RouterProvider} from 'react-router-dom';
+import {createBrowserRouter} from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
+import HomePage from "../../views/HomePage";
+import IdentifiedEvidenceDetailPage from "../../views/IdentifiedEvidenceDetailPage";
+import PageNotFound from "../../views/NotFoundPage";
+import Login from "../../views/LoginPage";
 
-function AppRoutes({
-  component: Component, path, isPrivate, ...rest
-}) {
-  const { auth } = useAppState();
-  return (
-    <Route
-      path={path}
-      render={(props) => (isPrivate && !auth.user.token ? (
-        <Redirect to="/login" />
-      ) : (
-        <Component {...props} />
-      ))}
-      {...rest}
-    />
-  );
+const routes = [
+  {
+    path: "/",
+    element: (<ProtectedRoute><HomePage/></ProtectedRoute>),
+    children: [
+      {
+        path: "main",
+        element: (<ProtectedRoute><HomePage/></ProtectedRoute>),
+      },
+      {
+        path: 'identified-evidence-detail',
+        element: (<ProtectedRoute><IdentifiedEvidenceDetailPage/></ProtectedRoute>),
+      },
+    ]
+  },
+  {
+    path: '/*',
+    element: <PageNotFound/>,
+  },
+  {
+    path: '/login',
+    element: <Login/>,
+  }]
+const AppRoutes = () => {
+  let router = createBrowserRouter(routes)
+  return (<RouterProvider router={router}/>)
 }
-
-AppRoutes.propTypes = {
-  component: PropTypes.any,
-  path: PropTypes.any,
-  isPrivate: PropTypes.any,
-};
 
 export default AppRoutes;

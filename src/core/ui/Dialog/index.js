@@ -109,7 +109,7 @@ function DialogComponent(props) {
     <Dialog
       open={props.open}
       onClose={props.handleClose}
-      fullWidth="true"
+      fullWidth={true}
       aria-labelledby="設定是否申報營業稅與選擇憑證種類"
     >
       <DialogTitle id="responsive-dialog-title">設定</DialogTitle>
@@ -134,7 +134,7 @@ function DialogComponent(props) {
         </Button>
         <Button
           variant="contained"
-          disableElevation="true"
+          disableElevation={true}
           onClick={(e) => {
             props.handleClose();
             props.onScan();

@@ -65,15 +65,19 @@ function HomePage() {
   const [scanDisable, setScanDisable] = React.useState(false);
   const [scanAlert, setScanAlert] = React.useState(false);
   const [assignMap, setAssignMap] = React.useState();
+  const [importDisable, setImportDisable] = React.useState(false);
 
-  useEffect(async () => {
-    await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token);
-    if (declareProperties.clientTaxId !== '') {
-      await electronActions.getChooseBusinessEntityData(dispatch, declareProperties.clientTaxId);
+  useEffect(() => {
+    const pageInit = async ()=> {
+      await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token);
+      if (declareProperties.clientTaxId !== '') {
+        await electronActions.getChooseBusinessEntityData(dispatch, declareProperties.clientTaxId);
+      }
+      const assign = await electronActions.getAssign();
+      setAssignMap(assign);
+      openScanner(dispatch);
     }
-    const assign = await electronActions.getAssign();
-    setAssignMap(assign);
-    openScanner(dispatch);
+    pageInit().catch(console.error)
   }, [value, declareProperties.clientTaxId]);
 
   // region Main Events
@@ -185,6 +189,7 @@ function HomePage() {
     if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
       setScanDisable(true);
       setScanAlert(true);
+      setImportDisable(true);
       // fixme rm
       // handleMoveImage(1, C:\Users\amyyu\string123_24549210_1645062357828.jpg')
       // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable);
@@ -347,6 +352,7 @@ function HomePage() {
               onImageOriginalViewClick={handleViewImage}
               onDeleteImageClick={handleDeleteImage}
               scanDisable={scanDisable}
+              importDisable={importDisable}
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
