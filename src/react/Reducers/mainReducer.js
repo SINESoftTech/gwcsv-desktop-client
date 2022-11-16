@@ -12,6 +12,8 @@ export const MainReducer = (state = initialMainState, action) => {
       return { ...state, fileLists: action.payload };
     case actionTypes.GET_CLIENT_LIST_SUCCESS:
       return { ...state, clientLists: action.payload };
+    case actionTypes.GET_CLIENT_LIST_FAILED:
+      return {...state,  clientLists: []}
     case actionTypes.GET_SCAN_DEVICE:
       return { ...state, scannerName: action.payload };
     default:
