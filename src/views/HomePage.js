@@ -11,7 +11,7 @@ import ScannedImageList from '../modules/scanning/ui/ScannedImageList';
 import ConfirmedEvidenceListTable from '../modules/confirming/ui/ConfirmedEvidenceListTable';
 import IdentifiedEvidenceListTable from '../modules/identifying/ui/IdentifiedEvidenceListTable';
 import {
-  gwUploaded, identifyResultConfirmed, identifyResultReceived, identifySent,
+  gwUploaded, identifyResultConfirmed, identifyResultReceived, identifySent, importImage,
 } from '../react/Actions/electionActions';
 import { getIdentifyResult } from '../react/Actions/sightourActions';
 import { openScanner } from '../react/Actions/scanAction';
@@ -55,6 +55,7 @@ function HomePage() {
   const dispatch = useAppDispatch();
   const appState = useAppState();
   const [value, setValue] = React.useState(0);
+  // TODO move this to context
   const [declareProperties, setDeclareProperties] = React.useState({
     clientTaxId: '',
     reportingPeriod: '',
@@ -184,6 +185,11 @@ function HomePage() {
   const handleDeleteEvidence = (businessEntityTaxId, step, ticketId) => {
     electronActions.deleteData(dispatch, businessEntityTaxId, step, ticketId);
   };
+
+  const handleImageImport = () => {
+    console.log('handleImageImport')
+    electronActions.importImage();
+  }
 
   const handleScanImage = () => {
     if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
@@ -353,6 +359,7 @@ function HomePage() {
               onDeleteImageClick={handleDeleteImage}
               scanDisable={scanDisable}
               importDisable={importDisable}
+              onImportImageClick={handleImageImport}
             />
           </TabPanel>
           <TabPanel value={value} index={1}>

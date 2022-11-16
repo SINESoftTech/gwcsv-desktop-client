@@ -1,13 +1,13 @@
 import isElectron from 'is-electron';
 import actionTypes from './actionTypes';
+import {electronCommand} from "./electronCommand";
 
 const electron = isElectron() ? window.electron : null;
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null;
-
 export const saveAssign = async (payload, yearAssignVersion) => {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:saveAssign', payload, yearAssignVersion);
+      const result = await ipcRenderer.invoke(electronCommand.SaveServerAssignLog, payload, yearAssignVersion);
       return result;
     }
   } catch (error) {
@@ -18,7 +18,7 @@ export const saveAssign = async (payload, yearAssignVersion) => {
 export async function getYearAssignVersion() {
   try {
     if (ipcRenderer) {
-      return await ipcRenderer.invoke('evidence:getYearAssignVersion');
+      return await ipcRenderer.invoke(electronCommand.GetLocalAssignLogVersion);
     }
   } catch (error) {
     console.log('updateData', error);
@@ -46,15 +46,26 @@ export async function deleteData(dispatch, businessEntityTaxId, step, id) {
   }
 }
 
-export async function deleteSigoutourData(dispatch, eventName, ticketId) {
+export async function importImage() {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:deleteSigoutourData', eventName, ticketId);
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result });
+      const result = await ipcRenderer.invoke(electronCommand.ImportImage);
+      // dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result });
     }
   } catch (error) {
-    console.log('deleteSigoutourData', error);
+    console.log('importImage', error);
   }
+}
+
+export async function deleteSigoutourData(dispatch, eventName, ticketId) {
+//   try {
+//     if (ipcRenderer) {
+//       const result = await ipcRenderer.invoke('evidence:deleteSigoutourData', eventName, ticketId);
+//       dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result });
+//     }
+//   } catch (error) {
+//     console.log('deleteSigoutourData', error);
+//   }
 }
 
 export async function getJsonRawData(ticketId, clientTaxId) {

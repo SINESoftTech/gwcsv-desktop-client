@@ -10,7 +10,7 @@ const userHomedir = require('os').homedir()
 const process = require('process')
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
-const { globalShortcut } = electron
+const { globalShortcut, dialog } = electron
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -374,5 +374,27 @@ ipcMain.handle('evidence:getAssign', (event) => {
   //todo
   const targetFilePath = config.fileFolder + '/' + 'assign.json'
   return fse.readJSONSync(targetFilePath)
+})
+
+ipcMain.handle('evidence:importFromImage', (event,method, params) => {
+  console.log('handle import from image')
+  const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
+  const id = Date.now()
+  // const targetFilePath = path.join(targetFolderPath, username.username + '_' + declareProperties.clientTaxId + '_' + id + '.' + sourceFileExt)
+  dialog.showOpenDialog({
+    filters: [
+      {name: 'Images', extensions: ['jpg', 'png', 'gif']},
+      {name: 'All Files', extensions: ['*']}
+    ],
+    properties: ['openFile', 'multiSelections'] ,
+  })
+    .then(result => {
+      console.log(result.canceled)
+      console.log('filePaths=', result.filePaths)
+    })
+    .catch(err => {
+      console.log(err)
+    });
+  return 'hello'
 })
 
