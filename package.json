@@ -45,6 +45,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "babel-jest": "^29.3.1",
+    "babel-preset-electron": "^1.4.15",
     "concurrently": "^7.5.0",
     "electron-packager": "^17.1.1",
     "eslint": "^8.27.0",

@@ -46,11 +46,11 @@ export async function deleteData(dispatch, businessEntityTaxId, step, id) {
   }
 }
 
-export async function importImage() {
+export async function importImage(dispatch, businessEntityTaxId, username) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke(electronCommand.ImportImage);
-      // dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result });
+      const result = await ipcRenderer.invoke(electronCommand.ImportImage, businessEntityTaxId, username );
+      // dispatch({ type: actionTypes.IMPORT_FILE_SUCCESS, payload: result });
     }
   } catch (error) {
     console.log('importImage', error);
@@ -78,15 +78,15 @@ export async function getJsonRawData(ticketId, clientTaxId) {
   }
 }
 
-export async function getChooseBusinessEntityData(dispatch, taxId) {
+export async function getBusinessEntityListLocal(dispatch, taxId) {
   try {
     if (ipcRenderer) {
-      const result = await ipcRenderer.invoke('evidence:getChooseBusinessEntityData', taxId);
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result });
+      const result = await ipcRenderer.invoke(electronCommand.GetBusinessEntityList, taxId);
+      dispatch({ type: actionTypes.BUSINESS_ENTITY_LIST_RECEIVED, payload: result });
       return result;
     }
   } catch (error) {
-    dispatch({ type: actionTypes.GET_FILE_LIST_ERROR, payload: error });
+    dispatch({ type: actionTypes.GET_BUSINESS_ENTITY_LIST_ERROR, payload: error });
   }
 }
 

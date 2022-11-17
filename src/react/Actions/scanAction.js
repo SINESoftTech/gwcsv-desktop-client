@@ -1,17 +1,17 @@
-// const apiPath = 'ws://127.0.0.1:17777';
+const apiPath = 'ws://127.0.0.1:17777';
 
 // callback
 export const openScanner = (dispatch) => {
-  // const url = `${apiPath}/GetDevicesList`;
-  // const ws = new WebSocket(url, 'webfxscan');
-  // ws.onopen = () => console.log('ws opened');
-  // ws.onmessage = async (message) => {
-  //   const scannerName = message.data.split(' ')[1];
-  //   dispatch({ type: 'GET_SCAN_DEVICE', payload: scannerName });
-  // };
-  // ws.onclose = () => {
-  //   ws.close();
-  // };
+  const url = `${apiPath}/GetDevicesList`;
+  const ws = new WebSocket(url, 'webfxscan');
+  ws.onopen = () => console.log('ws opened');
+  ws.onmessage = async (message) => {
+    const scannerName = message.data.split(' ')[1];
+    dispatch({ type: 'GET_SCAN_DEVICE', payload: scannerName });
+  };
+  ws.onclose = () => {
+    ws.close();
+  };
 };
 
 export const scan = (deviceName, handleMoveFile, handleScannerError, handleCloseDisable) => {

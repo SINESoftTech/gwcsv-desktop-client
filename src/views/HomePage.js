@@ -72,11 +72,11 @@ function HomePage() {
     const pageInit = async ()=> {
       await gwActions.getAllClientList(dispatch, appState.auth.user.username, appState.auth.user.taxId, appState.auth.user.token);
       if (declareProperties.clientTaxId !== '') {
-        await electronActions.getChooseBusinessEntityData(dispatch, declareProperties.clientTaxId);
+        await electronActions.getBusinessEntityListLocal(dispatch, declareProperties.clientTaxId);
       }
       const assign = await electronActions.getAssign();
       setAssignMap(assign);
-      openScanner(dispatch);
+      // openScanner(dispatch);
     }
     pageInit().catch(console.error)
   }, [value, declareProperties.clientTaxId]);
@@ -188,11 +188,12 @@ function HomePage() {
 
   const handleImageImport = () => {
     console.log('handleImageImport')
-    electronActions.importImage();
+    electronActions.importImage(dispatch);
   }
 
   const handleScanImage = () => {
     if (declareProperties.reportingPeriod !== '' && declareProperties.isDeclareBusinessTax !== '') {
+      openScanner(dispatch)
       setScanDisable(true);
       setScanAlert(true);
       setImportDisable(true);
