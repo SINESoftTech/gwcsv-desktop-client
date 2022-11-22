@@ -12,6 +12,7 @@ import {A5032ToGwObj} from './SigoutourReqMapper/A5032Mapper'
 import {A5033ToGwObj} from './SigoutourReqMapper/A5033Mapper'
 import {A5034ToGwObj} from './SigoutourReqMapper/A5034Mapper'
 import {A8001ToGwObj} from './SigoutourReqMapper/A8001Mapper'
+import {convertUnixTimestamp} from "../Util/Time";
 
 
 const TAX_TYPE = {
@@ -208,14 +209,15 @@ class GwMapperClass {
     }
 
     toGw(jsonData) {
+        console.log('BBB',jsonData)
         const evidenceType = GW_EVIDENCE_TYPE[jsonData.evidenceType.result].value
         const declareBusinessTax = jsonData.isDeclareBusinessTax.result
         const commentType = "BLANK"
         const summaryCount = null
         //todo
         //todo if bill convert
-        const evidenceDate = ""
-        const evidencePeriod = ""
+        const evidenceDate = convertUnixTimestamp(jsonData.evidenceDate.result)
+        const evidencePeriod = jsonData.period.result
         const buyerTaxId = jsonData.buyerTaxId.result
         const evidenceId = jsonData.evidenceNumber.result
         const reportingPeriod = jsonData.reportingPeriod.result
@@ -246,7 +248,7 @@ class GwMapperClass {
             totalAmount: totalAmount,
             totalPayAmount: totalPayAmount,
         };
-        console.log(evidenceData)
+        console.log("AAA",evidenceData)
         return evidenceData
     }
 }

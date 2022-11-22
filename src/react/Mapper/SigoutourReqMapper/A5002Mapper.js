@@ -52,11 +52,12 @@ const A5002ToGwObj = (data) => {
     result.isDeclareBusinessTax = {result: data.isDeclareBusinessTax, score: -1}
     result.fullPath = {result: data.fullPath, score: 1}
     result.evidenceDate = result['invoiceDate']
-    result.evidenceDate.result = getYYYYMMDD(result.evidenceDate.result)
+
     result.reportingPeriod = {
         result: data.reportingPeriod,
         score: 1
     }
+    result.evidenceDate.result = getYYYYMMDD(result.evidenceDate.result)
     let period = ''
     try {
         period = getPeriod(result.evidenceDate.result)
@@ -68,6 +69,7 @@ const A5002ToGwObj = (data) => {
         result: period,
         score: -1
     }
+
     result.deductionType = {
         result: data.deductionType,
         score: 1
