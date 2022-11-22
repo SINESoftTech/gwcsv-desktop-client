@@ -25,7 +25,7 @@ import {
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
-  identifySent
+  identifySent, importFromImage, test
 } from '../react/Actions/electionActions'
 import { openScanner } from '../react/Actions/scanAction'
 import DialogComponent from '../core/ui/Dialog'
@@ -364,8 +364,13 @@ function HomePage() {
   }
 
   const handleImportImageClick = async (e) => {
-    const file = e.target.files[0]
-    await electronActions.scanImages(dispatch, file.path, appState.auth.user, declareProperties)
+
+    // await electronActions.scanImages(dispatch, file.path, appState.auth.user, declareProperties)
+    const result=await electronActions.importFromImage()
+    console.log('handleImportImageClick',result)
+    for(let i=0;i<result.length;i++){
+        await electronActions.scanImages(dispatch, result[i], appState.auth.user, declareProperties)
+    }
   }
 
   return (

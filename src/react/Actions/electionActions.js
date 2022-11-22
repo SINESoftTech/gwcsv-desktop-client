@@ -196,6 +196,20 @@ export async function identifyResultConfirmed(
   }
 }
 
+export async function importFromImage(){
+  try {
+    if (ipcRenderer) {
+      const result = await ipcRenderer.invoke(
+          'evidence:importFromImage'
+      )
+      console.log('importFromImage',result)
+      return result
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export async function gwUploaded(dispatch, businessEntityTaxId, payload) {
   try {
     if (ipcRenderer) {

@@ -136,22 +136,19 @@ function DialogComponent(props) {
           variant='contained'
           disableElevation={true}
           onClick={(e) => {
-            if (props.isScan) {
               props.handleClose()
               props.onConfirm()
-            }
           }}
-          component='label'
           color='primary'
         >
-          {props.isScan ? '' : <input
-            type='file'
-            hidden
-            onChange={event => {
-              props.onConfirm(event)
-              props.handleClose()
-            }}
-          />}
+          {/*{props.isScan ? '' : <input*/}
+          {/*  type='file'*/}
+          {/*  hidden*/}
+          {/*  onChange={event => {*/}
+          {/*    props.onConfirm(event)*/}
+          {/*    props.handleClose()*/}
+          {/*  }}*/}
+          {/*/>}*/}
           確認
         </Button>
       </DialogActions>
