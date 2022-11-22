@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import {
   Button, Dialog, DialogActions, DialogContent, DialogTitle,
-  FormControl, MenuItem, Stack, TextField,
-} from '@mui/material';
-import PropTypes from 'prop-types';
-import { SIGOUTOUR_EVIDENCE_TYPE } from '../../../react/Mapper/sigoutour_mapper';
+  FormControl, MenuItem, Stack, TextField
+} from '@mui/material'
+import PropTypes from 'prop-types'
+import { GW_EVIDENCE_TYPE } from '../../../react/Mapper/gw_mapper'
 
-const R = require('ramda');
+const R = require('ramda')
 
 function DialogComponent(props) {
-  const [renderEvidenceTypeList, setRenderEvidenceTypeList] = useState([]);
+  const [renderEvidenceTypeList, setRenderEvidenceTypeList] = useState([])
 
   const handleChange = (event) => {
-    props.handleSelectionChange(event);
-  };
+    props.handleSelectionChange(event)
+  }
 
   useEffect(() => {
-    const keyList = R.keys(SIGOUTOUR_EVIDENCE_TYPE);
-    const { isDeclareBusinessTax } = props.declareProperties;
+    const keyList = R.keys(GW_EVIDENCE_TYPE)
+    const { isDeclareBusinessTax } = props.declareProperties
     if (isDeclareBusinessTax === 'true') {
       const data = keyList
-        .filter((key) => SIGOUTOUR_EVIDENCE_TYPE[key].id !== '').map((key) => {
-          const id = `${SIGOUTOUR_EVIDENCE_TYPE[key].id} `;
-          const { name } = SIGOUTOUR_EVIDENCE_TYPE[key];
+        .filter((key) => GW_EVIDENCE_TYPE[key].id !== '').map((key) => {
+          const id = `${GW_EVIDENCE_TYPE[key].id} `
+          const { name } = GW_EVIDENCE_TYPE[key]
           return (
             <MenuItem
               key={key}
@@ -30,14 +30,14 @@ function DialogComponent(props) {
             >
               {(id + name)}
             </MenuItem>
-          );
-        });
-      setRenderEvidenceTypeList([...data]);
+          )
+        })
+      setRenderEvidenceTypeList([...data])
     } else {
       const data = keyList
         .map((key) => {
-          const id = SIGOUTOUR_EVIDENCE_TYPE[key].id === '' ? '99 ' : `${SIGOUTOUR_EVIDENCE_TYPE[key].id} `;
-          const { name } = SIGOUTOUR_EVIDENCE_TYPE[key];
+          const id = GW_EVIDENCE_TYPE[key].id === '' ? '99 ' : `${GW_EVIDENCE_TYPE[key].id} `
+          const { name } = GW_EVIDENCE_TYPE[key]
           return (
             <MenuItem
               key={key}
@@ -45,11 +45,11 @@ function DialogComponent(props) {
             >
               {(id + name)}
             </MenuItem>
-          );
-        });
-      setRenderEvidenceTypeList([...data]);
+          )
+        })
+      setRenderEvidenceTypeList([...data])
     }
-  }, [props.declareProperties, props.declareProperties.isDeclareBusinessTax]);
+  }, [props.declareProperties.isDeclareBusinessTax])
 
   // const renderReportingPeriod = () => {
   //   return (
@@ -74,45 +74,45 @@ function DialogComponent(props) {
   const renderIsDeclareBusinessTax = () => (
     <FormControl fullWidth>
       <TextField
-        id="is-declare-business-select"
-        name="isDeclareBusinessTax"
+        id='is-declare-business-select'
+        name='isDeclareBusinessTax'
         select
         value={props.declareProperties.isDeclareBusinessTax}
         onChange={handleChange}
-        label="是否申報營業稅"
+        label='是否申報營業稅'
         defaultValue={`${true}`}
       >
         <MenuItem key={1} value={`${true}`}>是</MenuItem>
         <MenuItem key={2} value={`${false}`}>否</MenuItem>
       </TextField>
     </FormControl>
-  );
+  )
 
   const renderEvidenceType = (evidenceTypeList) => (
     <FormControl fullWidth>
       <TextField
-        id="evidence-type-select"
-        name="evidenceType"
+        id='evidence-type-select'
+        name='evidenceType'
         select
         value={props.declareProperties.evidenceType}
         onChange={handleChange}
-        label="請選擇憑證種類"
-        defaultValue=""
+        label='請選擇憑證種類'
+        defaultValue=''
       >
-        <MenuItem key={0} value="">請選擇憑證種類</MenuItem>
+        <MenuItem key={0} value=''>請選擇憑證種類</MenuItem>
         {evidenceTypeList}
       </TextField>
     </FormControl>
-  );
+  )
 
   return (
     <Dialog
       open={props.open}
       onClose={props.handleClose}
       fullWidth={true}
-      aria-labelledby="設定是否申報營業稅與選擇憑證種類"
+      aria-labelledby='設定是否申報營業稅與選擇憑證種類'
     >
-      <DialogTitle id="responsive-dialog-title">設定</DialogTitle>
+      <DialogTitle id='responsive-dialog-title'>設定</DialogTitle>
 
       <DialogContent>
         <Stack spacing={2} my={2}>
@@ -123,29 +123,40 @@ function DialogComponent(props) {
       </DialogContent>
       <DialogActions>
         <Button
-          variant="outlined"
+          variant='outlined'
           onClick={(e) => {
-            props.handleClose();
-            props.handleReset();
+            props.handleClose()
+            props.handleReset()
           }}
-          color="primary"
+          color='primary'
         >
           取消
         </Button>
         <Button
-          variant="contained"
+          variant='contained'
           disableElevation={true}
           onClick={(e) => {
-            props.handleClose();
-            props.onScan();
+            if (props.isScan) {
+              props.handleClose()
+              props.onConfirm()
+            }
           }}
-          color="primary"
+          component='label'
+          color='primary'
         >
+          {props.isScan ? '' : <input
+            type='file'
+            hidden
+            onChange={event => {
+              props.onConfirm(event)
+              props.handleClose()
+            }}
+          />}
           確認
         </Button>
       </DialogActions>
     </Dialog>
-  );
+  )
 }
 
 DialogComponent.propTypes = {
@@ -154,7 +165,7 @@ DialogComponent.propTypes = {
   handleSelectionChange: PropTypes.func,
   handleClose: PropTypes.func,
   handleReset: PropTypes.func,
-  onScan: PropTypes.func,
-};
+  onConfirm: PropTypes.func
+}
 
-export default DialogComponent;
+export default DialogComponent

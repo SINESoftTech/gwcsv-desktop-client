@@ -56,53 +56,53 @@ export async function sendToIdentify(identifyData) {
   // }
   // return resultList
 }
-
-export async function getIdentifyResult(payload) {
-  // try {
-  //   const apiPath = '/check.php'
-  //   const token = await getToken('gateweb1', 'qwe123')
-  //   const formData = new FormData()
-  //   formData.append('token', token)
-  //   formData.append('ticket', payload.ticketId)
-  //   const result = await signtTourAxios.post(apiPath, formData)
-  //   if (result.data.result === undefined) {
-  //     const status = result.data.pageList[0]['photoList'][0].result.length === 0 ?
-  //                    'failed' : 'completed'
-  //     return {
-  //       'fullPath': payload.fullPath,
-  //       'reportingPeriod': payload.reportingPeriod,
-  //       'deductionType': payload.deductionType,
-  //       'gwEvidenceType': payload.gwEvidenceType,
-  //       'ticketId': payload.ticketId,
-  //       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
-  //       'status': status,
-  //       'data': result.data
-  //     }
-  //   }
-  //   if (result.data.result === -200014) {
-  //     return {
-  //       'fullPath': payload.fullPath,
-  //       'reportingPeriod': payload.reportingPeriod,
-  //       'deductionType': payload.deductionType,
-  //       'gwEvidenceType': payload.gwEvidenceType,
-  //       'ticketId': payload.ticketId,
-  //       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
-  //       'status': 'process'
-  //     }
-  //   }
-  //   return {
-  //     'fullPath': payload.fullPath,
-  //     'reportingPeriod': payload.reportingPeriod,
-  //     'deductionType': payload.deductionType,
-  //     'gwEvidenceType': payload.gwEvidenceType,
-  //     'isDeclareBusinessTax': payload.isDeclareBusinessTax,
-  //     'ticketId': payload.ticketId,
-  //     'status': 'failed'
-  //   }
-  // } catch (error) {
-  //   throw new Error(error)
-  // }
-}
+//
+// export async function getIdentifyResult(payload) {
+//   // try {
+//   //   const apiPath = '/check.php'
+//   //   const token = await getToken('gateweb1', 'qwe123')
+//   //   const formData = new FormData()
+//   //   formData.append('token', token)
+//   //   formData.append('ticket', payload.ticketId)
+//   //   const result = await signtTourAxios.post(apiPath, formData)
+//   //   if (result.data.result === undefined) {
+//   //     const status = result.data.pageList[0]['photoList'][0].result.length === 0 ?
+//   //                    'failed' : 'completed'
+//   //     return {
+//   //       'fullPath': payload.fullPath,
+//   //       'reportingPeriod': payload.reportingPeriod,
+//   //       'deductionType': payload.deductionType,
+//   //       'gwEvidenceType': payload.gwEvidenceType,
+//   //       'ticketId': payload.ticketId,
+//   //       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
+//   //       'status': status,
+//   //       'data': result.data
+//   //     }
+//   //   }
+//   //   if (result.data.result === -200014) {
+//   //     return {
+//   //       'fullPath': payload.fullPath,
+//   //       'reportingPeriod': payload.reportingPeriod,
+//   //       'deductionType': payload.deductionType,
+//   //       'gwEvidenceType': payload.gwEvidenceType,
+//   //       'ticketId': payload.ticketId,
+//   //       'isDeclareBusinessTax': payload.isDeclareBusinessTax,
+//   //       'status': 'process'
+//   //     }
+//   //   }
+//   //   return {
+//   //     'fullPath': payload.fullPath,
+//   //     'reportingPeriod': payload.reportingPeriod,
+//   //     'deductionType': payload.deductionType,
+//   //     'gwEvidenceType': payload.gwEvidenceType,
+//   //     'isDeclareBusinessTax': payload.isDeclareBusinessTax,
+//   //     'ticketId': payload.ticketId,
+//   //     'status': 'failed'
+//   //   }
+//   // } catch (error) {
+//   //   throw new Error(error)
+//   // }
+// }
 // deprecated
 export async function sendConfirmedResult(payload) {
   // try {

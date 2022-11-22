@@ -160,10 +160,13 @@ function openFile(directory) {
 
 
 function getFileContent(fullPath) {
-  if (R.endsWith('.jpg', fullPath)) {
+  if (fullPath.toLowerCase().endsWith('jpg')) {
     return fse.readFileSync(fullPath)
   }
-  if (R.endsWith('.jpeg', fullPath)) {
+  if (fullPath.toLowerCase().endsWith('jpeg')) {
+    return fse.readFileSync(fullPath)
+  }
+  if (fullPath.toLowerCase().endsWith('png')) {
     return fse.readFileSync(fullPath)
   }
 }
@@ -190,6 +193,7 @@ ipcMain.handle('evidence:saveAssign', (event, payload, version) => {
 })
 
 ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
+  console.log(fullPath)
   return getFileContent(fullPath)
 })
 
@@ -225,7 +229,9 @@ ipcMain.handle('evidence:deleteData', (event, businessEntityTaxId, step, id) => 
   return db.read().value()
 })
 
+
 ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
+  console.log(fullPath, username, declareProperties)
   const sourceFileExt = getFileExt(fullPath)
   const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
   const id = Date.now()
@@ -274,7 +280,6 @@ ipcMain.handle('evidence:getJsonFileData', (event, ticketId, businessEntityTaxId
 })
 
 ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
-  //
   const username = sentIdentifyResult['user']
   const identifyResult = sentIdentifyResult['result']
   const businessEntityTaxId = identifyResult[0].businessEntityTaxId
@@ -283,14 +288,14 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
     const data = identifyResult[i]
     if (data['result']) {
       const fileExt = data['sourceFullPath'].split('_')[2].split('.')[1]
-      const targetFileName = username + '_' + data['businessEntityTaxId'] + '_' + data['ticketId'] + '.' + fileExt
+      const targetFileName = username + '_' + data['businessEntityTaxId'] + '_' + data['id'] + '.' + fileExt
       const targetFullName = path.join(config.fileFolder, persistenceFolder.image, targetFileName)
       fse.moveSync(data.sourceFullPath, targetFullName)
       const id = data['sourceFileName'].split('_')[1].split('.')[0]
       const data01List = db.get('01').value()
       data01List[id].fullPath.result = targetFullName
       const data02 = {
-        [data['ticketId']]: data01List[id]
+        [data['id']]: data01List[id]
       }
       db.get('02')
         .assign(data02)
@@ -309,12 +314,12 @@ ipcMain.handle('evidence:identifyResultReceived', (event, businessEntityTaxId, i
     const data = identifyResult[i]
     const data02List = db.get('02').value()
     const data03 = {
-      [data['ticketId'].result]: data
+      [data['id'].result]: data
     }
     db.get('03')
       .assign(data03)
       .write()
-    delete data02List[data['ticketId'].result]
+    delete data02List[data['id'].result]
     db.get('02')
       .assign(data02List)
       .write()
@@ -324,31 +329,32 @@ ipcMain.handle('evidence:identifyResultReceived', (event, businessEntityTaxId, i
 
 
 ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
-
+  console.log(payload)
   const db = getDbContext(businessEntityTaxId)
   payload.map(data => {
-    const ticketId = data.json['ticketId']
+    console.log(data)
+    const id = data.id
     if (data.status) {
       //move image
       const targetFolder = path.join(config.fileFolder, persistenceFolder.backup)
-      const targetImagePath = path.join(targetFolder, ticketId + '.' + getFileExt(data.json.fullPath))
+      const targetImagePath = path.join(targetFolder, id + '.' + getFileExt(data.json.fullPath))
       fse.moveSync(data.json.fullPath, targetImagePath)
       const db04 = db.get('04').value()
       const data05 = {
-        [ticketId]: db04[data.json[ticketId]]
+        [id]: db04[data.id]
       }
       db.get('05')
         .assign(data05)
         .write()
-      delete db04[ticketId]
+      delete db04[id]
       db.get('04')
         .assign(db04)
         .write()
       //save data to 05
     } else {
-      console.log('BB')
+
       const db04 = db.get('04').value()
-      db04[data.json['ticketId']]['errorMsg'].result = data.json['errorMsg']
+      db04[id]['errorMsg'].result = data['errorMsg']
       db.get('04')
         .assign(db04)
         .write()
@@ -357,10 +363,13 @@ ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
   return db.read().value()
 })
 const getFileExt = (fileName) => {
-  if (fileName.endsWith('jpg')) {
+  if (fileName.toLowerCase().endsWith('jpg')) {
     return 'jpg'
   }
-  if (fileName.endsWith('png')) {
+  if (fileName.toLowerCase().endsWith('jpeg')) {
+    return 'jpg'
+  }
+  if (fileName.toLowerCase().endsWith('png')) {
     return 'png'
   }
   return 'json'

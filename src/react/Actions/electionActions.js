@@ -80,6 +80,7 @@ export async function getChooseBusinessEntityData(dispatch, taxId) {
 }
 
 export async function scanImages(dispatch, filePath, username, declareProperties) {
+  console.log(dispatch,filePath,username,declareProperties)
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:scanImages', filePath, username, declareProperties);
