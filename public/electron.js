@@ -203,7 +203,7 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
   return getFileContent(fullPath)
 })
 
-ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
+ipcMain.handle('evidence:getBusinessEntityList', (event, taxId) => {
   return getDbContext(taxId).read().value()
 })
 

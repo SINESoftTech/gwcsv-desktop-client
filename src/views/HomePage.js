@@ -365,12 +365,13 @@ function HomePage() {
 
   const handleImportImageClick = async (e) => {
     const file = e.target.files[0]
-    await electronActions.importImage(
-      dispatch,
-      file.path,
-      appState.auth.user,
-      declareProperties
-    )
+    await electronActions.scanImages(dispatch, file.path, appState.auth.user, declareProperties)
+    // await electronActions.scanImages(
+    //   dispatch,
+    //   file.path,
+    //   appState.auth.user,
+    //   declareProperties
+    // )
   }
 
   return (

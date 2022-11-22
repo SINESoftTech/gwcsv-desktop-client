@@ -135,7 +135,7 @@ export async function scanImages(
         username,
         declareProperties
       )
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      dispatch({ type: actionTypes.IMAGE_FILE_SCANNED, payload: result })
     }
   } catch (error) {
     console.log(error)
