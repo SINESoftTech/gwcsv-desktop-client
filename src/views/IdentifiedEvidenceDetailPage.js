@@ -28,21 +28,21 @@ function IdentifiedEvidenceDetailPage() {
                   variant="text"
                   component={Link} href="/"
                   startIcon={<KeyboardBackspace />}
-                  disableElevation="true"
+                  disableElevation={true}
                 >
                   返回辨識結果
                 </Button>
                 <Button
                   variant="outlined"
                   startIcon={<PlaylistRemove />}
-                  disableElevation="true"
+                  disableElevation={true}
                 >
                   刪除
                 </Button>
                 <Button
                   variant="contained"
                   startIcon={<Save />}
-                  disableElevation="true"
+                  disableElevation={true}
                 >
                   儲存
                 </Button>

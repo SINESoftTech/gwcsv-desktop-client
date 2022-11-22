@@ -22,7 +22,7 @@ import {
   electronActions, gwActions, sightTourActions, useAppDispatch, useAppState,
 } from '../react/Context';
 import DesktopNavbar from '../core/layout/DesktopNavbar';
-import { toPeriodList } from '../react/Util/Time';
+import { toPeriodList, getCurrentPeriod } from '../react/Util/Time';
 
 function TabPanel(props) {
   const {
@@ -57,7 +57,7 @@ function HomePage() {
   const [value, setValue] = React.useState(0);
   const [declareProperties, setDeclareProperties] = React.useState({
     clientTaxId: '',
-    reportingPeriod: '',
+    reportingPeriod: getCurrentPeriod(),
     evidenceType: '',
     isDeclareBusinessTax: 'true',
   });
@@ -191,7 +191,7 @@ function HomePage() {
       setScanAlert(true);
       setImportDisable(true);
       // fixme rm
-      // handleMoveImage(1, C:\Users\amyyu\string123_24549210_1645062357828.jpg')
+      handleMoveImage(1, "C:\\Users\\amyyu\\string123_24549210_1645062357828.jpg")
       // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable);
     }
   };
@@ -241,11 +241,11 @@ function HomePage() {
           onChange={handleSelectionChange}
           disabled={scanDisable}
           defaultValue={declareProperties.clientTaxId}
-          label="請選擇營利事業人"
+          label="請選擇營利事業單位"
         >
-          <MenuItem key={0} value="">請選擇營利事業人</MenuItem>
+          <MenuItem key={0} value="">請選擇營利事業單位</MenuItem>
           {appState.appData.clientLists.map((client) => (
-            <MenuItem key={client.taxId.id} value={client.taxId.id}>{client.name}</MenuItem>
+            <MenuItem key={client.taxId.id} value={client.taxId.id}>{client.taxId.id}{' '}{client.businessName}</MenuItem>
           ))}
         </TextField>
       </FormControl>
@@ -254,11 +254,11 @@ function HomePage() {
           id="reporting-period-select"
           name="reportingPeriod"
           select
-          label="申報期別"
           value={declareProperties.reportingPeriod}
           onChange={handleSelectionChange}
+          disabled={scanDisable}
+          label="申報期別"
         >
-          <MenuItem key={0} value="">請選擇申報期別</MenuItem>
           {toPeriodList().filter((period) => period % 2 === 0).map((period) => (
             <MenuItem key={period} value={period}>{period}</MenuItem>
           ))}
@@ -270,7 +270,7 @@ function HomePage() {
   const handleReset = () => {
     setDeclareProperties((prevState) => ({
       ...prevState,
-      reportingPeriod: '',
+      reportingPeriod: getCurrentPeriod(),
     }));
   };
 
