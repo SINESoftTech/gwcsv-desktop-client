@@ -52,7 +52,7 @@ export async function deleteData(dispatch, businessEntityTaxId, step, id) {
         step,
         id
       )
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      dispatch({ type: actionTypes.BUSINESS_ENTITY_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
     console.log('deleteData', error)
@@ -135,7 +135,7 @@ export async function scanImages(
         username,
         declareProperties
       )
-      dispatch({ type: actionTypes.IMAGE_FILE_SCANNED, payload: result })
+      dispatch({ type: actionTypes.BUSINESS_ENTITY_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
     console.log(error)
@@ -150,7 +150,7 @@ export async function identifySent(dispatch, payload) {
   try {
     if (ipcRenderer) {
       const result = await ipcRenderer.invoke('evidence:identifySent', payload)
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      dispatch({ type: actionTypes.BUSINESS_ENTITY_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
     console.log(error)
@@ -169,7 +169,7 @@ export async function identifyResultReceived(
         businessEntityTaxId,
         payload
       )
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      dispatch({ type: actionTypes.BUSINESS_ENTITY_LIST_RECEIVED, payload: result })
     }
   } catch (error) {
     console.log(error)
@@ -188,7 +188,7 @@ export async function identifyResultConfirmed(
         businessEntityTaxId,
         payload
       )
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      dispatch({ type: actionTypes.BUSINESS_ENTITY_LIST_RECEIVED, payload: result })
       return result
     }
   } catch (error) {
@@ -204,7 +204,7 @@ export async function gwUploaded(dispatch, businessEntityTaxId, payload) {
         businessEntityTaxId,
         payload
       )
-      dispatch({ type: actionTypes.FILE_LIST_RECEIVED, payload: result })
+      dispatch({ type: actionTypes.BUSINESS_ENTITY_LIST_RECEIVED, payload: result })
       return result
     }
   } catch (error) {
