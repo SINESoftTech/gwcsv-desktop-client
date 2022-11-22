@@ -39,206 +39,45 @@ export const getHistoryAssignLog = async (localVersion) => {
   return result
 }
 
-const uploadToGwStrategy = {
-  'TRIPLE_GUI': uploadGUI,
-  'DUPLICATE_CASH_REGISTER_GUI': uploadGUI,
-  'TRIPLE_CASH_REGISTER_GUI': uploadGUI,
-  'EGUI': uploadGUI,
-  'ELECTRIC_BILL': uploadBill,
-  'WATER_BILL': uploadBill,
-  'TELECOM_BILL': uploadBill,
-  'CUSTOMS_TAXABLE_EVIDENCE': uploadCustoms,
-};
-
-async function uploadGUI(payload, imageBlob, accountingFirmTaxId, token) {
-  console.log('uploadGUI', payload);
-  try {
-    const req = {
-      inputOutputType: 'INPUT',
-      businessEntityTaxId: payload.buyerTaxId,
-      evidenceType: payload.gwEvidenceType,
-      reportingPeriod: payload.reportingPeriod,
-      deductionType: payload.deductionType,
-      isDeclareBusinessTax: payload.isDeclareBusinessTax,
-      buyerTaxId: payload.buyerTaxId,
-      sellerTaxId: payload.sellerTaxId,
-      taxType: payload.taxType,
-      taxableSalesValue: payload.taxableSalesValue,
-      zeroTaxSalesValue: payload.zeroTaxSalesValue,
-      dutyFreeSalesValue: payload.dutyFreeSalesValue,
-      withoutTaxAmount: parseInt(payload.taxableSalesValue)
-        + parseInt(payload.zeroTaxSalesValue)
-        + parseInt(payload.dutyFreeSalesValue),
-      businessTaxValue: payload.businessTaxValue,
-      totalAmount: payload.totalAmount,
-      evidenceTimestamp: payload.evidenceDate,
-      guiId: payload.evidenceNumber,
-      commentType: 'WHITE_SPACE',
-      summaryCount: 1,
-      clearanceType: 'BLANK',
-    };
-    const url = '/evidence/gui';
-    const bodyFormData = new FormData();
-    bodyFormData.append('input', JSON.stringify(req));
-    bodyFormData.append('file', imageBlob);
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        taxId: accountingFirmTaxId,
-        Authorization: token,
-      },
-    };
-    await gwAxios.post(url, bodyFormData, config);
-    return {
-      status: true,
-      errorMsg: '',
-    };
-  } catch (error) {
-    let errorMsg = '';
-    if (error.response === undefined) {
-      errorMsg = '網路錯誤';
-    } else {
-      errorMsg = error.response.data.errorMsg;
-    }
-    return {
-      status: false,
-      errorMsg,
-    };
-  }
-}
-
-async function uploadBill(payload, imageBlob, accountingFirmTaxId, token) {
-  try {
-    const req = {
-      businessEntityTaxId: payload.buyerTaxId,
-      evidenceType: payload.gwEvidenceType,
-      reportingPeriod: payload.reportingPeriod,
-      deductionType: payload.deductionType,
-      isDeclareBusinessTax: payload.isDeclareBusinessTax,
-      buyerTaxId: payload.buyerTaxId,
-      sellerTaxId: payload.sellerTaxId,
-      taxType: payload.taxType,
-      taxableSalesValue: payload.taxableSalesValue,
-      zeroTaxSalesValue: payload.zeroTaxSalesValue,
-      dutyFreeSalesValue: payload.dutyFreeSalesValue,
-      withoutTaxAmount: parseInt(payload.taxableSalesValue)
-        + parseInt(payload.zeroTaxSalesValue)
-        + parseInt(payload.dutyFreeSalesValue),
-      businessTaxValue: payload.businessTaxValue,
-      otherFee: payload.otherFee,
-      totalAmount: payload.totalAmount,
-      totalPayAmount: payload.totalPayAmount,
-      evidenceTimestamp: payload.evidenceDate,
-      evidenceId: payload.evidenceNumber,
-      commentType: 'WHITE_SPACE',
-      summaryCount: 1,
-    };
-    const url = '/evidence/bill';
-    const bodyFormData = new FormData();
-    bodyFormData.append('input', JSON.stringify(req));
-    bodyFormData.append('file', imageBlob);
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        taxId: accountingFirmTaxId,
-        Authorization: token,
-      },
-    };
-    const result = await gwAxios.post(url, bodyFormData, config);
-    return {
-      status: true,
-      errorMsg: '',
-    };
-  } catch (error) {
-    let errorMsg = '';
-    if (error.response === undefined) {
-      errorMsg = '網路錯誤';
-    } else {
-      errorMsg = error.response.data.errorMsg;
-    }
-    return {
-      status: false,
-      errorMsg,
-    };
-  }
-}
-
-// TODO
-async function uploadCustoms(payload, imageBlob, accountingFirmTaxId, token) {
-  try {
-    const req = {
-      businessEntityTaxId: payload.buyerTaxId,
-      evidenceType: payload.gwEvidenceType,
-      reportingPeriod: payload.reportingPeriod,
-      deductionType: payload.deductionType,
-      isDeclareBusinessTax: payload.isDeclareBusinessTax,
-      buyerTaxId: payload.buyerTaxId,
-      taxType: payload.taxType,
-      taxableSalesValue: payload.taxableSalesValue,
-      zeroTaxSalesValue: null,
-      dutyFreeSalesValue: payload.dutyFreeSalesValue,
-      withoutTaxAmount: parseInt(payload.taxableSalesValue)
-        + parseInt(payload.zeroTaxSalesValue)
-        + parseInt(payload.dutyFreeSalesValue),
-      businessTaxValue: payload.businessTaxValue,
-      otherFee: payload.otherFee,
-      totalAmount: payload.totalAmount,
-      totalPayAmount: payload.totalPayAmount,
-      evidenceTimestamp: payload.evidenceDate,
-      evidenceId: payload.evidenceNumber,
-      declarationId: payload.declarationId,
-    };
-    const url = '/evidence/customs';
-    const bodyFormData = new FormData();
-    bodyFormData.append('input', JSON.stringify(req));
-    bodyFormData.append('file', imageBlob);
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        taxId: accountingFirmTaxId,
-        Authorization: token,
-      },
-    };
-    const result = await gwAxios.post(url, bodyFormData, config);
-    return {
-      status: true,
-      errorMsg: '',
-    };
-  } catch (error) {
-    let errorMsg = '';
-    if (error.response === undefined) {
-      errorMsg = '網路錯誤';
-    } else {
-      errorMsg = error.response.data.errorMsg;
-    }
-    return {
-      status: false,
-      errorMsg,
-    };
-  }
-}
-
-export async function uploadToGw(payload, accountingFirmTaxId, token) {
-  const result = [];
+export async function uploadToGw(payload, ownerId, token) {
+  console.log(payload, ownerId, token)
+  const url = '/vat/api/v1/evidence/input'
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      ownerId: ownerId,
+      Authorization: "Bearer " + token,
+    },
+  };
+  const result = []
   for (let i = 0; i < payload.length; i++) {
-    // payload, imageBlob, accountingFirmTaxId, token
-    const data = payload[i];
-    const uploadResult = await uploadToGwStrategy[data.json.gwEvidenceType](data.json, data.image, accountingFirmTaxId, token);
-    if (uploadResult.status) {
+    const id=payload[i].id
+    try {
+      const req = payload[i].json
+      const bodyFormData = new FormData();
+      bodyFormData.append('json', JSON.stringify(req));
+      bodyFormData.append('file', payload[i].image);
+      const result = await gwAxios.post(url, bodyFormData, config);
       result.push({
+        id:id,
         status: true,
-        json: data.json,
         errorMsg: '',
-      });
-    } else {
-      data.json.errorMsg = uploadResult.errorMsg;
+      })
+    } catch (error) {
+      let errorMsg = '';
+      if (error.response === undefined) {
+        errorMsg = '網路錯誤';
+      } else {
+        errorMsg = error.response.data.errorMsg;
+      }
       result.push({
+        id:id,
         status: false,
-        json: data.json,
-      });
+        errorMsg,
+      })
     }
   }
-  return result;
+  return result
 }
 
 export const getAllClientList = async (dispatch, username, taxId, token) => {
