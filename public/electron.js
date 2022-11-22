@@ -367,15 +367,6 @@ ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
     const id = data.id
     if (data.status) {
       //move image
-      const targetFolder = path.join(
-        config.fileFolder,
-        persistenceFolder.backup
-      )
-      const targetImagePath = path.join(
-        targetFolder,
-        id + '.' + getFileExt(data.json.fullPath)
-      )
-      fse.moveSync(data.json.fullPath, targetImagePath)
       const db04 = db.get('04').value()
       const data05 = {
         [id]: db04[data.id]

@@ -34,7 +34,6 @@ function ConfirmedEvidenceListTable(props) {
         const uploadData = [];
         for (let i = 0; i < keyList.length; i++) {
             const data = props.data['04'][keyList[i]];
-
             const image = await getImageData(data.fullPath.result);
             uploadData.push(
                 {

@@ -49,7 +49,7 @@ export async function uploadToGw(payload, ownerId, token) {
       Authorization: "Bearer " + token,
     },
   };
-  const result = []
+  const resultList = []
   for (let i = 0; i < payload.length; i++) {
     const id=payload[i].id
     try {
@@ -58,7 +58,8 @@ export async function uploadToGw(payload, ownerId, token) {
       bodyFormData.append('json', JSON.stringify(req));
       bodyFormData.append('file', payload[i].image);
       const result = await gwAxios.post(url, bodyFormData, config);
-      result.push({
+      console.log("AAAA",result)
+      resultList.push({
         id:id,
         status: true,
         errorMsg: '',
@@ -70,14 +71,14 @@ export async function uploadToGw(payload, ownerId, token) {
       } else {
         errorMsg = error.response.data.errorMsg;
       }
-      result.push({
+      resultList.push({
         id:id,
         status: false,
         errorMsg,
       })
     }
   }
-  return result
+  return resultList
 }
 
 export const getAllClientList = async (dispatch, username, taxId, token) => {
