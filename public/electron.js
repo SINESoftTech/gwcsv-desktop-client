@@ -35,7 +35,7 @@ function initFileStructure() {
   if (!fse.existsSync(config.fileFolder)) {
     fse.mkdirSync(config.fileFolder)
   }
-  Object.keys(persistenceFolder).forEach(key => {
+  Object.keys(persistenceFolder).forEach((key) => {
     const folderPath = path.join(config.fileFolder, key)
     if (!fse.existsSync(folderPath)) {
       fse.mkdirSync(folderPath)
@@ -97,7 +97,10 @@ function createWindow() {
       childWindow.webContents.openDevTools()
     }
     //
-    const fileLocation = `file://${path.join(__dirname, '../public/image.html')}`
+    const fileLocation = `file://${path.join(
+      __dirname,
+      '../public/image.html'
+    )}`
     //todo
     childWindow.loadURL(fileLocation)
     childWindow.webContents.on('will-navigate', (e) => {
@@ -105,7 +108,6 @@ function createWindow() {
     })
   })
   mainWindow.on('closed', () => (mainWindow = null))
-
 }
 
 // This method will be called when Electron has finished
@@ -114,7 +116,7 @@ function createWindow() {
 app.on('ready', initApp)
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -122,7 +124,7 @@ app.on('window-all-closed', function() {
   }
 })
 
-app.on('activate', function() {
+app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
@@ -130,8 +132,7 @@ app.on('activate', function() {
   }
 })
 
-
-app.on('browser-window-focus', function() {
+app.on('browser-window-focus', function () {
   globalShortcut.register('CommandOrControl+R', () => {
     mainWindow.loadURL(loadPage(isDev))
   })
@@ -141,23 +142,24 @@ app.on('browser-window-focus', function() {
 })
 
 const persistenceFolder = {
-  'image': 'image',
-  'db': 'db',
-  'backup': 'backup'
+  image: 'image',
+  db: 'db',
+  backup: 'backup'
 }
 
 function openFile(directory) {
   let fileInfo = fse.readdirSync(directory)
-  return fileInfo.filter(filename => {
-    return filename !== '.DS_Store'
-  }).map(filename => {
-    return {
-      filename: filename,
-      fullPath: path.join(directory, filename)
-    }
-  })
+  return fileInfo
+    .filter((filename) => {
+      return filename !== '.DS_Store'
+    })
+    .map((filename) => {
+      return {
+        filename: filename,
+        fullPath: path.join(directory, filename)
+      }
+    })
 }
-
 
 function getFileContent(fullPath) {
   if (fullPath.toLowerCase().endsWith('jpg')) {
@@ -171,13 +173,17 @@ function getFileContent(fullPath) {
   }
 }
 
-
 function getDbContext(businessEntityTaxId) {
-  const filePath = config.fileFolder + '/' + persistenceFolder.db + '/' + businessEntityTaxId + '.json'
+  const filePath =
+    config.fileFolder +
+    '/' +
+    persistenceFolder.db +
+    '/' +
+    businessEntityTaxId +
+    '.json'
   const adapter = new FileSync(filePath)
   const db = low(adapter)
-  db.defaults({ '01': {}, '02': {}, '03': {}, '04': {}, '05': {} })
-    .write()
+  db.defaults({ '01': {}, '02': {}, '03': {}, '04': {}, '05': {} }).write()
   return db
 }
 
@@ -197,7 +203,6 @@ ipcMain.handle('evidence:getImageFileContent', (event, fullPath) => {
   return getFileContent(fullPath)
 })
 
-
 ipcMain.handle('evidence:getChooseBusinessEntityData', (event, taxId) => {
   return getDbContext(taxId).read().value()
 })
@@ -209,75 +214,96 @@ ipcMain.handle('evidence:updateData', (event, businessEntityTaxId, payload) => {
     .assign({ [ticketId]: payload })
     .write()
   return db.read().value()
-
 })
-ipcMain.handle('evidence:deleteData', (event, businessEntityTaxId, step, id) => {
-  const db = getDbContext(businessEntityTaxId)
-  const data = db.get(step)
-    .value()
-  delete data[id]
-  db.get(step)
-    .assign(data)
-    .write()
-  const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
-  const imageFileList = openFile(targetFolderPath)
-  imageFileList.filter(obj => {
-    return obj.filename.split('_')[2].split('.')[0] === id
-  }).forEach(obj => {
-    fse.removeSync(obj.fullPath)
-  })
-  return db.read().value()
-})
-
-
-ipcMain.handle('evidence:scanImages', (event, fullPath, username, declareProperties) => {
-  console.log(fullPath, username, declareProperties)
-  const sourceFileExt = getFileExt(fullPath)
-  const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
-  const id = Date.now()
-  const targetFilePath = path.join(targetFolderPath, username.username + '_' + declareProperties.clientTaxId + '_' + id + '.' + sourceFileExt)
-  console.log(targetFilePath)
-  fse.copySync(fullPath, targetFilePath)
-  const data = {
-    [id]: {
-      reportingPeriod: { result: declareProperties.reportingPeriod, score: [-1] },
-      deductionType: { result: '1', score: [-1] },
-      isDeclareBusinessTax: { result: declareProperties.isDeclareBusinessTax, score: [-1] },
-      gwEvidenceType: { result: declareProperties.evidenceType, score: [-1] },
-      fullPath: { result: targetFilePath, score: [-1] }
-    }
+ipcMain.handle(
+  'evidence:deleteData',
+  (event, businessEntityTaxId, step, id) => {
+    const db = getDbContext(businessEntityTaxId)
+    const data = db.get(step).value()
+    delete data[id]
+    db.get(step).assign(data).write()
+    const targetFolderPath = path.join(
+      config.fileFolder,
+      persistenceFolder.image
+    )
+    const imageFileList = openFile(targetFolderPath)
+    imageFileList
+      .filter((obj) => {
+        return obj.filename.split('_')[2].split('.')[0] === id
+      })
+      .forEach((obj) => {
+        fse.removeSync(obj.fullPath)
+      })
+    return db.read().value()
   }
-  const db = getDbContext(declareProperties.clientTaxId)
-  db.get('01')
-    .assign(data)
-    .write()
-  return db.read().value()
-})
+)
 
-ipcMain.handle('evidence:identifyResultConfirmed', (event, businessEntityTaxId, payload) => {
-  const db = getDbContext(businessEntityTaxId)
-  for (let i = 0; i < payload.length; i++) {
-    const data03List = db.get('03').value()
+ipcMain.handle(
+  'evidence:scanImages',
+  (event, fullPath, username, declareProperties) => {
+    console.log(fullPath, username, declareProperties)
+    const sourceFileExt = getFileExt(fullPath)
+    const targetFolderPath = path.join(
+      config.fileFolder,
+      persistenceFolder.image
+    )
+    const id = Date.now()
+    const targetFilePath = path.join(
+      targetFolderPath,
+      username.username +
+        '_' +
+        declareProperties.clientTaxId +
+        '_' +
+        id +
+        '.' +
+        sourceFileExt
+    )
+    console.log(targetFilePath)
+    fse.copySync(fullPath, targetFilePath)
     const data = {
-      [payload[i]]: data03List[payload[i]]
+      [id]: {
+        reportingPeriod: {
+          result: declareProperties.reportingPeriod,
+          score: [-1]
+        },
+        deductionType: { result: '1', score: [-1] },
+        isDeclareBusinessTax: {
+          result: declareProperties.isDeclareBusinessTax,
+          score: [-1]
+        },
+        gwEvidenceType: { result: declareProperties.evidenceType, score: [-1] },
+        fullPath: { result: targetFilePath, score: [-1] }
+      }
     }
-    db.get('04')
-      .assign(data)
-      .write()
-    delete data03List[payload[i]]
-    db.get('03')
-      .assign(data03List)
-      .write()
+    const db = getDbContext(declareProperties.clientTaxId)
+    db.get('01').assign(data).write()
+    return db.read().value()
   }
-  return db.read().value()
-})
+)
 
-ipcMain.handle('evidence:getJsonFileData', (event, ticketId, businessEntityTaxId) => {
-  return getDbContext(businessEntityTaxId)
-    .get('03')
-    .get(ticketId)
-    .value()
-})
+ipcMain.handle(
+  'evidence:identifyResultConfirmed',
+  (event, businessEntityTaxId, payload) => {
+    const db = getDbContext(businessEntityTaxId)
+    for (let i = 0; i < payload.length; i++) {
+      const data03List = db.get('03').value()
+      const data = {
+        [payload[i]]: data03List[payload[i]]
+      }
+      db.get('04').assign(data).write()
+      delete data03List[payload[i]]
+      db.get('03').assign(data03List).write()
+    }
+    return db.read().value()
+  }
+)
+
+ipcMain.handle(
+  'evidence:getJsonFileData',
+  (event, ticketId, businessEntityTaxId) => {
+    return getDbContext(businessEntityTaxId).get('03').get(ticketId).value()
+  }
+)
 
 ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
   const username = sentIdentifyResult['user']
@@ -288,8 +314,19 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
     const data = identifyResult[i]
     if (data['result']) {
       const fileExt = data['sourceFullPath'].split('_')[2].split('.')[1]
-      const targetFileName = username + '_' + data['businessEntityTaxId'] + '_' + data['id'] + '.' + fileExt
-      const targetFullName = path.join(config.fileFolder, persistenceFolder.image, targetFileName)
+      const targetFileName =
+        username +
+        '_' +
+        data['businessEntityTaxId'] +
+        '_' +
+        data['id'] +
+        '.' +
+        fileExt
+      const targetFullName = path.join(
+        config.fileFolder,
+        persistenceFolder.image,
+        targetFileName
+      )
       fse.moveSync(data.sourceFullPath, targetFullName)
       const id = data['sourceFileName'].split('_')[1].split('.')[0]
       const data01List = db.get('01').value()
@@ -297,67 +334,60 @@ ipcMain.handle('evidence:identifySent', (event, sentIdentifyResult) => {
       const data02 = {
         [data['id']]: data01List[id]
       }
-      db.get('02')
-        .assign(data02)
-        .write()
+      db.get('02').assign(data02).write()
       delete data01List[id]
-      db.get('01')
-        .assign(data01List)
-        .write()
+      db.get('01').assign(data01List).write()
     }
   }
   return db.read().value()
 })
-ipcMain.handle('evidence:identifyResultReceived', (event, businessEntityTaxId, identifyResult) => {
-  const db = getDbContext(businessEntityTaxId)
-  for (let i = 0; i < identifyResult.length; i++) {
-    const data = identifyResult[i]
-    const data02List = db.get('02').value()
-    const data03 = {
-      [data['id'].result]: data
+ipcMain.handle(
+  'evidence:identifyResultReceived',
+  (event, businessEntityTaxId, identifyResult) => {
+    const db = getDbContext(businessEntityTaxId)
+    for (let i = 0; i < identifyResult.length; i++) {
+      const data = identifyResult[i]
+      const data02List = db.get('02').value()
+      const data03 = {
+        [data['id'].result]: data
+      }
+      db.get('03').assign(data03).write()
+      delete data02List[data['id'].result]
+      db.get('02').assign(data02List).write()
     }
-    db.get('03')
-      .assign(data03)
-      .write()
-    delete data02List[data['id'].result]
-    db.get('02')
-      .assign(data02List)
-      .write()
+    return db.read().value()
   }
-  return db.read().value()
-})
-
+)
 
 ipcMain.handle('evidence:uploaded', (event, businessEntityTaxId, payload) => {
   console.log(payload)
   const db = getDbContext(businessEntityTaxId)
-  payload.map(data => {
+  payload.map((data) => {
     console.log(data)
     const id = data.id
     if (data.status) {
       //move image
-      const targetFolder = path.join(config.fileFolder, persistenceFolder.backup)
-      const targetImagePath = path.join(targetFolder, id + '.' + getFileExt(data.json.fullPath))
+      const targetFolder = path.join(
+        config.fileFolder,
+        persistenceFolder.backup
+      )
+      const targetImagePath = path.join(
+        targetFolder,
+        id + '.' + getFileExt(data.json.fullPath)
+      )
       fse.moveSync(data.json.fullPath, targetImagePath)
       const db04 = db.get('04').value()
       const data05 = {
         [id]: db04[data.id]
       }
-      db.get('05')
-        .assign(data05)
-        .write()
+      db.get('05').assign(data05).write()
       delete db04[id]
-      db.get('04')
-        .assign(db04)
-        .write()
+      db.get('04').assign(db04).write()
       //save data to 05
     } else {
-
       const db04 = db.get('04').value()
       db04[id]['errorMsg'].result = data['errorMsg']
-      db.get('04')
-        .assign(db04)
-        .write()
+      db.get('04').assign(db04).write()
     }
   })
   return db.read().value()
@@ -385,3 +415,26 @@ ipcMain.handle('evidence:getAssign', (event) => {
   return fse.readJSONSync(targetFilePath)
 })
 
+ipcMain.handle('evidence:importFromImage', (event, method, params) => {
+  console.log('handle import from image')
+  const targetFolderPath = path.join(config.fileFolder, persistenceFolder.image)
+  const id = Date.now()
+  // const targetFilePath = path.join(targetFolderPath, username.username + '_' + declareProperties.clientTaxId + '_' + id + '.' + sourceFileExt)
+  dialog
+    .showOpenDialog({
+      filters: [
+        { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+        { name: 'All Files', extensions: ['*'] }
+      ],
+      properties: ['openFile', 'multiSelections']
+    })
+    .then((result) => {
+      console.log(result.canceled)
+      console.log('filePaths=', result.filePaths)
+      return result.filePaths
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  return 'hello'
+})

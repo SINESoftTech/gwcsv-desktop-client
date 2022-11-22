@@ -19,15 +19,16 @@ const userLogin = async (loginPayload) => {
         const response = await gwAxios.post('/login', JSON.stringify(loginPayload)); // await fetch(`${ROOT_URL}/auth/login`, requestOptions);
         if (response.status !== 200) {
             loginResult.success = false
-            loginResult.error.code = response.status
-            loginResult.error.message = response.data
+            loginResult.error.code = response.data.errorCode
+            loginResult.error.message = response.data.errorMsg
         } else {
             loginResult.success = true;
             loginResult.data = {
+                ...response.data,
                 taxId: loginPayload.taxId,
                 username: loginPayload.username,
-                token: response.data.token
             };
+            delete loginResult.data['result']
         }
     } catch (error) {
         loginResult.success = false
@@ -38,4 +39,24 @@ const userLogin = async (loginPayload) => {
     return loginResult;
 }
 
-export { userLogin }
+const getUserInfo = async (accountingFirmTaxId, token) => {
+    const headers = {
+        'Content-type': 'application/json',
+        'accountingFirmTaxId': accountingFirmTaxId,
+        'Authorization': `Bearer ${token}`
+    }
+    const response = await gwAxios.get('/login', {headers});
+
+}
+
+const refreshToken = async (token) => {
+    const headers = {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    }
+
+    const response = await gwAxios.post('/refresh/token', {}, {headers});
+    console.log(response)
+}
+
+export {userLogin, getUserInfo, refreshToken}
