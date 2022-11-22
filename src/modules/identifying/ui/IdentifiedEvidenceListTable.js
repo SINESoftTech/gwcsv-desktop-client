@@ -129,7 +129,7 @@ function IdentifiedEvidenceListTable(props) {
         <Button
           variant="contained"
           startIcon={<ReadMore />}
-          disableElevation="true"
+          disableElevation={true}
           onClick={(e) => onGetIdentifyResult(e, localFiles['02'])}
         >
           取得辨識結果
@@ -137,7 +137,7 @@ function IdentifiedEvidenceListTable(props) {
         <Button
           variant="contained"
           startIcon={<PlaylistAddCheck />}
-          disableElevation="true"
+          disableElevation={true}
           onClick={handleResultAllConfirmed}
         >
           確認辨識結果

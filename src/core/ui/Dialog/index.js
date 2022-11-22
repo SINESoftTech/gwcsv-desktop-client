@@ -49,7 +49,7 @@ function DialogComponent(props) {
         });
       setRenderEvidenceTypeList([...data]);
     }
-  }, [props.declareProperties.isDeclareBusinessTax]);
+  }, [props.declareProperties, props.declareProperties.isDeclareBusinessTax]);
 
   // const renderReportingPeriod = () => {
   //   return (

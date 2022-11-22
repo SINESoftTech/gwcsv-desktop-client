@@ -69,7 +69,7 @@ function ConfirmedEvidenceListTable(props) {
         <Button
           variant="contained"
           startIcon={<FileUpload />}
-          disableElevation="true"
+          disableElevation={true}
           onClick={handleUpload}
         >
           上傳

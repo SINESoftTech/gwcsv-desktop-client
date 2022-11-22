@@ -98,7 +98,7 @@ function ScannedImageList(props) {
         <Button
           variant="contained"
           startIcon={<InsertPhoto/>}
-          disableElevation="true"
+          disableElevation={true}
           onClick={props.onImportImageClick}
           disabled={isScanEnabled({taxId: props.declareProperties.clientTaxId, disabled: props.importDisable})}
         >
@@ -107,7 +107,7 @@ function ScannedImageList(props) {
         <Button
           variant="contained"
           startIcon={<InsertPhoto/>}
-          disableElevation="true"
+          disableElevation={true}
           onClick={props.onOpenDialog}
           disabled={isImportEnabled({taxId: props.declareProperties.clientTaxId, diasbled: props.scanDisable})}
         >
@@ -116,7 +116,7 @@ function ScannedImageList(props) {
         <Button
           variant="contained"
           startIcon={<Send/>}
-          disableElevation="true"
+          disableElevation={true}
           onClick={(e) => {
             props.onSendToIdentifyClick(e, selectionDataRows.selection);
             setSelectionDataRow({selection: []});
@@ -125,6 +125,7 @@ function ScannedImageList(props) {
           送出辨識
         </Button>
       </Stack>
+      
       <ImageList cols={3} gap={12}>
         {dataRows.map((item) => (
           <ImageListItem key={item.fileName} sx={{borderRadius: '8px', border: '1px solid #ccc', overflow: 'hidden'}}>
@@ -175,6 +176,7 @@ function ScannedImageList(props) {
           </ImageListItem>
         ))}
       </ImageList>
+      <Stack direction="row" mt={2}>總共 {dataRows.length} 筆</Stack>
     </>
   );
 }
@@ -196,3 +198,4 @@ ScannedImageList.propTypes = {
 };
 
 export default ScannedImageList;
+

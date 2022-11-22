@@ -14,3 +14,37 @@ export const getPeriod = (yyyyMMdd) => {
   }
   return period;
 };
+
+function getCurrentPeriodMonth(mon) {
+  let currentMonth = mon;
+  if (mon % 2 !== 0) {
+    currentMonth += 1;
+  }
+  return currentMonth;
+}
+
+function getCurrentPeriodYear(year) {
+  let currentYear;
+  if (year) {
+    currentYear = year - 1911;
+  }
+  return currentYear;
+}
+
+function combineWithRepublicEra(y, m) {
+  const yaer = getCurrentPeriodYear(y);
+  const month = getCurrentPeriodMonth(m);
+  const currentRepublicEraMon = String(month).padStart(2, '0');
+  return String(yaer + currentRepublicEraMon);
+}
+
+export const getCurrentPeriod = () => {
+  const sysMonth = new Date().getMonth() + 1;
+  const sysYear = new Date().getFullYear();
+  const period = {
+    year: getCurrentPeriodYear(sysYear),
+    month: getCurrentPeriodMonth(sysMonth),
+    epublicEra: combineWithRepublicEra(sysYear, sysMonth),
+  };
+  return period.epublicEra;
+}
