@@ -8,6 +8,7 @@ import {IdentifiedEvidenceColumnDefinitions} from '../../../react/Components/Col
 import GwMapper, {EVIDENCE_TYPE} from '../../../react/Mapper/gw_mapper'
 import EvidenceListTable from '../../../core/ui/EvidenceListTable'
 import {validData} from "../../../react/Valid/valid";
+import {getPeriod} from "../../../react/Util/Time";
 
 
 //todo validation
@@ -65,15 +66,15 @@ function IdentifiedEvidenceListTable(props) {
     const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
     const handleEditRow = async (editData, field = '') => {
-        // console.log('handleEditRow', editData)
-        // console.log('handleEditRow', field)
         const jsonData = await getJsonRawData(editData.id, declareProperties.clientTaxId)
         console.log(jsonData)
         jsonData[field].result = editData[field]
-
         if (field === 'evidenceType') {
             const key = jsonData[field].result
             jsonData[field].result = EVIDENCE_TYPE[key]
+        }
+        if (field === 'evidenceDate') {
+            jsonData['period'].result = getPeriod(editData[field])+''
         }
         // const validatingData = validData(declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData.ticketId.result, 1), assignMap).cellHighlight
         const result = await electronActions.updateData(declareProperties.clientTaxId, jsonData)
