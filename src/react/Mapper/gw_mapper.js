@@ -220,7 +220,6 @@ class GwMapperClass {
         Object.keys(jsonData).forEach((key) => {
             result[key] = jsonData[key].result
         })
-        console.log(result['evidenceType'])
         const {name} = GW_EVIDENCE_TYPE[result['evidenceType']]
         result['evidenceType'] = name
         result.sn = sn

@@ -9,7 +9,6 @@ export const toPeriodList = (timestamp = Date.now()) => {
 };
 
 export const getPeriod = (yyyyMMdd) => {
-    console.log('getPeriod', yyyyMMdd);
     let period = parseInt((yyyyMMdd+"").substring(0, 6), 10) - 191100;
     if (period % 2 === 1) {
         period += 1;

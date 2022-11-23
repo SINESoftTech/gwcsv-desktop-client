@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import {electronActions} from '../../../react/Context'
 import {getJsonRawData} from '../../../react/Actions/electionActions'
 import {IdentifiedEvidenceColumnDefinitions} from '../../../react/Components/ColumnDefinitions'
-import SigoutourMapper, {EVIDENCE_TYPE} from '../../../react/Mapper/gw_mapper'
+import GwMapper, {EVIDENCE_TYPE} from '../../../react/Mapper/gw_mapper'
 import EvidenceListTable from '../../../core/ui/EvidenceListTable'
 import {validData} from "../../../react/Valid/valid";
 
@@ -16,10 +16,9 @@ const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => Object.ke
         const obj = evidenceObj[id]
         const data = validData(
           businessEntityTaxId,
-          SigoutourMapper.toView(obj, id, idx + 1),
+            GwMapper.toView(obj, id, idx + 1),
           assignMap,
         );
-        console.log('data',data)
         return data
     })
 
@@ -68,22 +67,21 @@ function IdentifiedEvidenceListTable(props) {
     const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
     const handleEditRow = async (editData, field = '') => {
-        console.log('handleEditRow', editData)
-        console.log('handleEditRow', field)
+        // console.log('handleEditRow', editData)
+        // console.log('handleEditRow', field)
         const jsonData = await getJsonRawData(editData.id, declareProperties.clientTaxId)
         console.log(jsonData)
         jsonData[field].result = editData[field]
 
         if (field === 'evidenceType') {
             const key = jsonData[field].result
-            // eslint-disable-next-line no-unused-expressions
             jsonData[field].result = EVIDENCE_TYPE[key]
         }
         // const validatingData = validData(declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData.ticketId.result, 1), assignMap).cellHighlight
         const result = await electronActions.updateData(declareProperties.clientTaxId, jsonData)
-        // const validResult = validEvidence(result['03'], declareProperties.clientTaxId, assignMap)
+        const validResult = validEvidence(result['03'], declareProperties.clientTaxId, assignMap)
         setLocalFiles(result)
-        // setRowData(validResult)
+        setRowData(validResult)
     }
 
     const handleOpenImage = async (fullPath) => {
