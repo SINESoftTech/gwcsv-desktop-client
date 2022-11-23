@@ -100,9 +100,10 @@ function ConfirmedEvidenceListTable(props) {
                                 <TableCell component="th" scope="row" align='center'>
                                     {row.sn}
                                 </TableCell>
+                                <TableCell align='center'>{row.errorMsg}</TableCell>
                                 <TableCell align='center'>{row.reportingPeriod}</TableCell>
                                 <TableCell align='center'>{row.isDeclareBusinessTax ? '是' : '否'}</TableCell>
-                                <TableCell align='center'>{row.gwEvidenceType}</TableCell>
+                                <TableCell align='center'>{row.evidenceType}</TableCell>
                                 <TableCell align='center'>{row.taxType}</TableCell>
                                 <TableCell align='center'>{row.otherFee}</TableCell>
                                 <TableCell align='center'>{row.evidenceDate}</TableCell>

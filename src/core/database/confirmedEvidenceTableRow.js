@@ -3,6 +3,9 @@ export const confirmedEvidenceTableHead = [
     headerName: '序號'
   },
   {
+    headerName: "錯誤訊息"
+  },
+  {
     headerName: '申報期別'
   },
   {

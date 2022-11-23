@@ -15,9 +15,9 @@ const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => Object.ke
     .map((id, idx) => {
         const obj = evidenceObj[id]
         const data = validData(
-          businessEntityTaxId,
+            businessEntityTaxId,
             GwMapper.toView(obj, id, idx + 1),
-          assignMap,
+            assignMap,
         );
         return data
     })
@@ -45,23 +45,21 @@ function IdentifiedEvidenceListTable(props) {
 
     const handleResultAllConfirmed = async () => {
         //fixme if validation ok
-        // const errorIdList = rowData.filter((obj) => obj.cellHighlight.length > 0).map((obj) => obj.id)
+        const errorIdList = rowData.filter((obj) => obj.cellHighlight.length > 0).map((obj) => obj.id)
         const filterIdList = Object.keys(localFiles['03'])
             .filter((key) => {
                 const ticketId = localFiles['03'][key].id.result
                 return selectionModel.includes(ticketId)
+            }).filter((key) => {
+                const ticketId = localFiles['03'][key].id.result
+                return !errorIdList.includes(ticketId)
             })
-        //fixme if validation ok
-        // .filter((key) => {
-        //     const ticketId = localFiles['03'][key].id.result
-        //     return !errorTicketIdList.includes(ticketId)
-        // })
 
         console.log(filterIdList)
         const result = await onResultAllConfirmed(declareProperties.clientTaxId, filterIdList)
-        // setLocalFiles(result)
-        // const validResult = validEvidence(result['03'], declareProperties.clientTaxId, assignMap)
-        // setRowData(validResult)
+        setLocalFiles(result)
+        const validResult = validEvidence(result['03'], declareProperties.clientTaxId, assignMap)
+        setRowData(validResult)
     }
 
     const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
