@@ -26,12 +26,12 @@ const A5034ToGwObj = (data) => {
   result.evidenceNumber = result['carrierNumber']
   delete result.carrierNumber
   result.period = result['carrierPeriod']
-  result.period.result = getCurrentPeriodYearWithMonth(result.period.result)
-  delete result['carrierPeriod']
   result.evidenceDate = {
-    result: '',
+    result: result.period.result + '01',
     score: -1
   }
+  result.period.result = getCurrentPeriodYearWithMonth(result.period.result)
+  delete result['carrierPeriod']
   result.reportingPeriod = {
     result: data.reportingPeriod,
     score: -1
@@ -56,7 +56,7 @@ const A5034ToGwObj = (data) => {
     result: 'A5034',
     score: 1
   }
-  result.dutyFreeSalesAmount = {
+  result.dutyFreeSalesValue = {
     result: 0,
     score: -1
   }
@@ -88,7 +88,6 @@ const A5034ToGwObj = (data) => {
     score: -1
   }
   delete result.salesAmount
-  delete result.taxableSalesValue
   delete result.zeroTaxSalesAmount
   return result
 }
