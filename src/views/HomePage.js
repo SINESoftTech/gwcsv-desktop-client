@@ -27,7 +27,7 @@ import {
   identifyResultReceived,
   identifySent, importFromImage, test
 } from '../react/Actions/electionActions'
-import { openScanner } from '../react/Actions/scanAction'
+import {openScanner, scan} from '../react/Actions/scanAction'
 import DialogComponent from '../core/ui/Dialog'
 import { getFileExt } from '../react/Util/FileUtils'
 import {
@@ -243,7 +243,7 @@ function HomePage() {
       setImportDisable(true)
       // fixme rm
       // handleMoveImage(1, C:\Users\amyyu\string123_24549210_1645062357828.jpg')
-      // scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable);
+      scan(appState.appData.scannerName, handleMoveImage, handleScannerError, handleCloseDisable);
     }
   }
 
