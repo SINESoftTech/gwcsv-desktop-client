@@ -76,9 +76,6 @@ export const IdentifiedEvidenceColumnDefinitions = [
         renderCell: (cellValues) => <ImageSearch color='primary'>打開</ImageSearch>
     },
     {
-        field: 'createDate', headerName: 'timestamp', width: 150, cellClassName: renderCellClassName, editable: false,
-    },
-    {
         field: 'sn', headerName: '序號', width: 110, cellClassName: renderCellClassName, editable: false,
     },
     {
