@@ -86,28 +86,22 @@ export const IdentifiedEvidenceColumnDefinitions = [
         headerName: '憑證類型',
         width: 200,
         cellClassName: getCellClassName,
-        editable: false,
-        // renderEditCell
-        renderCell: (cellValues) => {
-            //todo
-            if (cellValues.row.evidenceType !== undefined || cellValues.row.evidenceType !== '') {
-                return GW_EVIDENCE_TYPE[cellValues.value].name;
-            }
-            return '';
-        },
+        editable: true,
+        type: 'singleSelect',
+        valueOptions: renderEvidenceType()
     },
+
     {
         field: 'taxType',
         headerName: '課稅別',
         width: 150,
         cellClassName: getCellClassName,
         editable: true,
-        renderCell: renderTaxType,
     },
-    //tood
-    {
-        field: 'other', headerName: '其他代收代付', width: 110, cellClassName: getCellClassName, editable: true,
-    },
+    //todo
+    // {
+    //     field: 'other', headerName: '其他代收代付', width: 110, cellClassName: getCellClassName, editable: true,
+    // },
     {
         field: 'evidenceDate', headerName: '憑證日期', width: 150, cellClassName: getCellClassName, editable: true,
     },
@@ -151,7 +145,6 @@ export const IdentifiedEvidenceColumnDefinitions = [
         width: 150,
         cellClassName: getCellClassName,
         editable: true,
-        renderCell: renderDeductionType,
     },
     {
         field: 'otherFee', headerName: '其他金額', width: 150, cellClassName: getCellClassName, editable: true,
@@ -162,30 +155,29 @@ export const IdentifiedEvidenceColumnDefinitions = [
     {
         field: 'totalPayAmount', headerName: '付款總金額', width: 150, cellClassName: getCellClassName, editable: true,
     },
-    {field: 'cellHighlight', hide: true},
+    {
+        field: 'cellHighlight', hide: true
+    },
     {
         field: 'delete', headerName: '刪除', width: 110, renderCell: renderDeleteBtnCell,
     }
 ];
 
-function renderEvidenceType(param) {
+function renderEvidenceType() {
     const keyList = R.keys(GW_EVIDENCE_TYPE);
-    return (
-        <FormControl>
-            <Select
-                labelId="evidence-type-select-label"
-                id="evidence-type-select"
-                name="gwEvidenceType"
-                value={param.value}
-            >
-                {keyList.map((key) => {
-                    const {name} = GW_EVIDENCE_TYPE[key];
-                    return (<MenuItem key={key} value={key}>{name}</MenuItem>);
-                })}
-            </Select>
-        </FormControl>
-    );
+    const result = keyList
+        .map(key => {
+            const {name} = GW_EVIDENCE_TYPE[key]
+            return name
+            // {
+            //     value: key,
+            //     label: name
+            // }
+        })
+    return result
 }
+
+
 
 function renderDeductionType(param) {
     const deductionType = param.row.deductionType === undefined || param.row.deductionType === '' ? '1' : param.row.deductionType;
@@ -206,23 +198,24 @@ function renderDeductionType(param) {
     );
 }
 
-function renderTaxType(param) {
-    const taxType = param.row.taxType === undefined || param.row.taxType === '' ? '' : param.row.taxType;
-    return (
-        <FormControl>
-            <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                name="taxType"
-                value={taxType}
-            >
-                <MenuItem value={1}>應</MenuItem>
-                <MenuItem value={2}>零</MenuItem>
-                <MenuItem value={3}>免</MenuItem>
-            </Select>
-        </FormControl>
-    );
-}
+
+// function renderTaxType(param) {
+//     const taxType = param.row.taxType === undefined || param.row.taxType === '' ? '' : param.row.taxType;
+//     return (
+//         <FormControl>
+//             <Select
+//                 labelId="demo-simple-select-label"
+//                 id="demo-simple-select"
+//                 name="taxType"
+//                 value={taxType}
+//             >
+//                 <MenuItem value={1}>應</MenuItem>
+//                 <MenuItem value={2}>零</MenuItem>
+//                 <MenuItem value={3}>免</MenuItem>
+//             </Select>
+//         </FormControl>
+//     );
+// }
 
 function renderSn(cellValues) {
     const {value} = cellValues;
@@ -241,15 +234,9 @@ function getCellClassName(cellValues) {
     }
 }
 
-// function renderImageCell() {
-//   return (
-//     <div>Image Icon here</div>
-//   )
-// }
 
-function renderDeleteBtnCell(param) {
+function renderDeleteBtnCell() {
     return <IconButton aria-label='delete' color='primary'>
         <Delete/>
     </IconButton>
-    // return <Button variant="contained" color="primary">刪除</Button>;
 }

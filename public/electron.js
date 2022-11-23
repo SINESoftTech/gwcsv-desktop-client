@@ -208,7 +208,7 @@ ipcMain.handle('evidence:getBusinessEntityList', (event, taxId) => {
 })
 
 ipcMain.handle('evidence:updateData', (event, businessEntityTaxId, payload) => {
-    const ticketId = payload['ticketId'].result
+    const ticketId = payload['id'].result
     const db = getDbContext(businessEntityTaxId)
     db.get('03')
         .assign({[ticketId]: payload})
@@ -300,8 +300,8 @@ ipcMain.handle(
 
 ipcMain.handle(
     'evidence:getJsonFileData',
-    (event, ticketId, businessEntityTaxId) => {
-        return getDbContext(businessEntityTaxId).get('03').get(ticketId).value()
+    (event, id, businessEntityTaxId) => {
+        return getDbContext(businessEntityTaxId).get('03').get(id).value()
     }
 )
 

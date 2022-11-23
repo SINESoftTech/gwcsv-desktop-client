@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react'
 import {Button, Stack} from '@mui/material'
 import {PlaylistAddCheck, ReadMore} from '@mui/icons-material'
 import PropTypes from 'prop-types'
-import {electronActions, sightTourActions} from '../../../react/Context'
+import {electronActions} from '../../../react/Context'
 import {getJsonRawData} from '../../../react/Actions/electionActions'
 import {validData} from '../../../react/Valid/valid'
 import {IdentifiedEvidenceColumnDefinitions} from '../../../react/Components/ColumnDefinitions'
-import SigoutourMapper from '../../../react/Mapper/gw_mapper'
+import SigoutourMapper, {EVIDENCE_TYPE, GW_EVIDENCE_TYPE} from '../../../react/Mapper/gw_mapper'
 import EvidenceListTable from '../../../core/ui/EvidenceListTable'
 
 
@@ -68,13 +68,22 @@ function IdentifiedEvidenceListTable(props) {
     const handleSelection = (newSelectionModel) => setSelectionModel(newSelectionModel)
 
     const handleEditRow = async (editData, field = '') => {
-        const jsonData = await getJsonRawData(editData.ticketId, declareProperties.clientTaxId)
+        console.log('handleEditRow', editData)
+        console.log('handleEditRow', field)
+        const jsonData = await getJsonRawData(editData.id, declareProperties.clientTaxId)
+        console.log(jsonData)
         jsonData[field].result = editData[field]
-        const validatingData = validData(declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData.ticketId.result, 1), assignMap).cellHighlight
+
+        if (field === 'evidenceType') {
+            const key = jsonData[field].result
+            // eslint-disable-next-line no-unused-expressions
+            jsonData[field].result = EVIDENCE_TYPE[key]
+        }
+        // const validatingData = validData(declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData.ticketId.result, 1), assignMap).cellHighlight
         const result = await electronActions.updateData(declareProperties.clientTaxId, jsonData)
-        const validResult = validEvidence(result['03'], declareProperties.clientTaxId, assignMap)
+        // const validResult = validEvidence(result['03'], declareProperties.clientTaxId, assignMap)
         setLocalFiles(result)
-        setRowData(validResult)
+        // setRowData(validResult)
     }
 
     const handleOpenImage = async (fullPath) => {
@@ -88,26 +97,26 @@ function IdentifiedEvidenceListTable(props) {
         await OnDeleteEvidence(declareProperties.clientTaxId, '03', id)
     }
 
-    const [selected, setSelected] = React.useState([])
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name)
-        let newSelected = []
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name)
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1))
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1))
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
-            )
-        }
-
-        setSelected(newSelected)
-    }
+    // const [selected, setSelected] = React.useState([])
+    // const handleClick = (event, name) => {
+    //     const selectedIndex = selected.indexOf(name)
+    //     let newSelected = []
+    //
+    //     if (selectedIndex === -1) {
+    //         newSelected = newSelected.concat(selected, name)
+    //     } else if (selectedIndex === 0) {
+    //         newSelected = newSelected.concat(selected.slice(1))
+    //     } else if (selectedIndex === selected.length - 1) {
+    //         newSelected = newSelected.concat(selected.slice(0, -1))
+    //     } else if (selectedIndex > 0) {
+    //         newSelected = newSelected.concat(
+    //             selected.slice(0, selectedIndex),
+    //             selected.slice(selectedIndex + 1)
+    //         )
+    //     }
+    //
+    //     setSelected(newSelected)
+    // }
 
     return (
         <>

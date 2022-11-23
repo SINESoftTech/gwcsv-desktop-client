@@ -137,6 +137,24 @@ const GW_EVIDENCE_TYPE = {
         value: ''
     }
 }
+
+const EVIDENCE_TYPE = {
+    "三聯式統一發票": "A1001",
+    "二聯式收銀發票": "A2001",
+    "三聯式收銀機發票": "A5001",
+    "電子發票證明聯-格式一": "A5002",
+    "電子發票證明聯-格式二": "A5003",
+    "電力帳單": "A5010",
+    "水費帳單-台灣自來水": "A5020",
+    "水費帳單-台北自來水": "A5021",
+    "電信費帳單-中華電信": "A5030",
+    "電信費帳單-台灣大哥大": "A5031",
+    "電信費帳單-遠傳": "A5032",
+    "電信費帳單-台灣之星": "A5033",
+    "電信費帳單-亞太": "A5034",
+    "海關代徵營業稅繳納證": "A8001",
+}
+
 //period add
 const parseToDomainObjStrategy = {
     A1001: (data) => A1001ToGwObj(data),
@@ -202,6 +220,9 @@ class GwMapperClass {
         Object.keys(jsonData).forEach((key) => {
             result[key] = jsonData[key].result
         })
+        console.log(result['evidenceType'])
+        const {name} = GW_EVIDENCE_TYPE[result['evidenceType']]
+        result['evidenceType'] = name
         result.sn = sn
         result.id = ticketId
         result.errorMsg = jsonData.errorMsg.result
@@ -209,7 +230,7 @@ class GwMapperClass {
     }
 
     toGw(jsonData) {
-        console.log('BBB',jsonData)
+        console.log('BBB', jsonData)
         const evidenceType = GW_EVIDENCE_TYPE[jsonData.evidenceType.result].value
         const declareBusinessTax = jsonData.isDeclareBusinessTax.result
         const commentType = "BLANK"
@@ -248,7 +269,7 @@ class GwMapperClass {
             totalAmount: totalAmount,
             totalPayAmount: totalPayAmount,
         };
-        console.log("AAA",evidenceData)
+        console.log("AAA", evidenceData)
         return evidenceData
     }
 }
@@ -317,6 +338,6 @@ const buildTaxInfo = (jsonData) => {
 
 
 const GwMapper = new GwMapperClass()
-export {GW_EVIDENCE_TYPE, DEDUCTION_TYPE}
+export {GW_EVIDENCE_TYPE, DEDUCTION_TYPE, EVIDENCE_TYPE}
 
 export default GwMapper

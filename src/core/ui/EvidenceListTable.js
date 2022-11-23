@@ -31,19 +31,10 @@ function EvidenceListTable(props) {
     }, [dataRows, handleEditRow]);
 
     const handleCellClick = async (param, event) => {
-        console.log(param)
         const {row} = param;
         if (event.target.name === 'taxType') {
             row.taxType = event.target.value;
             handleEditRow(param.row, 'taxType');
-        }
-        if (event.target.name === 'deductionType') {
-            row.deductionType = event.target.value;
-            handleEditRow(param.row, 'deductionType');
-        }
-        if (event.target.name === 'gwEvidenceType') {
-            row.gwEvidenceType = event.target.value;
-            handleEditRow(param.row, 'gwEvidenceType');
         }
         if (param.field === 'image') {
             handleOpenImage(param.row.fullPath);
@@ -57,6 +48,7 @@ function EvidenceListTable(props) {
     const handlePageChange = (e) => setPageNumber(e);
 
     const handlePageSizeChange = (e) => setPageSize(e);
+
 
     return (
         <div style={{height: 650, width: '100%'}}>
