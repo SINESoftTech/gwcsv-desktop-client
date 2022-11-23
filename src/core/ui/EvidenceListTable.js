@@ -3,6 +3,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {DataGrid} from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
+import {Box} from "@mui/material";
 
 const getRowClassName = (params) => {
     if (params.row.rowStatus === 'error') {
@@ -52,6 +53,15 @@ function EvidenceListTable(props) {
 
     return (
         <div style={{height: 650, width: '100%'}}>
+            <Box
+                sx={{
+                    height: 300,
+                    width: '100%',
+                    '& .highlight': {
+                        backgroundColor: 'red',
+                    },
+                }}
+            >
             <DataGrid
                 rows={dataRows}
                 columns={columns}
@@ -66,6 +76,7 @@ function EvidenceListTable(props) {
                 getCellClassName={getRowClassName}
                 onCellClick={handleCellClick}
             />
+            </Box>
         </div>
     );
 }

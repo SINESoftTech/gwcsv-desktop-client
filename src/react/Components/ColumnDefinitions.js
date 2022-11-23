@@ -225,14 +225,7 @@ function renderSn(cellValues) {
 
 function renderCellClassName(cellValues) {
     if (cellValues.row.cellHighlight && cellValues.row.cellHighlight.indexOf(cellValues.field) > -1) {
-        return {
-            backgroundColor: '#ff943975',
-            color: '#1a3e72',
-        };
-    }
-    return {
-        backgroundColor: '#ff943975',
-        color: '#1a3e72',
+        return 'highlight'
     }
 }
 
