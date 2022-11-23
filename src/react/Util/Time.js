@@ -16,6 +16,11 @@ export const getPeriod = (yyyyMMdd) => {
     return period;
 };
 
+export const getTxtPeriod = (yyyyMMdd) => {
+    let period = parseInt((yyyyMMdd+"").substring(0, 6), 10) - 191100;
+    return period;
+};
+
 export const getYYYYMMDD = (yyymmdd) => {
     let currentYear;
     if (yyymmdd) {

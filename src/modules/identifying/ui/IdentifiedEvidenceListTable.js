@@ -8,7 +8,7 @@ import {IdentifiedEvidenceColumnDefinitions} from '../../../react/Components/Col
 import GwMapper, {EVIDENCE_TYPE} from '../../../react/Mapper/gw_mapper'
 import EvidenceListTable from '../../../core/ui/EvidenceListTable'
 import {validData} from "../../../react/Valid/valid";
-import {getPeriod} from "../../../react/Util/Time";
+import {getPeriod, getTxtPeriod} from "../../../react/Util/Time";
 
 
 //todo validation
@@ -74,7 +74,7 @@ function IdentifiedEvidenceListTable(props) {
             jsonData[field].result = EVIDENCE_TYPE[key]
         }
         if (field === 'evidenceDate') {
-            jsonData['period'].result = getPeriod(editData[field])+''
+            jsonData['period'].result = getTxtPeriod(editData[field])+''
         }
         // const validatingData = validData(declareProperties.clientTaxId, SigoutourMapper.toView(jsonData, jsonData.ticketId.result, 1), assignMap).cellHighlight
         const result = await electronActions.updateData(declareProperties.clientTaxId, jsonData)
