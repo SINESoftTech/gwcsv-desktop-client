@@ -22,24 +22,24 @@ const validTaxId = (taxId) => {
 const validData = (clientTaxId, json, assignMap) => {
   console.log('valid', clientTaxId, json);
   let validResult = validTaxMoney(json);
-  const isCustom = json.gwEvidenceType === 'A8001';
-
+  console.log(validResult)
+  const isCustom = json.evidenceType === 'A8001';
   if (!isCustom && (json.sellerTaxId.length !== 8 || !validTaxId(json.sellerTaxId))) {
     validResult.push('sellerTaxId');
   }
   if (json.buyerTaxId.length !== 8 || !validTaxId(json.buyerTaxId) || json.buyerTaxId !== clientTaxId) {
     validResult.push('buyerTaxId');
   }
-  console.log(json.gwEvidenceType);
-  // console.log(validEvidenceType[json['gwEvidenceType']](json, assignMap))
-  validResult = validResult
-    .concat(validEvidenceType[json.gwEvidenceType](json, assignMap))
-    .concat(validEvidenceDate(json));
+  // // console.log(validEvidenceType[json['evidenceType']](json, assignMap))
+  // validResult = validResult
+  //   .concat(validEvidenceType[json.evidenceType](json, assignMap))
+  //   .concat(validEvidenceDate(json));
 
   json.cellHighlight = [...new Set(validResult)];
-  json.cellHighlight = json.cellHighlight
-    .filter((value) => value !== '');
-  json.cellHighlight = json.cellHighlight.length > 0 ? json.cellHighlight.concat('sn') : json.cellHighlight;
+
+  // json.cellHighlight = json.cellHighlight
+  //   .filter((value) => value !== '');
+  // json.cellHighlight = json.cellHighlight.length > 0 ? json.cellHighlight.concat('sn') : json.cellHighlight;
   console.log('valid result', json);
   return json;
 };

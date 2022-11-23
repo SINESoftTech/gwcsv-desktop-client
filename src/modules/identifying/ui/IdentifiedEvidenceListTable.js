@@ -7,19 +7,20 @@ import {getJsonRawData} from '../../../react/Actions/electionActions'
 import {IdentifiedEvidenceColumnDefinitions} from '../../../react/Components/ColumnDefinitions'
 import SigoutourMapper, {EVIDENCE_TYPE} from '../../../react/Mapper/gw_mapper'
 import EvidenceListTable from '../../../core/ui/EvidenceListTable'
+import {validData} from "../../../react/Valid/valid";
 
 
 //todo validation
 const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => Object.keys(evidenceObj)
     .map((id, idx) => {
-        console.log(id)
         const obj = evidenceObj[id]
-        // const data = validData(
-        //   businessEntityTaxId,
-        //   SigoutourMapper.toView(obj, id, idx + 1),
-        //   assignMap,
-        // );
-        return SigoutourMapper.toView(obj, id, idx + 1)
+        const data = validData(
+          businessEntityTaxId,
+          SigoutourMapper.toView(obj, id, idx + 1),
+          assignMap,
+        );
+        console.log('data',data)
+        return data
     })
 
 function IdentifiedEvidenceListTable(props) {
