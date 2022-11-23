@@ -42,7 +42,7 @@ const A5010ToGwObj = (data) => {
     delete result['carrierPeriod']
 
 
-    result.reportingPejriod = {
+    result.reportingPeriod = {
         result: data.reportingPeriod,
         score: 1
     }
