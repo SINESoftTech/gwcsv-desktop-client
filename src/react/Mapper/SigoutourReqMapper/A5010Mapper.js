@@ -33,7 +33,6 @@ const A5010ToGwObj = (data) => {
         score: -1
     }
     result.period = result['carrierPeriod']
-    console.log(result.period)
     result.evidenceDate = {
         result: result.period.result + '01',
         score: -1

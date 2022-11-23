@@ -45,7 +45,6 @@ function IdentifiedEvidenceListTable(props) {
     }, [assignMap, data, declareProperties.clientTaxId])
 
     const handleResultAllConfirmed = async () => {
-        //fixme if validation ok
         const errorIdList = rowData.filter((obj) => obj.cellHighlight.length > 0).map((obj) => obj.id)
         const filterIdList = Object.keys(localFiles['03'])
             .filter((key) => {
@@ -67,7 +66,8 @@ function IdentifiedEvidenceListTable(props) {
 
     const handleEditRow = async (editData, field = '') => {
         const jsonData = await getJsonRawData(editData.id, declareProperties.clientTaxId)
-
+        console.log('handleEditRow',field)
+        console.log('jsonData',jsonData)
         jsonData[field].result = editData[field]
         if (field === 'evidenceType') {
             const key = jsonData[field].result
