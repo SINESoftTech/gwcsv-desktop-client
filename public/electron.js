@@ -272,7 +272,8 @@ ipcMain.handle(
                     score: [-1]
                 },
                 gwEvidenceType: {result: declareProperties.evidenceType, score: [-1]},
-                fullPath: {result: targetFilePath, score: [-1]}
+                fullPath: {result: targetFilePath, score: [-1]},
+                createDate: {result: id, score: 1}
             }
         }
         const db = getDbContext(declareProperties.clientTaxId)

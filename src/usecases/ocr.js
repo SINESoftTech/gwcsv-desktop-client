@@ -50,6 +50,7 @@ async function getIdentifyResult(token, owner, payload) {
         //cs 偷改response error handler
         if(!Array.isArray(response.data)){
             return {
+                'createDate':payload.createDate,
                 'fullPath': payload.fullPath,
                 'reportingPeriod': payload.reportingPeriod,
                 'deductionType': payload.deductionType,
@@ -61,6 +62,7 @@ async function getIdentifyResult(token, owner, payload) {
             }
         }
         return {
+            'createDate':payload.createDate,
             'fullPath': payload.fullPath,
             'reportingPeriod': payload.reportingPeriod,
             'deductionType': payload.deductionType,

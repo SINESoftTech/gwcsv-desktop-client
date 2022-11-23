@@ -185,6 +185,7 @@ function HomePage() {
         appState.auth.user.token,
         ownerId,
         {
+          createDate:json.createDate.result,
           fullPath: json.fullPath.result,
           reportingPeriod: json.reportingPeriod.result,
           deductionType: json.deductionType.result,

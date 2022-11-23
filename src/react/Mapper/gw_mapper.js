@@ -187,7 +187,12 @@ class GwMapperClass {
     toDomainObj(jsonData) {
         const {gwEvidenceType} = jsonData
         if (jsonData.status === 'completed') {
-            return parseToDomainObjStrategy[gwEvidenceType](jsonData)
+            const data = parseToDomainObjStrategy[gwEvidenceType](jsonData)
+            data.createDate = {
+                result: jsonData.createDate,
+                score: -1
+            }
+            return data
         }
 
         return {
@@ -229,7 +234,6 @@ class GwMapperClass {
     }
 
     toGw(jsonData) {
-        console.log('BBB', jsonData)
         const evidenceType = GW_EVIDENCE_TYPE[jsonData.evidenceType.result].value
         const declareBusinessTax = jsonData.isDeclareBusinessTax.result
         const commentType = "BLANK"

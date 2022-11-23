@@ -20,6 +20,7 @@ const validEvidence = (evidenceObj, businessEntityTaxId, assignMap) => Object.ke
             GwMapper.toView(obj, id, idx + 1),
             assignMap,
         );
+
         return data
     })
 
@@ -38,7 +39,17 @@ function IdentifiedEvidenceListTable(props) {
             // setAssignMap(assignMap)
             setLocalFiles(data)
             if (Object.keys(data).length > 0) {
-                setRowData(validEvidence(data['03'], declareProperties.clientTaxId, assignMap))
+                let result = validEvidence(data['03'], declareProperties.clientTaxId, assignMap)
+                result = result.sort((a, b) => {
+                    const createDate1 = a.createDate
+                    const createDate2 = b.createDate
+                    if (createDate1 <= createDate2) {
+                        return 1
+                    }
+                    return 0
+                });
+
+                setRowData(result)
             }
         }
         init()
@@ -66,8 +77,8 @@ function IdentifiedEvidenceListTable(props) {
 
     const handleEditRow = async (editData, field = '') => {
         const jsonData = await getJsonRawData(editData.id, declareProperties.clientTaxId)
-        console.log('handleEditRow',field)
-        console.log('jsonData',jsonData)
+        console.log('handleEditRow', field)
+        console.log('jsonData', jsonData)
         jsonData[field].result = editData[field]
         if (field === 'evidenceType') {
             const key = jsonData[field].result
