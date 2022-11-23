@@ -1,5 +1,5 @@
-import { isEmptyOrUndefined } from '../../Util/StringUtils'
-import {getCurrentPeriodYear, getCurrentPeriodYearWithMonth} from "../../Util/Time";
+import {isEmptyOrUndefined} from '../../Util/StringUtils'
+import {getCurrentPeriodYearWithMonth} from "../../Util/Time";
 
 const A5033ToGwObj = (data) => {
   const result = {
@@ -51,6 +51,10 @@ const A5033ToGwObj = (data) => {
     score: 1
   }
   result.period = result['carrierPeriod']
+  result.evidenceDate = {
+    result: result.period.result + '01',
+    score: -1
+  }
   result.period.result = getCurrentPeriodYearWithMonth(result.period.result)
   delete result['carrierPeriod']
   result.evidenceNumber = result.carrierNumber
@@ -59,12 +63,6 @@ const A5033ToGwObj = (data) => {
     result: 0,
     score: -1
   }
-  //
-  //{
-  //       taxType: { result: '1', score: -1 },
-  //     }
-
-
   result.salesAmount.result = isEmptyOrUndefined(result.salesAmount.result) ? 0 : parseInt(result.salesAmount.result)
   result.zeroTaxSalesAmount.result = isEmptyOrUndefined(result.zeroTaxSalesAmount.result) ? 0 : parseInt(result.zeroTaxSalesAmount.result)
   result.taxAmount.result = isEmptyOrUndefined(result.taxAmount.result) ? 0 : parseInt(result.taxAmount.result)

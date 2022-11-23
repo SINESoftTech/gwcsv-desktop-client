@@ -51,6 +51,12 @@ const validEvidenceDate = (json) => {
     const reportingPeriod = parseInt(json.reportingPeriod);
     const tenYearAgoPeriod = reportingPeriod - 1000;
     const isBetweenTenYearAgoPeriodAndReportingPeriod = (reportingPeriod >= evidencePeriod) && (tenYearAgoPeriod <= evidencePeriod);
+    console.log(reportingPeriod)
+    console.log(evidencePeriod)
+    console.log(tenYearAgoPeriod)
+    console.log(reportingPeriod >= evidencePeriod)
+    console.log(tenYearAgoPeriod <= evidencePeriod)
+    console.log('isBetweenTenYearAgoPeriodAndReportingPeriod', isBetweenTenYearAgoPeriodAndReportingPeriod)
     if (!isBetweenTenYearAgoPeriodAndReportingPeriod) {
         return 'evidenceDate';
     }
@@ -62,11 +68,11 @@ const validGUI = (typeValue, json, assignMap) => {
         return ['evidenceNumber'];
     }
     const yyyymm = getPeriod(json.evidenceDate);
-    console.log('validGUI',yyyymm)
+    console.log('validGUI', yyyymm)
     const trackId = json.evidenceNumber.substring(0, 2);
     console.log(assignMap[typeValue][yyyymm])
     const isTrackIdIncludeAssign = assignMap[typeValue][yyyymm] === undefined ? false : assignMap[typeValue][yyyymm].includes(trackId);
-    if(!isTrackIdIncludeAssign){
+    if (!isTrackIdIncludeAssign) {
         return ['evidenceNumber']
     }
     const isNumber = !isNaN(json.evidenceNumber.substring(2));

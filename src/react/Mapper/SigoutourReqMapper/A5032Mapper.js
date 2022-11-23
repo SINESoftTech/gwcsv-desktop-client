@@ -1,5 +1,5 @@
-import { isEmptyOrUndefined } from '../../Util/StringUtils'
-import {getCurrentPeriodYear, getCurrentPeriodYearWithMonth} from "../../Util/Time";
+import {isEmptyOrUndefined} from '../../Util/StringUtils'
+import {getCurrentPeriodYearWithMonth} from "../../Util/Time";
 
 const A5032ToGwObj = (data) => {
   const result = {
@@ -34,6 +34,10 @@ const A5032ToGwObj = (data) => {
   result.evidenceDate = result['invoiceDate']
   delete result.evidenceDate
   result.period = result['carrierPeriod']
+  result.evidenceDate = {
+    result: result.period.result + '01',
+    score: -1
+  }
   result.period.result = getCurrentPeriodYearWithMonth(result.period.result)
   delete result['carrierPeriod']
   result.reportingPeriod = {
