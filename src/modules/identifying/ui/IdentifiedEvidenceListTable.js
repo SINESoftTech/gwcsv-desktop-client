@@ -4,9 +4,8 @@ import {PlaylistAddCheck, ReadMore} from '@mui/icons-material'
 import PropTypes from 'prop-types'
 import {electronActions} from '../../../react/Context'
 import {getJsonRawData} from '../../../react/Actions/electionActions'
-import {validData} from '../../../react/Valid/valid'
 import {IdentifiedEvidenceColumnDefinitions} from '../../../react/Components/ColumnDefinitions'
-import SigoutourMapper, {EVIDENCE_TYPE, GW_EVIDENCE_TYPE} from '../../../react/Mapper/gw_mapper'
+import SigoutourMapper, {EVIDENCE_TYPE} from '../../../react/Mapper/gw_mapper'
 import EvidenceListTable from '../../../core/ui/EvidenceListTable'
 
 

@@ -36,7 +36,7 @@ const recognizeAsync = async (token, ownerId, identifyData) => {
 }
 
 
-async function getIdentifyResult(token,owner, payload) {
+async function getIdentifyResult(token, owner, payload) {
     console.log('getId', payload)
     const requestOptions = {
         headers: {
@@ -47,7 +47,19 @@ async function getIdentifyResult(token,owner, payload) {
     try {
         const apiPath = '/ocr/api/v1/recognize/' + payload.id
         const response = await gwAxios.get(apiPath, requestOptions)
-        console.log(response.data)
+        //cs 偷改response error handler
+        if(!Array.isArray(response.data)){
+            return {
+                'fullPath': payload.fullPath,
+                'reportingPeriod': payload.reportingPeriod,
+                'deductionType': payload.deductionType,
+                'gwEvidenceType': payload.gwEvidenceType,
+                'id': payload.id,
+                'isDeclareBusinessTax': payload.isDeclareBusinessTax,
+                'data': response.data,
+                'status': 'completed'
+            }
+        }
         return {
             'fullPath': payload.fullPath,
             'reportingPeriod': payload.reportingPeriod,
