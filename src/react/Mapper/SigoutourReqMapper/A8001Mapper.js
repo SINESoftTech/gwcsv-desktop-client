@@ -94,11 +94,11 @@ const A8001ToGwObj = (data) => {
   }
   result.evidenceNumber = result['taxStatementNumber']
   delete result.taxStatementNumber
-  result.zeroTaxSalesAmount = {
+  result.zeroTaxSalesValue = {
     result: 0,
     score: -1
   }
-  result.dutyFreeSalesAmount = {
+  result.dutyFreeSalesValue = {
     result: 0,
     score: -1
   }

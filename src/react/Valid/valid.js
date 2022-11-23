@@ -23,14 +23,14 @@ const validTaxId = (taxId) => {
 const validData = (clientTaxId, json, assignMap) => {
     // console.log('valid', clientTaxId, json);
     let validResult = validTaxMoney(json);
-    const isCustom = json.evidenceType === 'A8001';
+    const type = EVIDENCE_TYPE[json['evidenceType']]
+    const isCustom = type === 'A8001';
     if (!isCustom && (json.sellerTaxId.length !== 8 || !validTaxId(json.sellerTaxId))) {
         validResult.push('sellerTaxId');
     }
     if (json.buyerTaxId.length !== 8 || !validTaxId(json.buyerTaxId) || json.buyerTaxId !== clientTaxId) {
         validResult.push('buyerTaxId');
     }
-    const type = EVIDENCE_TYPE[json['evidenceType']]
     validResult = validResult
         .concat(validEvidenceType[type](json, assignMap))
         .concat(validEvidenceDate(json));
