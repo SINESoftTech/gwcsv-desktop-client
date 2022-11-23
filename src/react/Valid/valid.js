@@ -34,7 +34,6 @@ const validData = (clientTaxId, json, assignMap) => {
     validResult = validResult
         .concat(validEvidenceType[type](json, assignMap))
         .concat(validEvidenceDate(json));
-    console.log('validResult', validResult)
     json.cellHighlight = [...new Set(validResult)];
 
     json.cellHighlight = json.cellHighlight
@@ -120,6 +119,13 @@ const validTaxType = {
         const isBusinessTaxValueEq0 = parseInt(json.businessTaxValue) === 0 ? '' : 'businessTaxValue';
         return [isZeroTaxSalesValueGte0, isDutyFreeSalesValueEq0, isTaxableSalesValueEq0, isBusinessTaxValueEq0];
     },
+    9: (json) => {
+        const isTaxableSalesValueGte0 = parseInt(json.taxableSalesValue) >= 0 ? '' : 'taxableSalesValue';
+        const isBusinessTaxValueGt0 = parseInt(json.businessTaxValue) >= 0 ? '' : 'businessTaxValue';
+        const isZeroTaxSalesValueGt0 = parseInt(json.zeroTaxSalesValue) >= 0 ? '' : 'zeroTaxSalesValue';
+        const isDutyFreeSalesValueGt0 = parseInt(json.dutyFreeSalesValue) >= 0 ? '' : 'dutyFreeSalesValue';
+        return [isTaxableSalesValueGte0, isBusinessTaxValueGt0, isZeroTaxSalesValueGt0, isDutyFreeSalesValueGt0];
+    },
     '': (json) => ['zeroTaxSalesValue', 'dutyFreeSalesValue', 'taxableSalesValue', 'taxType', 'businessTaxValue'],
     undefined: (json) => ['zeroTaxSalesValue', 'dutyFreeSalesValue', 'taxableSalesValue', 'taxType', 'businessTaxValue'],
 };
@@ -161,7 +167,8 @@ const validB2C = (json) => {
 };
 
 const validTax = (json) => {
-    switch (json.gwEvidenceType) {
+    const type = EVIDENCE_TYPE[json['evidenceType']]
+    switch (type) {
         case 'A2001':
             return validB2C(json);
         default:
@@ -174,11 +181,9 @@ const validTaxMoney = (json) => {
     console.log('validTaxMoney', json);
     const validResult =
         validTaxType[json.taxType](json).concat(validTax(json));
-    console.log('ABC',validResult)
     const withoutTotalAmount = parseInt(json.taxableSalesValue) + parseInt(json.zeroTaxSalesValue) + parseInt(json.dutyFreeSalesValue);
 
     const totalAmount = withoutTotalAmount + parseInt(json.businessTaxValue);
-    console.log("AAA",totalAmount)
     if (totalAmount !== parseInt(json.totalAmount) || totalAmount === 0) {
         validResult.push('totalAmount', 'zeroTaxSalesValue', 'businessTaxValue', 'dutyFreeSalesValue', 'taxableSalesValue');
     }

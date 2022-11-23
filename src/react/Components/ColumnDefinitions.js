@@ -82,6 +82,9 @@ export const IdentifiedEvidenceColumnDefinitions = [
         field: 'reportingPeriod', headerName: '申報期別', width: 150, cellClassName: renderCellClassName, editable: true,
     },
     {
+        field: 'isDeclareBusinessTax', headerName: '申報', width: 150, cellClassName: renderCellClassName, editable: true,
+    },
+    {
         field: 'evidenceType',
         headerName: '憑證類型',
         width: 200,
