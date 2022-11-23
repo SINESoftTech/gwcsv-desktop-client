@@ -11,11 +11,11 @@ const A5031ToGwObj = (data) => {
       result: 0,
       score: -1
     },
-    freeTaxSalesAmount: {
+    dutyFreeSalesValue: {
       result: 0,
       score: -1
     },
-    zeroTaxSalesAmount: {
+    zeroTaxSalesValue: {
       result: 0,
       score: -1
     },
@@ -42,6 +42,10 @@ const A5031ToGwObj = (data) => {
   result.evidenceNumber = result['carrierNumber']
   delete result.carrierNumber
   result.period = result['carrierPeriod']
+  result.evidenceDate = {
+    result: result.period.result + '01',
+    score: -1
+  }
   result.period.result = getCurrentPeriodYearWithMonth(result.period.result)
   delete result['carrierPeriod']
   result.reportingPeriod = {

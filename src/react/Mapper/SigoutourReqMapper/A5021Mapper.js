@@ -29,6 +29,10 @@ const A5021ToGwObj = (data) => {
     score: -1
   }
   result.period = result['carrierPeriod']
+  result.evidenceDate = {
+    result: result.period.result + '01',
+    score: -1
+  }
   result.period.result = getCurrentPeriodYearWithMonth(result.period.result)
   delete result['carrierPeriod']
   result.reportingPeriod = {
