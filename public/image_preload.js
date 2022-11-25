@@ -1,5 +1,5 @@
 window.addEventListener('message', receiveMessage, false)
-const electron = require('electron')
+// const electron = require('electron')
 
 let imageJson = ''
 
