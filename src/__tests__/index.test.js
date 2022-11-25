@@ -20,7 +20,7 @@ test('reporting period dialog UI', async () => {
       handleSelectionChange={handleSelectionChange}
       handleClose={handleClose}
       handleReset={handleReset}
-      onScan={onScan}
+      onConfirm={onScan}
       declareProperties={declareProperties}
       open={open}
     />,

@@ -1,38 +1,50 @@
-import React from 'react';
-import {RouterProvider} from 'react-router-dom';
-import {createBrowserRouter} from "react-router-dom";
-import ProtectedRoute from "./ProtectedRoute";
-import HomePage from "../../views/HomePage";
-import IdentifiedEvidenceDetailPage from "../../views/IdentifiedEvidenceDetailPage";
-import PageNotFound from "../../views/NotFoundPage";
-import Login from "../../views/LoginPage";
+import React from 'react'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
+import ProtectedRoute from './ProtectedRoute'
+import HomePage from '../../views/HomePage'
+import IdentifiedEvidenceDetailPage from '../../views/IdentifiedEvidenceDetailPage'
+import Login from '../../views/LoginPage'
+import NotFoundPage from '../../views/NotFoundPage'
 
 const routes = [
   {
-    path: "/",
-    element: (<ProtectedRoute><HomePage/></ProtectedRoute>),
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <HomePage />
+      </ProtectedRoute>
+    ),
     children: [
       {
-        path: "main",
-        element: (<ProtectedRoute><HomePage/></ProtectedRoute>),
+        path: 'main',
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        )
       },
       {
         path: 'identified-evidence-detail',
-        element: (<ProtectedRoute><IdentifiedEvidenceDetailPage/></ProtectedRoute>),
-      },
+        element: (
+          <ProtectedRoute>
+            <IdentifiedEvidenceDetailPage />
+          </ProtectedRoute>
+        )
+      }
     ]
   },
   {
     path: '/*',
-    element: <PageNotFound/>,
+    element: <NotFoundPage />
   },
   {
     path: '/login',
-    element: <Login/>,
-  }]
+    element: <Login />
+  }
+]
 const AppRoutes = () => {
-  let router = createBrowserRouter(routes)
-  return (<RouterProvider router={router}/>)
+  let router = createHashRouter(routes)
+  return <RouterProvider router={router} />
 }
 
-export default AppRoutes;
+export default AppRoutes

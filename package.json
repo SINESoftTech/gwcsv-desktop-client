@@ -16,12 +16,11 @@
     "@mui/x-data-grid": "^5.16.0",
     "@reduxjs/toolkit": "^1.9.0",
     "axios": "^1.1.3",
-    "electron": "^21.2.3",
-    "electron-builder": "^23.6.0",
     "electron-is-dev": "^2.0.0",
     "eslint-config-airbnb": "^19.0.4",
     "fs-extra": "^10.0.0",
     "is-electron": "^2.2.0",
+    "jwt-decode": "^3.1.2",
     "lowdb": "^1.0.0",
     "material-ui-image": "^3.3.2",
     "moment": "^2.29.1",
@@ -45,6 +44,8 @@
     "@testing-library/user-event": "^14.4.3",
     "babel-jest": "^29.3.1",
     "concurrently": "^7.5.0",
+    "electron": "^17.4.11",
+    "electron-builder": "^23.6.0",
     "electron-packager": "^17.1.1",
     "eslint": "^8.27.0",
     "eslint-plugin-react": "^7.30.1",
@@ -54,7 +55,7 @@
   },
   "homepage": ".",
   "scripts": {
-    "start": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000/ && yarn electron-start\"",
+    "start": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000 && yarn electron-start\"",
     "build": "yarn react-build && yarn electron-build",
     "react-script-test": "react-scripts test --env=jsdom --transformIgnorePatterns \\\"node_modules/(?!axios)/\\\"",
     "test": "jest",
@@ -63,7 +64,9 @@
     "react-start": "react-scripts start",
     "electron-start": " electron .",
     "react-build": "react-scripts build",
-    "electron-build": "react-scripts build && electron-packager ./ test --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*"
+    "electron-build-win": "react-scripts build && electron-packager ./ gw-vat-desktop --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*",
+    "electron-build-mac": "react-scripts build && electron-packager ./ gw-vat-desktop --platform=darwin --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-* --icon ./favicon.ico",
+    "electron-build-mac-arm": "react-scripts build && electron-packager ./ gw-vat-desktop --platform=darwin --arch=arm64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-* --icon ./favicon.ico"
   },
   "browserslist": {
     "production": [
