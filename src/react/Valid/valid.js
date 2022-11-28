@@ -118,8 +118,8 @@ const validTaxType = {
         return [isZeroTaxSalesValueEq0, isDutyFreeSalesValueGte0, isTaxableSalesValueEq0, isBusinessTaxValueEq0];
     },
     2: (json) => {
-        const isZeroTaxSalesValueGte0 = parseInt(json.zeroTaxSalesValue) === 0 ? '' : 'zeroTaxSalesValue';
-        const isDutyFreeSalesValueEq0 = parseInt(json.dutyFreeSalesValue) >= 0 ? '' : 'dutyFreeSalesValue';
+        const isZeroTaxSalesValueGte0 = parseInt(json.zeroTaxSalesValue) >= 0 ? '' : 'zeroTaxSalesValue';
+        const isDutyFreeSalesValueEq0 = parseInt(json.dutyFreeSalesValue) === 0 ? '' : 'dutyFreeSalesValue';
         const isTaxableSalesValueEq0 = parseInt(json.taxableSalesValue) === 0 ? '' : 'taxableSalesValue';
         const isBusinessTaxValueEq0 = parseInt(json.businessTaxValue) === 0 ? '' : 'businessTaxValue';
         return [isZeroTaxSalesValueGte0, isDutyFreeSalesValueEq0, isTaxableSalesValueEq0, isBusinessTaxValueEq0];
@@ -137,15 +137,13 @@ const validTaxType = {
 
 const validB2B = (json) => {
     const taxableSalesValue = parseInt(json.taxableSalesValue);
-    const businessTaxValue = parseInt(json.businessTaxValue);
     const withoutTaxAmount = parseInt(json.taxableSalesValue) + parseInt(json.zeroTaxSalesValue) + parseInt(json.dutyFreeSalesValue);
-    const businessCalcTaxValueResult = Math.round(taxableSalesValue * 0.05);
-    const calcResultValue = businessCalcTaxValueResult + withoutTaxAmount - parseInt(json.totalAmount);
-    if (calcResultValue <= 1 && calcResultValue >= 0) {
-        return [];
-    }
-    if (businessCalcTaxValueResult === businessTaxValue) {
-        return [];
+    const realTax = taxableSalesValue * 0.05
+    const ceilTax = Math.ceil(realTax)
+    const floorTax = Math.floor(realTax)
+    const calcResultValue = parseInt(json.totalAmount) - withoutTaxAmount
+    if (calcResultValue <= ceilTax && calcResultValue >= floorTax) {
+        return []
     }
     return ['zeroTaxSalesValue', 'dutyFreeSalesValue', 'taxableSalesValue', 'businessTaxValue'];
 };
