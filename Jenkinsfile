@@ -6,19 +6,19 @@ pipeline {
     registryCredential = 'dockerhub'
  }
  stages {
-    stage('Test'){
-        agent{
-             docker{
-                 image 'node:14.17.3-stretch-slim'
-                 reuseNode true
-             }
-        }
-        steps {
-            // echo "test"
-            sh 'npm install'
-            sh 'npm run ci'
-        }
-    }
+   // stage('Test'){
+   //     agent{
+   //          docker{
+   //              image 'node:14.17.3-stretch-slim'
+   //              reuseNode true
+   //          }
+   //     }
+   //     steps {
+   //         // echo "test"
+   //         sh 'npm install'
+   //         sh 'npm run ci'
+   //     }
+   // }
     stage('Build'){
         when{
             anyOf{
