@@ -64,6 +64,7 @@
     "react-start": "react-scripts start",
     "electron-start": " electron .",
     "react-build": "react-scripts build",
+    "electron-build": "concurrently \"yarn electron-build-win\" \"yarn.lock electron-build-mac\"",
     "electron-build-win": "react-scripts build && electron-packager ./ gw-vat-desktop --platform=win32 --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-*",
     "electron-build-mac": "react-scripts build && electron-packager ./ gw-vat-desktop --platform=darwin --arch=x64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-* --icon ./favicon.ico",
     "electron-build-mac-arm": "react-scripts build && electron-packager ./ gw-vat-desktop --platform=darwin --arch=arm64 --out=release-builds --asar --ignore=release-build --ignore=.git --ignore=node_modules/.bin --ingore=node_modules/electron-* --icon ./favicon.ico"
