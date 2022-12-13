@@ -52,8 +52,16 @@ const A5031ToGwObj = (data) => {
     result: data.reportingPeriod,
     score: 1
   }
-  result.deductionType = {
+  result.taxableDeductionType = {
     result: data.deductionType,
+    score: 1
+  }
+  result.zeroTaxDeductionType = {
+    result: '',
+    score: 1
+  }
+  result.dutyFreeDeductionType = {
+    result: '',
     score: 1
   }
   result.id = {
@@ -91,6 +99,14 @@ const A5031ToGwObj = (data) => {
   console.log("result",result)
   result.taxableSalesValue.result = result.salesAmount
   delete result.salesAmount
+  result['other'] = {
+    result: result['otherFee'] > 0 ? 'Y' : 'N',
+    score: -1
+  }
+  result['saleAmount-view'] = {
+    result: parseInt(result['taxableSalesValue'].result) + parseInt(result['dutyFreeSalesValue'].result) + parseInt(result['zeroTaxSalesValue'].result),
+    score: 1
+  }
   return result
 }
 export { A5031ToGwObj }

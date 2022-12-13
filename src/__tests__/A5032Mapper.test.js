@@ -1,4 +1,4 @@
-import { A5032ToGwObj } from '../react/Mapper/SigoutourReqMapper/A5032Mapper';
+import { A5032ToGwObj } from '../react/Mapper/GwReqMapper/A5032Mapper';
 
 test('success SigoutourMapper toDomainObj 5032', () => {
   const data = {

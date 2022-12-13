@@ -70,8 +70,16 @@ const A5002ToGwObj = (data) => {
         score: -1
     }
 
-    result.deductionType = {
+    result.taxableDeductionType = {
         result: data.deductionType,
+        score: 1
+    }
+    result.zeroTaxDeductionType = {
+        result: '',
+        score: 1
+    }
+    result.dutyFreeDeductionType = {
+        result: '',
         score: 1
     }
     result.id = {
@@ -107,6 +115,14 @@ const A5002ToGwObj = (data) => {
     result.totalPayAmount = {
         result: 0,
         score: -1
+    }
+    result['other'] = {
+        result: result['otherFee'] > 0 ? 'Y' : 'N',
+        score: -1
+    }
+    result['saleAmount-view'] = {
+        result: parseInt(result['taxableSalesValue'].result) + parseInt(result['dutyFreeSalesValue'].result) + parseInt(result['zeroTaxSalesValue'].result),
+        score: 1
     }
     return result
 }
