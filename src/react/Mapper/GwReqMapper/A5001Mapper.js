@@ -1,7 +1,7 @@
-import {isEmptyOrUndefined} from '../../Util/StringUtils';
+import { isEmptyOrUndefined } from '../../Util/StringUtils'
 import {getPeriod} from "../../Util/Time";
 
-const A5003ToGwObj = (data) => {
+const A5001ToGwObj = (data) => {
   const result = {
     taxableSalesValue: {
       result: 0,
@@ -24,40 +24,32 @@ const A5003ToGwObj = (data) => {
         score: -1
       }
     })
-  result.salesAmount.result = isEmptyOrUndefined(result.salesAmount.result) ? 0 : parseInt(result.salesAmount.result)
-  let taxType = '1'
-  if (result.taxable.result === 'selected') {
-    taxType = '1'
-    result.taxableSalesValue = result.salesAmount
-  }
-  if (result.zerotax.result === 'selected') {
-    taxType = '2'
-    result.zerotax = result.salesAmount
-  }
-  if (result.taxExempt.result === 'selected') {
-    taxType = '3'
-    result.dutyFreeSalesValue = result.salesAmount
-  }
-  if ((result.zerotax.result === 'selected' || result.taxExempt.result === 'selected') && result.taxable.result === 'selected') {
-    taxType = '9'
-    result.taxableSalesValue = result.salesAmount
-
-  }
-  result.taxType = {
-    result: taxType,
-    score: 1
-  }
-  delete result.salesAmount
-
   result.isDeclareBusinessTax = { result: data.isDeclareBusinessTax, score: -1 }
   result.fullPath = { result: data.fullPath, score: 1 }
   result.evidenceDate = result['invoiceDate']
+  result.taxType = {
+    result: '1',
+    score: 1
+  }
+  result.otherFee = {
+    result: 0,
+    score: -1
+  }
   result.reportingPeriod = {
     result: data.reportingPeriod,
     score: 1
   }
-  result.deductionType = {
+
+  result.taxableDeductionType = {
     result: data.deductionType,
+    score: 1
+  }
+  result.zeroTaxDeductionType = {
+    result: '',
+    score: 1
+  }
+  result.dutyFreeDeductionType = {
+    result: '',
     score: 1
   }
   result.id = {
@@ -73,9 +65,12 @@ const A5003ToGwObj = (data) => {
     score: 1
   }
   result.evidenceType = {
-    result: 'A5003',
+    result: 'A5001',
     score: 1
   }
+  result.evidenceNumber = result['invoiceNumber']
+  delete result.invoiceNumber
+  delete result.invoiceDate
   let period = ''
   try {
     period = getPeriod(result.evidenceDate.result)
@@ -86,24 +81,25 @@ const A5003ToGwObj = (data) => {
     result: period,
     score: -1
   }
-  result.evidenceNumber = result['invoiceNumber']
-  delete result.taxExempt
-  delete result.taxable
-  delete result.zerotax
-  delete result.invoiceNumber
-  delete result.invoiceDate
   result.totalAmount.result = isEmptyOrUndefined(result.totalAmount.result) ? 0 : parseInt(result.totalAmount.result)
-  result.otherFee = {
-    result: 0,
-    score: -1
-  }
   result.taxAmount.result = isEmptyOrUndefined(result.taxAmount.result) ? 0 : parseInt(result.taxAmount.result)
-  result['businessTaxValue'] = result['taxAmount']
+  result.businessTaxValue = result.taxAmount
   delete result.taxAmount
+  result.salesAmount.result = isEmptyOrUndefined(result.salesAmount.result) ? 0 : parseInt(result.salesAmount.result)
+  result.taxableSalesValue = result.salesAmount
+  delete result.salesAmount
   result.totalPayAmount = {
     result: 0,
     score: -1
   }
+  result['other'] = {
+    result: result['otherFee'] > 0 ? 'Y' : 'N',
+    score: -1
+  }
+  result['saleAmount-view'] = {
+    result: parseInt(result['taxableSalesValue'].result) + parseInt(result['dutyFreeSalesValue'].result) + parseInt(result['zeroTaxSalesValue'].result),
+    score: 1
+  }
   return result
-};
-export { A5003ToGwObj };
+}
+export { A5001ToGwObj }

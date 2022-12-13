@@ -58,7 +58,6 @@ export async function uploadToGw(payload, ownerId, token) {
       bodyFormData.append('json', JSON.stringify(req));
       bodyFormData.append('file', payload[i].image);
       const result = await gwAxios.post(url, bodyFormData, config);
-      console.log("AAAA",result)
       resultList.push({
         id:id,
         status: true,

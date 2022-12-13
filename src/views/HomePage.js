@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import {
   Alert,
   Badge,
@@ -16,7 +16,7 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { AdfScanner, Close, CloudUpload, Compare } from '@mui/icons-material'
+import {AdfScanner, Close, CloudUpload, Compare} from '@mui/icons-material'
 import PropTypes from 'prop-types'
 import ScannedImageList from '../modules/scanning/ui/ScannedImageList'
 import ConfirmedEvidenceListTable from '../modules/confirming/ui/ConfirmedEvidenceListTable'
@@ -25,24 +25,20 @@ import {
   gwUploaded,
   identifyResultConfirmed,
   identifyResultReceived,
-  identifySent, importFromImage, test
+  identifySent
 } from '../react/Actions/electionActions'
 import {openScanner, scan} from '../react/Actions/scanAction'
 import DialogComponent from '../core/ui/Dialog'
-import { getFileExt } from '../react/Util/FileUtils'
-import {
-  electronActions,
-  gwActions,
-  useAppDispatch,
-  useAppState
-} from '../react/Context'
+import {getFileExt} from '../react/Util/FileUtils'
+import {electronActions, gwActions, useAppDispatch, useAppState} from '../react/Context'
 import DesktopNavbar from '../core/layout/DesktopNavbar'
-import { getCurrentPeriod, toPeriodList } from '../react/Util/Time'
-import { getIdentifyResult, recognizeAsync } from '../usecases/ocr'
+import {getCurrentPeriod, toPeriodList} from '../react/Util/Time'
+import {getIdentifyResult, recognizeAsync} from '../usecases/ocr'
 import GwMapper from '../react/Mapper/gw_mapper'
+import {useLocation} from "react-router-dom";
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props
+  const {children, value, index, ...other} = props
 
   return (
     <div
@@ -61,6 +57,13 @@ function TabPanel(props) {
   )
 }
 
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
+  }
+}
+
 TabPanel.propTypes = {
   children: PropTypes.any,
   value: PropTypes.any,
@@ -68,8 +71,7 @@ TabPanel.propTypes = {
 }
 
 function HomePage() {
-  const dispatch = useAppDispatch()
-  const appState = useAppState()
+  const location = useLocation();
   const [value, setValue] = React.useState(0)
   const [declareProperties, setDeclareProperties] = React.useState({
     clientTaxId: '',
@@ -77,6 +79,9 @@ function HomePage() {
     evidenceType: '',
     isDeclareBusinessTax: 'true'
   })
+  const dispatch = useAppDispatch()
+  const appState = useAppState()
+
   const [scanCount, setScanCount] = React.useState(0)
   const [scanDisable, setScanDisable] = React.useState(false)
   const [scanAlert, setScanAlert] = React.useState(false)
@@ -105,13 +110,25 @@ function HomePage() {
     pageInit().catch(console.error)
   }, [value, declareProperties.clientTaxId])
 
+  useEffect(() => {
+    if (location.state != null) {
+      setValue(1)
+      setDeclareProperties(location.state)
+      const ownerId = appState.appData.clientLists
+        .filter((client) => client.taxId.id === location.state.clientTaxId)
+        .map((client) => {
+          return client.id
+        })
+      setOwnerId(ownerId[0])
+    }
+  }, [location.state])
+
   // region Main Events
-  const handleTabChange = (event, newValue) => {
-    setValue(newValue)
-  }
+  const handleTabChange = (event, newValue) => setValue(newValue)
+
 
   const handleSelectionChange = async (event) => {
-    const { name, value } = event.target
+    const {name, value} = event.target
     console.log(name, value)
     setDeclareProperties((prevState) => ({
       ...prevState,
@@ -132,6 +149,7 @@ function HomePage() {
   const handleScannerError = (errorMsg) => {
     const isErrorMsgStartsWithError = errorMsg.startsWith('error:')
     setScanDisable(false)
+    setImportDisable(false)
     if (isErrorMsgStartsWithError && errorMsg === 'error:feeding error') {
       alert('無法掃描，請放入紙張')
       return
@@ -185,7 +203,7 @@ function HomePage() {
         appState.auth.user.token,
         ownerId,
         {
-          createDate:json.createDate.result,
+          createDate: json.createDate.result,
           fullPath: json.fullPath.result,
           reportingPeriod: json.reportingPeriod.result,
           deductionType: json.deductionType.result,
@@ -247,9 +265,8 @@ function HomePage() {
     }
   }
 
-  const handleCloseDisable = () => {
-    setScanDisable(false)
-  }
+  const handleCloseDisable = () => setScanDisable(false)
+
 
   const handleMoveImage = async (count, filePath) => {
     setScanCount((prevState) => prevState + 1)
@@ -261,10 +278,7 @@ function HomePage() {
     )
   }
 
-  const handleResultAllConfirmed = async (
-    businessEntityTaxId,
-    filesByTicketId
-  ) => {
+  const handleResultAllConfirmed = async (businessEntityTaxId, filesByTicketId) => {
     console.log(businessEntityTaxId, filesByTicketId)
     try {
       const result = await identifyResultConfirmed(
@@ -288,16 +302,10 @@ function HomePage() {
     }
   }
 
-  function a11yProps(index) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`
-    }
-  }
 
   const renderClientSelect = () => (
     <Stack spacing={2} direction="row" my={3}>
-      <FormControl sx={{ width: '25%' }}>
+      <FormControl sx={{width: '25%'}}>
         <TextField
           id="client-taxId-select"
           name="clientTaxId"
@@ -318,7 +326,7 @@ function HomePage() {
           ))}
         </TextField>
       </FormControl>
-      <FormControl sx={{ width: '25%' }}>
+      <FormControl sx={{width: '25%'}}>
         <TextField
           id="reporting-period-select"
           name="reportingPeriod"
@@ -349,7 +357,6 @@ function HomePage() {
     }))
   }
 
-  //todo refactor
   const [openDialog, setOpenDialog] = React.useState(false)
   const [openDialog2, setOpenDialog2] = React.useState(false)
   const handleClose = () => setOpenDialog(false)
@@ -365,19 +372,16 @@ function HomePage() {
   }
 
   const handleImportImageClick = async (e) => {
-
-    // await electronActions.scanImages(dispatch, file.path, appState.auth.user, declareProperties)
-    const result=await electronActions.importFromImage()
-    console.log('handleImportImageClick',result)
-    for(let i=0;i<result.length;i++){
-        await electronActions.scanImages(dispatch, result[i], appState.auth.user, declareProperties)
+    const result = await electronActions.importFromImage()
+    for (let i = 0; i < result.length; i++) {
+      await electronActions.scanImages(dispatch, result[i], appState.auth.user, declareProperties)
     }
   }
 
   return (
     <>
-      <CssBaseline />
-      <DesktopNavbar />
+      <CssBaseline/>
+      <DesktopNavbar/>
       <Container maxWidth="false">
         <DialogComponent
           isScan={true}
@@ -409,7 +413,7 @@ function HomePage() {
                   setScanAlert(false)
                 }}
               >
-                <Close fontSize="inherit" />
+                <Close fontSize="inherit"/>
               </IconButton>
             }
           >
@@ -419,14 +423,14 @@ function HomePage() {
         <Box>{renderClientSelect()}</Box>
         <Tabs value={value} onChange={handleTabChange}>
           <Tab
-            icon={<AdfScanner />}
+            icon={<AdfScanner/>}
             iconPosition="start"
             label="掃描"
             key={0}
             {...a11yProps(0)}
           />
           <Tab
-            icon={<Compare />}
+            icon={<Compare/>}
             iconPosition="start"
             label={
               <Badge
@@ -443,7 +447,7 @@ function HomePage() {
             }
           />
           <Tab
-            icon={<CloudUpload />}
+            icon={<CloudUpload/>}
             iconPosition="start"
             label="上傳"
             key={2}
@@ -469,12 +473,12 @@ function HomePage() {
           <TabPanel value={value} index={1}>
             <IdentifiedEvidenceListTable
               data={appState.appData.fileLists}
-              declareProperties={declareProperties}
               onViewImage={handleViewImage}
               onGetIdentifyResult={handleGetIdentifyResult}
               onResultAllConfirmed={handleResultAllConfirmed}
               OnDeleteEvidence={handleDeleteEvidence}
               assignMap={assignMap}
+              declareProperties={declareProperties}
             />
           </TabPanel>
           <TabPanel value={value} index={2}>

@@ -1,4 +1,4 @@
-import { A5001ToGwObj } from '../react/Mapper/SigoutourReqMapper/A5001Mapper';
+import { A5001ToGwObj } from '../react/Mapper/GwReqMapper/A5001Mapper';
 
 test('success SigoutourMapper toDomainObj 5001', () => {
   const sigoutourJson = {

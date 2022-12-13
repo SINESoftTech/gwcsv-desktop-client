@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   Box, Button, Checkbox, FormControl, IconButton,
-  ImageList, ImageListItem, ImageListItemBar, Input, Stack, Typography
+  ImageList, ImageListItem, ImageListItemBar, Input, InputLabel, MenuItem, Select, Stack, TextField, Typography
 } from '@mui/material'
 import {
   Delete, InsertPhoto, Save, Send, ZoomIn
 } from '@mui/icons-material'
-import { blue } from '@mui/material/colors'
+import {blue} from '@mui/material/colors'
 import isElectron from 'is-electron'
 import PropTypes from 'prop-types'
+import {GW_EVIDENCE_TYPE} from "../../../react/Mapper/gw_mapper";
 
 const electron = isElectron() ? window.electron : null
 const ipcRenderer = isElectron() ? electron.ipcRenderer : null
@@ -19,7 +20,6 @@ const getRowData = async (jsonData, businessEntityTaxId) => {
   const keys = Object.keys(jsonData)
   for (let idx = 0; idx < keys.length; idx += 1) {
     const item = jsonData[keys[idx]]
-    // console.log(item);
     const imageFileBlob = await getImageFileBlob(item.fullPath.result)
     const fileName = `${item.gwEvidenceType.result}_${keys[idx]}`
     const rowItem = {
@@ -58,29 +58,43 @@ function ScannedImageList(props) {
     onImageOriginalViewClick, onSaveImageClick, onDeleteImageClick
   } = props
   const [dataRows, setDataRows] = useState([])
-  const [selectionDataRows, setSelectionDataRow] = useState({ selection: [] })
+  const [selectionDataRows, setSelectionDataRow] = useState({selection: []})
+  const [selectionEvidenceType, setSelectionEvidenceType] = useState("All")
 
   useEffect(() => {
     const initDataRows = async (data, businessEntityTaxId) => {
       let rowData = (data) ? await getRowData(data, businessEntityTaxId) : []
-      rowData = rowData.sort((a, b) => {
-        const fileName1 = a.fileName.split('_')[1].split('.')[0]
-        const fileName2 = b.fileName.split('_')[1].split('.')[0]
-        if (fileName1 >= fileName2) {
-          return 0
-        }
-        return 1
-      }).reverse()
+      rowData = rowData
+        .map(d => {
+          if (selectionEvidenceType === "All") {
+            return d
+          }
+          const type = d.fileName.split('_')[0]
+          if (type === selectionEvidenceType) {
+            return d
+          }
+          return null
+        })
+        .filter(d => d != null)
+        .sort((a, b) => {
+          const fileName1 = a.fileName.split('_')[1].split('.')[0]
+          const fileName2 = b.fileName.split('_')[1].split('.')[0]
+          if (fileName1 >= fileName2) {
+            return 0
+          }
+          return 1
+        }).reverse()
       setDataRows(rowData)
     }
     initDataRows(data, declareProperties.clientTaxId)
-  }, [data, declareProperties])
+  }, [data, declareProperties, selectionEvidenceType])
 
   // TODO
   const handleChange = (event) => {
-    const { value } = event.target
+    const {value} = event.target
     const selectData = dataRows.filter((obj) => obj.fullPath === value)[0]
-    const isExist = selectionDataRows.selection.filter((obj) => selectData.fullPath === obj.fullPath).length > 0
+    const isExist = selectionDataRows.selection
+      .filter((obj) => selectData.fullPath === obj.fullPath).length > 0
     if (!isExist) {
       setSelectionDataRow((prevState) => ({
         selection: [...prevState.selection, selectData]
@@ -90,6 +104,16 @@ function ScannedImageList(props) {
         selection: prevState.selection.filter((obj) => selectData.fullPath !== obj.fullPath)
       }))
     }
+  }
+
+  const handleSelectionEvidenceTypeChange = (event) => {
+    console.log("handleSelectionEvidenceTypeChange", event)
+    const {value} = event.target
+    setSelectionEvidenceType(value)
+    setSelectionDataRow((prevState) => ({
+      selection: []
+    }))
+    console.log('handleSelectionEvidenceTypeChange', value)
   }
 
   const uploadFileHandler = (event) => {
@@ -102,37 +126,67 @@ function ScannedImageList(props) {
         <Button
           variant='contained'
           onClick={uploadFileHandler}
-          startIcon={<InsertPhoto />}
+          disableElevation='true'
+          startIcon={<InsertPhoto/>}
           component='label'
-          disabled={isScanEnabled({ taxId: props.declareProperties.clientTaxId, disabled: props.importDisable })}
+          disabled={isScanEnabled({taxId: props.declareProperties.clientTaxId, disabled: props.importDisable})}
         >
           匯入圖檔
         </Button>
         <Button
           variant='contained'
-          startIcon={<InsertPhoto />}
+          startIcon={<InsertPhoto/>}
           disableElevation='true'
           onClick={props.onOpenDialog}
-          disabled={isImportEnabled({ taxId: props.declareProperties.clientTaxId, diasbled: props.scanDisable })}
+          disabled={isImportEnabled({taxId: props.declareProperties.clientTaxId, diasbled: props.scanDisable})}
         >
           掃描文件
         </Button>
         <Button
           variant='contained'
-          startIcon={<Send />}
+          startIcon={<Send/>}
           disableElevation='true'
           onClick={(e) => {
             props.onSendToIdentifyClick(e, selectionDataRows.selection)
-            setSelectionDataRow({ selection: [] })
+            setSelectionDataRow({selection: []})
           }}
         >
           送出辨識
         </Button>
       </Stack>
+      <div>
+        <FormControl sx={{width: '25%'}}>
+          <TextField
+            id="evidenceType-select"
+            name="evidenceType-select"
+            select
+            onChange={handleSelectionEvidenceTypeChange}
+            value={selectionEvidenceType}
+            label="請選擇憑證種類"
+          >
+            <MenuItem key={0} value="All">
+              All
+            </MenuItem>
+            {
+              Object.keys(GW_EVIDENCE_TYPE)
+                .filter(val => val !== '')
+                .filter(val => val !== 'A3001')
+                .filter(val => val !== 'A3002')
+                .filter(val => val !== 'A4001')
+                .filter(val => val !== 'other')
+                .map(val => {
+                  return <MenuItem key={val} value={val}>
+                    {GW_EVIDENCE_TYPE[val].id} {GW_EVIDENCE_TYPE[val].name}
+                  </MenuItem>
+                })
+            }
+          </TextField>
+        </FormControl>
+      </div>
       <ImageList cols={3} gap={12}>
         {dataRows.map((item) => (
-          <ImageListItem key={item.fileName} sx={{ borderRadius: '8px', border: '1px solid #ccc', overflow: 'hidden' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <ImageListItem key={item.fileName} sx={{borderRadius: '8px', border: '1px solid #ccc', overflow: 'hidden'}}>
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
               <FormControl>
                 <Checkbox
                   id={item.id}
@@ -144,12 +198,12 @@ function ScannedImageList(props) {
               </FormControl>
               <Typography>{item.fileName}</Typography>
             </Box>
-            <Box sx={{ width: '100%', height: '300px', overflow: 'hidden' }}>
+            <Box sx={{width: '100%', height: '300px', overflow: 'hidden'}}>
               <img
                 src={item.imageUrl}
                 alt={item.fileName}
                 loading='lazy'
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                style={{width: '100%', height: '100%', objectFit: 'cover'}}
               />
             </Box>
             <ImageListItemBar
@@ -159,19 +213,19 @@ function ScannedImageList(props) {
                     aria-label={`info about ${item.fileName}`}
                     onClick={(e) => onImageOriginalViewClick(item)}
                   >
-                    <ZoomIn sx={{ color: blue[200] }} />
+                    <ZoomIn sx={{color: blue[200]}}/>
                   </IconButton>
                   <IconButton
                     aria-label={`info about ${item.fileName}`}
                     onClick={(e) => onSaveImageClick(item)}
                   >
-                    <Save sx={{ color: blue[200] }} />
+                    <Save sx={{color: blue[200]}}/>
                   </IconButton>
                   <IconButton
                     aria-label={`info about ${item.fileName}`}
                     onClick={(e) => onDeleteImageClick(item)}
                   >
-                    <Delete sx={{ color: blue[200] }} />
+                    <Delete sx={{color: blue[200]}}/>
                   </IconButton>
                 </div>
               )}

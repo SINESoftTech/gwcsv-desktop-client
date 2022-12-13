@@ -1,5 +1,5 @@
 import React from 'react'
-import { createHashRouter, RouterProvider } from 'react-router-dom'
+import {createHashRouter, RouterProvider} from 'react-router-dom'
 import ProtectedRoute from './ProtectedRoute'
 import HomePage from '../../views/HomePage'
 import IdentifiedEvidenceDetailPage from '../../views/IdentifiedEvidenceDetailPage'
@@ -11,7 +11,7 @@ const routes = [
     path: '/',
     element: (
       <ProtectedRoute>
-        <HomePage />
+        <HomePage/>
       </ProtectedRoute>
     ),
     children: [
@@ -19,15 +19,7 @@ const routes = [
         path: 'main',
         element: (
           <ProtectedRoute>
-            <HomePage />
-          </ProtectedRoute>
-        )
-      },
-      {
-        path: 'identified-evidence-detail',
-        element: (
-          <ProtectedRoute>
-            <IdentifiedEvidenceDetailPage />
+            <HomePage/>
           </ProtectedRoute>
         )
       }
@@ -35,16 +27,24 @@ const routes = [
   },
   {
     path: '/*',
-    element: <NotFoundPage />
+    element: <NotFoundPage/>
+  },
+  {
+    path: '/evidence-detail',
+    element: (
+      <ProtectedRoute>
+        <IdentifiedEvidenceDetailPage/>
+      </ProtectedRoute>
+    )
   },
   {
     path: '/login',
-    element: <Login />
+    element: <Login/>
   }
 ]
 const AppRoutes = () => {
   let router = createHashRouter(routes)
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router}/>
 }
 
 export default AppRoutes

@@ -51,25 +51,7 @@ function DialogComponent(props) {
     }
   }, [props.declareProperties.isDeclareBusinessTax])
 
-  // const renderReportingPeriod = () => {
-  //   return (
-  //     <FormControl fullWidth>
-  //       <TextField
-  //         id="reporting-period-select-label"
-  //         name="reportingPeriod"
-  //         select
-  //         label="申報期別"
-  //         value={props.declareProperties.reportingPeriod}
-  //         onChange={handleChange}
-  //       >
-  //         <MenuItem key={0} value=''>請選擇申報期別</MenuItem>
-  //         {toPeriodList().filter(period => period % 2 === 0).map(period => {
-  //           return (<MenuItem key={period} value={period}>{period}</MenuItem>)
-  //         })}
-  //       </TextField>
-  //     </FormControl>
-  //   )
-  // }
+
 
   const renderIsDeclareBusinessTax = () => (
     <FormControl fullWidth>
@@ -116,7 +98,6 @@ function DialogComponent(props) {
 
       <DialogContent>
         <Stack spacing={2} my={2}>
-          {/* {renderReportingPeriod()} */}
           {renderIsDeclareBusinessTax()}
           {renderEvidenceType(renderEvidenceTypeList)}
         </Stack>
@@ -141,14 +122,6 @@ function DialogComponent(props) {
           }}
           color='primary'
         >
-          {/*{props.isScan ? '' : <input*/}
-          {/*  type='file'*/}
-          {/*  hidden*/}
-          {/*  onChange={event => {*/}
-          {/*    props.onConfirm(event)*/}
-          {/*    props.handleClose()*/}
-          {/*  }}*/}
-          {/*/>}*/}
           確認
         </Button>
       </DialogActions>
