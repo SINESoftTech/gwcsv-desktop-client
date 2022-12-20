@@ -1,7 +1,7 @@
 import {gwAxios} from './axios';
 import actionTypes from './actionTypes';
-import {userLogin} from "../../usecases/userLogin";
-import {isMatchLocalVersion, getServerHistoryAssignLog} from "../../usecases/getHistoryAssignLog";
+import {userLogin} from "../usecases/userLogin";
+import {isMatchLocalVersion, getServerHistoryAssignLog} from "../usecases/getHistoryAssignLog";
 
 
 export async function loginUser(dispatch, loginPayload) {
@@ -34,6 +34,7 @@ export const getHistoryAssignLog = async (localVersion) => {
   }
   const compareResult = await isMatchLocalVersion(localVersion)
   if (!compareResult.isMatch) {
+    console.log('notmatch')
     result = await getServerHistoryAssignLog(compareResult.remoteVersion)
   }
   return result

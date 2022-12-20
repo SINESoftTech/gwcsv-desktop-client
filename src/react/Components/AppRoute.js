@@ -1,29 +1,20 @@
 import React from 'react'
 import {createHashRouter, RouterProvider} from 'react-router-dom'
-import ProtectedRoute from './ProtectedRoute'
-import HomePage from '../../views/HomePage'
-import IdentifiedEvidenceDetailPage from '../../views/IdentifiedEvidenceDetailPage'
-import Login from '../../views/LoginPage'
-import NotFoundPage from '../../views/NotFoundPage'
+
+import Login from '../views/LoginPage'
+import NotFoundPage from "../views/NotFoundPage";
+import HomePage from "../views/HomePage";
+import ProtectedRoute from "./ProtectedRoute";
+import IdentifiedEvidenceDetailPage from "../views/IdentifiedEvidenceDetailPage";
 
 const routes = [
   {
     path: '/',
-    element: (
+    element:
       <ProtectedRoute>
         <HomePage/>
       </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: 'main',
-        element: (
-          <ProtectedRoute>
-            <HomePage/>
-          </ProtectedRoute>
-        )
-      }
-    ]
+
   },
   {
     path: '/*',
