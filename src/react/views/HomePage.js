@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import {
-  Alert, Autocomplete,
+  Alert,
+  Autocomplete,
   Badge,
   Box,
   Collapse,
-  Container, createFilterOptions,
+  Container,
   CssBaseline,
   FormControl,
   IconButton,
@@ -26,13 +27,8 @@ import { useLocation } from "react-router-dom";
 import ScannedImageList from "../modules/scanning/ui/ScannedImageList";
 import * as gwActions from "../Actions/gwActions";
 import * as electronActions from "../Actions/electionActions";
+import { gwUploaded, identifyResultConfirmed, identifyResultReceived, identifySent } from "../Actions/electionActions";
 import { openScanner, scan } from "../Actions/scanAction";
-import {
-  gwUploaded,
-  identifyResultConfirmed,
-  identifyResultReceived,
-  identifySent
-} from "../Actions/electionActions";
 import GwMapper from "../Mapper/gw_mapper";
 import ConfirmedEvidenceListTable from "../modules/confirming/ui/ConfirmedEvidenceListTable";
 import IdentifiedEvidenceListTable from "../modules/identifying/ui/IdentifiedEvidenceListTable";
@@ -126,9 +122,8 @@ function HomePage() {
     }
   }, [location.state]);
 
-  // region Main Events
-  const handleTabChange = (event, newValue) => setValue(newValue);
 
+  const handleTabChange = (event, newValue) => setValue(newValue);
 
   const handleSelectionChange = async (event) => {
     const { name, value } = event.target;
@@ -306,7 +301,7 @@ function HomePage() {
     <Stack spacing={2} direction="row" my={3}>
       <FormControl sx={{ width: "25%" }}>
         <Autocomplete
-          id={"client"}
+          id={"client-autocomplete"}
           renderInput={(param) => (
             <TextField {...param} label={"請輸入營利事業單位"} />
           )}
@@ -324,9 +319,13 @@ function HomePage() {
           }}
           onChange={(event) => {
             const { value } = event.target;
+            let id = value;
+            if ((value + "").length < 8) {
+              id = "0".repeat(8 - (value + "").length) + id;
+            }
             setDeclareProperties((prevState) => ({
               ...prevState,
-              "clientTaxId": value
+              "clientTaxId": id
             }));
             const ownerId = appState.appData.clientLists
               .filter((client) => {
@@ -338,10 +337,13 @@ function HomePage() {
             setOwnerId(ownerId[0]);
             handleReset();
           }}
-          value={declareProperties.clientTaxId}
+          isOptionEqualToValue={(option, value) => {
+            return option.taxId.id === value;
+          }}
+          value={parseInt(declareProperties.clientTaxId) || 0}
           renderOption={(props, option) => {
             const value = option.taxId.id + " " + option.businessName;
-            return <li value={option.taxId.id}  {...props}>{option.taxId.id} {option.businessName}</li>;
+            return <li value={option.taxId.id + ""}  {...props}>{value}</li>;
           }}
           options={appState.appData.clientLists
             .sort((a, b) => {

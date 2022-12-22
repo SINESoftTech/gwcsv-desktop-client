@@ -337,8 +337,8 @@ ipcMain.handle('evidence:importFromImage', (event) => {
   return dialog
     .showOpenDialog({
       filters: [
+        {name: 'All Files', extensions: ['*']},
         {name: 'Images', extensions: ['jpg', 'png', 'gif']},
-        {name: 'All Files', extensions: ['*']}
       ],
       properties: ['openFile', 'multiSelections']
     })
