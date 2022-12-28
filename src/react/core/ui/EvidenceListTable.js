@@ -82,6 +82,13 @@ function EvidenceListTable(props) {
           width: "100%",
           "& .highlight": {
             backgroundColor: "yellow"
+          },
+          "& .color-highlight": {
+            color: "red"
+          },
+          "& .all-highlight": {
+            backgroundColor: "yellow",
+            color: "red"
           }
         }}
       >

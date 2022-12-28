@@ -33,8 +33,7 @@ const userLogin = async (loginPayload) => {
     } catch (error) {
         loginResult.success = false
         loginResult.error.code = 'SYSTEM_ERROR'
-        loginResult.error.message = error.message
-        console.log(error);
+        loginResult.error.message = error.response.data.errorMsg
     }
     return loginResult;
 }

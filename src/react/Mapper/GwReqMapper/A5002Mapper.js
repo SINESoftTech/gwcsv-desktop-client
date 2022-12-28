@@ -1,5 +1,5 @@
 import {isEmptyOrUndefined} from '../../Util/StringUtils'
-import {getPeriod, getYYYYMMDD} from "../../Util/Time";
+import { getPeriod, getTxtPeriod, getYYYYMMDD } from "../../Util/Time";
 
 const A5002ToGwObj = (data) => {
     const result = {
@@ -60,7 +60,7 @@ const A5002ToGwObj = (data) => {
     result.evidenceDate.result = getYYYYMMDD(result.evidenceDate.result)
     let period = ''
     try {
-        period = getPeriod(result.evidenceDate.result)
+        period = getTxtPeriod(result.evidenceDate.result)
     } catch (e) {
         console.log(e)
     }
@@ -113,11 +113,11 @@ const A5002ToGwObj = (data) => {
     result['businessTaxValue'] = result['taxAmount']
     delete result.taxAmount
     result.totalPayAmount = {
-        result: 0,
+        result: result.totalAmount.result,
         score: -1
     }
     result['other'] = {
-        result: result['otherFee'] > 0 ? 'Y' : 'N',
+        result: result['otherFee'].result > 0 ? 'Y' : 'N',
         score: -1
     }
     result['saleAmount-view'] = {

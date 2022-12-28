@@ -100,7 +100,7 @@ const A5031ToGwObj = (data) => {
   result.taxableSalesValue.result = result.salesAmount
   delete result.salesAmount
   result['other'] = {
-    result: result['otherFee'] > 0 ? 'Y' : 'N',
+    result: result['otherFee'].result > 0 ? 'Y' : 'N',
     score: -1
   }
   result['saleAmount-view'] = {
