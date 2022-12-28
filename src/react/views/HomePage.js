@@ -110,11 +110,26 @@ function HomePage() {
   }, [value, declareProperties.clientTaxId]);
 
   useEffect(() => {
+    if (declareProperties.clientTaxId !== "") {
+      const ownerId = appState.appData.clientLists
+        .filter((client) => {
+          return parseInt(client.taxId.id) === parseInt(declareProperties.clientTaxId);
+        })
+        .map((client) => {
+          return client.id;
+        }) || "";
+      setOwnerId(ownerId[0]);
+    }
+  });
+
+  useEffect(() => {
     if (location.state != null) {
       setValue(1);
       setDeclareProperties(location.state);
       const ownerId = appState.appData.clientLists
-        .filter((client) => client.taxId.id === location.state.clientTaxId)
+        .filter((client) => {
+          return parseInt(client.taxId.id) === location.state.clientTaxId;
+        })
         .map((client) => {
           return client.id;
         });

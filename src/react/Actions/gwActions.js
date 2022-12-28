@@ -1,26 +1,28 @@
-import {gwAxios} from './axios';
-import actionTypes from './actionTypes';
-import {userLogin} from "../usecases/userLogin";
-import {isMatchLocalVersion, getServerHistoryAssignLog} from "../usecases/getHistoryAssignLog";
+import { gwAxios } from "./axios";
+import actionTypes from "./actionTypes";
+import { userLogin } from "../usecases/userLogin";
+import { isMatchLocalVersion, getServerHistoryAssignLog } from "../usecases/getHistoryAssignLog";
 
 
 export async function loginUser(dispatch, loginPayload) {
-  dispatch({type: actionTypes.REQUEST_LOGIN});
+  dispatch({ type: actionTypes.REQUEST_LOGIN });
   const loginResult = await userLogin(loginPayload);
+  console.log("loginUser", loginResult);
   if (loginResult.success) {
-    dispatch({type: 'LOGIN_SUCCESS', payload: loginResult.data});
-    localStorage.setItem('currentUser', JSON.stringify(loginResult.data));
-    return loginResult.data;
+    dispatch({ type: "LOGIN_SUCCESS", payload: loginResult.data });
+    localStorage.setItem("currentUser", JSON.stringify(loginResult.data));
+    return loginResult;
   } else {
-    dispatch({type: actionTypes.LOGIN_ERROR, error: loginResult.error.message});
+    dispatch({ type: actionTypes.LOGIN_ERROR, error: loginResult.error.message });
+    return loginResult;
   }
 
 }
 
 export async function logout(dispatch) {
-  dispatch({type: 'LOGOUT'});
-  localStorage.removeItem('currentUser');
-  localStorage.removeItem('token');
+  dispatch({ type: "LOGOUT" });
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("token");
 }
 
 export const getHistoryAssignLog = async (localVersion) => {
@@ -28,75 +30,75 @@ export const getHistoryAssignLog = async (localVersion) => {
     success: false,
     data: {},
     error: {
-      code: '',
-      message: ''
+      code: "",
+      message: ""
     }
-  }
-  const compareResult = await isMatchLocalVersion(localVersion)
+  };
+  const compareResult = await isMatchLocalVersion(localVersion);
   if (!compareResult.isMatch) {
-    console.log('notmatch')
-    result = await getServerHistoryAssignLog(compareResult.remoteVersion)
+    console.log("notmatch");
+    result = await getServerHistoryAssignLog(compareResult.remoteVersion);
   }
-  return result
-}
+  return result;
+};
 
 export async function uploadToGw(payload, ownerId, token) {
-  console.log(payload, ownerId, token)
-  const url = '/vat/api/v1/evidence/input'
+  console.log(payload, ownerId, token);
+  const url = "/vat/api/v1/evidence/input";
   const config = {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
       ownerId: ownerId,
-      Authorization: "Bearer " + token,
-    },
+      Authorization: "Bearer " + token
+    }
   };
-  const resultList = []
+  const resultList = [];
   for (let i = 0; i < payload.length; i++) {
-    const id=payload[i].id
+    const id = payload[i].id;
     try {
-      const req = payload[i].json
+      const req = payload[i].json;
       const bodyFormData = new FormData();
-      bodyFormData.append('json', JSON.stringify(req));
-      bodyFormData.append('file', payload[i].image);
+      bodyFormData.append("json", JSON.stringify(req));
+      bodyFormData.append("file", payload[i].image);
       const result = await gwAxios.post(url, bodyFormData, config);
       resultList.push({
-        id:id,
+        id: id,
         status: true,
-        errorMsg: '',
-      })
+        errorMsg: ""
+      });
     } catch (error) {
-      let errorMsg = '';
+      let errorMsg = "";
       if (error.response === undefined) {
-        errorMsg = '網路錯誤';
+        errorMsg = "網路錯誤";
       } else {
         errorMsg = error.response.data.errorMsg;
       }
       resultList.push({
-        id:id,
+        id: id,
         status: false,
-        errorMsg,
-      })
+        errorMsg
+      });
     }
   }
-  return resultList
+  return resultList;
 }
 
 export const getAllClientList = async (dispatch, username, taxId, token) => {
   const requestOptions = {
     headers: {
-      'Content-Type': 'application/json',
-      'accountingfirmTaxId': taxId,
-      'Authorization': `Bearer ${token}`
-    },
+      "Content-Type": "application/json",
+      "accountingfirmTaxId": taxId,
+      "Authorization": `Bearer ${token}`
+    }
   };
 
-  const result = await gwAxios.get('/vat/api/v1/businessEntity', requestOptions).catch((error) => {
+  const result = await gwAxios.get("/vat/api/v1/businessEntity", requestOptions).catch((error) => {
     // TODO Error handling, logout or re-login?
-    console.log('getAllClientList error', JSON.stringify(error));
-    dispatch({type: actionTypes.GET_CLIENT_LIST_FAILED, payload: error});
+    console.log("getAllClientList error", JSON.stringify(error));
+    dispatch({ type: actionTypes.GET_CLIENT_LIST_FAILED, payload: error });
   });
-  console.log('getAllClientList result', result);
+  console.log("getAllClientList result", result);
   if (result) {
-    dispatch({type: actionTypes.GET_CLIENT_LIST_SUCCESS, payload: result.data});
+    dispatch({ type: actionTypes.GET_CLIENT_LIST_SUCCESS, payload: result.data });
   }
 };

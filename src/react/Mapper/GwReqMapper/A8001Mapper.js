@@ -25,7 +25,7 @@
 //       }
 
 import { isEmptyOrUndefined } from '../../Util/StringUtils'
-import {getPeriod} from "../../Util/Time";
+import { getPeriod, getTxtPeriod } from "../../Util/Time";
 
 const A8001ToGwObj = (data) => {
   const result = {
@@ -60,7 +60,7 @@ const A8001ToGwObj = (data) => {
   }
   let period = ''
   try {
-    period = getPeriod(result.evidenceDate.result)
+    period = getTxtPeriod(result.evidenceDate.result)
   } catch (e) {
     console.log(e)
   }

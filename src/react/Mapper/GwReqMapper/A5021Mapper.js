@@ -101,7 +101,7 @@ const A5021ToGwObj = (data) => {
     score: -1
   }
   result['other'] = {
-    result: result['otherFee'] > 0 ? 'Y' : 'N',
+    result:result['otherFee'].result > 0 ? 'Y' : 'N',
     score: -1
   }
   result['saleAmount-view'] = {

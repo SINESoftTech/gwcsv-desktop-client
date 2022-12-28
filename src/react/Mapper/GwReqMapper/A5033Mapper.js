@@ -103,7 +103,7 @@ const A5033ToGwObj = (data) => {
   result.totalPayAmount = result.payAmount
   delete result['payAmount']
   result['other'] = {
-    result: result['otherFee'] > 0 ? 'Y' : 'N',
+    result: result['otherFee'].result > 0 ? 'Y' : 'N',
     score: -1
   }
   result['saleAmount-view'] = {
