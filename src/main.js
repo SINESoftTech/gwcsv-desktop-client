@@ -15,7 +15,34 @@ let config = {
   yearAssignVersion: ''
 }
 
+function initFileStructure() {
+  if (!fse.existsSync(config.rootFolder)) {
+    fse.mkdirSync(config.rootFolder)
+  }
+  if (!fse.existsSync(config.fileFolder)) {
+    fse.mkdirSync(config.fileFolder)
+  }
+  Object.keys(persistenceFolder).forEach((key) => {
+    const folderPath = path.join(config.fileFolder, key)
+    if (!fse.existsSync(folderPath)) {
+      fse.mkdirSync(folderPath)
+    }
+  })
+}
+
+
+function loadConfig() {
+  var configPath = path.join(config.rootFolder, 'appSetting.conf')
+  if (!fse.existsSync(configPath)) {
+    fse.writeFileSync(configPath, JSON.stringify(config))
+  }
+  config = fse.readJSONSync(configPath)
+}
+
+
 const createWindow = () => {
+  initFileStructure()
+  loadConfig()
   const mainWindow = new BrowserWindow({
     webPreferences: {
       nativeWindowOpen: false,
