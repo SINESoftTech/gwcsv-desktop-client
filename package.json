@@ -13,8 +13,10 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "package-windows": "electron-forge package --platform=win32",
+    "package-mac-intel": "electron-forge package --arch=x64",
     "make": "electron-forge make",
     "make-windows": "electron-forge make --platform=win32",
+    "make-mac-intel": "electron-forge make --arch=x64",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
