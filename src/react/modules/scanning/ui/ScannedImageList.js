@@ -94,12 +94,13 @@ function ScannedImageList(props) {
           const fileName1 = a.fileName.split("_")[1].split(".")[0];
           const fileName2 = b.fileName.split("_")[1].split(".")[0];
           if (fileName1 >= fileName2) {
-            return 1
+            return 1;
           }
           return -1;
         });
       setDataRows(rowData);
     };
+
     initDataRows(data, declareProperties.clientTaxId);
   }, [data, declareProperties, selectionEvidenceType]);
 
@@ -109,6 +110,7 @@ function ScannedImageList(props) {
     const selectData = dataRows.filter((obj) => obj.fullPath === value)[0];
     const isExist = selectionDataRows.selection
       .filter((obj) => selectData.fullPath === obj.fullPath).length > 0;
+    console.log("handleChange", selectData);
     if (!isExist) {
       setSelectionDataRow((prevState) => ({
         selection: [...prevState.selection, selectData]
@@ -241,12 +243,15 @@ function ScannedImageList(props) {
                 <Typography>{item.fileName}</Typography>
               </Box>
               <Box sx={{ width: "100%", height: "300px", overflow: "hidden" }}>
-                <img
-                  src={item.imageUrl}
-                  alt={item.fileName}
-                  loading="lazy"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
+
+                {item.fullPath.endsWith(".pdf") ?
+                  <Typography align={"center"}>無法顯示</Typography>
+                  : <img
+                    src={item.imageUrl}
+                    alt={item.fileName}
+                    loading="lazy"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />}
               </Box>
               <ImageListItemBar
                 actionIcon={(

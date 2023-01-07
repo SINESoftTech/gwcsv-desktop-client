@@ -41,10 +41,12 @@
     "electron": "^21.3.3",
     "eslint": "^8.29.0",
     "eslint-plugin-react": "^7.31.11",
+    "file-loader": "^6.2.0",
     "node-loader": "^2.0.0",
     "prettier": "^2.8.1",
     "recharts": "^2.2.0",
     "style-loader": "^3.0.0",
+    "url-loader": "^4.1.1",
     "wait-on": "^6.0.1"
   },
   "dependencies": {
