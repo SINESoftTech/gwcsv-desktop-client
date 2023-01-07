@@ -312,6 +312,7 @@ function HomePage() {
       throw new Error(e);
     }
   };
+
   const renderClientSelect = () => (
     <Stack spacing={2} direction="row" my={3}>
       <FormControl sx={{ width: "25%" }}>
@@ -416,7 +417,10 @@ function HomePage() {
   };
 
   const handleImportImageClick = async (e) => {
-    const result = await electronActions.importFromImage();
+    if (declareProperties.evidenceType === "") {
+      return;
+    }
+    const result = await electronActions.importFromImage(declareProperties.evidenceType);
     for (let i = 0; i < result.length; i++) {
       await electronActions.scanImages(dispatch, result[i], appState.auth.user, declareProperties);
     }

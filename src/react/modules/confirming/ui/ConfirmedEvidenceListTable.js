@@ -18,6 +18,23 @@ import { uploadToGw } from "../../../Actions/gwActions";
 import { confirmedEvidenceTableHead } from "../../../core/database/confirmedEvidenceTableRow";
 import GwMapper, { TAX_TYPE } from "../../../Mapper/gw_mapper";
 
+function newFileName(filePath) {
+  let fileName = `${Date.now()}`;
+  if (filePath.endsWith(".pdf")) {
+    fileName += ".pdf";
+  }
+  if (filePath.endsWith(".jpg")) {
+    fileName += ".jpg";
+  }
+  if (filePath.endsWith(".jpeg")) {
+    fileName += ".jpg";
+  }
+  if (filePath.endsWith(".png")) {
+    fileName += ".png";
+  }
+  return fileName;
+}
+
 function ConfirmedEvidenceListTable(props) {
   const {
     data, declareProperties, user, onGwUploaded, OnDeleteEvidence, ownerId
@@ -41,10 +58,11 @@ function ConfirmedEvidenceListTable(props) {
     for (let i = 0; i < keyList.length; i++) {
       const data = props.data["04"][keyList[i]];
       const image = await getImageData(data.fullPath.result);
+      let fileName = newFileName(data.fullPath.result);
       uploadData.push(
         {
           id: keyList[i],
-          image: new File([image], `${Date.now()}.jpg`),
+          image: new File([image], fileName),
           json: GwMapper.toGw(data)
         }
       );

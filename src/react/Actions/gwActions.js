@@ -2,6 +2,7 @@ import { gwAxios } from "./axios";
 import actionTypes from "./actionTypes";
 import { userLogin } from "../usecases/userLogin";
 import { isMatchLocalVersion, getServerHistoryAssignLog } from "../usecases/getHistoryAssignLog";
+import axios from "axios";
 
 
 export async function loginUser(dispatch, loginPayload) {
